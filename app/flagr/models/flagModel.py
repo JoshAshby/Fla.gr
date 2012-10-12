@@ -46,7 +46,7 @@ def pushFlag(flagType=None):
         else:
                 raise Exception("No flagType supplied, aborting!")
 
-def flagList(userID=None, md=False):
+def flagList(userID=None, md=False, flags=[]):
         keys = c.redisFlagServer.keys("flag:*:id")
         flagList = []
         def addFlag(key):
@@ -56,37 +56,46 @@ def flagList(userID=None, md=False):
 
                 flagList.append(returnFlag)
 
-        """
-        #global flag search - everyone but yours
-        if visible and not yours:
-                throw it into the list
-        """
-        if not userID:
-                for key in keys:
-                        key = key.strip(":id")
-                        if helpers.boolean(c.redisFlagServer.get(key+":visibility")) and c.redisFlagServer.get(key+":userID") != c.session.userID:
-                                addFlag(key)
+        if not flags:
+                """
+                #global flag search - everyone but yours
+                if visible and not yours:
+                        throw it into the list
+                """
+                if not userID:
+                        for key in keys:
+                                key = key.strip(":id")
+                                if helpers.boolean(c.redisFlagServer.get(key+":visibility")):
+                                        addFlag(key)
 
-        """
-        #global flag search for one users flag
-        if visible and the userID matches the userID we're looking for:
-                throw it into the list
-        """
-        if userID and userID != c.session.userID:
-                for key in keys:
-                        key = key.strip(":id")
-                        if helpers.boolean(c.redisFlagServer.get(key+":visibility")) and c.redisFlagServer.get(key+":userID") == userID:
-                                addFlag(key)
+                """
+                #global flag search for one users flag
+                if visible and the userID matches the userID we're looking for:
+                        throw it into the list
+                """
+                if userID and userID != c.session.userID:
+                        for key in keys:
+                                key = key.strip(":id")
+                                if helpers.boolean(c.redisFlagServer.get(key+":visibility")) and c.redisFlagServer.get(key+":userID") == userID:
+                                        addFlag(key)
 
-        """
-        #looking for just your flags
-        if it's yours:
-                throw it into the list
-        """
-        if userID and userID == c.session.userID:
-                for key in keys:
-                        key = key.strip(":id")
-                        if c.redisFlagServer.get(key+":userID") == c.session.userID:
-                                addFlag(key)
+                """
+                #looking for just your flags
+                if it's yours:
+                        throw it into the list
+                """
+                if userID and userID == c.session.userID:
+                        for key in keys:
+                                key = key.strip(":id")
+                                if c.redisFlagServer.get(key+":userID") == c.session.userID:
+                                        addFlag(key)
+        else:
+                """
+                Someone wants specific flags so it's assumed they
+                are only going to show proper flags
+                """
+                for key in flags:
+                        key = key.strip("flag::id")
+                        addFlag(key)
 
         return flagList

@@ -20,7 +20,7 @@ import views.pyStrap.pyStrap as ps
 
 class godObject(bo.baseHTTPPageObject):
        __level__ = "GOD"
-       __login__ = "True"
+       __login__ = True
        __name__ = "god"
        def finishInit(self):
                self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Your Throne Awaits..."}]))

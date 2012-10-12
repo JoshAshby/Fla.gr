@@ -61,6 +61,7 @@ urls = []
 authRegex = re.compile("([^_\W]*)")
 
 redisPostServer = redis.Redis("localhost", db=3)
+redisCarouselServer = redisPostServer
 redisSessionServer = redis.Redis("localhost", db=1)
 redisUserServer = redis.Redis("localhost", db=0)
 redisFlagServer = redis.Redis("localhost", db=2)

@@ -25,14 +25,20 @@ import models.basic.baseModel as bm
 def userList():
         users = []
         for key in c.redisUserServer.keys("user:*"):
-                users.append(baseUser(key[5:]))
+                user = baseUser(key[5:])
+                if user.level == "GOD" and c.session.user.level == "GOD":
+                        users.append(user)
+                elif user.level != "GOD":
+                        users.append(user)
+
         return users
 
 def findUser(username):
-        names = []
-        for key in userList():
-                if key.username == username:
-                        return key
+        users = []
+        for key in c.redisUserServer.keys("user:*"):
+                user = baseUser(key[5:])
+                if user.username == username:
+                        return user
 
 
 class baseUser(bm.baseRedisModel):

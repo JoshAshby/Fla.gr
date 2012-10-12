@@ -20,6 +20,7 @@ from seshat.route import route
 import views.pyStrap.pyStrap as ps
 import models.basic.authModel as am
 
+from controllers.god.allFlags import *
 
 @route("/god")
 class godIndex_god(basePage):
@@ -30,9 +31,17 @@ class godIndex_god(basePage):
                 hero = ps.baseHeading(ps.baseIcon("eye-open") + " Welcome, Deity", size=1)
                 hero += ps.baseParagraph("This is the deity panel. From here, you will be able to control and view information concerning several aspects of the website which no one else has access to.")
 
-                content = ps.baseParagraph("It would seem your minions are well behaved today. As a result, you might want to take a look at the sidebar for things to do, me lord.")
+                pageHead = ps.baseRow(hero)
 
-                self.view.body = ps.baseHero(hero) + content
+                page = ""
+
+                self.view["body"] = ps.baseHero(hero) + ps.baseUL(page, classes="thumbnails")
+                self.view.sidebar = ""
+                self.view.scripts = ps.baseScript("""
+                $('.btn-group').tooltip({
+                      selector: "a[rel=tooltip]"
+                })
+""")
 
 
 @route("/god/setup")

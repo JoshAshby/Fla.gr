@@ -61,7 +61,7 @@ class baseMenu(b.brick):
                                 if element.has_key("sub"):
                                         links += """
                                         <li class="dropdown-submenu">
-                                                <a tabindex="-1" href="%(link)s">%(name)s</a>
+                                                <a tabindex="-1" href="%(subLink)s">%(subName)s</a>
                                                 %(sub)s
                                         </li>
                                         """ % element

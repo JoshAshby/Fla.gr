@@ -18,11 +18,10 @@ import views.pyStrap.pyStrap as ps
 
 
 class flagrObject(bo.baseHTTPPageObject):
-       __login__ = "False"
        __name__ = "flagr"
        def finishInit(self):
                """
-               if c.session.loggedIn == "True":
+               if c.session.loggedIn:
                        self.view.sidebar = ps.baseWell(
                                 ps.baseNavList(items=[
                                         {"header": "Welcome to fla.gr!"}, 

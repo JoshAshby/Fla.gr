@@ -14,6 +14,7 @@ joshuaashby@joshashby.com
 """
 import config as c
 import views.smartPage as sp
+import models.blocks.helpers as helpers
 
 
 class baseHTTPPageObject(object):
@@ -62,25 +63,24 @@ class baseHTTPPageObject(object):
                                 """
                                 pass
 
-                        else:
-                                if self.__level__ != c.session.user.level:
-                                        c.session.pushMessage("You need to have %s rights to access this." % self.__level__)
-                                        self.head = ("303 SEE OTHER", [("location", "/auth/login")])
-                                        error = True
+                        elif self.__level__ != c.session.user.level:
+                                print "duh"
+                                c.session.pushMessage("You need to have %s rights to access this." % self.__level__)
+                                self.head = ("303 SEE OTHER", [("location", "/auth/login")])
+                                error = True
 
-                                else:
-                                        if self.__login__ != c.session.loggedIn:
-                                                c.session.pushMessage("You need to be logged in to view this.")
-                                                self.head = ("303 SEE OTHER", [("location", "/auth/login")])
-                                                error = True
-
-                                        else:
-                                                pass
-
+                elif helpers.boolean(self.__login__) and not helpers.boolean(c.session.loggedIn):
+                        print c.session.loggedIn
+                        print self.__login__
+                        print "here"
+                        c.session.pushMessage("You need to be logged in to view this.")
+                        self.head = ("303 SEE OTHER", [("location", "/auth/login")])
+                        error = True
 
                 if not error:
                         getattr(self, self.method)()
                         if not self.view.title: self.view.title = self.__menu__
+                        self.view.title = "%s - %s" % (c.appName, self.view.title)
                         self.view.build()
                         content = self.view
                         if self.method == "GET" or self.method == "HEAD":

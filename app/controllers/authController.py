@@ -27,7 +27,7 @@ class login(basePage):
                 """
                 Display the login page.
                 """
-                if c.session.loggedIn == "True":
+                if c.session.loggedIn:
                         self.head = ("303 SEE OTHER", [("location", "/")])
                         c.session.pushMessage("Hey look, you're already signed in!")
 

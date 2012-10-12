@@ -27,23 +27,26 @@ import views.pyStrap.pyStrap as ps
 @route("/profiles")
 class userIndex(flagrPage):
         def GET(self):
+                pass
 
         def POST(self):
-
+                pass
 
 
 @route("/profiles/edit")
 class userEdit(flagrPage):
         def GET(self):
+                pass
 
         def POST(self):
-
+                pass
 
 
 @route("/profiles/view/(.*)")
 class userView(flagrPage):
         def GET(self):
+                pass
 
         def POST(self):
-
+                pass
 

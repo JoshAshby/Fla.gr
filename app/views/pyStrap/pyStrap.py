@@ -17,8 +17,7 @@ from views.pyStrap.alerts.baseAlert import baseAlert
 from views.pyStrap.badges.baseBadge import baseBadge
 #from views.pyStrap.breadcrumbs.baseBreadcrumb import baseBreadcrumb
 from views.pyStrap.buttonDropdowns.baseButtonDropdown import baseButtonDropdown
-from views.pyStrap.buttonDropdowns.baseButtonDropdown import baseSplitButtonDropdown
-from views.pyStrap.buttonDropdowns.baseButtonDropdown import baseSplitADropdown
+from views.pyStrap.buttonDropdowns.baseButtonDropdown import baseSplitDropdown
 from views.pyStrap.buttonGroups.baseButtonGroup import baseButtonGroup
 from views.pyStrap.buttonGroups.baseButtonGroup import baseButtonToolbar
 from views.pyStrap.buttons.baseButton import baseButton
@@ -32,7 +31,7 @@ from views.pyStrap.forms.baseFormLabel import baseFormLabel
 from views.pyStrap.forms.baseInput import baseInput
 from views.pyStrap.forms.baseLegend import baseLegend
 from views.pyStrap.forms.baseRadio import baseRadio
-#from views.pyStrap.forms.baseSelect import baseSelect
+from views.pyStrap.forms.baseSelect import baseSelect
 from views.pyStrap.forms.baseTextarea import baseTextarea
 from views.pyStrap.heros.baseHero import baseHero
 from views.pyStrap.icons.baseIcon import baseIcon
@@ -70,3 +69,5 @@ from views.pyStrap.wells.baseWell import baseWell
 from views.pyStrap.nonBootstrap.baseContenteditable import baseContenteditable
 from views.pyStrap.nonBootstrap.baseContenteditable import baseEditableScript
 from views.pyStrap.nonBootstrap.baseScript import baseScript
+
+from views.pyStrap.carousel.baseCarousel import baseCarousel

@@ -29,7 +29,7 @@ import re
 import urllib
 
 import models.basic.sessionModel as sm
-
+import models.blocks.helpers as helpers
 cookie = Cookie.SimpleCookie()
 
 
@@ -83,7 +83,11 @@ def app(env, start_response):
 
                         sessionID = cookie.output(header="")[5:]
                         c.session = sm.session(sessionID)
-                        c.session.history = env["REQUEST_URI"]
+                        if env["REQUEST_METHOD"] == "GET":
+                                c.session.history = env["REQUEST_URI"]
+
+                        c.session.loggedIn = helpers.boolean(c.session.loggedIn)
+
 
                         newHTTPObject = url.pageObject(env, members)
 

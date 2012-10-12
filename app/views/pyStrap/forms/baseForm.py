@@ -65,12 +65,8 @@ class baseHorizontalForm(b.brick):
 
                                 else:
                                         returnHTML += """
-                                        <div class="control-group %(classes)s">
-                                                <div class="controls">
-                                                        %(content)s
-                                                        %(help)s
-                                                </div>
-                                        </div>
+                                        %(content)s
+                                        %(help)s
                                         """ % element
                         else:
                                 returnHTML += element

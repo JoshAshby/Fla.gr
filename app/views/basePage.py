@@ -31,11 +31,12 @@ class basePage(object):
                 str - String of HTML which represents a HTML page
 
         """
-        def __init__(self, title="", content=""):
+        def __init__(self, title="", content="", scripts=""):
                 self.assetURL = c.assetURL
                 self.baseURL = c.baseURL
                 self.title = title
                 self.content = content
+                self.scripts = scripts
                 self.returnHTML = ""
 
         def build(self):
@@ -51,6 +52,9 @@ class basePage(object):
                 %(content)s
                 <script src="http://code.jquery.com/jquery-latest.js"></script>
                 <script src="%(assetURL)s/js/bootstrap.js"></script>
+                <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-carousel.js"></script>
+                <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script>
+                %(scripts)s
         </body>
 </html>""" % self
 

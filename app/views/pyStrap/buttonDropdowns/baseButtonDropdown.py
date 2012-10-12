@@ -15,7 +15,7 @@ http://JoshAshby.com
 http://github.com/JoshAshby
 """
 import views.pyStrap.brick as b
-
+import views.pyStrap.buttons.baseButton as btn
 
 class baseButtonDropdown(b.brick):
         """
@@ -34,21 +34,21 @@ class baseButtonDropdown(b.brick):
                 str - an HTML div element
 
         """
-        __other__ = ["name"]
+        __other__ = ["btn", "dropdown"]
         __tag__ = "div"
         __tagContent__ = "content"
         def prep(self):
                 classes = ""
                 for each in self.classes:
                         classes += " %s " % each
-                self.content = """<a class="btn dropdown-toggle %s" data-toggle="dropdown" href="#">
-        %s
-        <span class="caret"></span>
-</a>
-%s""" % (classes, self.name, self.content)
+
+                self.btn["classes"].union({"dropdown-toggle"})
+                self.btn["data"].append(("toggle", "dropdown"))
+
+                self.content = self.btn + self.dropdown
 
 
-class baseSplitADropdown(b.brick):
+class baseSplitDropdown(b.brick):
         """
         baseSplitADropdown
 
@@ -67,47 +67,7 @@ class baseSplitADropdown(b.brick):
         """
         __tag__ = "div"
         __tagContent__ = "content"
-        __other__ = ["link", "name", "btnClasses"]
+        __other__ = ["btn", "dropdown", "dropBtn"]
         def prep(self):
-                self.link = self.link or "#"
+                self.content = self.btn + self.dropBtn + self.dropdown
                 self.classes.append("btn-group")
-                self.content = """<a class="btn %s" href="%s">
-        %s
-</a>
-<button class=" btn dropdown-toogle %s" data-toggle="dropdown">
-        <span class="caret"></span>
-</button>
-%s""" % (self.btnClasses, self.link, self.name, self.btnClasses, self.content)
-
-
-class baseSplitButtonDropdown(b.brick):
-        """
-        baseSplitButtonDropdown
-
-        Abstract:
-                Very base button dropdown element.
-
-        Accepts:
-                content - baseMenu
-                name
-                classes
-                id
-
-        Returns:
-                str - an HTML div element
-
-        """
-        __tag__ = "div"
-        __tagContent__ = "content"
-        __other__ = ["name", "btnClasses"]
-        def prep(self):
-                self.link = self.link or "#"
-                self.classes.append("btn-group")
-
-                self.content = """<button class="btn %s"">
-        %s
-</button>
-<button class=" btn dropdown-toogle %s" data-toggle="dropdown">
-        <span class="caret"></span>
-</button>
-%s""" % (self.btnClasses, self.name, self.btnClasses, self.content)

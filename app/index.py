@@ -30,7 +30,8 @@ import seshat.framework as fw
 from objects.userObject import userObject as basePage
 from seshat.route import route
 
-import models.basic.postModel as pm
+import models.postModel as pm
+import models.carouselModel as cm
 import views.pyStrap.pyStrap as ps
 
 
@@ -44,38 +45,123 @@ class index(basePage):
                 """
 
                 """
-                hero = ps.baseHeading(ps.baseIcon("flag")+" Welcome to fla.gr!", size=1)
-                hero += ps.baseParagraph("Fla.gr is a place to store web memories. Whether they are just notes, a webpage, or a neat book or some other oddity of the web, you can find (or better yet make) a flag for it!")
+                carousel = cm.carouselList(True)
 
-                hero = ps.baseHero(hero)
-                posts = pm.postList()
+                hero = ""
 
-                postListRows = ""
+                if carousel:
+                        carouselList = [ ps.baseColumn(item["content"], offset=1, width=6) for item in carousel if item["visibility"] ]
+
+                        if carouselList: hero = ps.baseHero(ps.baseCarousel(items=carouselList, id="frontCarousel"))
+
+                posts = pm.postList(True)
+
+                content = ""
                 if posts:
                         for post in posts:
-                                if c.session.loggedIn and c.session.user.level in ["GOD", "admin"]:
-                                        edit = ps.baseButtonGroup([ps.baseAButton("Edit this post", link=c.baseURL + "/admin/posts/edit/%s"%post.id, classes="btn-info"),
-                                                ps.baseAButton("Delete this post", link=c.baseURL+"/admin/posts/delete/%s"%post.id, classes="btn-danger")])
-                                else:
-                                        edit = ""
+                                if post["visibility"]:
+                                        if c.session.loggedIn and c.session.user.level in ["GOD", "admin"]:
+                                                edit = ps.baseSplitDropdown(btn=ps.baseAButton(ps.baseIcon("zoom-in"),
+                                                                classes="",
+                                                                link=c.baseURL+"/posts/view/"+post.id,
+                                                                data=[("original-title", "Expand Post")],
+                                                                rel="tooltip"),
+                                                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                                                classes="dropdown-toggle btn-info",
+                                                                data=[("toggle", "dropdown"),
+                                                                        ("original-title", "More actions")],
+                                                                rel="tooltip"),
+                                                        dropdown=ps.baseMenu(name="postDropdown",
+                                                                items=[{"name": "%s View as admin" % ps.baseIcon("cogs"), "link": c.baseURL+"/admin/posts/view/"+post.id},
+                                                                        {"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/posts/edit/"+post.id},
+                                                                        {"name": ps.baseBold("%s Delete"%ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/posts/delete/"+post.id}]
+                                                                ))
+                                        else:
+                                                edit = ps.baseButtonGroup([
+                                                        ps.baseAButton(ps.baseIcon("zoom-in"),
+                                                                classes="",
+                                                                link=c.baseURL+"/posts/view/"+post.id,
+                                                                data=[("original-title", "Expand Post")],
+                                                                rel="tooltip"),
+                                                        ])
+ 
+                                        content += ps.baseRow(ps.baseColumn(ps.baseAnchor(ps.baseHeading(post.title, size=1), link=c.baseURL+"/posts/view/"+post.id)))
+                                        content += ps.baseRow(ps.baseColumn(ps.baseWell(
+                                                        ps.baseColumn(ps.baseBold("Author: ", classes="muted"))+
+                                                        ps.baseColumn(post.author)+
+                                                        ps.baseColumn(ps.baseBold("When: ", classes="muted"))+
+                                                        ps.baseColumn(post.time)+
+                                                        ps.baseColumn(edit, classes="pull-right")
+                                                        ), width=10
+                                                ))
 
-                                title = post.title + ps.baseSmall(" Posted by: "+post.author)
+                                        content += ps.baseRow([
+                                                ps.baseColumn(ps.baseParagraph(post["post"][:250]+ps.baseAnchor("...", link=c.baseURL+"/posts/view/"+post.id))),
+                                                ])
+                                        content += "<hr>"
 
-                                postListRows += """
-                                %(title)s
-                                %(post)s
-                                Posted/Last Updated at: %(time)s
-                                %(edit)s
-                                <hr>
-                                """ % {"title": ps.baseHeading(title, size=2),
-                                        "post": post.post,
-                                        "time": ps.baseSmall(post.time),
-                                        "edit": edit}
+                if not content:
+                        content = "Well it would look like we don't have any news to bring you just this moment, however stay tuned!"
+
+
+                self.view.body = hero + content
+                self.view.scripts = ps.baseScript("""
+        $('#frontCarousel').carousel()
+        $('.btn-group').tooltip({
+                      selector: "a[rel=tooltip]"
+                })
+                """)
+
+
+@route("/posts/view/(.*)")
+class postsView(basePage):
+        def GET(self):
+                """
+                """
+                post = pm.post(self.members[0], True)
+
+                self.view["title"] = "Post: %s" % post.title
+
+                content = ""
+
+                if not c.session.user.level in ["admin", "GOD"]:
+                        other = ""
                 else:
-                        postListRows = "Well it would look like we don't have any news to bring you just this moment, however stay tuned!"
+                        other = ps.baseColumn(
+                                ps.baseButtonGroup([
+                                ps.baseAButton(ps.baseIcon("edit"),
+                                        classes="btn-info",
+                                        link=c.baseURL+"/admin/posts/edit/%s"%post.id,
+                                        data=[("original-title", "Edit Post")],
+                                        rel="tooltip"),
+                                ps.baseAButton(ps.baseIcon("trash"),
+                                        classes="btn-danger",
+                                        link=c.baseURL+"/admin/posts/delete/%s"%post.id,
+                                        data=[("original-title", "Delete Post")],
+                                        rel="tooltip")
+                                        ])
+                                )
 
 
-                self.view.body = hero + postListRows
+                content += ps.baseRow(ps.baseColumn(ps.baseHeading(post.title, size=1)))
+                content += ps.baseRow(ps.baseColumn(ps.baseWell(
+                        ps.baseColumn(ps.baseBold("Author: ", classes="muted"))+
+                        ps.baseColumn(post.author)+
+                        ps.baseColumn(ps.baseBold("When: ", classes="muted"))+
+                        ps.baseColumn(post.time)+
+                        ps.baseColumn(other, classes="pull-right")
+                        ), width=10
+                        ))
+                content += ps.baseRow([
+                        ps.baseColumn(ps.baseParagraph(post["post"])),
+                        ])
+
+                self.view["body"] = content
+                self.view.scripts = ps.baseScript("""
+                $('.btn-group').tooltip({
+                      selector: "a[rel=tooltip]"
+                })
+""")
 
 
 from controllers.authController import *
@@ -85,8 +171,8 @@ from controllers.godController import *
 
 #Fla.gr specific code. Makes for easy modulation of the system...
 from flagr.controllers.flagController import *
-#from flagr.controllers.profileController import *
-#from flagr.controllers.labelController import *
+from flagr.controllers.profileController import *
+from flagr.controllers.labelController import *
 
 #from test import *
 

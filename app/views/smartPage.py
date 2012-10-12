@@ -38,7 +38,7 @@ class smartPage(object):
                 str - String of HTML which represents a HTML page
 
         """
-        __defaultParts__ = [ "title", "navbar", "header", "sidebar", "body", "footer", "page", "messages", "fluid"]
+        __defaultParts__ = [ "title", "navbar", "header", "sidebar", "body", "footer", "page", "messages", "fluid", "scripts"]
         def __init__(self, **kwargs):
                 for part in self.__defaultParts__:
                         setattr(self, part, "")
@@ -111,7 +111,7 @@ class smartPage(object):
                         row = ps.baseRow([self.sidebar, self.body])
 
                 else:
-                        self.body = ps.baseColumn(self.body, width=8, offset=2)
+                        self.body = ps.baseColumn(self.body, width=10, offset=1)
                         row = ps.baseRow(self.body)
 
                 content += row
@@ -135,19 +135,29 @@ class smartPage(object):
 
                 self.page.content = content
                 self.page.title = self.title
+                self.page.scripts = self.scripts
 
 
 class flagrPage(smartPage):
         def finishInit(self):
                 home = ps.baseIcon(icon="home")+" Home"
                 flags = ps.baseIcon(icon="flag")+" Flags"
+                labels = ps.baseIcon("tags") + " Labels"
 
-                if c.session.loggedIn == "True":
+                if c.session.loggedIn:
                         name = "Heya %s!"%(c.session.user.username)
                         logout = ps.baseIcon("road") + " Logout"
                         admin = ps.baseIcon("dashboard") + " Admin Panel"
                         flagLink = {"name": ps.baseIcon("flag")+" Your flags", "link": "/flags"}
-                        profileLink = {"name": ps.baseIcon("user")+" Your profile", "link": "/profiles"}
+                        profileLink = {"name": ps.baseIcon("user")+" You", "link": "/profiles"}
+
+                        adminSub = ps.baseMenu(name="adminSubDropdown",
+                                        items=[{"name": ps.baseIcon("rss")+" Blog Posts", "link": c.baseURL+"/admin/posts"},
+                                                {"name": ps.baseIcon("play")+" News Carousel", "link": c.baseURL+"/admin/carousel"},
+                                                {"name": ps.baseIcon("group")+" Users", "link": c.baseURL+"/admin/users"}])
+
+                        deitySub = ps.baseMenu(name="deitySubDropdown",
+                                        items=[{"name": ps.baseIcon("flag")+" All flags", "link": c.baseURL+"/god/flags"}])
 
                         if c.session.user.level == "GOD":
                                 deity = ps.baseIcon("eye-open") + " Deity Panel"
@@ -156,8 +166,8 @@ class flagrPage(smartPage):
                                         items=[flagLink,
                                                 profileLink,
                                                 "divider",
-                                                {"name": deity, "link": c.baseURL+"/god"},
-                                                {"name": admin, "link": c.baseURL+"/admin"},
+                                                {"subName": deity, "subLink": c.baseURL+"/god", "sub": deitySub},
+                                                {"subName": admin, "subLink": c.baseURL+"/admin", "sub": adminSub},
                                                 "divider",
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
 
@@ -166,7 +176,7 @@ class flagrPage(smartPage):
                                         items=[flagLink,
                                                 profileLink,
                                                 "divider",
-                                                {"name": "Admin Panel", "link": c.baseURL + "/admin"},
+                                                {"subName": admin, "subLink": c.baseURL + "/admin", "sub": adminSub},
                                                 "divider",
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
 
@@ -195,7 +205,8 @@ class flagrPage(smartPage):
                         brand={"name": c.appName, "link": c.baseURL},
                         left=[{"name": ps.baseIcon("home")+" Home", "link": c.baseURL},
                                 "divider",
-                                {"name": flags, "link": c.baseURL + "/flags"}],
+                                {"name": flags, "link": c.baseURL + "/labels/view/public"},
+                                {"name": labels, "link": c.baseURL+"/labels"}],
                         right=[{"dropdown": userDropdown, "name": name}])
 
                 self.footer = """

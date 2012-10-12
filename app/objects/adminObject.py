@@ -20,9 +20,11 @@ import views.pyStrap.pyStrap as ps
 
 class adminObject(bo.baseHTTPPageObject):
        __level__ = "admin"
-       __login__ = "True"
+       __login__ = True
        __name__ = "admin"
        def finishInit(self):
-               self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Things to do..."}, 
-                {"link": c.baseURL + "/admin/posts", "name": "%s Edit Front Page Posts"%ps.baseIcon("edit")},
-                {"link": c.baseURL + "/admin/users", "name": "%s Manage Some Users" % ps.baseIcon("user")}]))
+               self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Things to do..."},
+                {"link": c.baseURL + "/admin", "name": "%s Front Panel"%ps.baseIcon("dashboard")},
+                {"link": c.baseURL + "/admin/posts", "name": "%s Front Page Posts"%ps.baseIcon("rss")},
+                {"link": c.baseURL + "/admin/carousel", "name": "%s Front Page Carousel"%ps.baseIcon("play")},
+                {"link": c.baseURL + "/admin/users", "name": "%s Manage Some Users" % ps.baseIcon("group")}]))
