@@ -18,13 +18,24 @@ import objects.baseObject as bo
 import views.pyStrap.pyStrap as ps
 
 
-class adminObject(bo.baseHTTPPageObject):
-       __level__ = "admin"
+class profileObject(bo.baseHTTPPageObject):
        __login__ = True
-       __name__ = "admin"
+       __name__ = "profile"
        def finishInit(self):
-               self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Things to do..."},
-                {"link": c.baseURL + "/admin", "name": "%s Front Panel"%ps.baseIcon("dashboard")},
-                {"link": c.baseURL + "/admin/posts", "name": "%s Front Page Posts"%ps.baseIcon("rss")},
-                {"link": c.baseURL + "/admin/carousels", "name": "%s Front Page Carousel"%ps.baseIcon("play")},
-                {"link": c.baseURL + "/admin/users", "name": "%s Manage Some Users" % ps.baseIcon("group")}]))
+               messCount = 4
+               #messCount = c.session.user.messages.count()
+               if messCount:
+                       messCount = ps.baseBadge(messCount, classes="badge-important")
+               messages = "%s Your Messages %s" % (ps.baseIcon("envelope-alt"), messCount)
+               self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Your stuff"},
+                {"link": c.baseURL + "/your/flags", "name": "%s Your flags"%ps.baseIcon("flag")},
+                {"link": c.baseURL + "/your/labels", "name": "%s Your labels"%ps.baseIcon("tags")},
+                "divider",
+                {"header": "Settings"},
+                {"link": c.baseURL+"/your/messages", "name": messages},
+                {"link": c.baseURL + "/your/settings", "name": "%s Your settings"%ps.baseIcon("cogs")},
+                "divider",
+                {"header": "About you (%s)"%c.session.user.username},
+                {"text": "Nothing yet"}
+#                {"text": c.session.user.about}
+                ]))

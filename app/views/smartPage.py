@@ -148,9 +148,16 @@ class flagrPage(smartPage):
                 stuffFlag = ""
                 stuffLabel = ""
                 stuffUser = ""
+                stuffMail = ""
                 div = ""
 
                 if c.session.loggedIn:
+                        messCount = 4
+                        #messCount = c.session.user.messages.count()
+                        if messCount:
+                                messCount = ps.baseBadge(messCount, classes="badge-important")
+                        messages = "%s %s" % (ps.baseIcon("envelope-alt"), messCount)
+                        stuffMail = {"name": messages, "link": "/your/messages"}
                         stuffFlag = {"name": ps.baseIcon("flag"), "link": "/your/flags"}
                         stuffLabel = {"name": ps.baseIcon("tags"), "link": "/your/labels"}
                         stuffUser = {"name": ps.baseIcon("user"), "link": "/you"}
@@ -171,13 +178,21 @@ class flagrPage(smartPage):
                                         items=[{"name": ps.baseIcon("flag")+" All flags", "link": c.baseURL+"/god/flags"},
                                                 {"name": ps.baseIcon("tags")+" All labels", "link": c.baseURL+"/god/labels"}])
 
+                        youSub = {"subName": "%s You"%ps.baseIcon("user"),
+                                "subLink": c.baseURL+"/you",
+                                "sub": ps.baseMenu(name="youSubDropdown",
+                                        items=[
+                                                flagLink,
+                                                labelLink
+                                                ]
+                                        )
+                                }
+
                         if c.session.user.level == "GOD":
                                 deity = ps.baseIcon("eye-open") + " Deity Panel"
 
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[flagLink,
-                                                labelLink,
-                                                profileLink,
+                                        items=[youSub,
                                                 "divider",
                                                 {"subName": deity, "subLink": c.baseURL+"/god", "sub": deitySub},
                                                 {"subName": admin, "subLink": c.baseURL+"/admin", "sub": adminSub},
@@ -186,9 +201,7 @@ class flagrPage(smartPage):
 
                         elif c.session.user.level == "admin":
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[flagLink,
-                                                labelLink,
-                                                profileLink,
+                                        items=[youSub,
                                                 "divider",
                                                 {"subName": admin, "subLink": c.baseURL + "/admin", "sub": adminSub},
                                                 "divider",
@@ -196,9 +209,7 @@ class flagrPage(smartPage):
 
                         else:
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[flagLink,
-                                                labelLink,
-                                                profileLink,
+                                        items=[youSub,
                                                 "divider",
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
                 else:
@@ -220,11 +231,10 @@ class flagrPage(smartPage):
                         brand={"name": c.appName, "link": c.baseURL},
                         left=[{"name": home, "link": c.baseURL},
                                 "divider",
-                                {"name": public, "link": c.baseURL + "/public"},
+                                {"name": public, "link": c.baseURL + "/flags"},
                                 {"name": labels, "link": c.baseURL+"/labels"}],
                         right=[stuffFlag,
-                                stuffLabel,
-                                stuffUser,
+                                stuffMail,
                                 div,
                                 {"dropdown": userDropdown, "name": name}])
 

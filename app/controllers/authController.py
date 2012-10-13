@@ -28,7 +28,7 @@ class login(basePage):
                 Display the login page.
                 """
                 if c.session.loggedIn:
-                        self.head = ("303 SEE OTHER", [("location", "/")])
+                        self.head = ("303 SEE OTHER", [("location", "/you")])
                         c.session.pushMessage("Hey look, you're already signed in!")
 
                 else:
@@ -51,7 +51,7 @@ class login(basePage):
 
                 try:
                         c.session.login(name, passwd)
-                        self.head = ("303 SEE OTHER", [("location", "/flags")])
+                        self.head = ("303 SEE OTHER", [("location", "/you")])
                         c.session.pushMessage("Welcome back, %s!" % name, icon="")
 
                 except Exception as exc:

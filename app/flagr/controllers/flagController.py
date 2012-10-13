@@ -32,10 +32,6 @@ class flagIndex(flagrPage):
         def GET(self):
                 """
                 """
-
-                if self.members.has_key("view"): view = self.members["view"]
-                else: view = ""
-
                 new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
                         classes="btn-info", link=c.baseURL+"/flags/new"),
                         dropdown=ps.baseMenu(name="flagDropdown",

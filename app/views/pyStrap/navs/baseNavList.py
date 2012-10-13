@@ -58,5 +58,10 @@ class baseNavList(b.brick):
                                         <li class="nav-header">%(header)s</li>
                                         """ % element
 
+                                if element.has_key("text"):
+                                        content += """
+                                        <li classes="">%(text)s</li>
+                                        """ % element
+
 
                 self.items = content

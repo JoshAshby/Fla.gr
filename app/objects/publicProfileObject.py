@@ -17,5 +17,5 @@ import config as c
 import objects.baseObject as bo
 
 
-class userObject(bo.baseHTTPPageObject):
-        __name__ = "user"
+class publicProfileObject(bo.baseHTTPPageObject):
+        __name__ = "publicProfile"
