@@ -50,12 +50,12 @@ class usersIndex_admin(basePage):
                                         ])
                                 editButton = ps.baseAButton(ps.baseIcon("edit"),
                                                 classes="btn-info",
-                                                link=c.baseURL+"/admin/users/edit/%s"%user.id,
+                                                link=c.baseURL+"/admin/user/%s/edit"%user.id,
                                                 data=[("original-title", "Edit User")],
                                                 rel="tooltip")
                                 deleteButton = ps.baseAButton(ps.baseIcon("trash"),
                                                 classes="btn-danger",
-                                                link=c.baseURL+"/admin/users/delete/%s"%user.id,
+                                                link=c.baseURL+"/admin/user/%s/delete"%user.id,
                                                 data=[("original-title", "Delete User")],
                                                 rel="tooltip")
                                 actions = ps.baseButtonGroup([editButton, deleteButton])
@@ -73,6 +73,8 @@ class usersIndex_admin(basePage):
                       selector: "a[rel=tooltip]"
                 })
 """)
+
+@route("/admin/user/(.*)/edit")
 @route("/admin/users/edit/(.*)")
 class usersEdit_admin(basePage):
         def GET(self):
@@ -98,9 +100,9 @@ class usersEdit_admin(basePage):
                         else:
                                 other.append({"label": "Demigod", "value": "god"})
 
-                editForm = ps.baseHorizontalForm(action=(c.baseURL+"/admin/users/edit/" + id),
+                editForm = ps.baseHorizontalForm(action=(c.baseURL+"/admin/user/%s/edit" % id),
                         method="POST",
-                        actions=[ps.baseButtonGroup([ps.baseSubmit("Update, perhaps?", classes="btn-info"), ps.baseAButton("Delete, perhaps?", classes="btn-danger", link=c.baseURL+"/admin/users/delete/"+user.id)])],
+                        actions=[ps.baseButtonGroup([ps.baseSubmit("Update, perhaps?", classes="btn-info"), ps.baseAButton("Delete, perhaps?", classes="btn-danger", link=c.baseURL+"/admin/user/%s/delete"%user.id)])],
                         fields=[
                                 {"label": "Set a new Password, perhaps?", "content": ps.baseInput(type="password", name="password", placeholder="password", classes="span5")},
                                 {"label": "Add a note to their account, perhaps?", "content": ps.baseTextarea(user.notes, name="notes", classes="span5")},
@@ -135,6 +137,7 @@ class usersEdit_admin(basePage):
                         c.session.pushMessage("Something went wrong while updateing the user, id: %s. Heres the edit form again. Sorry!" % ps.baseBold(user.id), icon="fire", title="OH SNAP!", type="error")
 
 
+@route("/admin/user/(.*)/delete")
 @route("/admin/users/delete/(.*)")
 class usersDelete_admin(basePage):
         def GET(self):
@@ -148,9 +151,9 @@ class usersDelete_admin(basePage):
                 confirm += ps.baseParagraph("You are about to delete user: %s"%user.username, classes="text-error")
                 confirm += ps.baseParagraph("Pressing confirm will delete this user forever and you will not be able to recover them. Are you sure you would like to continue?", classes="text-warning")
 
-                confirmForm = ps.baseBasicForm(action=c.baseURL+"/admin/users/delete/"+user.id,
+                confirmForm = ps.baseBasicForm(action=c.baseURL+"/admin/user/%s/delete"%user.id,
                                 method="POST",
-                                fields=[ps.baseButtonGroup([ps.baseSubmit("I feel no mercy (Delete)", classes="btn-danger"), ps.baseAButton("NO, I made a mistake!(Don't Delete)", link=c.baseURL+"/admin/users/edit/"+user.id, classes="btn-info")])])
+                                fields=[ps.baseButtonGroup([ps.baseSubmit("I feel no mercy (Delete)", classes="btn-danger"), ps.baseAButton("NO, I made a mistake!(Don't Delete)", link=c.baseURL+"/admin/user/%s/edit"%user.id, classes="btn-info")])])
 
                 confirm += ps.baseWell(confirmForm)
 
@@ -215,4 +218,3 @@ class usersNew_admin(basePage):
                         if c.debug: print exc
                         self.head = ("303 SEE OTHER", [("location", "/admin/users/new")])
                         c.session.pushMessage("Something went wrong while creating the user: %s. Heres the edit form again. Sorry!" % ps.baseBold(name), icon="fire", title="OH SNAP!", type="error")
-

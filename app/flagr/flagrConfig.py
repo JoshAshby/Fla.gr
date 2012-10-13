@@ -20,14 +20,14 @@ def flagThumbnails(flags, width=10):
         if flags:
                 flagList = ""
                 for flag in flags:
-                        title = ps.baseAnchor("%s %s" % (ps.baseIcon(flag.icon), flag.title), link=c.baseURL+"/flags/view/"+flag.id)
+                        title = ps.baseAnchor("%s %s" % (ps.baseIcon(flag.icon), flag.title), link=c.baseURL+"/flag/%s"%flag.id)
 
                         if not flag["visibility"]:
                                 other = ps.baseLabel("%s Private" % ps.baseIcon("eye-close"))
                         else:
-                                other = ps.baseAnchor(ps.baseLabel("%s Public" % ps.baseIcon("globe")), link=c.baseURL+"/labels/view/public")
+                                other = ps.baseAnchor(ps.baseLabel("%s Public" % ps.baseIcon("globe")), link=c.baseURL+"/public")
 
-                        caption = "%s%s<br />" % (flag["description"][:250], ps.baseAnchor("...", link=c.baseURL+"/flags/view/"+flag.id))
+                        caption = "%s%s<br />" % (flag["description"][:250], ps.baseAnchor("...", link=c.baseURL+"/flag/%s"%flag.id))
 
                         for field in flag.fields:
                                 name = field[0] if type(field) != str else field
@@ -45,22 +45,22 @@ def flagThumbnails(flags, width=10):
                                 who = "You!"
                                 edit = ps.baseSplitDropdown(btn=(
                                         ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
-                                                link=c.baseURL+"/flags/view/"+flag.id,
+                                                link=c.baseURL+"/flag/%s"%flag.id,
                                                 classes="",
                                                 rel="tooltip",
                                                 data=[("original-title", "View this flag")])+
                                         ps.baseAButton("%s" % ps.baseIcon("edit"),
                                                 classes="btn-info",
-                                                link=c.baseURL+"/flags/edit/"+flag.id,
+                                                link=c.baseURL+"/flag/%s/edit"%flag.id,
                                                 rel="tooltip",
                                                 data=[("original-title", "Edit this flag")])
                                         ),
                                         dropdown=ps.baseMenu(name="flagDropdown",
                                                 items=[{"name": "%s Copy flag" % ps.baseIcon("copy"),
-                                                        "link": c.baseURL+"/flags/copy/"+flag.id},
+                                                        "link": c.baseURL+"/flag/%s/copy"%flag.id},
                                                 {"name": ps.baseBold("%s Delete flag" % ps.baseIcon("trash"),
                                                         classes="text-error"),
-                                                        "link": c.baseURL+"/flags/delete/"+flag.id}]
+                                                        "link": c.baseURL+"/flag/%s/delete"%flag.id}]
                                                 ),
                                         dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
                                                 classes="dropdown-toggle btn-danger",
@@ -71,10 +71,10 @@ def flagThumbnails(flags, width=10):
                         elif c.session.loggedIn:
                                 edit = ps.baseButtonGroup([
                                         ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
-                                                        link=c.baseURL+"/flags/view/"+flag.id,
+                                                        link=c.baseURL+"/flag/%s"%flag.id,
                                                         classes="", rel="tooltip", data=[("original-title", "View this flag")]),
                                         ps.baseAButton(ps.baseIcon("copy"),
-                                                link=c.baseURL+"/flags/copy/"+flag.id,
+                                                link=c.baseURL+"/flag/%s/copy"%flag.id,
                                                 classes="",
                                                 rel="tooltip",
                                                 data=[("original-title", "Copy this flag")])
@@ -82,7 +82,7 @@ def flagThumbnails(flags, width=10):
                         else:
                                 edit = ps.baseButtonGroup([
                                         ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
-                                                        link=c.baseURL+"/flags/view/"+flag.id,
+                                                        link=c.baseURL+"/flag/%s"%flag.id,
                                                         classes="", rel="tooltip", data=[("original-title", "View this flag")])
                                         ], classes="pull-right")
 
@@ -93,7 +93,7 @@ def flagThumbnails(flags, width=10):
 
                         labelLinks = "%s " % other
                         for label in flag["labels"]:
-                                labelLinks += ps.baseAnchor(ps.baseLabel(label, classes="label-info"), link=c.baseURL+"/labels/view/"+label) + " "
+                                labelLinks += ps.baseAnchor(ps.baseLabel(label, classes="label-info"), link=c.baseURL+"/label/"+label) + " "
 
                         caption += ps.baseRow([
                                 ps.baseColumn(ps.baseBold("Labels: ", classes="muted"), width=1),

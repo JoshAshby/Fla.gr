@@ -22,7 +22,7 @@ import models.carouselModel as cm
 import views.pyStrap.pyStrap as ps
 
 
-@route("/admin/carousel")
+@route("/admin/carousels")
 class carouselIndex_admin(basePage):
         def GET(self):
                 """
@@ -41,12 +41,12 @@ class carouselIndex_admin(basePage):
                 pageHead = ps.baseRow([
                         ps.baseColumn(ps.baseHeading("%s Front page carousel" % ps.baseIcon("play"), size=1)),
                                 ps.baseButtonGroup([
-                                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/carousel/new",
+                                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/carousels/new",
                                         data=[("original-title", "New Item")],
                                         rel="tooltip",
                                         classes="btn-info"),
                                         ps.baseAButton(ps.baseIcon("wrench"),
-                                                link=c.baseURL+"/admin/carousel/drafts",
+                                                link=c.baseURL+"/admin/carousels/drafts",
                                                 data=[("original-title", "View Drafts")],
                                                 rel="tooltip",
                                                 classes="")
@@ -59,21 +59,21 @@ class carouselIndex_admin(basePage):
                         content = ""
                         for carouselItem in carousel:
                                 if not carouselItem["visibility"]:
-                                        other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/carousel/drafts")
+                                        other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/carousels/drafts")
                                 else:
                                         other = ps.baseLabel("%s Published" % ps.baseIcon("globe"))
   
                                 content += ps.baseRow([
-                                        ps.baseColumn(ps.baseParagraph(carouselItem["content"][:50]+ps.baseAnchor("...", link=c.baseURL+"/admin/carousel/view/"+carouselItem.id))),
+                                        ps.baseColumn(ps.baseParagraph(carouselItem["content"][:50]+ps.baseAnchor("...", link=c.baseURL+"/admin/carousel/"+carouselItem.id))),
                                         ])
 
                                 edit = ps.baseSplitDropdown(btn=ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
-                                        classes="", link=c.baseURL+"/admin/carousel/view/"+carouselItem.id,
+                                        classes="", link=c.baseURL+"/admin/carousel/%s"%carouselItem.id,
                                         rel="tooltip",
                                         data=[("original-title", "Expand")]),
                                         dropdown=ps.baseMenu(name="postDropdown",
-                                                items=[{"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/carousel/edit/"+carouselItem.id},
-                                                        {"name": ps.baseBold("%s Delete" % ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/carousel/delete/"+carouselItem.id}]
+                                                items=[{"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/carousel/%s/edit"%carouselItem.id},
+                                                        {"name": ps.baseBold("%s Delete" % ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/carousel/%s/delete"%carouselItem.id}]
                                                 ),
                                         dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
                                                 classes="dropdown-toggle btn-danger",
@@ -102,7 +102,7 @@ class carouselIndex_admin(basePage):
 """)
 
 
-@route("/admin/carousel/drafts")
+@route("/admin/carousels/drafts")
 class carouselDrafts_admin(basePage):
         def GET(self):
                 """
@@ -114,12 +114,12 @@ class carouselDrafts_admin(basePage):
                 pageHead = ps.baseRow([
                         ps.baseColumn(ps.baseHeading("%s Front page carousel: Drafts" % ps.baseIcon("play"), size=1)),
                                 ps.baseButtonGroup([
-                                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/carousel/new",
+                                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/carousels/new",
                                         data=[("original-title", "New Item")],
                                         rel="tooltip",
                                         classes="btn-info"),
                                         ps.baseAButton(ps.baseIcon("wrench"),
-                                                link=c.baseURL+"/admin/carousel",
+                                                link=c.baseURL+"/admin/carousels",
                                                 data=[("original-title", "View All")],
                                                 rel="tooltip",
                                                 classes="")
@@ -131,17 +131,17 @@ class carouselDrafts_admin(basePage):
                 content = ""
                 for carouselItem in carousel:
                         if not carouselItem["visibility"]:
-                                other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/carousel/drafts")
+                                other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/carousels/drafts")
                                 content += ps.baseRow([
-                                        ps.baseColumn(ps.baseParagraph(carouselItem["content"][:50]+ps.baseAnchor("...", link=c.baseURL+"/admin/carousel/view/"+carouselItem.id))),
+                                        ps.baseColumn(ps.baseParagraph(carouselItem["content"][:50]+ps.baseAnchor("...", link=c.baseURL+"/admin/carousel/%s"%carouselItem.id))),
                                         ])
                                 edit = ps.baseSplitDropdown(btn=ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
-                                        classes="", link=c.baseURL+"/admin/carousel/view/"+carouselItem.id,
+                                        classes="", link=c.baseURL+"/admin/carousel/%s"%carouselItem.id,
                                         rel="tooltip",
                                         data=[("original-title", "Expand")]),
                                         dropdown=ps.baseMenu(name="postDropdown",
-                                                items=[{"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/carousel/edit/"+carouselItem.id},
-                                                        {"name": ps.baseBold("%s Delete" % ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/carousel/delete/"+carouselItem.id}]
+                                                items=[{"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/carousel/%s/edit"%carouselItem.id},
+                                                        {"name": ps.baseBold("%s Delete" % ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/carousel/%s/delete"%carouselItem.id}]
                                                 ),
                                         dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
                                                 classes="dropdown-toggle btn-danger",
@@ -169,60 +169,8 @@ class carouselDrafts_admin(basePage):
                 })
 """)
 
-@route("/admin/carousel/view/(.*)")
-class carouselView_admin(basePage):
-        def GET(self):
-                """
-                """
-                carouselItem = cm.carousel(self.members[0], True)
 
-                self.view["title"] = "Carousel: %s" % carouselItem.id
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Viewing carousel item: %s" % (ps.baseIcon("play"), carouselItem.id), size=1))
-                        ]) + "<hr>"
-
-                content = ""
-
-                if not carouselItem["visibility"]:
-                        other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/carousel/drafts")
-                else:
-                        other = ps.baseLabel("%s Published" % ps.baseIcon("globe"))
-
-                content += ps.baseRow(ps.baseColumn(ps.baseWell(
-                        ps.baseColumn(ps.baseBold("Author: ", classes="muted"))+
-                        ps.baseColumn(carouselItem.author)+
-                        ps.baseColumn(ps.baseBold("When: ", classes="muted"))+
-                        ps.baseColumn(carouselItem.time)+
-                        ps.baseColumn(other)+
-                        ps.baseColumn(
-                                ps.baseButtonGroup([
-                                ps.baseAButton(ps.baseIcon("edit"),
-                                        classes="btn-info",
-                                        link=c.baseURL+"/admin/carousel/edit/%s"%carouselItem.id,
-                                        data=[("original-title", "Edit Item")],
-                                        rel="tooltip"),
-                                ps.baseAButton(ps.baseIcon("trash"),
-                                        classes="btn-danger",
-                                        link=c.baseURL+"/admin/carousel/delete/%s"%carouselItem.id,
-                                        data=[("original-title", "Delete Item")],
-                                        rel="tooltip")
-                                        ]), classes="pull-right"
-                                )
-                        ), width=8
-                ))
-
-                content += ps.baseRow([
-                        ps.baseColumn(ps.baseHero(carouselItem["content"])),
-                        ])
-
-                self.view["body"] = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
-
-
+@route("/admin/carousel/(.*)/edit")
 @route("/admin/carousel/edit/(.*)")
 class carouselEdit_admin(basePage):
         def GET(self):
@@ -241,7 +189,7 @@ class carouselEdit_admin(basePage):
 
 
                 editForm = ps.baseHeading("%s Editing Carousel: %s" % (ps.baseIcon("play"), carouselItem.id), size=1)
-                editForm += ps.baseHorizontalForm(action=c.baseURL+"/admin/carousel/edit/%s"% (self.members[0]),
+                editForm += ps.baseHorizontalForm(action=c.baseURL+"/admin/carousel/%s/edit"% (self.members[0]),
                                 method="POST",
                                 actions=[ps.baseSubmit(ps.baseIcon("save")+" Update!")],
                                 fields=elements)
@@ -260,10 +208,11 @@ class carouselEdit_admin(basePage):
                                 carouselItem[part] = self.members[part]
 
                 carouselItem.commit()
-                self.head = ("303 SEE OTHER", [("location", str("/admin/carousel/view/"+carouselItem.id))])
+                self.head = ("303 SEE OTHER", [("location", str("/admin/carousel/"+carouselItem.id))])
                 c.session.pushMessage(("You updated the carousel item: %s!" % ps.baseBold(carouselItem.id)), type="success", icon="ok", title="YAY!")
 
 
+@route("/admin/carousel/(.*)/delete")
 @route("/admin/carousel/delete/(.*)")
 class carouselDelete_admin(basePage):
         def GET(self):
@@ -278,9 +227,9 @@ class carouselDelete_admin(basePage):
                 confirm += ps.baseParagraph("You are about to delete the carousel item: %s" % carouselItem.id, classes="text-error")
                 confirm += ps.baseParagraph("Pressing confirm will delete this carousel item forever and you will not be able to recover it. Are you sure you would like to continue?")
 
-                confirmForm = ps.baseBasicForm(action=c.baseURL+"/admin/carousel/delete/"+carouselItem.id,
+                confirmForm = ps.baseBasicForm(action=c.baseURL+"/admin/carousel/%s/delete"%carouselItem.id,
                                 method="POST",
-                                fields=[ps.baseButtonGroup([ps.baseSubmit("Yes, I am sure.", classes="btn-danger"), ps.baseAButton("NO, Do Not Delete!", link=c.baseURL+"/admin/carousel/edit/"+carouselItem.id, classes="btn-info")])])
+                                fields=[ps.baseButtonGroup([ps.baseSubmit("Yes, I am sure.", classes="btn-danger"), ps.baseAButton("NO, Do Not Delete!", link=c.baseURL+"/admin/carousel/%s/edit"%carouselItem.id, classes="btn-info")])])
 
                 confirm += ps.baseWell(confirmForm)
 
@@ -296,7 +245,7 @@ class carouselDelete_admin(basePage):
                 c.session.pushMessage(("The carousel item %s was deleted" % ps.baseBold(carouselItem.id)), title="Bye Bye", icon="trash", type="error")
 
 
-@route("/admin/carousel/new")
+@route("/admin/carousels/new")
 class carouselNew_admin(basePage):
         def GET(self):
                 self.view.title = "Creating a new carousel item"
@@ -334,3 +283,59 @@ class carouselNew_admin(basePage):
                 carouselItem.commit()
                 self.head = ("303 SEE OTHER", [("location", str("/admin/carousel/view/"+carouselItem.id))])
                 c.session.pushMessage(("You created carousel item: %s!" % ps.baseBold(carouselItem.id)), type="success", icon="ok", title="YAY!")
+
+
+@route("/admin/carousel/(.*)")
+@route("/admin/carousel/(.*)/view")
+@route("/admin/carousel/view/(.*)")
+class carouselView_admin(basePage):
+        def GET(self):
+                """
+                """
+                carouselItem = cm.carousel(self.members[0], True)
+
+                self.view["title"] = "Carousel: %s" % carouselItem.id
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Viewing carousel item: %s" % (ps.baseIcon("play"), carouselItem.id), size=1))
+                        ]) + "<hr>"
+
+                content = ""
+
+                if not carouselItem["visibility"]:
+                        other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/carousel/drafts")
+                else:
+                        other = ps.baseLabel("%s Published" % ps.baseIcon("globe"))
+
+                content += ps.baseRow(ps.baseColumn(ps.baseWell(
+                        ps.baseColumn(ps.baseBold("Author: ", classes="muted"))+
+                        ps.baseColumn(carouselItem.author)+
+                        ps.baseColumn(ps.baseBold("When: ", classes="muted"))+
+                        ps.baseColumn(carouselItem.time)+
+                        ps.baseColumn(other)+
+                        ps.baseColumn(
+                                ps.baseButtonGroup([
+                                ps.baseAButton(ps.baseIcon("edit"),
+                                        classes="btn-info",
+                                        link=c.baseURL+"/admin/carousel/%s/edit"%carouselItem.id,
+                                        data=[("original-title", "Edit Item")],
+                                        rel="tooltip"),
+                                ps.baseAButton(ps.baseIcon("trash"),
+                                        classes="btn-danger",
+                                        link=c.baseURL+"/admin/carousel/%s/delete"%carouselItem.id,
+                                        data=[("original-title", "Delete Item")],
+                                        rel="tooltip")
+                                        ]), classes="pull-right"
+                                )
+                        ), width=8
+                ))
+
+                content += ps.baseRow([
+                        ps.baseColumn(ps.baseHero(carouselItem["content"])),
+                        ])
+
+                self.view["body"] = pageHead + content
+                self.view.scripts = ps.baseScript("""
+                $('.btn-group').tooltip({
+                      selector: "a[rel=tooltip]"
+                })
+""")

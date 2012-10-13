@@ -140,30 +140,43 @@ class smartPage(object):
 
 class flagrPage(smartPage):
         def finishInit(self):
-                home = ps.baseIcon(icon="home")+" Home"
+                home = ps.baseIcon(icon="home")
                 flags = ps.baseIcon(icon="flag")+" Flags"
-                labels = ps.baseIcon("tags") + " Labels"
+                public = ps.baseIcon("flag") + " Public Flags"
+                labels = ps.baseIcon("tags") + " Public Labels"
+
+                stuffFlag = ""
+                stuffLabel = ""
+                stuffUser = ""
+                div = ""
 
                 if c.session.loggedIn:
+                        stuffFlag = {"name": ps.baseIcon("flag"), "link": "/your/flags"}
+                        stuffLabel = {"name": ps.baseIcon("tags"), "link": "/your/labels"}
+                        stuffUser = {"name": ps.baseIcon("user"), "link": "/you"}
+                        div = "divider"
                         name = "Heya %s!"%(c.session.user.username)
                         logout = ps.baseIcon("road") + " Logout"
                         admin = ps.baseIcon("dashboard") + " Admin Panel"
-                        flagLink = {"name": ps.baseIcon("flag")+" Your flags", "link": "/flags"}
-                        profileLink = {"name": ps.baseIcon("user")+" You", "link": "/profiles"}
+                        flagLink = {"name": ps.baseIcon("flag")+" Your flags", "link": "/your/flags"}
+                        labelLink = {"name": ps.baseIcon("tags") +" Your labels", "link": "/your/labels"}
+                        profileLink = {"name": ps.baseIcon("user")+" You", "link": "/you"}
 
                         adminSub = ps.baseMenu(name="adminSubDropdown",
                                         items=[{"name": ps.baseIcon("rss")+" Blog Posts", "link": c.baseURL+"/admin/posts"},
-                                                {"name": ps.baseIcon("play")+" News Carousel", "link": c.baseURL+"/admin/carousel"},
+                                                {"name": ps.baseIcon("play")+" News Carousel", "link": c.baseURL+"/admin/carousels"},
                                                 {"name": ps.baseIcon("group")+" Users", "link": c.baseURL+"/admin/users"}])
 
                         deitySub = ps.baseMenu(name="deitySubDropdown",
-                                        items=[{"name": ps.baseIcon("flag")+" All flags", "link": c.baseURL+"/god/flags"}])
+                                        items=[{"name": ps.baseIcon("flag")+" All flags", "link": c.baseURL+"/god/flags"},
+                                                {"name": ps.baseIcon("tags")+" All labels", "link": c.baseURL+"/god/labels"}])
 
                         if c.session.user.level == "GOD":
                                 deity = ps.baseIcon("eye-open") + " Deity Panel"
 
                                 userDropdown = ps.baseMenu(name="userDropdown",
                                         items=[flagLink,
+                                                labelLink,
                                                 profileLink,
                                                 "divider",
                                                 {"subName": deity, "subLink": c.baseURL+"/god", "sub": deitySub},
@@ -174,6 +187,7 @@ class flagrPage(smartPage):
                         elif c.session.user.level == "admin":
                                 userDropdown = ps.baseMenu(name="userDropdown",
                                         items=[flagLink,
+                                                labelLink,
                                                 profileLink,
                                                 "divider",
                                                 {"subName": admin, "subLink": c.baseURL + "/admin", "sub": adminSub},
@@ -183,6 +197,7 @@ class flagrPage(smartPage):
                         else:
                                 userDropdown = ps.baseMenu(name="userDropdown",
                                         items=[flagLink,
+                                                labelLink,
                                                 profileLink,
                                                 "divider",
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
@@ -203,14 +218,18 @@ class flagrPage(smartPage):
                 self.navbar = ps.baseNavbar(
                         classes="navbar-static-top",
                         brand={"name": c.appName, "link": c.baseURL},
-                        left=[{"name": ps.baseIcon("home")+" Home", "link": c.baseURL},
+                        left=[{"name": home, "link": c.baseURL},
                                 "divider",
-                                {"name": flags, "link": c.baseURL + "/labels/view/public"},
+                                {"name": public, "link": c.baseURL + "/public"},
                                 {"name": labels, "link": c.baseURL+"/labels"}],
-                        right=[{"dropdown": userDropdown, "name": name}])
+                        right=[stuffFlag,
+                                stuffLabel,
+                                stuffUser,
+                                div,
+                                {"dropdown": userDropdown, "name": name}])
 
                 self.footer = """
                 <hr>
                 %s
-                """ % ps.baseParagraph("A project by %s &copy 2012 | %s | %s" % (ps.baseAnchor(ps.baseIcon("user") + " JoshAshby", link="http://joshashby.com"), ps.baseAnchor(ps.baseIcon("github"), link="http://github.com/JoshAshby"), ps.baseAnchor(ps.baseIcon("twitter"), link="http://twitter.com/JoshPAshby")))
+                """ % ps.baseParagraph("A %s production &copy 2012 %s %s" % (ps.baseAnchor(ps.baseIcon("beaker") + " transientBug", link="http://joshashby.com"), ps.baseAnchor(ps.baseIcon("github"), link="http://github.com/JoshAshby"), ps.baseAnchor(ps.baseIcon("twitter"), link="http://twitter.com/JoshPAshby")))
 

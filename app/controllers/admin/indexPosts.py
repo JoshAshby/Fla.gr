@@ -57,12 +57,12 @@ class postsIndex_admin(basePage):
                                         other = ps.baseLabel("%s Published" % ps.baseIcon("globe"))
 
                                 edit = ps.baseSplitDropdown(btn=ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
-                                        classes="", link=c.baseURL+"/admin/posts/view/"+post.id,
+                                        classes="", link=c.baseURL+"/admin/post/%s"%post.id,
                                         rel="tooltip",
                                         data=[("original-title", "Expand")]),
                                         dropdown=ps.baseMenu(name="postDropdown",
-                                                items=[{"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/posts/edit/"+post.id},
-                                                        {"name": ps.baseBold("%s Delete" % ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/posts/delete/"+post.id}]
+                                                items=[{"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/post/%s/edit"%post.id},
+                                                        {"name": ps.baseBold("%s Delete" % ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/post/%s/delete"%post.id}]
                                                 ),
                                         dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
                                                 classes="dropdown-toggle btn-danger",
@@ -81,7 +81,7 @@ class postsIndex_admin(basePage):
                                         ), width=8
                                 ))
                                 content += ps.baseRow([
-                                        ps.baseColumn(ps.baseParagraph(post["post"][:250]+ps.baseAnchor("...", link=c.baseURL+"/admin/posts/view/"+post.id))),
+                                        ps.baseColumn(ps.baseParagraph(post["post"][:250]+ps.baseAnchor("...", link=c.baseURL+"/admin/post/%s"%post.id))),
                                         ])
                                 content += "<hr>"
                 else:
@@ -126,12 +126,12 @@ class postsDrafts_admin(basePage):
                         if not post["visibility"]:
                                 other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/posts/drafts")
                                 edit = ps.baseSplitDropdown(btn=ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
-                                        classes="", link=c.baseURL+"/admin/posts/view/"+post.id,
+                                        classes="", link=c.baseURL+"/admin/post/%s/view"%post.id,
                                         rel="tooltip",
                                         data=[("original-title", "Expand")]),
                                         dropdown=ps.baseMenu(name="postDropdown",
-                                                items=[{"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/posts/edit/"+post.id},
-                                                        {"name": ps.baseBold("%s Delete" % ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/posts/delete/"+post.id}]
+                                                items=[{"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/post/%s/edit"%post.id},
+                                                        {"name": ps.baseBold("%s Delete" % ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/post/%s/delete"%post.id}]
                                                 ),
                                         dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
                                                 classes="dropdown-toggle btn-danger",
@@ -150,7 +150,7 @@ class postsDrafts_admin(basePage):
                                         ), width=8
                                 ))
                                 content += ps.baseRow([
-                                        ps.baseColumn(ps.baseParagraph(post["post"][:250]+ps.baseAnchor("...", link=c.baseURL+"/admin/posts/view/"+post.id))),
+                                        ps.baseColumn(ps.baseParagraph(post["post"][:250]+ps.baseAnchor("...", link=c.baseURL+"/admin/post/%s"%post.id))),
                                         ])
                                 content += "<hr>"
                 if not content:
@@ -164,60 +164,7 @@ class postsDrafts_admin(basePage):
 """)
 
 
-@route("/admin/posts/view/(.*)")
-class postsView_admin(basePage):
-        def GET(self):
-                """
-                """
-                post = pm.post(self.members[0], True)
-
-                self.view["title"] = "Post: %s" % post.title
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Viewing post: %s" % (ps.baseIcon("rss"), post["title"]), size=1))
-                        ]) + "<hr>"
-
-                content = ""
-
-                if not post["visibility"]:
-                        other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/posts/drafts")
-                else:
-                        other = ps.baseLabel("%s Published" % ps.baseIcon("globe"))
-
-                content += ps.baseRow(ps.baseColumn(ps.baseHeading(post.title, size=1)))
-                content += ps.baseRow(ps.baseColumn(ps.baseWell(
-                        ps.baseColumn(ps.baseBold("Author: ", classes="muted"))+
-                        ps.baseColumn(post.author)+
-                        ps.baseColumn(ps.baseBold("When: ", classes="muted"))+
-                        ps.baseColumn(post.time)+
-                        ps.baseColumn(other)+
-                        ps.baseColumn(
-                                ps.baseButtonGroup([
-                                ps.baseAButton(ps.baseIcon("edit"),
-                                        classes="btn-info",
-                                        link=c.baseURL+"/admin/posts/edit/%s"%post.id,
-                                        data=[("original-title", "Edit Post")],
-                                        rel="tooltip"),
-                                ps.baseAButton(ps.baseIcon("trash"),
-                                        classes="btn-danger",
-                                        link=c.baseURL+"/admin/posts/delete/%s"%post.id,
-                                        data=[("original-title", "Delete Post")],
-                                        rel="tooltip")
-                                        ]), classes="pull-right"
-                                )
-                        ), width=8
-                ))
-                content += ps.baseRow([
-                        ps.baseColumn(ps.baseParagraph(post["post"])),
-                        ])
-
-                self.view["body"] = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
-
-
+@route("/admin/post/(.*)/edit")
 @route("/admin/posts/edit/(.*)")
 class postsEdit_admin(basePage):
         def GET(self):
@@ -238,7 +185,7 @@ class postsEdit_admin(basePage):
 
 
                 editForm = ps.baseHeading("%s Editing post: %s" % (ps.baseIcon("rss"), post["title"]), size=1)
-                editForm += ps.baseHorizontalForm(action=c.baseURL+"/admin/posts/edit/%s"% (self.members[0]),
+                editForm += ps.baseHorizontalForm(action=c.baseURL+"/admin/post/%s/edit"% (self.members[0]),
                                 method="POST",
                                 actions=[ps.baseSubmit(ps.baseIcon("save")+" Update!")],
                                 fields=elements)
@@ -257,10 +204,11 @@ class postsEdit_admin(basePage):
                                 post[part] = self.members[part]
 
                 post.commit()
-                self.head = ("303 SEE OTHER", [("location", str("/admin/posts/view/"+post.id))])
+                self.head = ("303 SEE OTHER", [("location", str("/admin/post/"+post.id))])
                 c.session.pushMessage(("You updated post: %s!" % ps.baseBold(post.title)), type="success", icon="ok", title="YAY!")
 
 
+@route("/admin/post/(.*)/delete")
 @route("/admin/posts/delete/(.*)")
 class postsDelete_admin(basePage):
         def GET(self):
@@ -273,9 +221,9 @@ class postsDelete_admin(basePage):
                 confirm += ps.baseParagraph("You are about to delete the post: %s" % post.title, classes="text-error")
                 confirm += ps.baseParagraph("Pressing confirm will delete this post forever and you will not be able to recover it. Are you sure you would like to continue?")
 
-                confirmForm = ps.baseBasicForm(action=c.baseURL+"/admin/posts/delete/"+post.id,
+                confirmForm = ps.baseBasicForm(action=c.baseURL+"/admin/post/%s/delete"%post.id,
                                 method="POST",
-                                fields=[ps.baseButtonGroup([ps.baseSubmit("Yes, I am sure.", classes="btn-danger"), ps.baseAButton("NO, Do Not Delete!", link=c.baseURL+"/admin/posts/edit/"+post.id, classes="btn-info")])])
+                                fields=[ps.baseButtonGroup([ps.baseSubmit("Yes, I am sure.", classes="btn-danger"), ps.baseAButton("NO, Do Not Delete!", link=c.baseURL+"/admin/post/%s/edit"%post.id, classes="btn-info")])])
 
                 confirm += ps.baseWell(confirmForm)
 
@@ -329,5 +277,61 @@ class postsNew_admin(basePage):
                                 post[part] = self.members[part]
 
                 post.commit()
-                self.head = ("303 SEE OTHER", [("location", str("/admin/posts/view/"+post.id))])
+                self.head = ("303 SEE OTHER", [("location", str("/admin/post/%s"%post.id))])
                 c.session.pushMessage(("You created post: %s!" % ps.baseBold(post.title)), type="success", icon="ok", title="YAY!")
+
+
+@route("/admin/post/(.*)")
+@route("/admin/post/(.*)/view")
+@route("/admin/posts/view/(.*)")
+class postsView_admin(basePage):
+        def GET(self):
+                """
+                """
+                post = pm.post(self.members[0], True)
+
+                self.view["title"] = "Post: %s" % post.title
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Viewing post: %s" % (ps.baseIcon("rss"), post["title"]), size=1))
+                        ]) + "<hr>"
+
+                content = ""
+
+                if not post["visibility"]:
+                        other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/posts/drafts")
+                else:
+                        other = ps.baseLabel("%s Published" % ps.baseIcon("globe"))
+
+                content += ps.baseRow(ps.baseColumn(ps.baseHeading(post.title, size=1)))
+                content += ps.baseRow(ps.baseColumn(ps.baseWell(
+                        ps.baseColumn(ps.baseBold("Author: ", classes="muted"))+
+                        ps.baseColumn(post.author)+
+                        ps.baseColumn(ps.baseBold("When: ", classes="muted"))+
+                        ps.baseColumn(post.time)+
+                        ps.baseColumn(other)+
+                        ps.baseColumn(
+                                ps.baseButtonGroup([
+                                ps.baseAButton(ps.baseIcon("edit"),
+                                        classes="btn-info",
+                                        link=c.baseURL+"/admin/post/%s/edit"%post.id,
+                                        data=[("original-title", "Edit Post")],
+                                        rel="tooltip"),
+                                ps.baseAButton(ps.baseIcon("trash"),
+                                        classes="btn-danger",
+                                        link=c.baseURL+"/admin/post/%s/delete"%post.id,
+                                        data=[("original-title", "Delete Post")],
+                                        rel="tooltip")
+                                        ]), classes="pull-right"
+                                )
+                        ), width=8
+                ))
+                content += ps.baseRow([
+                        ps.baseColumn(ps.baseParagraph(post["post"])),
+                        ])
+
+                self.view["body"] = pageHead + content
+                self.view.scripts = ps.baseScript("""
+                $('.btn-group').tooltip({
+                      selector: "a[rel=tooltip]"
+                })
+""")

@@ -19,7 +19,7 @@ from datetime import datetime as dt
 import bcrypt
 
 
-class basePost(blm.baseBlockModel):
+class baseProfile(blm.baseBlockModel):
         fields = ["username",
                 "password",
                 "adminNotes",
@@ -31,7 +31,6 @@ class basePost(blm.baseBlockModel):
                 "about",
                 "email",
                 ("emailVisibility", "string", helpers.boolean),
-                ("friends", "set"), # a set of id's that are other users ID's
                 ]
 
         objectID = "profile"

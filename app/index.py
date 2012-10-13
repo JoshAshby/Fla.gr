@@ -63,7 +63,7 @@ class index(basePage):
                                         if c.session.loggedIn and c.session.user.level in ["GOD", "admin"]:
                                                 edit = ps.baseSplitDropdown(btn=ps.baseAButton(ps.baseIcon("zoom-in"),
                                                                 classes="",
-                                                                link=c.baseURL+"/posts/view/"+post.id,
+                                                                link=c.baseURL+"/post/"+post.id,
                                                                 data=[("original-title", "Expand Post")],
                                                                 rel="tooltip"),
                                                         dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
@@ -72,20 +72,20 @@ class index(basePage):
                                                                         ("original-title", "More actions")],
                                                                 rel="tooltip"),
                                                         dropdown=ps.baseMenu(name="postDropdown",
-                                                                items=[{"name": "%s View as admin" % ps.baseIcon("cogs"), "link": c.baseURL+"/admin/posts/view/"+post.id},
-                                                                        {"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/posts/edit/"+post.id},
-                                                                        {"name": ps.baseBold("%s Delete"%ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/posts/delete/"+post.id}]
+                                                                items=[{"name": "%s View as admin" % ps.baseIcon("cogs"), "link": c.baseURL+"/admin/post/%s/view"%post.id},
+                                                                        {"name": "%s Edit" % ps.baseIcon("edit"), "link": c.baseURL+"/admin/post/%s/edit"%post.id},
+                                                                        {"name": ps.baseBold("%s Delete"%ps.baseIcon("trash"), classes="text-error"), "link": c.baseURL+"/admin/post/%s/delete"%post.id}]
                                                                 ))
                                         else:
                                                 edit = ps.baseButtonGroup([
                                                         ps.baseAButton(ps.baseIcon("zoom-in"),
                                                                 classes="",
-                                                                link=c.baseURL+"/posts/view/"+post.id,
+                                                                link=c.baseURL+"/post/"+post.id,
                                                                 data=[("original-title", "Expand Post")],
                                                                 rel="tooltip"),
                                                         ])
  
-                                        content += ps.baseRow(ps.baseColumn(ps.baseAnchor(ps.baseHeading(post.title, size=1), link=c.baseURL+"/posts/view/"+post.id)))
+                                        content += ps.baseRow(ps.baseColumn(ps.baseAnchor(ps.baseHeading(post.title, size=1), link=c.baseURL+"/post/"+post.id)))
                                         content += ps.baseRow(ps.baseColumn(ps.baseWell(
                                                         ps.baseColumn(ps.baseBold("Author: ", classes="muted"))+
                                                         ps.baseColumn(post.author)+
@@ -96,7 +96,7 @@ class index(basePage):
                                                 ))
 
                                         content += ps.baseRow([
-                                                ps.baseColumn(ps.baseParagraph(post["post"][:250]+ps.baseAnchor("...", link=c.baseURL+"/posts/view/"+post.id))),
+                                                ps.baseColumn(ps.baseParagraph(post["post"][:250]+ps.baseAnchor("...", link=c.baseURL+"/post/"+post.id))),
                                                 ])
                                         content += "<hr>"
 
@@ -113,6 +113,7 @@ class index(basePage):
                 """)
 
 
+@route("/post/(.*)")
 @route("/posts/view/(.*)")
 class postsView(basePage):
         def GET(self):
@@ -131,12 +132,12 @@ class postsView(basePage):
                                 ps.baseButtonGroup([
                                 ps.baseAButton(ps.baseIcon("edit"),
                                         classes="btn-info",
-                                        link=c.baseURL+"/admin/posts/edit/%s"%post.id,
+                                        link=c.baseURL+"/admin/post/%s/edit"%post.id,
                                         data=[("original-title", "Edit Post")],
                                         rel="tooltip"),
                                 ps.baseAButton(ps.baseIcon("trash"),
                                         classes="btn-danger",
-                                        link=c.baseURL+"/admin/posts/delete/%s"%post.id,
+                                        link=c.baseURL+"/admin/post/%s/delete"%post.id,
                                         data=[("original-title", "Delete Post")],
                                         rel="tooltip")
                                         ])
@@ -167,11 +168,11 @@ class postsView(basePage):
 from controllers.authController import *
 from controllers.adminController import *
 from controllers.godController import *
+from controllers.profileController import *
 
 
 #Fla.gr specific code. Makes for easy modulation of the system...
 from flagr.controllers.flagController import *
-from flagr.controllers.profileController import *
 from flagr.controllers.labelController import *
 
 #from test import *

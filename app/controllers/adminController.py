@@ -49,7 +49,7 @@ Edit, delete and create front page carousel items.
 <br />
 <br />
 %s
-                                        """ % ps.baseAButton("%s Carousel"%ps.baseIcon("play"), link=c.baseURL+"/admin/carousel", classes="btn-info")),
+                                        """ % ps.baseAButton("%s Carousel"%ps.baseIcon("play"), link=c.baseURL+"/admin/carousels", classes="btn-info")),
                                 classes="span4") + ps.baseTextThumbnail(label=ps.baseHeading(ps.baseIcon("group") + " Users"),
                                 caption=ps.baseParagraph("""
 Edit, delete and create system users.

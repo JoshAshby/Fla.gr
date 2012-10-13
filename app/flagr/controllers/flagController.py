@@ -26,7 +26,8 @@ import views.pyStrap.pyStrap as ps
 import flagr.flagrConfig as fc
 
 
-@route("/flags")
+@route("/you/flags")
+@route("/your/flags")
 class flagIndex(flagrPage):
         def GET(self):
                 """
@@ -51,20 +52,8 @@ class flagIndex(flagrPage):
                         self.view["title"] = "Your Flags"
 
                         flags = fm.flagList(c.session.userID, True)
-                        if flags:
-                                pageHead = ps.baseButtonToolbar([
-                                        new,
-                                        ps.baseButtonGroup([
-                                                ps.baseAButton(ps.baseIcon("th"), classes="",
-                                                        link=c.baseURL+"/flags?view=cards", data=[("original-title", "View as cards")], rel="tooltip", id="th"),
-                                                ps.baseAButton(ps.baseIcon("list"), classes="",
-                                                        link=c.baseURL+"/flags", data=[("original-title", "View as list")], rel="tooltip")
-                                                ])
-                                        ], id="group", classes="")
-                        else:
-                                pageHead = new
+                        pageHead = new
 
-#                        pageHead = ps.baseRow([ps.baseColumn(pageHead), ps.baseColumn(ps.baseHeading("%s Your flags" % (ps.baseIcon("flag")), size=1), classes="pull-right")])
                         pageHead = ps.baseRow([ps.baseColumn(ps.baseHeading("%s Your flags" % (ps.baseIcon("flag")), size=1)), ps.baseColumn(pageHead, classes="pull-right")])
 
 
@@ -72,8 +61,6 @@ class flagIndex(flagrPage):
 
                         if flags:
                                 width=10
-                                if view == "cards":
-                                        width=5
                                 flagList = fc.flagThumbnails(flags, width)
 
                                 flagList = ps.baseUL(flagList, classes="thumbnails")
@@ -87,117 +74,18 @@ class flagIndex(flagrPage):
                         })
         """)
                 else:
-                        self.head = ("303 SEE OTHER", [("location", str("/labels/view/public"))])
+                        self.head = ("303 SEE OTHER", [("location", str("/public"))])
                         c.session.pushMessage(("You're not logged in, so we've sent you here to see some of the pretty public flags!"), icon="exclamation-sign", title="Oh snap!!")
 
 
-
-@route("/flags/view/(.*)")
-class viewFlag(flagrPage):
-        def GET(self):
-                """
-                """
-                flagID = self.members[0]
-
-                flag = fm.flag(flagID, md=True)
-
-                if not flag.visibility and flag.userID != c.session.userID:
-                        content = ps.baseHeading("Oh no!", size=2)
-                        content += ps.baseParagraph("This flag isn't public, and your either not logged in, or not the owner of the flag!")
-
-                else:
-                        self.view["title"] = "Viewing flag: %s" % (flag.title)
-                        content = ""
-
-                        if c.session.loggedIn and c.session.userID == flag["userID"]:
-                                edit = ps.baseColumn(
-                                        ps.baseButtonGroup([
-                                                ps.baseAButton("%s" % ps.baseIcon("copy"),
-                                                        link=c.baseURL+"/flags/copy/"+flag.id,
-                                                        classes="", rel="tooltip", data=[("original-title", "Copy Flag")]),
-                                                ps.baseAButton("%s" % ps.baseIcon("edit"),
-                                                        link=c.baseURL+"/flags/edit/"+flag.id,
-                                                        classes="btn-info ", rel="tooltip", data=[("original-title", "Edit Flag")]),
-                                                ps.baseAButton("%s" % ps.baseIcon("trash"),
-                                                        link=c.baseURL+"/flags/delete/"+flag.id,
-                                                        classes="btn-danger ", rel="tooltip", data=[("original-title", "Delete Flag")])
-                                        ])
-                                 )
-                        elif c.session.loggedIn and c.session.userID != flag["userID"]:
-                                edit = ps.baseColumn(
-                                        ps.baseButtonGroup([
-                                                ps.baseAButton("%s" % ps.baseIcon("copy"),
-                                                        link=c.baseURL+"/flags/copy/"+flag.id,
-                                                        classes="", rel="tooltip", data=[("original-title", "Copy Flag")])
-                                                ])
-                                 )
-                        else:
-                                edit = ""
-
-                        content += ps.baseHeading("%s %s" % (ps.baseIcon(flag.icon), flag.title), size=1, classes="")
-
-                        if flag["userID"] == c.session.userID:
-                                author = "You"
-                        else:
-                                author = flag.author
-
-                        if flag["visibility"]:
-                                vis = "%s Public" % ps.baseIcon("globe")
-                        else:
-                                vis = "%s Private" % ps.baseIcon("eye-close")
-
-                        content += ps.baseRow(ps.baseColumn(ps.baseWell(
-                                        ps.baseColumn(ps.baseBold("Author: ", classes="muted")) +
-                                        ps.baseColumn(author) + 
-                                        ps.baseColumn(ps.baseBold("When: ", classes="muted")) +
-                                        ps.baseColumn(flag.time) + 
-                                        ps.baseColumn(vis) + 
-                                        ps.baseColumn(edit, classes="pull-right")
-                                ), width=10
-                        ))
-
-                        content += ps.baseRow(ps.baseColumn(flag.description))
-
-                        for field in flag.fields:
-                                name = field[0] if type(field) != str else field
-                                if name not in ["title", "description", "labels", "time", "visibility", "author", "userID", "flagType"]:
-                                        if name in ["url"]:
-                                                d = flag[name]
-                                                value = ps.baseAnchor(d, link=d)
-                                        else:
-                                                value = flag[name]
-                                        content += ps.baseRow(ps.baseColumn("%s: %s" %(ps.baseBold(name.lower().title(), classes="muted"), value)))
-
-                        if not flag["visibility"]:
-                                other = ps.baseLabel("%s Private" % ps.baseIcon("eye-close"))
-                        else:
-                                other = ps.baseAnchor(ps.baseLabel("%s Public" % ps.baseIcon("globe")), link=c.baseURL+"/labels/view/public")
-
-                        labelLinks = "%s " % other
-                        for label in flag["labels"]:
-                                labelLinks += ps.baseAnchor(ps.baseLabel(label, classes="label-info"), link=c.baseURL+"/labels/view/"+label) + " "
-
-                        content += ps.baseRow([
-                                ps.baseColumn(ps.baseBold("Labels: ", classes="muted"), width=1),
-                                ps.baseColumn(labelLinks, width=7)
-                                ])
-
-
-                self.view.body = content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
-
-
+@route("/flag/(.*)/edit")
 @route("/flags/edit/(.*)")
 class newFlag(flagrPage):
         __login__ = True
         def GET(self):
                 flag = fm.flag(self.members[0])
                 if flag["userID"] != c.session.userID:
-                        self.head = ("303 SEE OTHER", [("location", str("/flags/copy/"+flag.id))])
+                        self.head = ("303 SEE OTHER", [("location", str("/flag/%s/copy"%flag.id))])
                         c.session.pushMessage(("You didn't create the flag: %s, but we can allow you to make a copy of it!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh no!")
                         return
 
@@ -227,7 +115,7 @@ class newFlag(flagrPage):
 
 
                 editForm = ps.baseHeading("%s Editing flag: %s" % (ps.baseIcon(flag.icon), flag["title"]), size=1)
-                editForm += ps.baseHorizontalForm(action=c.baseURL+"/flags/edit/%s"% (self.members[0]),
+                editForm += ps.baseHorizontalForm(action=c.baseURL+"/flag/%s/edit"% (self.members[0]),
                                 method="POST",
                                 actions=[ps.baseSubmit(ps.baseIcon("save")+" Update!")],
                                 fields=elements)
@@ -238,7 +126,7 @@ class newFlag(flagrPage):
         def POST(self):
                 flag = fm.flag(self.members[0])
                 if flag["userID"] != c.session.userID:
-                        self.head = ("303 SEE OTHER", [("location", str("/flags/copy/"+flag.id))])
+                        self.head = ("303 SEE OTHER", [("location", str("/flag/#s/copy"%flag.id))])
                         c.session.pushMessage(("You didn't create the flag: %s, but we can allow you to make a copy of it!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh no!")
                         return
 
@@ -253,7 +141,7 @@ class newFlag(flagrPage):
                                 flag[part] = self.members[part]
 
                 flag.commit()
-                self.head = ("303 SEE OTHER", [("location", str("/flags/view/"+flag.id))])
+                self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
                 c.session.pushMessage(("You updated flag: %s!" % ps.baseBold(flag.title)), type="success", icon="ok", title="YAY!")
 
 
@@ -328,10 +216,11 @@ class newFlag(flagrPage):
                                 flag[part] = self.members[part]
 
                 flag.commit()
-                self.head = ("303 SEE OTHER", [("location", str("/flags/view/"+flag.id))])
+                self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
                 c.session.pushMessage(("You created flag: %s!" % ps.baseBold(flag.title)), type="success", icon="ok", title="YAY!")
 
 
+@route("/flag/(.*)/delete")
 @route("/flags/delete/(.*)")
 class deleteFlag(flagrPage):
         __login__ = True
@@ -349,7 +238,7 @@ class deleteFlag(flagrPage):
                 confirm += ps.baseParagraph("You are about to delete your flag: %s"% flag.title , classes="text-error")
                 confirm += ps.baseParagraph("Pressing confirm will delete this flag forever and you will not be able to recover it. Are you sure you would like to continue?", classes="text-warning")
 
-                confirmForm = ps.baseBasicForm(action=c.baseURL+"/flags/delete/"+flag.id,
+                confirmForm = ps.baseBasicForm(action=c.baseURL+"/flag/%s/delete"%flag.id,
                                 method="POST",
                                 fields=[ps.baseButtonGroup([ps.baseSubmit("Yes, Delete it.", classes="btn-danger"), ps.baseAButton("NO, Do Not Delete!", link=c.baseURL+"/flags/edit/"+flag.id, classes="btn-info")])])
 
@@ -372,6 +261,7 @@ class deleteFlag(flagrPage):
                 c.session.pushMessage(("The flag %s was deleted" % ps.baseBold(flag.title)), type="error")
 
 
+@route("/flag/(.*)/copy")
 @route("/flags/copy/(.*)")
 class copyFlag(flagrPage):
         __login__ = True
@@ -405,7 +295,7 @@ class copyFlag(flagrPage):
 
 
                 editForm = ps.baseHeading("%s Copying flag: %s" % (ps.baseIcon(flag.icon), flag["title"]), size=1)
-                editForm += ps.baseHorizontalForm(action=c.baseURL+"/flags/copy/%s"% (self.members[0]),
+                editForm += ps.baseHorizontalForm(action=c.baseURL+"/flag/%s/copy"% (self.members[0]),
                                 method="POST",
                                 actions=[ps.baseSubmit(ps.baseIcon("save")+" Copy!")],
                                 fields=elements)
@@ -427,5 +317,107 @@ class copyFlag(flagrPage):
                                 flag[part] = self.members[part]
 
                 flag.commit()
-                self.head = ("303 SEE OTHER", [("location", str("/flags/view/"+flag.id))])
+                self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
                 c.session.pushMessage("You made a copy of flag: %s called %s!" % (ps.baseBold(self.members["oldTitle"]), ps.baseBold(flag["title"])), type="success", icon="ok", title="YAY!")
+
+
+@route("/flag/(.*)")
+@route("/flag/(.*)/view")
+@route("/flags/view/(.*)")
+class viewFlag(flagrPage):
+        def GET(self):
+                """
+                """
+                flagID = self.members[0]
+
+                flag = fm.flag(flagID, md=True)
+
+                if not flag.visibility and flag.userID != c.session.userID:
+                        content = ps.baseHeading("Oh no!", size=2)
+                        content += ps.baseParagraph("This flag isn't public, and your either not logged in, or not the owner of the flag!")
+
+                else:
+                        self.view["title"] = "Viewing flag: %s" % (flag.title)
+                        content = ""
+
+                        if c.session.loggedIn and c.session.userID == flag["userID"]:
+                                edit = ps.baseColumn(
+                                        ps.baseButtonGroup([
+                                                ps.baseAButton("%s" % ps.baseIcon("copy"),
+                                                        link=c.baseURL+"/flag/%s/copy"%flag.id,
+                                                        classes="", rel="tooltip", data=[("original-title", "Copy Flag")]),
+                                                ps.baseAButton("%s" % ps.baseIcon("edit"),
+                                                        link=c.baseURL+"/flag/%s/edit"%flag.id,
+                                                        classes="btn-info ", rel="tooltip", data=[("original-title", "Edit Flag")]),
+                                                ps.baseAButton("%s" % ps.baseIcon("trash"),
+                                                        link=c.baseURL+"/flag/%s/delete"%flag.id,
+                                                        classes="btn-danger ", rel="tooltip", data=[("original-title", "Delete Flag")])
+                                        ])
+                                 )
+                        elif c.session.loggedIn and c.session.userID != flag["userID"]:
+                                edit = ps.baseColumn(
+                                        ps.baseButtonGroup([
+                                                ps.baseAButton("%s" % ps.baseIcon("copy"),
+                                                        link=c.baseURL+"/flag/%s/copy"%flag.id,
+                                                        classes="", rel="tooltip", data=[("original-title", "Copy Flag")])
+                                                ])
+                                 )
+                        else:
+                                edit = ""
+
+                        content += ps.baseHeading("%s %s" % (ps.baseIcon(flag.icon), flag.title), size=1, classes="")
+
+                        if flag["userID"] == c.session.userID:
+                                author = "You"
+                        else:
+                                author = flag.author
+
+                        if flag["visibility"]:
+                                vis = "%s Public" % ps.baseIcon("globe")
+                        else:
+                                vis = "%s Private" % ps.baseIcon("eye-close")
+
+                        content += ps.baseRow(ps.baseColumn(ps.baseWell(
+                                        ps.baseColumn(ps.baseBold("Author: ", classes="muted")) +
+                                        ps.baseColumn(author) + 
+                                        ps.baseColumn(ps.baseBold("When: ", classes="muted")) +
+                                        ps.baseColumn(flag.time) + 
+                                        ps.baseColumn(vis) + 
+                                        ps.baseColumn(edit, classes="pull-right")
+                                ), width=10
+                        ))
+
+                        content += ps.baseRow(ps.baseColumn(flag.description))
+
+                        for field in flag.fields:
+                                name = field[0] if type(field) != str else field
+                                if name not in ["title", "description", "labels", "time", "visibility", "author", "userID", "flagType"]:
+                                        if name in ["url"]:
+                                                d = flag[name]
+                                                value = ps.baseAnchor(d, link=d)
+                                        else:
+                                                value = flag[name]
+                                        content += ps.baseRow(ps.baseColumn("%s: %s" %(ps.baseBold(name.lower().title(), classes="muted"), value)))
+
+                        if not flag["visibility"]:
+                                other = ps.baseLabel("%s Private" % ps.baseIcon("eye-close"))
+                        else:
+                                other = ps.baseAnchor(ps.baseLabel("%s Public" % ps.baseIcon("globe")), link=c.baseURL+"/public")
+
+                        labelLinks = "%s " % other
+                        for label in flag["labels"]:
+                                labelLinks += ps.baseAnchor(ps.baseLabel(label, classes="label-info"), link=c.baseURL+"/label/%s"%label) + " "
+
+                        content += ps.baseRow([
+                                ps.baseColumn(ps.baseBold("Labels: ", classes="muted"), width=1),
+                                ps.baseColumn(labelLinks, width=7)
+                                ])
+
+
+                self.view.body = content
+                self.view.scripts = ps.baseScript("""
+                $('.btn-group').tooltip({
+                      selector: "a[rel=tooltip]"
+                })
+""")
+

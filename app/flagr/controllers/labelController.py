@@ -32,7 +32,7 @@ class labelIndex(flagrPage):
                 labelList = lm.labelList()
 
                 self.view["title"] = "Public Labels"
-                pageHead = ps.baseColumn(ps.baseHeading("%s Public labels" % (ps.baseIcon("tags")), size=1))
+                pageHead = ps.baseColumn(ps.baseHeading("%s Public labels" % (ps.baseIcon("globe")), size=1))
 
                 if not labelList:
                         labelList = "Oh no! There are not any public labels currently available!"
@@ -40,6 +40,25 @@ class labelIndex(flagrPage):
                 self.view.body = ps.baseRow(pageHead)+"<hr>"+labelList
 
 
+@route("/you/labels")
+@route("/your/labels")
+class labelIndex(flagrPage):
+        def GET(self):
+                labelList = lm.labelList(user=c.session.userID)
+
+                self.view["title"] = "Your Labels"
+                pageHead = ps.baseColumn(ps.baseHeading("%s Your labels" % (ps.baseIcon("tags")), size=1))
+
+                if not labelList:
+                        labelList = "Oh no! You don't have any labels currently!"
+
+                self.view.body = ps.baseRow(pageHead)+"<hr>"+labelList
+
+
+@route("/flags")
+@route("/public")
+@route("/label/public")
+@route("/label/public/view")
 @route("/labels/view/public")
 class labelPublic(flagrPage):
         def GET(self):
@@ -49,17 +68,6 @@ class labelPublic(flagrPage):
                 flags = fm.flagList(md=True)
                 self.view["title"] = "Public Flags"
                 pageHead = ps.baseColumn(ps.baseHeading("%s Public flags" % (ps.baseIcon("globe")), size=1))
-                if flags:
-                        pageHead += ps.baseButtonToolbar([
-                                ps.baseButtonGroup([
-                                        ps.baseAButton(ps.baseIcon("th"), classes="",
-                                                link=c.baseURL+"/labels/view/public?view=cards", data=[("original-title", "View as cards")], rel="tooltip"),
-                                        ps.baseAButton(ps.baseIcon("list"), classes="",
-                                                link=c.baseURL+"/labels/view/public", data=[("original-title", "View as list")], rel="tooltip")
-                                        ])
-                                ], classes="pull-right")
-                else:
-                        pageHead += ""
 
                 pageHead = ps.baseRow(pageHead)+"<hr>"
 
@@ -67,8 +75,6 @@ class labelPublic(flagrPage):
 
                 if flags:
                         width=10
-                        if view == "cards":
-                                width=5
 
                         flagList = fc.flagThumbnails(flags, width)
 
@@ -84,6 +90,8 @@ class labelPublic(flagrPage):
 """)
 
 
+@route("/label/(.*)")
+@route("/label/(.*)/view")
 @route("/labels/view/(.*)")
 class labelView(flagrPage):
         def GET(self):
@@ -94,7 +102,7 @@ class labelView(flagrPage):
                 self.view["title"] = "Flags in label: %s" % label
 
                 labels = label.split("/")
-                labs = [ps.baseAnchor(labels[0], link=c.baseURL+"/labels/view/%s" % labels[0])]
+                labs = [ps.baseAnchor(labels[0], link=c.baseURL+"/label/%s" % labels[0])]
 
                 for lab in range(1, len(labels)):
                         link = labs[lab-1]["link"]+"/%s" % labels[lab]
@@ -107,9 +115,6 @@ class labelView(flagrPage):
 
                 stack = stack.strip("/")
 
-                if not stack:
-                        stack = "Oh no! Theres no labels stacked under this yet!"
-
                 pageHead = ps.baseColumn(ps.baseHeading("%s Flags in label: %s" % (ps.baseIcon("tag"), stack), size=1))
 
                 other = ""
@@ -120,22 +125,12 @@ class labelView(flagrPage):
                                                 data=[("original-title", "Toggle your flags")],
                                                 rel="tooltip")
 
-                if flags:
-                        pageHead += ps.baseButtonToolbar([
-                                ps.baseButtonGroup([
-                                        other,
-                                        ps.baseAButton(ps.baseIcon("th"), classes="",
-                                                link=c.baseURL+"/labels/view/%s?view=cards"%label, data=[("original-title", "View as cards")], rel="tooltip"),
-                                        ps.baseAButton(ps.baseIcon("list"), classes="",
-                                                link=c.baseURL+"/labels/view/%s"%label, data=[("original-title", "View as list")], rel="tooltip"),
-                                        ])
-                                ], classes="pull-right")
-                else:
-                        pageHead += ""
-
                 pageHead = ps.baseRow(pageHead)+"<hr>"
 
                 labelsUnder = lm.labelsUnderList(label)
+
+                if not labelsUnder:
+                        labelsUnder = "You've hit bottom! There's nothing stacked under this label!"
 
                 pageHead += ps.baseRow([ps.baseColumn(ps.baseBold("%s Stacked labels:"%ps.baseIcon("tags"), classes="muted")), ps.baseColumn(labelsUnder)])+"<hr>"
 
@@ -144,8 +139,6 @@ class labelView(flagrPage):
 
                 if flags:
                         width=10
-                        if view == "cards":
-                                width=5
 
                         flagList = fc.flagThumbnails(flags, width)
 
@@ -163,5 +156,3 @@ class labelView(flagrPage):
                         $(".you").toggle()
                         })
 """)
-
-

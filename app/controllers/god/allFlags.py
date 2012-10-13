@@ -26,3 +26,37 @@ class flagsIndex_god(basePage):
         __menu__ = "Deity Flags"
         def GET(self):
                 pass
+
+@route("/god/flag/(.*)/edit")
+class flagEdit_god(basePage):
+        def GET(self):
+                pass
+
+        def POST(self):
+                pass
+
+@route("/god/flag/(.*)/delete")
+class flagEdit_god(basePage):
+        def GET(self):
+                pass
+
+        def POST(self):
+                pass
+
+@route("/god/flag/(.*)/copy")
+class flagEdit_god(basePage):
+        def GET(self):
+                pass
+
+        def POST(self):
+                pass
+
+@route("/god/flag/(.*)")
+class flagEdit_god(basePage):
+        def GET(self):
+                pass
+
+        def POST(self):
+                pass
+
+

@@ -18,14 +18,27 @@ import config as c
 
 import flagr.models.flagModel as fm
 
-from flagr.objects.flagrObject import flagrObject as flagrPage
+from objects.profileObject import profileObject as profilePage
+from objects.profileObject import publicProfileObject as publivProfilePage
 from seshat.route import route
 
 import views.pyStrap.pyStrap as ps
 
 
-@route("/profiles")
-class userIndex(flagrPage):
+@route("/you")
+@route("/profile")
+class userIndex(profilePage):
+        def GET(self):
+                
+                pass
+
+        def POST(self):
+                pass
+
+
+@route("/you/edit")
+@route("/profile/edit")
+class userEdit(profilePage):
         def GET(self):
                 pass
 
@@ -33,20 +46,13 @@ class userIndex(flagrPage):
                 pass
 
 
-@route("/profiles/edit")
-class userEdit(flagrPage):
+@route("/profile/(.*)")
+@route("/profile/(.*)/view")
+@route("/peep/(.*)")
+@route("/person/(.*)")
+class userView(publicProfilePage):
         def GET(self):
                 pass
 
         def POST(self):
                 pass
-
-
-@route("/profiles/view/(.*)")
-class userView(flagrPage):
-        def GET(self):
-                pass
-
-        def POST(self):
-                pass
-

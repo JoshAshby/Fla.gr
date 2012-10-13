@@ -21,20 +21,26 @@ import re
 
 def label(name, count=None):
         returnLabel = " "
-        returnLabel += ps.baseAnchor(ps.baseLabel(name, classes="label-info"), link=c.baseURL+"/labels/view/"+name)
+        returnLabel += ps.baseAnchor(ps.baseLabel(name, classes="label-info"), link=c.baseURL+"/label/"+name)
         returnLabel += " "
         return returnLabel
 
-def labelList():
+def labelList(user=None):
         labelList = set()
         returnLabels = ""
 
         keys = c.redisFlagServer.keys("flag:*:labels")
 
-        for key in keys:
-                if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
-                        labels = c.redisFlagServer.smembers(key)
-                        labelList = labelList.union(labels)
+        if not user:
+                for key in keys:
+                        if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
+                                labels = c.redisFlagServer.smembers(key)
+                                labelList = labelList.union(labels)
+        else:
+                for key in keys:
+                        if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")) and c.redisFlagServer.get(key.strip(":labels")+":userID") == user:
+                                labels = c.redisFlagServer.smembers(key)
+                                labelList = labelList.union(labels)
 
         for lab in labelList:
                 returnLabels += label(lab)
@@ -65,7 +71,7 @@ def labeledFlagList(label, md=True):
 
         keys = c.redisFlagServer.keys("flag:*:labels")
 
-        reg = re.compile("(^%s/*)" % label)
+        reg = re.compile("(^%s$)" % label)
 
         for key in keys:
                 if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
