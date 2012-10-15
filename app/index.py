@@ -60,7 +60,7 @@ class index(basePage):
                 if posts:
                         for post in posts:
                                 if post["visibility"]:
-                                        if c.session.loggedIn and c.session.user.level in ["GOD", "admin"]:
+                                        if c.session.loggedIn and c.session.user["level"] in ["GOD", "admin"]:
                                                 edit = ps.baseSplitDropdown(btn=ps.baseAButton(ps.baseIcon("zoom-in"),
                                                                 classes="",
                                                                 link=c.baseURL+"/post/"+post.id,
@@ -125,7 +125,7 @@ class postsView(basePage):
 
                 content = ""
 
-                if not c.session.user.level in ["admin", "GOD"]:
+                if not c.session.user["level"] in ["admin", "GOD"]:
                         other = ""
                 else:
                         other = ps.baseColumn(
@@ -174,6 +174,8 @@ from controllers.profileController import *
 #Fla.gr specific code. Makes for easy modulation of the system...
 from flagr.controllers.flagController import *
 from flagr.controllers.labelController import *
+from flagr.controllers.youController import *
+from flagr.controllers.searchController import *
 
 #from test import *
 

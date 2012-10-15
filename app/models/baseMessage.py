@@ -16,24 +16,21 @@ import models.blocks.baseBlockModel as blm
 import models.blocks.helpers as helpers
 from datetime import datetime as dt
 
-import bcrypt
 
-
-class basePost(blm.baseBlockModel):
-        fields = ["otherEnd",
-                "otherEndID",
+class baseMessage(blm.baseBlockModel):
+        fields = ["user",
                 "sender",
-                "senderID",
                 "message",
                 "sentTime",
-                "read",
+                ("read", "string", helpers.boolean),
                 "replyTo",
                 "subject",
+                ("archive", "string", helpers.boolean)
                 ]
 
         objectID = "message"
         dbName = "redisUserServer"
 
         def new(self):
-                self.sender = c.session.user["username"]
+                self.sender = c.session.userID
                 self.sentTime = dt.utcnow().strftime("%b-%d-%Y %I:%M %p")

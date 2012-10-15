@@ -171,7 +171,6 @@ class carouselDrafts_admin(basePage):
 
 
 @route("/admin/carousel/(.*)/edit")
-@route("/admin/carousel/edit/(.*)")
 class carouselEdit_admin(basePage):
         def GET(self):
                 carouselItem = cm.carousel(self.members[0])
@@ -213,7 +212,6 @@ class carouselEdit_admin(basePage):
 
 
 @route("/admin/carousel/(.*)/delete")
-@route("/admin/carousel/delete/(.*)")
 class carouselDelete_admin(basePage):
         def GET(self):
                 id = self.members[0]
@@ -287,7 +285,6 @@ class carouselNew_admin(basePage):
 
 @route("/admin/carousel/(.*)")
 @route("/admin/carousel/(.*)/view")
-@route("/admin/carousel/view/(.*)")
 class carouselView_admin(basePage):
         def GET(self):
                 """

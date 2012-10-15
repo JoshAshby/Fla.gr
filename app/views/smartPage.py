@@ -152,17 +152,20 @@ class flagrPage(smartPage):
                 div = ""
 
                 if c.session.loggedIn:
-                        messCount = 4
-                        #messCount = c.session.user.messages.count()
+                        messCount = c.session.mail.unreadCount()
+                        readCount = c.session.mail.readCount()
                         if messCount:
-                                messCount = ps.baseBadge(messCount, classes="badge-important")
-                        messages = "%s %s" % (ps.baseIcon("envelope-alt"), messCount)
+                                messCounter = ps.baseBadge(ps.baseBadge(messCount, classes="badge-important") + " %s"%readCount, style="padding-left: 0px")
+                        else:
+                                messCounter = ps.baseBadge(str(readCount))
+
+                        messages = "%s %s" % (ps.baseIcon("envelope-alt"), messCounter)
                         stuffMail = {"name": messages, "link": "/your/messages"}
                         stuffFlag = {"name": ps.baseIcon("flag"), "link": "/your/flags"}
                         stuffLabel = {"name": ps.baseIcon("tags"), "link": "/your/labels"}
                         stuffUser = {"name": ps.baseIcon("user"), "link": "/you"}
                         div = "divider"
-                        name = "Heya %s!"%(c.session.user.username)
+                        name = "Heya %s!"%(c.session.user["username"])
                         logout = ps.baseIcon("road") + " Logout"
                         admin = ps.baseIcon("dashboard") + " Admin Panel"
                         flagLink = {"name": ps.baseIcon("flag")+" Your flags", "link": "/your/flags"}
@@ -188,20 +191,20 @@ class flagrPage(smartPage):
                                         )
                                 }
 
-                        if c.session.user.level == "GOD":
+                        if c.session.user["level"] == "GOD":
                                 deity = ps.baseIcon("eye-open") + " Deity Panel"
 
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[youSub,
+                                        items=[profileLink,
                                                 "divider",
                                                 {"subName": deity, "subLink": c.baseURL+"/god", "sub": deitySub},
                                                 {"subName": admin, "subLink": c.baseURL+"/admin", "sub": adminSub},
                                                 "divider",
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
 
-                        elif c.session.user.level == "admin":
+                        elif c.session.user["level"] == "admin":
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[youSub,
+                                        items=[profileLink,
                                                 "divider",
                                                 {"subName": admin, "subLink": c.baseURL + "/admin", "sub": adminSub},
                                                 "divider",
@@ -209,21 +212,26 @@ class flagrPage(smartPage):
 
                         else:
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[youSub,
+                                        items=[profileLink,
                                                 "divider",
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
+                        link=""
                 else:
                         name = "Ohia Stranger!"
                         loginForm = ps.baseBasicForm(action=c.baseURL+"/auth/login",
                                 method="POST",
                                 fields=[
+                                ps.baseBold("Please Login...", classes="muted"),
                                 ps.baseInput(type="text", name="username", placeholder="Username"),
                                 ps.baseInput(type="password", name="password", placeholder="Password"),
-                                ps.baseSubmit(content="Login")
+                                ps.baseSubmit("Login"),
+                                ps.baseAButton("Register", link=c.baseURL+"/auth/register")
                                 ])
+
                         userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[{"header": "Please login to continue..."},
-                                                {"form": loginForm}])
+                                        items=[{"form": loginForm}])
+                        link={"name": "Login", "link": c.baseURL+"/auth/login"}
+                        link=ps.baseAButton("Login", link=c.baseURL+"/auth/login")
 
 
                 self.navbar = ps.baseNavbar(
@@ -234,8 +242,10 @@ class flagrPage(smartPage):
                                 {"name": public, "link": c.baseURL + "/flags"},
                                 {"name": labels, "link": c.baseURL+"/labels"}],
                         right=[stuffFlag,
+                                stuffLabel,
                                 stuffMail,
                                 div,
+                                link,
                                 {"dropdown": userDropdown, "name": name}])
 
                 self.footer = """

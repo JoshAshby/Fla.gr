@@ -18,9 +18,10 @@ from objects.godObject import godObject as basePage
 from objects.userObject import userObject as setupPage
 from seshat.route import route
 import views.pyStrap.pyStrap as ps
-import models.basic.authModel as am
+import models.profileModel as profilem
 
 from controllers.god.allFlags import *
+from controllers.god.allLabels import *
 
 @route("/god")
 class godIndex_god(basePage):
@@ -49,13 +50,20 @@ class setup(setupPage):
         def GET(self):
                 """
                 """
-                user = am.baseUser()
-                user["username"] = "Josh"
+                user = profilem.profile()
+                user["username"] = "JoshAshby"
                 user["level"] = "GOD"
-                user["notes"] = ""
-                user.password = "josh"
+                user["adminNotes"] = ""
+                user["password"] = "josh"
+                user["about"] = """#Hi there!  
+  
+My names transientBug, but you can also call me Josh. I'm the programmer and developer of fla.gr!
+                """
+                user["visibility"] = True
+                user["emailVisibility"] = True
+                user["email"] = "joshuaashby@joshashby.com"
 
                 user.commit()
 
                 self.view["title"] = "Initial Setup"
-                self.view["body"] = "User Josh with password josh has been created."
+                self.view["body"] = "User JoshAshby with password josh has been created."

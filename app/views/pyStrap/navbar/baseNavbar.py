@@ -29,7 +29,7 @@ class baseNavbar(b.brick):
                 id
                 brand - {"name": "", "link": ""}
                 leftElements - [{"name": "", "link": "", "active": True},
-                        "search",
+                        {"search", "action"},
                         {"form": baseForm},
                         {"dropdown": baseMenu, "link": "", "name": ""},
                         {"text": ""},
@@ -60,7 +60,7 @@ class baseNavbar(b.brick):
                 otherPartsRight = ""
 
                 for element in self.left:
-                        if not type(element) is str:
+                        if type(element) is dict:
                                 if element.has_key("link"):
                                         if element.has_key("active"):
                                                 element["classes"] = " active "
@@ -92,19 +92,21 @@ class baseNavbar(b.brick):
                                 if element.has_key("form"):
                                         otherParts += element
 
-                        if element == "divider":
+                        elif element == "divider":
                                 links += """<li class="divider-vertical"></li>"""
 
-                        if element == "search":
+                        elif element == "search":
                                 otherParts += """
                                 <form class="navbar-search">
                                       <input type="text" class="search-query" placeholder="Search">
                                 </form>
                                 """
+                        else:
+                                otherParts += element
 
 
                 for element in self.right:
-                        if not type(element) is str:
+                        if type(element) is dict:
                                 if element.has_key("link"):
                                         if element.has_key("active"):
                                                 element["classes"] = " active "
@@ -137,15 +139,18 @@ class baseNavbar(b.brick):
                                 if element.has_key("form"):
                                         otherPartsRight += element
 
-                        if element == "divider":
+                        elif element == "divider":
                                 linksRight += """<li class="divider-vertical"></li>"""
 
-                        if element == "search":
+                        elif element == "search":
                                 otherPartsRight += """
                                 <form class="navbar-search">
                                       <input type="text" class="search-query" placeholder="Search">
                                 </form>
                                 """
+
+                        else:
+                                otherPartsRight += element
 
 
                 items += """

@@ -63,16 +63,12 @@ class baseHTTPPageObject(object):
                                 """
                                 pass
 
-                        elif self.__level__ != c.session.user.level:
-                                print "duh"
+                        elif self.__level__ != c.session.user["level"]:
                                 c.session.pushMessage("You need to have %s rights to access this." % self.__level__)
-                                self.head = ("303 SEE OTHER", [("location", "/auth/login")])
+                                self.head = ("303 SEE OTHER", [("location", "/you")])
                                 error = True
 
                 elif helpers.boolean(self.__login__) and not helpers.boolean(c.session.loggedIn):
-                        print c.session.loggedIn
-                        print self.__login__
-                        print "here"
                         c.session.pushMessage("You need to be logged in to view this.")
                         self.head = ("303 SEE OTHER", [("location", "/auth/login")])
                         error = True

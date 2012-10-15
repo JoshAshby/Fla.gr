@@ -40,21 +40,6 @@ class labelIndex(flagrPage):
                 self.view.body = ps.baseRow(pageHead)+"<hr>"+labelList
 
 
-@route("/you/labels")
-@route("/your/labels")
-class labelIndex(flagrPage):
-        def GET(self):
-                labelList = lm.labelList(user=c.session.userID)
-
-                self.view["title"] = "Your Labels"
-                pageHead = ps.baseColumn(ps.baseHeading("%s Your labels" % (ps.baseIcon("tags")), size=1))
-
-                if not labelList:
-                        labelList = "Oh no! You don't have any labels currently!"
-
-                self.view.body = ps.baseRow(pageHead)+"<hr>"+labelList
-
-
 @route("/flags")
 @route("/public")
 @route("/label/public")
@@ -71,14 +56,12 @@ class labelPublic(flagrPage):
 
                 pageHead = ps.baseRow(pageHead)+"<hr>"
 
-                buildMessage = "OH NO! Either something went wrong, or there aren't any publicly visible flags just yet! If you'd like to make your own flags, please login."
+                buildMessage = "OH NO! Either something went wrong, or there aren't any publicly visible flags just yet!"
 
                 if flags:
                         width=10
 
                         flagList = fc.flagThumbnails(flags, width)
-
-                        flagList = ps.baseUL(flagList, classes="thumbnails")
                 else:
                         flagList = buildMessage
 
@@ -91,8 +74,6 @@ class labelPublic(flagrPage):
 
 
 @route("/label/(.*)")
-@route("/label/(.*)/view")
-@route("/labels/view/(.*)")
 class labelView(flagrPage):
         def GET(self):
                 label = self.members[0]
@@ -135,14 +116,12 @@ class labelView(flagrPage):
                 pageHead += ps.baseRow([ps.baseColumn(ps.baseBold("%s Stacked labels:"%ps.baseIcon("tags"), classes="muted")), ps.baseColumn(labelsUnder)])+"<hr>"
 
 
-                buildMessage = "OH NO! Either something went wrong, or there aren't any publicly visible flags just yet! If you'd like to make your own flags, please login."
+                buildMessage = "OH NO! Either something went wrong, or there aren't any publicly visible flags under this label just yet!"
 
                 if flags:
                         width=10
 
                         flagList = fc.flagThumbnails(flags, width)
-
-                        flagList = ps.baseUL(flagList, classes="thumbnails")
                 else:
                         flagList = buildMessage
 

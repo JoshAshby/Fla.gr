@@ -31,7 +31,7 @@ class basePost(blm.baseBlockModel):
         dbName = "redisPostServer"
 
         def new(self):
-                self.author = c.session.user.username
+                self.author = c.session.user["username"]
                 self.userID = c.session.userID
 
                 self.time = dt.utcnow().strftime("%b-%d-%Y %I:%M %p")

@@ -68,7 +68,7 @@ class baseMenu(b.brick):
 
                                 if element.has_key("form"):
                                         links += """
-                                        <li>%s</li>
+                                        <li style="padding: 20px">%s</li>
                                         """ % element["form"]
 
                                 if element.has_key("header"):

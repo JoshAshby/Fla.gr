@@ -26,56 +26,7 @@ import views.pyStrap.pyStrap as ps
 import flagr.flagrConfig as fc
 
 
-@route("/you/flags")
-@route("/your/flags")
-class flagIndex(flagrPage):
-        def GET(self):
-                """
-                """
-                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
-                        classes="btn-info", link=c.baseURL+"/flags/new"),
-                        dropdown=ps.baseMenu(name="flagDropdown",
-                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
-                                        {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
-                                ),
-                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
-                                classes="dropdown-toggle btn-info",
-                                data=[("toggle", "dropdown"),
-                                        ("original-title", "Quick select")],
-                                rel="tooltip"))
-
-                if c.session.loggedIn:
-                        self.view["title"] = "Your Flags"
-
-                        flags = fm.flagList(c.session.userID, True)
-                        pageHead = new
-
-                        pageHead = ps.baseRow([ps.baseColumn(ps.baseHeading("%s Your flags" % (ps.baseIcon("flag")), size=1)), ps.baseColumn(pageHead, classes="pull-right")])
-
-
-                        buildMessage = "You have no flags at the moment, but if you want to add one, simply click the button up above to get started!."
-
-                        if flags:
-                                width=10
-                                flagList = fc.flagThumbnails(flags, width)
-
-                                flagList = ps.baseUL(flagList, classes="thumbnails")
-                        else:
-                                flagList = buildMessage
-
-                        self.view.body = pageHead + "<hr>" + ps.baseRow(ps.baseColumn(flagList, id="flags"))
-                        self.view.scripts = ps.baseScript("""
-                        $('.btn-group').tooltip({
-                              selector: "a[rel=tooltip]"
-                        })
-        """)
-                else:
-                        self.head = ("303 SEE OTHER", [("location", str("/public"))])
-                        c.session.pushMessage(("You're not logged in, so we've sent you here to see some of the pretty public flags!"), icon="exclamation-sign", title="Oh snap!!")
-
-
 @route("/flag/(.*)/edit")
-@route("/flags/edit/(.*)")
 class newFlag(flagrPage):
         __login__ = True
         def GET(self):
@@ -217,7 +168,6 @@ class newFlag(flagrPage):
 
 
 @route("/flag/(.*)/delete")
-@route("/flags/delete/(.*)")
 class deleteFlag(flagrPage):
         __login__ = True
         def GET(self):
@@ -258,7 +208,6 @@ class deleteFlag(flagrPage):
 
 
 @route("/flag/(.*)/copy")
-@route("/flags/copy/(.*)")
 class copyFlag(flagrPage):
         __login__ = True
         def GET(self):
@@ -318,8 +267,6 @@ class copyFlag(flagrPage):
 
 
 @route("/flag/(.*)")
-@route("/flag/(.*)/view")
-@route("/flags/view/(.*)")
 class viewFlag(flagrPage):
         def GET(self):
                 """
@@ -366,7 +313,7 @@ class viewFlag(flagrPage):
                         if flag["userID"] == c.session.userID:
                                 author = "You"
                         else:
-                                author = flag.author
+                                author = ps.baseAnchor(flag.author, link=c.baseURL+"/people/%s"%flag.author)
 
                         if flag["visibility"]:
                                 vis = "%s Public" % ps.baseIcon("globe")
@@ -416,4 +363,3 @@ class viewFlag(flagrPage):
                       selector: "a[rel=tooltip]"
                 })
 """)
-

@@ -17,9 +17,11 @@ import string
 import random
 import bcrypt
 
-import models.basic.authModel as am
 import models.basic.baseModel as bm
 import views.pyStrap.pyStrap as ps
+
+import models.profileModel as profilem
+import models.messageModel as mm
 
 
 class session(bm.baseRedisModel):
@@ -34,7 +36,8 @@ class session(bm.baseRedisModel):
                         for bit in self.parts:
                                 setattr(self, bit, getattr(c, self.__dbname__).hget(self.__dbid__+self.id, bit))
 
-                        self.user = am.baseUser(self.userID)
+                        self.user = profilem.profile(self.userID)
+                        self.mail = mm.mail(self.userID)
 
                 else:
                         #No session was found so make a new one
@@ -45,7 +48,8 @@ class session(bm.baseRedisModel):
                         self.history = ""
                         self.loggedIn = False
 
-                        self.user = am.baseUser()
+                        self.user = profilem.profile()
+                        self.mail = mm.mail()
 
         def getMessages(self):
                 returnData = self.messages
@@ -67,15 +71,20 @@ class session(bm.baseRedisModel):
                         self.messages += ps.baseAlert(content, classes="alert-%s alert-block"%type)
 
         def login(self, username, passwd):
-                foundUser = am.findUser(username)
+                foundUser = profilem.findUser(username)
                 if foundUser:
-                        if foundUser.password == bcrypt.hashpw(passwd, foundUser.password):
-                                self.loggedIn = True
-                                self.user = foundUser
-                                self.userID = foundUser.id
+                        if not foundUser["disable"]:
+                                if foundUser["password"] == bcrypt.hashpw(passwd, foundUser["password"]):
+                                        self.loggedIn = True
+                                        self.user = foundUser
+                                        self.userID = foundUser.id
+                                else:
+                                        self.logout()
+                                        raise Exception("Your password appears to be wrong")
+
                         else:
                                 self.logout()
-                                raise Exception("Your password appears to be wrong")
+                                raise Exception("Your user is currently disabled. Please contact an admin to determine why.")
                 else:
                         self.logout()
                         raise Exception("We can't find that username, are you sure it's correct?")
@@ -84,3 +93,4 @@ class session(bm.baseRedisModel):
                 self.loggedIn = False
                 self.user = None
                 self.userID = None
+                self.mail = None

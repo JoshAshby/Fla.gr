@@ -165,7 +165,6 @@ class postsDrafts_admin(basePage):
 
 
 @route("/admin/post/(.*)/edit")
-@route("/admin/posts/edit/(.*)")
 class postsEdit_admin(basePage):
         def GET(self):
                 post = pm.post(self.members[0])
@@ -209,7 +208,6 @@ class postsEdit_admin(basePage):
 
 
 @route("/admin/post/(.*)/delete")
-@route("/admin/posts/delete/(.*)")
 class postsDelete_admin(basePage):
         def GET(self):
                 id = self.members[0]
@@ -283,7 +281,6 @@ class postsNew_admin(basePage):
 
 @route("/admin/post/(.*)")
 @route("/admin/post/(.*)/view")
-@route("/admin/posts/view/(.*)")
 class postsView_admin(basePage):
         def GET(self):
                 """

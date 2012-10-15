@@ -17,9 +17,9 @@ import config as c
 from objects.adminObject import adminObject as basePage
 from seshat.route import route
 
-import models.basic.authModel as am
-
 import views.pyStrap.pyStrap as ps
+import models.profileModel as profilem
+
 
 @route("/admin/users")
 class usersIndex_admin(basePage):
@@ -28,7 +28,7 @@ class usersIndex_admin(basePage):
                 """
 
                 """
-                users = am.userList()
+                users = profilem.userList()
 
                 pageHead = ps.baseRow([
                         ps.baseColumn(ps.baseHeading("%s Users" % ps.baseIcon("group"), size=1)),
@@ -44,10 +44,11 @@ class usersIndex_admin(basePage):
                 if users:
                         content = ""
                         for user in users:
-                                content += ps.baseRow([
-                                        ps.baseColumn(ps.baseHeading("Name: " + user.username, size=5), width=4),
-                                        ps.baseColumn(ps.baseParagraph("Level: "+ user.level), width=4)
-                                        ])
+                                if user["disable"]:
+                                        dis = ps.baseLabel("%s Disabled" % ps.baseIcon("ban-circle"))
+                                else:
+                                        dis = ps.baseLabel("%s Active" % ps.baseIcon("ok-circle"))
+
                                 editButton = ps.baseAButton(ps.baseIcon("edit"),
                                                 classes="btn-info",
                                                 link=c.baseURL+"/admin/user/%s/edit"%user.id,
@@ -59,13 +60,23 @@ class usersIndex_admin(basePage):
                                                 data=[("original-title", "Delete User")],
                                                 rel="tooltip")
                                 actions = ps.baseButtonGroup([editButton, deleteButton])
+
+                                content += ps.baseRow(ps.baseColumn(ps.baseWell(
+                                        ps.baseColumn(ps.baseBold("Username:", classes="muted")) +
+                                        ps.baseColumn(
+                                                ps.baseAnchor(user["username"], link=c.baseURL+"/people/%s"%user["username"])) +
+                                        ps.baseColumn(ps.baseBold("Level:", classes="muted")) +
+                                        ps.baseColumn(user["level"]) +
+                                        ps.baseColumn(dis) +
+                                        ps.baseColumn(actions, classes="pull-right")
+                                        ), width=8))
+
                                 content += ps.baseRow([
-                                        ps.baseColumn(ps.baseParagraph("Notes: "+user.notes), width=6),
-                                        ps.baseColumn(actions, width=2)
+                                        ps.baseColumn(ps.baseParagraph("Notes: "+user["adminNotes"]), width=8)
                                         ])
                                 content += "<hr>"
                 else:
-                        content = "Well either all of your users have god perms and aren't shown, or you don't have any additional users!"
+                        content = "Uh, well this is bad... unless you don't have god permissions and can't see any of the deities..."
 
                 self.view["body"] = pageHead + content
                 self.view.scripts = ps.baseScript("""
@@ -74,17 +85,17 @@ class usersIndex_admin(basePage):
                 })
 """)
 
+
 @route("/admin/user/(.*)/edit")
-@route("/admin/users/edit/(.*)")
 class usersEdit_admin(basePage):
         def GET(self):
                 """
                 """
                 id = self.members[0]
-                user = am.baseUser(id)
+                user = profilem.profile(id, md=False)
 
-                self.view["title"] = "Edit User " + user.username
-                pageHead = ps.baseHeading("%s Editing user: %s" % (ps.baseIcon("group"), user.username), size=1)
+                self.view["title"] = "Edit User " + user["username"]
+                pageHead = ps.baseHeading("%s Editing user: %s" % (ps.baseIcon("group"), user["username"]), size=1)
 
                 other = [{"label": "Default/Normal", "value": "normal"},
                         {"label": "Admin", "value": "admin"}]
@@ -94,19 +105,25 @@ class usersEdit_admin(basePage):
                                 {"label": "Admin", "value": "admin", "selected": ""}]
 
 
-                if c.session.user.level == "GOD":
-                        if user.level == "GOD":
-                                other.append({"label": "Demigod", "value": "god", "selected": ""})
+                if c.session.user["level"] == "GOD":
+                        if user["level"] == "GOD":
+                                other.append({"label": "Demigod", "value": "GOD", "selected": ""})
                         else:
-                                other.append({"label": "Demigod", "value": "god"})
+                                other.append({"label": "Demigod", "value": "GOD"})
 
                 editForm = ps.baseHorizontalForm(action=(c.baseURL+"/admin/user/%s/edit" % id),
                         method="POST",
                         actions=[ps.baseButtonGroup([ps.baseSubmit("Update, perhaps?", classes="btn-info"), ps.baseAButton("Delete, perhaps?", classes="btn-danger", link=c.baseURL+"/admin/user/%s/delete"%user.id)])],
-                        fields=[
+                        fields=[ps.baseHeading("Admin stuff...", size=3), "<hr>",
                                 {"label": "Set a new Password, perhaps?", "content": ps.baseInput(type="password", name="password", placeholder="password", classes="span5")},
-                                {"label": "Add a note to their account, perhaps?", "content": ps.baseTextarea(user.notes, name="notes", classes="span5")},
-                                {"label": "User level", "content": ps.baseSelect(elements=other, classes="span5", name="level")}
+                                {"label": "Add a note to their account, perhaps?", "content": ps.baseTextarea(user["adminNotes"], name="notes", classes="span5")},
+                                {"label": "User level", "content": ps.baseSelect(elements=other, classes="span5", name="level")},
+                                {"label": "Disable/Ban?", "content": ps.baseCheckbox(name="disable", checked=user["disable"], label="Check to disable/ban the user")},
+                                ps.baseHeading("Profile stuff...", size=3), "<hr>",
+                                {"label": "Profile Visibility", "content": ps.baseCheckbox(name="visibility", checked=user["visibility"], label="Users public profile visibility. Checked for visibile")},
+                                {"label": "About", "content": ps.baseTextarea(user["about"], name="about", classes="span5")},
+                                {"label": "Email", "content": ps.baseInput(type="email", name="email", placeholder="email@email.com", classes="span5", content=user["email"])},
+                                {"label": "Email Visibility", "content": ps.baseCheckbox(name="emailVisibility", checked=user["emailVisibility"], label="Users email visibility. Checked for visibile")},
                                 ]
                        )
 
@@ -117,20 +134,28 @@ class usersEdit_admin(basePage):
                 """
                 id = self.members[0]
                 notes = self.members["notes"] or ""
+                if not self.members.has_key("disable"): self.members["disable"] = False
+                if not self.members.has_key("visibility"): self.members["visibility"] = False
+                if not self.members.has_key("emailVisibility"): self.members["emailVisibility"] = False
 
                 try:
-                        user = am.baseUser(id)
-                        user["notes"] = notes
+                        user = profilem.profile(id)
+                        user["adminNotes"] = notes
 
                         if self.members["password"]:
-                                user.password = self.members["password"]
+                                user["password"] = self.members["password"]
 
-                        user.level = self.members["level"]
+                        user["level"] = self.members["level"]
+                        user["disable"] = self.members["disable"]
+                        user["visibility"] = self.members["visibility"]
+                        user["emailVisibility"] = self.members["emailVisibility"]
+                        user["about"] = self.members["about"]
+                        user["email"] = self.members["email"]
 
                         user.commit()
 
                         self.head = ("303 SEE OTHER", [("location", "/admin/users")])
-                        c.session.pushMessage(("The user %s was updated!" % ps.baseBold(user.username)), title="Congratulations!", icon="ok", type="success")
+                        c.session.pushMessage(("The user %s was updated!" % ps.baseBold(user["username"])), title="Congratulations!", icon="ok", type="success")
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/admin/users")])
@@ -138,11 +163,10 @@ class usersEdit_admin(basePage):
 
 
 @route("/admin/user/(.*)/delete")
-@route("/admin/users/delete/(.*)")
 class usersDelete_admin(basePage):
         def GET(self):
                 id = self.members[0]
-                user = am.baseUser(id)
+                user = profilem.profile(id)
 
                 self.view.title = "Delete user %s" % user.username
                 pageHead = ps.baseHeading("%s Delete user: %s" % (ps.baseIcon("group"), user.username), size=1, classes="text-error")
@@ -161,12 +185,12 @@ class usersDelete_admin(basePage):
 
         def POST(self):
                 id = self.members[0]
-                user = am.baseUser(id)
+                user = profilem.profile(id)
 
                 user.delete()
 
                 self.head = ("303 SEE OTHER", [("location", "/admin/users")])
-                c.session.pushMessage(("The user %s was deleted" % ps.baseBold(user.username)), title="Bye!", icon="trash", type="error")
+                c.session.pushMessage(("The user %s was deleted" % ps.baseBold(user["username"])), title="Bye!", icon="trash", type="error")
 
 
 @route("/admin/users/new")
@@ -180,17 +204,26 @@ class usersNew_admin(basePage):
                 pageHead = ps.baseHeading("%s Creating a new user" % ps.baseIcon("group"), size=1)
 
                 other = [{"label": "Default/Normal", "value": "normal"},
-                        {"label": "Admin", "value": "admin"},
-                        {"label": "Demigod", "value": "god"}]
+                        {"label": "Admin", "value": "admin"}]
+
+
+                if c.session.user["level"] == "GOD":
+                        other.append({"label": "Demigod", "value": "GOD"})
 
                 editForm = ps.baseHorizontalForm(action=(c.baseURL+"/admin/users/new"),
                         method="POST",
                         actions=[ps.baseSubmit(content="MAKE ME!", classes="btn-info")],
-                        fields=[
+                        fields=[ps.baseHeading("Admin stuff...", size=3), "<hr>",
                                 {"label": "Imaginary Friend?", "content": ps.baseInput(type="text", name="username", placeholder="username", classes="span5")},
                                 {"label": "Password?", "content": ps.baseInput(type="password", name="password", placeholder="Password", classes="span5")},
-                                {"label": "How about: add a note to their account?", "content": ps.baseTextarea(name="notes", classes="span5")},
-                                {"label": "User level", "content": ps.baseSelect(elements=other, classes="span5", name="level")}
+                                {"label": "How about: add a note to their account?", "content": ps.baseTextarea(name="adminNotes", classes="span5")},
+                                {"label": "User level", "content": ps.baseSelect(elements=other, classes="span5", name="level")},
+                                {"label": "Disable/Ban?", "content": ps.baseCheckbox(name="disable", label="Check to disable/ban the user")},
+                                ps.baseHeading("Profile stuff...", size=3), "<hr>",
+                                {"label": "Profile Visibility", "content": ps.baseCheckbox(name="visibility", label="Users public profile visibility. Checked for visibile")},
+                                {"label": "About", "content": ps.baseTextarea(name="about", classes="span5")},
+                                {"label": "Email", "content": ps.baseInput(type="email", name="email", placeholder="email@email.com", classes="span5")},
+                                {"label": "Email Visibility", "content": ps.baseCheckbox(name="emailVisibility", label="Users email visibility. Checked for visibile")},
                                 ]
                        )
 
@@ -200,14 +233,25 @@ class usersNew_admin(basePage):
                 """
 
                 """
-                name = self.members["username"]
-                notes = self.members["notes"] or ""
+                notes = self.members["adminNotes"]
+                if not self.members.has_key("disable"): self.members["disable"] = False
+                if not self.members.has_key("visibility"): self.members["visibility"] = False
+                if not self.members.has_key("emailVisibility"): self.members["emailVisibility"] = False
+
                 try:
-                        user = am.baseUser()
-                        user["username"] = name
-                        user["notes"] = notes
-                        user.level = self.members["level"]
-                        user.password = self.members["password"]
+                        user = profilem.profile()
+                        user["adminNotes"] = notes
+                        user["username"] = self.members["username"]
+
+                        if self.members["password"]:
+                                user["password"] = self.members["password"]
+
+                        user["level"] = self.members["level"]
+                        user["disable"] = self.members["disable"]
+                        user["visibility"] = self.members["visibility"]
+                        user["emailVisibility"] = self.members["emailVisibility"]
+                        user["about"] = self.members["about"]
+                        user["email"] = self.members["email"]
 
                         user.commit()
 

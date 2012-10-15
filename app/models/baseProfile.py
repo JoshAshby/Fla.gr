@@ -25,7 +25,7 @@ class baseProfile(blm.baseBlockModel):
                 "adminNotes",
                 "creationTime",
                 "level",
-                "disable",
+                ("disable", "string", helpers.boolean),
                 #User editable under this, admin only above.
                 ("visibility", "string", helpers.boolean),
                 "about",

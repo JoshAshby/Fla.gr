@@ -37,10 +37,16 @@ def labelList(user=None):
                                 labels = c.redisFlagServer.smembers(key)
                                 labelList = labelList.union(labels)
         else:
-                for key in keys:
-                        if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")) and c.redisFlagServer.get(key.strip(":labels")+":userID") == user:
-                                labels = c.redisFlagServer.smembers(key)
-                                labelList = labelList.union(labels)
+                if user == c.session.userID:
+                        for key in keys:
+                                if c.redisFlagServer.get(key.strip(":labels")+":userID") == user:
+                                        labels = c.redisFlagServer.smembers(key)
+                                        labelList = labelList.union(labels)
+                else:
+                        for key in keys:
+                                if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")) and c.redisFlagServer.get(key.strip(":labels")+":userID") == user:
+                                        labels = c.redisFlagServer.smembers(key)
+                                        labelList = labelList.union(labels)
 
         for lab in labelList:
                 returnLabels += label(lab)
@@ -56,9 +62,14 @@ def labelsUnderList(labs):
         reg = re.compile("(^%s/*)"%labs)
 
         for key in keys:
-                if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
+                if c.redisFlagServer.get(key.strip(":labels")+":userID") == c.session.userID:
                         labels = c.redisFlagServer.smembers(key)
                         labelList = labelList.union(labels)
+
+                else:
+                        if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
+                                labels = c.redisFlagServer.smembers(key)
+                                labelList = labelList.union(labels)
 
         for lab in labelList:
                 if lab != labs and reg.match(lab):
@@ -74,13 +85,22 @@ def labeledFlagList(label, md=True):
         reg = re.compile("(^%s$)" % label)
 
         for key in keys:
-                if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
+                if c.redisFlagServer.get(key.strip(":labels")+":userID") == c.session.userID:
                         labels = c.redisFlagServer.smembers(key)
                         for label in labels:
                                 if reg.match(label):
                                         flagList.append(key.strip(":labels").strip("flag:"))
 
-        flags = fm.flagList(flags=flagList, md=md)
+                else:
+                        if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
+                                labels = c.redisFlagServer.smembers(key)
+                                for label in labels:
+                                        if reg.match(label):
+                                                flagList.append(key.strip(":labels").strip("flag:"))
+        if flagList:
+                flags = fm.flagList(flags=flagList, md=md)
+        else:
+                flags = ""
 
         return flags
 

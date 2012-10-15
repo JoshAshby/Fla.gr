@@ -23,6 +23,7 @@ from views.pyStrap.buttonGroups.baseButtonGroup import baseButtonToolbar
 from views.pyStrap.buttons.baseButton import baseButton
 from views.pyStrap.buttons.baseButton import baseAButton
 from views.pyStrap.buttons.baseButton import baseSubmit
+from views.pyStrap.forms.baseAppend import baseAppend
 from views.pyStrap.forms.baseCheckbox import baseCheckbox
 from views.pyStrap.forms.baseForm import baseHorizontalForm
 from views.pyStrap.forms.baseForm import baseBasicForm
