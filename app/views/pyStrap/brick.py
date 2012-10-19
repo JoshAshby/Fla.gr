@@ -32,7 +32,7 @@ class brick(object):
                 have been built.
 
         """
-        __defaultParts__ = ["classes", "id", "style"]
+        __defaultParts__ = ["classes", "id", "style", "rel"]
         __tag__ = ""
         __tagAttr__ = []
         __tagContent__ = ""

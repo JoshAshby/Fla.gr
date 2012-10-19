@@ -140,16 +140,19 @@ class smartPage(object):
 
 class flagrPage(smartPage):
         def finishInit(self):
-                home = ps.baseIcon(icon="home")
-                flags = ps.baseIcon(icon="flag")+" Flags"
-                public = ps.baseIcon("flag") + " Public Flags"
-                labels = ps.baseIcon("tags") + " Public Labels"
+                flags = ps.baseIcon("flag")
+                labels = ps.baseIcon("tags")
+                public = ps.baseIcon("globe")
 
-                stuffFlag = ""
-                stuffLabel = ""
-                stuffUser = ""
                 stuffMail = ""
-                div = ""
+                stuffProfile = ""
+
+                search = ps.baseBasicForm(
+                        action=c.baseURL+"/search/flags",
+                        fields=[
+                                ps.baseAppend(elements=[ps.baseInput(type="text", name="search", placeholder="Search", classes="span3"), ps.baseButton("%s"%ps.baseIcon("search"), type="submit", classes="btn")])
+                                ],
+                        classes="form-inline navbar-form")
 
                 if c.session.loggedIn:
                         messCount = c.session.mail.unreadCount()
@@ -160,17 +163,15 @@ class flagrPage(smartPage):
                                 messCounter = ps.baseBadge(str(readCount))
 
                         messages = "%s %s" % (ps.baseIcon("envelope-alt"), messCounter)
-                        stuffMail = {"name": messages, "link": "/your/messages"}
-                        stuffFlag = {"name": ps.baseIcon("flag"), "link": "/your/flags"}
-                        stuffLabel = {"name": ps.baseIcon("tags"), "link": "/your/labels"}
-                        stuffUser = {"name": ps.baseIcon("user"), "link": "/you"}
-                        div = "divider"
+                        stuffMail = {"name": messages, "link": c.baseURL+"/your/messages"}
+                        stuffProfile = {"name": ps.baseIcon("user"), "link": c.baseURL+"/you"}
                         name = "Heya %s!"%(c.session.user["username"])
                         logout = ps.baseIcon("road") + " Logout"
                         admin = ps.baseIcon("dashboard") + " Admin Panel"
-                        flagLink = {"name": ps.baseIcon("flag")+" Your flags", "link": "/your/flags"}
-                        labelLink = {"name": ps.baseIcon("tags") +" Your labels", "link": "/your/labels"}
-                        profileLink = {"name": ps.baseIcon("user")+" You", "link": "/you"}
+                        flagLink = {"name": ps.baseIcon("flag")+" Your flags", "link": c.baseURL+"/your/flags"}
+                        labelLink = {"name": ps.baseIcon("tags") +" Your labels", "link": c.baseURL+"/your/labels"}
+                        profileLink = {"name": ps.baseIcon("user")+" Your profile", "link": c.baseURL+"/you"}
+                        settingLink = {"name": ps.baseIcon("cogs")+" Your settings", "link": c.baseURL+"/your/settings"}
 
                         adminSub = ps.baseMenu(name="adminSubDropdown",
                                         items=[{"name": ps.baseIcon("rss")+" Blog Posts", "link": c.baseURL+"/admin/posts"},
@@ -185,8 +186,8 @@ class flagrPage(smartPage):
                                 "subLink": c.baseURL+"/you",
                                 "sub": ps.baseMenu(name="youSubDropdown",
                                         items=[
-                                                flagLink,
-                                                labelLink
+                                                labelLink,
+                                                settingLink
                                                 ]
                                         )
                                 }
@@ -195,25 +196,30 @@ class flagrPage(smartPage):
                                 deity = ps.baseIcon("eye-open") + " Deity Panel"
 
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[profileLink,
+                                        items=[flagLink,
+                                                labelLink,
+                                                profileLink,
                                                 "divider",
                                                 {"subName": deity, "subLink": c.baseURL+"/god", "sub": deitySub},
                                                 {"subName": admin, "subLink": c.baseURL+"/admin", "sub": adminSub},
                                                 "divider",
+                                                settingLink,
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
 
                         elif c.session.user["level"] == "admin":
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[profileLink,
+                                        items=[flagLink, labelLink, profileLink,
                                                 "divider",
                                                 {"subName": admin, "subLink": c.baseURL + "/admin", "sub": adminSub},
                                                 "divider",
+                                                settingLink,
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
 
                         else:
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[profileLink,
+                                        items=[flagLink, labelLink, profileLink,
                                                 "divider",
+                                                settingLink,
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
                         link=""
                 else:
@@ -236,20 +242,17 @@ class flagrPage(smartPage):
 
                 self.navbar = ps.baseNavbar(
                         classes="navbar-static-top",
-                        brand={"name": c.appName, "link": c.baseURL},
-                        left=[{"name": home, "link": c.baseURL},
-                                "divider",
-                                {"name": public, "link": c.baseURL + "/flags"},
+                        brand={"name": c.appNameNav, "link": c.baseURL},
+                        left=[{"form": search},
+                                {"name": flags, "link": c.baseURL+"/flags"},
                                 {"name": labels, "link": c.baseURL+"/labels"}],
-                        right=[stuffFlag,
-                                stuffLabel,
+                        right=[stuffProfile,
                                 stuffMail,
-                                div,
                                 link,
                                 {"dropdown": userDropdown, "name": name}])
 
                 self.footer = """
                 <hr>
                 %s
-                """ % ps.baseParagraph("A %s production &copy 2012 %s %s" % (ps.baseAnchor(ps.baseIcon("beaker") + " transientBug", link="http://joshashby.com"), ps.baseAnchor(ps.baseIcon("github"), link="http://github.com/JoshAshby"), ps.baseAnchor(ps.baseIcon("twitter"), link="http://twitter.com/JoshPAshby")))
+                """ % ps.baseSmall("A project by %s &copy 2012 %s %s" % (ps.baseAnchor(ps.baseIcon("beaker") + " transientBug", link="http://transientBug.com"), ps.baseAnchor(ps.baseIcon("github"), link="http://github.com/transientBug"), ps.baseAnchor(ps.baseIcon("twitter"), link="http://twitter.com/transientBug")))
 

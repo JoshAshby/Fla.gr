@@ -77,6 +77,16 @@ class baseHTTPPageObject(object):
                         getattr(self, self.method)()
                         if not self.view.title: self.view.title = self.__menu__
                         self.view.title = "%s - %s" % (c.appName, self.view.title)
+                        self.view.scripts += """
+                        <script>
+                        $('.btn-group').tooltip({
+                                selector: "a[rel=tooltip]"
+                                })
+                        $('.nav-tabs').tooltip({
+                                selector: "a[rel=tooltip]"
+                                })
+                        </script>
+                        """
                         self.view.build()
                         content = self.view
                         if self.method == "GET" or self.method == "HEAD":

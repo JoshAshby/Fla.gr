@@ -186,7 +186,7 @@ class deleteFlag(flagrPage):
 
                 confirmForm = ps.baseBasicForm(action=c.baseURL+"/flag/%s/delete"%flag.id,
                                 method="POST",
-                                fields=[ps.baseButtonGroup([ps.baseSubmit("Yes, Delete it.", classes="btn-danger"), ps.baseAButton("NO, Do Not Delete!", link=c.baseURL+"/flags/edit/"+flag.id, classes="btn-info")])])
+                                fields=[ps.baseButtonGroup([ps.baseSubmit("Yes, Delete it.", classes="btn-danger"), ps.baseAButton("NO, Do Not Delete!", link=c.baseURL+"/flag/%s/edit"%flag.id, classes="btn-info")])])
 
                 confirm += ps.baseWell(confirmForm)
 
@@ -311,7 +311,7 @@ class viewFlag(flagrPage):
                         content += ps.baseHeading("%s %s" % (ps.baseIcon(flag.icon), flag.title), size=1, classes="")
 
                         if flag["userID"] == c.session.userID:
-                                author = "You"
+                                author = ps.baseAnchor("You!", link=c.baseURL+"/you")
                         else:
                                 author = ps.baseAnchor(flag.author, link=c.baseURL+"/people/%s"%flag.author)
 
@@ -342,12 +342,8 @@ class viewFlag(flagrPage):
                                                 value = flag[name]
                                         content += ps.baseRow(ps.baseColumn("%s: %s" %(ps.baseBold(name.lower().title(), classes="muted"), value)))
 
-                        if not flag["visibility"]:
-                                other = ps.baseLabel("%s Private" % ps.baseIcon("eye-close"))
-                        else:
-                                other = ps.baseAnchor(ps.baseLabel("%s Public" % ps.baseIcon("globe")), link=c.baseURL+"/public")
 
-                        labelLinks = "%s " % other
+                        labelLinks = ""
                         for label in flag["labels"]:
                                 labelLinks += ps.baseAnchor(ps.baseLabel(label, classes="label-info"), link=c.baseURL+"/label/%s"%label) + " "
 
@@ -358,8 +354,3 @@ class viewFlag(flagrPage):
 
 
                 self.view.body = content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")

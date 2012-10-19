@@ -18,6 +18,7 @@ from objects.baseObject import baseHTTPPageObject as basePage
 from seshat.route import route
 
 import views.pyStrap.pyStrap as ps
+import models.profileModel as profilem
 
 
 @route("/auth/login")
@@ -28,7 +29,7 @@ class login(basePage):
                 Display the login page.
                 """
                 if c.session.loggedIn:
-                        self.head = ("303 SEE OTHER", [("location", "/you")])
+                        self.head = ("303 SEE OTHER", [("location", "/your/flags")])
                         c.session.pushMessage("Hey look, you're already signed in!")
 
                 else:
@@ -52,7 +53,7 @@ class login(basePage):
 
                 try:
                         c.session.login(name, passwd)
-                        self.head = ("303 SEE OTHER", [("location", "/you")])
+                        self.head = ("303 SEE OTHER", [("location", "/your/flags")])
                         c.session.pushMessage("Welcome back, %s!" % name, icon="")
 
                 except Exception as exc:
@@ -112,22 +113,29 @@ class register(basePage):
                         if test:
                                 self.head = ("303 SEE OTHER", [("location", "/auth/register")])
                                 c.session.pushMessage("The username %s is already taken. Pick a new one and try again!" % ps.baseBold(self.members["username"]), icon="fire", title="OH SNAP!", type="error")
-
-                        user = profilem.profile()
-                        user["email"] = self.members["email"]
-
-                        if self.members["newpassword"] == self.members["newtwopassword"]:
-                                user["password"] = self.members["newpassword"]
                         else:
-                                raise Exception("Passwords need to match!")
+                                user = profilem.profile()
+                                user["email"] = self.members["email"]
+                                user["username"] = self.members["username"]
 
-                        user["disable"] = True
+                                if self.members["newpassword"] == self.members["newtwopassword"]:
+                                        user["password"] = self.members["newpassword"]
+                                        user["disable"] = True
 
-                        user.commit()
+                                        user.commit()
 
-                        self.head = ("303 SEE OTHER", [("location", "/auth/thanks")])
-                        c.session.pushMessage(("You've been registerd! Hold tight and we'll send you an email when you're account is active!"), title="Congratulations!", icon="ok", type="success")
+                                        self.head = ("303 SEE OTHER", [("location", "/auth/thanks")])
+                                        c.session.pushMessage(("You've been registered! Hold tight and we'll send you an email when you're account is active!"), title="Congratulations!", icon="ok", type="success")
+
+                                else:
+                                        raise Exception("Passwords need to match!")
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/auth/register")])
                         c.session.pushMessage("Something went wrong while registering, heres the deal:%s" % exc, icon="fire", title="OH SNAP!", type="error")
+
+
+@route("/auth/thanks")
+class authThanks(basePage):
+        def GET(self):
+                pass

@@ -32,7 +32,7 @@ import bcrypt
 
 
 @route("/your/flags")
-class flagIndex(flagrPage):
+class flagIndex(profilePage):
         def GET(self):
                 """
                 """
@@ -45,49 +45,97 @@ class flagIndex(flagrPage):
                         dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
                                 classes="dropdown-toggle btn-info",
                                 data=[("toggle", "dropdown"),
-                                        ("original-title", "Quick select")],
-                                rel="tooltip"))
+                                        ("original-title", "Quick select"),
+                                        ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
 
-                if c.session.loggedIn:
-                        self.view["title"] = "Your Flags"
+                self.view["title"] = "Your Flags"
 
-                        flags = fm.flagList(c.session.userID, True)
-                        pageHead = new
+                flags = fm.flagList(c.session.userID, True)
 
-                        pageHead = ps.baseRow([ps.baseColumn(ps.baseHeading("%s Your flags" % (ps.baseIcon("flag")), size=1)), ps.baseColumn(pageHead, classes="pull-right")])
+                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
+                                rel="tooltip",
+                                data=[("original-title", "Your Profile"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags",
+                                rel="tooltip",
+                                data=[("original-title", "Your Flags"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link=c.baseURL+"/your/labels",
+                                rel="tooltip",
+                                data=[("original-title", "Your Labels"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("cogs"), link=c.baseURL+"/your/settings",
+                                rel="tooltip",
+                                data=[("original-title", "Your Settings"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += new
 
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Your Flags" % (ps.baseIcon("flag")), size=1), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                        ])
 
-                        buildMessage = "You have no flags at the moment, but if you want to add one, simply click the button up above to get started!."
+                buildMessage = "You have no flags at the moment, but if you want to add one, simply click the button up above to get started!."
 
-                        if flags:
-                                width=10
-                                flagList = fc.flagThumbnails(flags, width)
-                        else:
-                                flagList = buildMessage
-
-                        self.view.body = pageHead + "<hr>" + ps.baseRow(ps.baseColumn(flagList, id="flags"))
-                        self.view.scripts = ps.baseScript("""
-                        $('.btn-group').tooltip({
-                              selector: "a[rel=tooltip]"
-                        })
-        """)
+                if flags:
+                        width=10
+                        flagList = fc.flagThumbnails(flags, width)
                 else:
-                        self.head = ("303 SEE OTHER", [("location", str("/public"))])
-                        c.session.pushMessage(("You're not logged in, so we've sent you here to see some of the pretty public flags!"), icon="exclamation-sign", title="Oh snap!!")
+                        flagList = buildMessage
+
+                self.view.body = pageHead + ps.baseRow(ps.baseColumn(flagList, id="flags"))
 
 
 @route("/your/labels")
-class labelIndex(flagrPage):
+class labelIndex(profilePage):
         def GET(self):
                 labelList = lm.labelList(user=c.session.userID)
 
+                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+                        classes="btn-info", link=c.baseURL+"/flags/new"),
+                        dropdown=ps.baseMenu(name="flagDropdown",
+                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                                        {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                                ),
+                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                classes="dropdown-toggle btn-info",
+                                data=[("toggle", "dropdown"),
+                                        ("original-title", "Quick select"),
+                                        ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
+
                 self.view["title"] = "Your Labels"
-                pageHead = ps.baseColumn(ps.baseHeading("%s Your labels" % (ps.baseIcon("tags")), size=1))
+
+                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
+                                rel="tooltip",
+                                data=[("original-title", "Your Profile"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags",
+                                rel="tooltip",
+                                data=[("original-title", "Your Flags"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("tags"), link=c.baseURL+"/your/labels",
+                                rel="tooltip",
+                                data=[("original-title", "Your Labels"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("cogs"), link=c.baseURL+"/your/settings",
+                                rel="tooltip",
+                                data=[("original-title", "Your Settings"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += new
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Your Labels" % (ps.baseIcon("tags")), size=1), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                        ])
 
                 if not labelList:
                         labelList = "Oh no! You don't have any labels currently!"
 
-                self.view.body = ps.baseRow(pageHead)+"<hr>"+labelList
+                self.view.body = pageHead+labelList
 
 
 @route("/you")
@@ -104,21 +152,33 @@ class userIndex(profilePage):
                         dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
                                 classes="dropdown-toggle btn-info",
                                 data=[("toggle", "dropdown"),
-                                        ("original-title", "Quick select")],
-                                rel="tooltip"))
+                                        ("original-title", "Quick select"),
+                                        ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
+
+                tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
+                                rel="tooltip",
+                                data=[("original-title", "Your Profile"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags",
+                                rel="tooltip",
+                                data=[("original-title", "Your Flags"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link=c.baseURL+"/your/labels",
+                                rel="tooltip",
+                                data=[("original-title", "Your Labels"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("cogs"), link=c.baseURL+"/your/settings",
+                                rel="tooltip",
+                                data=[("original-title", "Your Settings"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += new
 
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s You! (%s)" % (ps.baseIcon("user"), c.session.user["username"]), size=1)),
-                                ps.baseButtonToolbar([
-                                        new,
-                                        ps.baseButtonGroup([
-                                                ps.baseAButton(ps.baseIcon("cogs"),
-                                                        link=c.baseURL+"/your/settings",
-                                                        rel="tooltip",
-                                                        data=[("original-title", "Your settings")])
-                                                ]),
-                                ], classes="pull-right")
-                        ]) + "<hr>"
+                        ps.baseColumn(ps.baseHeading("%s You" % (ps.baseIcon("user")), size=1), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                        ])
 
                 email = " %s"%c.session.user["email"] if c.session.user["email"] else " You don't have an email registered!"
 
@@ -141,35 +201,16 @@ class userIndex(profilePage):
                                                 ps.baseColumn(ps.baseBold("Email: ", classes="muted")) +
                                                 ps.baseColumn(emailVis + email)
                                                 ),
-                                        width=8
+                                        width=10
                                         )
                                 ])
 
-                labels = lm.labelList(c.session.userID)
-                if not labels:
-                        labels = "You have no labels yet!"
+                about = c.session.user["about"] or "You don't have anything about you yet!"
 
-                content += ps.baseRow([ps.baseColumn(ps.baseBold(ps.baseIcon("tags")+" Your labels:", classes="muted")), ps.baseColumn(lm.labelList(c.session.userID))]) + "<hr>"
-
-                flags = fm.flagList(c.session.userID, True)
-                buildMessage = "Uh oh! Looks like you don't have any flags at the moment, why don't you make one with the new flag button at the top of this page?"
-
-                if flags:
-                        flagList = fc.flagThumbnails(flags[:10], 8)
-                        flagList = flagList + ps.baseAButton("See all your flags",
-                                        link=c.baseURL+"/your/flags")
-                else:
-                        flagList = buildMessage
-
-                content += ps.baseRow(ps.baseColumn(flagList, id="flags"))
+                content += ps.baseRow(ps.baseColumn(about))
 
 
                 self.view.body = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                        $('.btn-group').tooltip({
-                              selector: "a[rel=tooltip]"
-                        })
-                """)
 
 @route("/your/settings")
 class userEdit(profilePage):
@@ -178,9 +219,44 @@ class userEdit(profilePage):
                 """
                 self.view.sidebar = ""
                 user = profilem.profile(c.session.userID, md=False)
+                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+                        classes="btn-info", link=c.baseURL+"/flags/new"),
+                        dropdown=ps.baseMenu(name="flagDropdown",
+                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                                        {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                                ),
+                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                classes="dropdown-toggle btn-info",
+                                data=[("toggle", "dropdown"),
+                                        ("original-title", "Quick select"),
+                                        ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
 
                 self.view["title"] = "Editing your settings"
-                pageHead = ps.baseHeading("%s Editing your settings" % (ps.baseIcon("group")), size=1)
+
+                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
+                                rel="tooltip",
+                                data=[("original-title", "Your Profile"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags",
+                                rel="tooltip",
+                                data=[("original-title", "Your Flags"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link=c.baseURL+"/your/labels",
+                                rel="tooltip",
+                                data=[("original-title", "Your Labels"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("cogs"), link=c.baseURL+"/your/settings",
+                                rel="tooltip",
+                                data=[("original-title", "Your Settings"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += new
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Your Settings" % (ps.baseIcon("cogs")), size=1), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                        ])
 
                 editForm = ps.baseHorizontalForm(action=(c.baseURL+"/your/settings"),
                         method="POST",
@@ -242,4 +318,33 @@ class userEdit(profilePage):
 @route("/your/messages")
 class userEdit(profilePage):
         def GET(self):
-                pass
+                self.view.title = "Inbox"
+                tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("inbox"), link=c.baseURL+"/your/messages",
+                                rel="tooltip",
+                                data=[("original-title", "Inbox"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("folder-open"), link=c.baseURL+"/your/messages/read",
+                                rel="tooltip",
+                                data=[("original-title", "Read"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("folder-close"), link=c.baseURL+"/your/messages/unread",
+                                rel="tooltip",
+                                data=[("original-title", "Unread"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("signout"), link=c.baseURL+"/your/messages/sent",
+                                rel="tooltip",
+                                data=[("original-title", "Sent"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("hdd"), link=c.baseURL+"/your/messages/archived",
+                                rel="tooltip",
+                                data=[("original-title", "Archived"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += ps.baseAButton("%s New" % ps.baseIcon("envelope"), link=c.baseURL+"/your/messages/new", classes="pull-right")
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Your Messages" % (ps.baseIcon("envelope-alt")), size=1), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                        ])
+
+                self.view.body = pageHead

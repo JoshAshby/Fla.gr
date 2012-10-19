@@ -25,19 +25,20 @@ def flagThumbnails(flags, width=10):
         if flags:
                 flagList = ""
                 for flag in flags:
-                        title = ps.baseAnchor("%s %s" % (ps.baseIcon(flag.icon), flag.title), link=c.baseURL+"/flag/%s"%flag.id)
+                        if flag["flagType"] == "bookmark":
+                                title = ps.baseAnchor("%s %s" % (ps.baseIcon(flag.icon), flag.title), link=flag.url)
+                        else:
+                                title = "%s %s" % (ps.baseIcon(flag.icon), flag.title)
 
                         if not flag["visibility"]:
                                 vis = "%s Private" % ps.baseIcon("eye-close")
-                                other = ps.baseLabel(vis)
                         else:
                                 vis = "%s Public" % ps.baseIcon("globe")
-                                other = ps.baseAnchor(ps.baseLabel(vis), link=c.baseURL+"/public")
 
                         who = ps.baseAnchor(flag["author"], link=c.baseURL+"/people/%s"%flag["author"])
 
                         if c.session.loggedIn and c.session.userID == flag["userID"]:
-                                who = "You!"
+                                who = ps.baseAnchor("You!", link=c.baseURL+"/you")
                                 edit = ps.baseSplitDropdown(btn=
                                         ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
                                                 link=c.baseURL+"/flag/%s"%flag.id,
@@ -94,7 +95,7 @@ def flagThumbnails(flags, width=10):
 
                         caption += "%s%s<br />" % (flag["description"][:250], ps.baseAnchor("...", link=c.baseURL+"/flag/%s"%flag.id))
 
-                        labelLinks = "%s " % other
+                        labelLinks = ""
                         for label in flag["labels"]:
                                 labelLinks += ps.baseAnchor(ps.baseLabel(label, classes="label-info"), link=c.baseURL+"/label/"+label) + " "
 

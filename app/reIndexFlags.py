@@ -8,19 +8,19 @@ import os
 
 r = redis.Redis(db=2)
 
-schema = Schema(title=TEXT(stored=True),
+schema = Schema(title=TEXT,
                 id=ID(stored=True, unique=True),
                 description=TEXT,
-                labels=KEYWORD(stored=True),
-                url=TEXT(stored=True),
-                author=TEXT(stored=True),
+                labels=KEYWORD,
+                url=TEXT,
+                author=TEXT,
                 time=TEXT,
                 userID=TEXT)
 
-if not os.path.exists("index"):
-        os.mkdir("index")
+if not os.path.exists(".searchIndex"):
+        os.mkdir(".searchIndex")
 
-ix = create_in("index", schema)
+ix = create_in(".searchIndex", schema)
 writer = ix.writer()
 
 for key in r.keys("flag:*:id"):
@@ -49,19 +49,3 @@ for key in r.keys("flag:*:id"):
                         time=flag["time"])
 
 writer.commit()
-
-
-from whoosh.index import open_dir
-from whoosh.qparser import MultifieldParser
-
-ix = open_dir("index")
-flags = []
-
-with ix.searcher() as searcher:
-        query = MultifieldParser(["title", "description", "labels", "url", "author"], ix.schema).parse(u"Josh*")
-        results = searcher.search(query)
-
-        for result in results:
-                flags.append(result["id"])
-
-print flags

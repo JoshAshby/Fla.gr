@@ -36,24 +36,26 @@ import os
 class searchFlags_term(flagrPage):
         def GET(self):
                 content = ""
+                self.view["title"] = "Search flags"
+
+                value = self.members["search"] if self.members.has_key("search") else ""
+
+                pageHead = ps.baseColumn(ps.baseHeading("%s Search flags..."%ps.baseIcon("search"), size=1) +
+                                ps.baseBasicForm(
+                                        action=c.baseURL+"/search/flags",
+                                        fields=[
+                                                ps.baseAppend(elements=[ps.baseInput(type="text", name="search", placeholder="Search", classes="span3", value=value), ps.baseButton(ps.baseIcon("search"), type="submit", classes="btn")])
+                                                ],
+                                        classes="form-inline"),
+                                offset=3)
+
                 if not self.members.has_key("search"):
-                        self.view["title"] = "Search flags"
-
-                        pageHead = ps.baseColumn(ps.baseHeading("%s Search flags..."%ps.baseIcon("flag"), size=1) +
-                                        ps.baseBasicForm(
-                                                action=c.baseURL+"/search/flags",
-                                                fields=[
-                                                        ps.baseAppend(elements=[ps.baseInput(type="text", name="search", placeholder="Search", classes="span3 search-query"), ps.baseSubmit("Search", classes="btn-info")])
-                                                        ],
-                                                classes="form-search"),
-                                        offset=3)
-
                         self.view.body = pageHead
 
                 else:
                         term = self.members["search"]
 
-                        ix = open_dir("index")
+                        ix = open_dir(".searchIndex")
                         flags = []
 
                         with ix.searcher() as searcher:
@@ -67,21 +69,16 @@ class searchFlags_term(flagrPage):
 
                         buildMessage = "Uh oh! Looks like I couldn't find any flags at the moment that fit that search criteria."
 
+                        for flag in flags:
+                                if not flag["visibility"] and flag["userID"] != c.session.userID:
+                                        flags.pop(flags.index(flag))
+
                         if flags:
                                 flagList = fc.flagThumbnails(flags, 10)
                         else:
                                 flagList = buildMessage
 
                         content = ps.baseRow(ps.baseColumn(flagList, id="flags"))
-
-                        pageHead = ps.baseColumn(ps.baseHeading("%s Search flags..."%ps.baseIcon("flag"), size=1) +
-                                        ps.baseBasicForm(
-                                                action=c.baseURL+"/search/flags",
-                                                fields=[
-                                                        ps.baseAppend(elements=[ps.baseInput(type="text", name="search", placeholder="Search", value=term, classes="span3 search-query"), ps.baseSubmit("Search", classes="btn-info")])
-                                                        ],
-                                                classes="form-search"),
-                                        offset=3)
 
                         self.view.body = pageHead + content
                         self.view.scripts = ps.baseScript("""

@@ -16,6 +16,7 @@ import re
 import redis
 
 appName = "fla.gr"
+appNameNav = "<i class=\"icon-flag\"></i> fla.gr"
 
 """
 We need to make

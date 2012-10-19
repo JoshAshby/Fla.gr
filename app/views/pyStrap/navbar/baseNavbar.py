@@ -90,7 +90,7 @@ class baseNavbar(b.brick):
                                         """ % element
 
                                 if element.has_key("form"):
-                                        otherParts += element
+                                        otherParts += element["form"]
 
                         elif element == "divider":
                                 links += """<li class="divider-vertical"></li>"""
