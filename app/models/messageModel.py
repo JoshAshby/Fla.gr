@@ -15,6 +15,7 @@ import config as c
 import models.baseMessage as bmess
 import models.blocks.helpers as helpers
 import markdown
+import views.pyStrap.pyStrap as ps
 
 def message(id=None, md=True):
         if id:
@@ -52,3 +53,19 @@ class mail(object):
                         if message["read"] and not message["archive"]:
                                 count += 1
                 return count
+
+        def mailBox(unread=False):
+                returnMess = []
+                returnHTML = ""
+                if unread:
+                        for message in self.messages:
+                                if message.read == False:
+                                        returnMess.append(message)
+                else:
+                        for message in self.messages:
+                                returnMess.append(message)
+
+                for message in returnMess:
+                        returnHTML += ""
+
+                return returnHTML

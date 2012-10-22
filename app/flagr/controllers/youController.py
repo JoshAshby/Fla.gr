@@ -316,35 +316,72 @@ class userEdit(profilePage):
 
 
 @route("/your/messages")
-class userEdit(profilePage):
+class userMessages(profilePage):
         def GET(self):
                 self.view.title = "Inbox"
                 tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("inbox"), link=c.baseURL+"/your/messages",
                                 rel="tooltip",
                                 data=[("original-title", "Inbox"),
                                         ("placement", "bottom")]) +"</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("folder-open"), link=c.baseURL+"/your/messages/read",
-                                rel="tooltip",
-                                data=[("original-title", "Read"),
-                                        ("placement", "bottom")]) +"</li>"
                 tabs += "<li>" + ps.baseAnchor(ps.baseIcon("folder-close"), link=c.baseURL+"/your/messages/unread",
                                 rel="tooltip",
                                 data=[("original-title", "Unread"),
-                                        ("placement", "bottom")]) +"</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("signout"), link=c.baseURL+"/your/messages/sent",
-                                rel="tooltip",
-                                data=[("original-title", "Sent"),
-                                        ("placement", "bottom")]) +"</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("hdd"), link=c.baseURL+"/your/messages/archived",
-                                rel="tooltip",
-                                data=[("original-title", "Archived"),
                                         ("placement", "bottom")]) +"</li>"
 
                 tabs += ps.baseAButton("%s New" % ps.baseIcon("envelope"), link=c.baseURL+"/your/messages/new", classes="pull-right")
 
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Your Messages" % (ps.baseIcon("envelope-alt")), size=1), width=5),
+                        ps.baseColumn(ps.baseHeading("%s Inbox" % (ps.baseIcon("envelope-alt")), size=1), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
                 self.view.body = pageHead
+
+
+@route("/your/messages/unread")
+class userMessagesUnread(profilePage):
+        def GET(self):
+                self.view.title = "Unread messages"
+                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("inbox"), link=c.baseURL+"/your/messages",
+                                rel="tooltip",
+                                data=[("original-title", "Inbox"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("folder-close"), link=c.baseURL+"/your/messages/unread",
+                                rel="tooltip",
+                                data=[("original-title", "Unread"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += ps.baseAButton("%s New" % ps.baseIcon("envelope"), link=c.baseURL+"/your/messages/new", classes="pull-right")
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Unread" % (ps.baseIcon("envelope-alt")), size=1), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                        ])
+
+                self.view.body = pageHead
+
+
+@route("/your/messages/new")
+class userMessagesNew(profilePage):
+        def GET(self):
+                self.view.title = "New message"
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s New Message" % (ps.baseIcon("envelope")), size=1), width=5),
+                        ])
+
+                elements = [
+                ps.baseInput(type="text", classes="span10", name="whoName", placeholder="Who is this for? (Username)"),
+                "<br /><br />",
+                ps.baseInput(type="text", classes="span10", name="subject", placeholder="Subject? (required)"),
+                "<br /><br />",
+                {"content": ps.baseTextarea(classes="span10", name="message"),
+                        "help": ps.baseSmall("Text can be formated with %s" % ps.baseAnchor("Daring Fireball's Markdown", link="http://daringfireball.net/projects/markdown/syntax"), classes="muted")},
+                "<br />"]
+
+                editForm = ps.baseHorizontalForm(action=c.baseURL+"/your/messages/new",
+                                method="POST",
+                                actions=[ps.baseSubmit(ps.baseIcon("save")+" Send!")],
+                                fields=elements)
+
+                self.view.body = pageHead + editForm

@@ -25,10 +25,7 @@ def flagThumbnails(flags, width=10):
         if flags:
                 flagList = ""
                 for flag in flags:
-                        if flag["flagType"] == "bookmark":
-                                title = ps.baseAnchor("%s %s" % (ps.baseIcon(flag.icon), flag.title), link=flag.url)
-                        else:
-                                title = "%s %s" % (ps.baseIcon(flag.icon), flag.title)
+                        title = ps.baseAnchor("%s %s" % (ps.baseIcon(flag.icon), flag.title), link=c.baseURL+"/flag/%s"%flag.id)
 
                         if not flag["visibility"]:
                                 vis = "%s Private" % ps.baseIcon("eye-close")
