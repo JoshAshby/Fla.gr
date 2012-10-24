@@ -22,7 +22,7 @@ import models.carouselModel as cm
 import views.pyStrap.pyStrap as ps
 
 
-@route(c.baseURL+"/")
+@route("/")
 class index(basePage):
         __menu__ = "Home"
         """

@@ -14,6 +14,7 @@ joshuaashby@joshashby.com
 """
 import re
 import redis
+import os
 
 appName = "fla.gr"
 appNameNav = "<i class=\"icon-flag\"></i> fla.gr"
@@ -43,8 +44,6 @@ things such as static assets and what not.
 """
 baseURL = "http://localhost"
 assetURL = "http://localhost/static"
-#baseURL = "/"
-#assetURL = "/static"
 
 levels = ["normal", "admin", "GOD"]
 
@@ -56,6 +55,7 @@ Don't change these following settings unless you know what you're doing!!!
 ##########################################################################
 """
 session = None
+path = os.path.dirname(__file__)
 
 urls = []
 

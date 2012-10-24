@@ -21,6 +21,9 @@ import flagr.models.flagModel as fm
 import flagr.models.labelModel as lm
 import models.profileModel as profilem
 
+import logging
+logger = logging.getLogger("flagr.search")
+
 from flagr.objects.flagrObject import flagrObject as flagrPage
 from seshat.route import route
 
@@ -29,7 +32,6 @@ import flagr.flagrConfig as fc
 
 from whoosh.index import open_dir
 from whoosh.qparser import MultifieldParser
-import os
 
 
 @route("/search/flags")
@@ -55,7 +57,7 @@ class searchFlags_term(flagrPage):
                 else:
                         term = self.members["search"]
 
-                        ix = open_dir(".searchIndex")
+                        ix = open_dir(c.path+"/.searchIndex")
                         flags = []
 
                         with ix.searcher() as searcher:

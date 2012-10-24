@@ -17,64 +17,97 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-try:
-        import config as c
-except:
-        import os
-        import sys
-        abspath = os.path.dirname(__file__)
-        sys.path.append(abspath)
-        os.chdir(abspath)
-        import config as c
-
-import logging
-formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
-        %(message)s""")
-
-logger = logging.getLogger("flagr")
-
-fh = logging.FileHandler("flagr.log")
-fh.setLevel(logging.DEBUG)
-fh.setFormatter(formatter)
-logger.addHandler(fh)
-
-logger.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
+import sys
 import signal
 import daemon
+import lockfile
+import sys
+import os
+abspath = os.path.dirname(__file__)
+sys.path.append(abspath)
+os.chdir(abspath)
 
-def stop(signal, frame):
-        sys.exit()
+debug = True
+logFolder = "/var/log/python/"
+pidFolder = "/tmp/"
 
-def start():
-        import seshat.framework as fw
+def setupLog():
+        import logging
+        level = logging.WARNING
+        if debug:
+                level = logging.DEBUG
 
-        from index import *
+        formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
+                %(message)s""")
 
-        from controllers.authController import *
-        from controllers.adminController import *
-        from controllers.godController import *
-        from controllers.profileController import *
+        logger = logging.getLogger("flagr")
+        logger.setLevel(level)
 
-        #Fla.gr specific code. Makes for easy modulation of the system...
-        from flagr.controllers.flagController import *
-        from flagr.controllers.labelController import *
-        from flagr.controllers.youController import *
-        from flagr.controllers.searchController import *
+        fh = logging.FileHandler(logFolder+"flagr.log")
+        fh.setLevel(level)
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
 
-if __name__ == '__main__':
-        """
-        Because we're not doing anything else yet, such as starting a websockets
-        server or whatever, we're going to just go into forever serve mode.
-        """
-        if sys.argv[0] == "-d":
-                with daemon.DaemonContext(signal_map={signal.SIGINT: stop,
-                        signal.SIGTERM: stop,
-                        signal.SIGQUIT: stop}):
-                        start()
+        if debug and "noDaemon" in sys.argv:
+                """
+                Make sure we're not in daemon mode if we're logging to console too
+                """
+                try:
+                        ch = logging.StreamHandler()
+                        ch.setLevel(level)
+                        ch.setFormatter(formatter)
+                        logger.addHandler(ch)
+                except:
+                        pass
+
+from simpleDaemon import Daemon
+class app(Daemon):
+        down = False
+        def run(self):
+                setupLog()
+                import seshat.framework as fw
+
+                if self.down:
+                        import controllers.maintenanceController
+                else:
+                        import controllers.controllerMap
+
+                fw.forever()
+
+
+if __name__ == "__main__":
+        daemon = app(pidFolder+'flagr.pid')
+        daemon.down=False
+        if len(sys.argv) >= 2:
+                if 'noDaemon' in sys.argv:
+                        setupLog()
+                        import seshat.framework as fw
+                        if 'maintenance' in sys.argv:
+                                import controllers.maintenanceController
+                        else:
+                                import controllers.controllerMap
+                        fw.forever()
+
+                elif 'start' in sys.argv:
+                        daemon.start()
+
+                elif 'stop' in sys.argv:
+                        daemon.stop()
+
+                elif 'restart' in sys.argv:
+                        daemon.restart()
+
+                elif 'maintenance' in sys.argv:
+                        daemon.down=True
+                        daemon.stop()
+                        daemon.start()
+
+                else:
+                        print "Unknown command"
+                        sys.exit(2)
+
+                sys.exit(0)
+
         else:
-                start()
+                print "usage: %s start|stop|restart|noDaemon|(noDaemon) maintenance" % sys.argv[0]
+                sys.exit(2)

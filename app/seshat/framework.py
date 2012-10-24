@@ -22,7 +22,6 @@ from gevent import queue
 import logging
 logger = logging.getLogger("flagr.seshat")
 
-import signal
 import string
 import random
 import Cookie
@@ -58,7 +57,8 @@ def app(env, start_response):
                         if c.debug: logger.debug("""----------------------------
         Method: %s
         URL: %s
-""" % (env["REQUEST_METHOD"], env["REQUEST_URI"]))
+        Object: %s
+""" % (env["REQUEST_METHOD"], env["REQUEST_URI"], url.pageObject.__name__))
 
                         try:
                                 cookie.load(env["HTTP_COOKIE"])
@@ -117,7 +117,7 @@ def app(env, start_response):
         Method: %s
         URL: %s
         """ % (env["REQUEST_METHOD"], env["REQUEST_URI"]))
-        headers = []
+        headers = [("Content-type", "text/html")]
         start_response(status, headers)
         return "<html><body><b>404 Not Found</b></body></html>"
 
@@ -140,7 +140,7 @@ def main():
         server = WSGIServer((address, port), app)
 
         logger.info("""Now serving py as a fastcgi server at %(address)s:%(port)i
-Press Ctrl+c if running as non daemon mode, or send a stop signal
+        Press Ctrl+c if running as non daemon mode, or send a stop signal
         """ % {"address": address, "port": port})
 
         return server
@@ -152,11 +152,16 @@ def forever():
 
         Starts the server
         """
-        gevent.signal(signal.SIGQUIT, gevent.shutdown)
         server = main()
         try:
                 server.serve_forever()
+                logger.warn("Shutdown py operations.")
         except Exception as exc:
                 logger.critical("""Shutdown py operations, here's why: %s""" % exc)
-                gevent.shutdown()
-                sys.exit()
+                gevent.shutdown
+        except KeyboardInterrupt:
+                logger.critical("""Shutdown py operations for a KeyboardInterrupt. Bye!""")
+                gevent.shutdown
+        else:
+                logger.critical("""Shutdown py operations for unknown reason, possibly a KeyboardInterrupt...""")
+                gevent.shutdown

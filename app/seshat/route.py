@@ -25,7 +25,7 @@ def route(routeURL):
                 urlObject = bu.url(routeURL, HTTPObject)
                 urls.append(urlObject)
                 HTTPObject.__url__ = routeURL
-                logger.debug("""Made route table entry for:
+                if debug: logger.debug("""Made route table entry for:
         Object: %(objectName)s
         Pattern %(regex)s""" % {"regex": routeURL, "objectName": HTTPObject.__module__ + "." + HTTPObject.__name__})
                 return HTTPObject
