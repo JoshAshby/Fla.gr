@@ -259,6 +259,5 @@ class usersNew_admin(basePage):
                         c.session.pushMessage(("The user %s was created!" % ps.baseBold(user.username)), title="Congratulations!", icon="ok", type="success")
 
                 except Exception as exc:
-                        if c.debug: print exc
                         self.head = ("303 SEE OTHER", [("location", "/admin/users/new")])
                         c.session.pushMessage("Something went wrong while creating the user: %s. Heres the edit form again. Sorry!" % ps.baseBold(name), icon="fire", title="OH SNAP!", type="error")

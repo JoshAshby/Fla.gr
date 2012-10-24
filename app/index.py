@@ -5,10 +5,6 @@ Main index file.
 
 For more information, see: https://github.com/JoshAshby/
 
-**WARNING**
-Make sure you look through and change things in config.py
-before running this file, to be sure it runs the way you want it to
-
 http://xkcd.com/353/
 
 Josh Ashby
@@ -16,17 +12,8 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import sys, os
+import config as c
 
-try:
-        import config as c
-except:
-        abspath = os.path.dirname(__file__)
-        sys.path.append(abspath)
-        os.chdir(abspath)
-        import config as c
-
-import seshat.framework as fw
 from objects.userObject import userObject as basePage
 from seshat.route import route
 
@@ -35,7 +22,7 @@ import models.carouselModel as cm
 import views.pyStrap.pyStrap as ps
 
 
-@route("/")
+@route(c.baseURL+"/")
 class index(basePage):
         __menu__ = "Home"
         """
@@ -163,26 +150,3 @@ class postsView(basePage):
                       selector: "a[rel=tooltip]"
                 })
 """)
-
-
-from controllers.authController import *
-from controllers.adminController import *
-from controllers.godController import *
-from controllers.profileController import *
-
-
-#Fla.gr specific code. Makes for easy modulation of the system...
-from flagr.controllers.flagController import *
-from flagr.controllers.labelController import *
-from flagr.controllers.youController import *
-from flagr.controllers.searchController import *
-
-#from test import *
-
-
-if __name__ == '__main__':
-        """
-        Because we're not doing anything else yet, such as starting a websockets
-        server or whatever, we're going to just go into forever serve mode.
-        """
-        fw.forever()

@@ -385,3 +385,9 @@ class userMessagesNew(profilePage):
                                 fields=elements)
 
                 self.view.body = pageHead + editForm
+
+
+@route("/your/messages/send")
+class userMssagesSend(profilePage):
+        def POST(self):
+                pass

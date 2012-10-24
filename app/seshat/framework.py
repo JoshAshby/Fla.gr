@@ -16,22 +16,23 @@ import config as c
 
 from gevent import monkey; monkey.patch_all()
 import gevent
-
 from gevent_fastcgi.server import WSGIServer
+from gevent import queue
+
+import logging
+logger = logging.getLogger("flagr.seshat")
 
 import signal
-
-from gevent import queue
 import string
 import random
 import Cookie
 import re
 import urllib
+import sys
 
 import models.basic.sessionModel as sm
 import models.blocks.helpers as helpers
 cookie = Cookie.SimpleCookie()
-
 
 def app(env, start_response):
         """
@@ -54,7 +55,10 @@ def app(env, start_response):
         for url in c.urls:
                 matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
                 if matched:
-                        if c.debug: print"\n\r----------------------------\n\r", env["REQUEST_METHOD"], env["REQUEST_URI"]
+                        if c.debug: logger.debug("""----------------------------
+        Method: %s
+        URL: %s
+""" % (env["REQUEST_METHOD"], env["REQUEST_URI"]))
 
                         try:
                                 cookie.load(env["HTTP_COOKIE"])
@@ -109,9 +113,14 @@ def app(env, start_response):
                         return data
 
         status = "404 NOT FOUND"
+        if c.debug: logger.debug("""\n\r-------404 NOT FOUND--------
+        Method: %s
+        URL: %s
+        """ % (env["REQUEST_METHOD"], env["REQUEST_URI"]))
         headers = []
         start_response(status, headers)
         return "<html><body><b>404 Not Found</b></body></html>"
+
 
 def main():
         """
@@ -130,11 +139,10 @@ def main():
 
         server = WSGIServer((address, port), app)
 
-        print ("Now serving py as a fastcgi server at %s:%i" % (address, port))
-        print "Press Ctrl+c or send SIGQUIT to stop"
+        logger.info("""Now serving py as a fastcgi server at %(address)s:%(port)i
+Press Ctrl+c if running as non daemon mode, or send a stop signal
+        """ % {"address": address, "port": port})
 
-        print "\r\n\r\nNo logging of requests done here."
-        print "Check your server logs instead."
         return server
 
 
@@ -148,5 +156,7 @@ def forever():
         server = main()
         try:
                 server.serve_forever()
-        except KeyboardInterrupt:
-                gevent.shutdown
+        except Exception as exc:
+                logger.critical("""Shutdown py operations, here's why: %s""" % exc)
+                gevent.shutdown()
+                sys.exit()
