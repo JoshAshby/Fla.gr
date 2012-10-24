@@ -88,6 +88,7 @@ class newFlag(flagrPage):
                                 flag[part] = self.members[part]
 
                 flag.commit()
+                fc.updateSearch()
                 self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
                 c.session.pushMessage(("You updated flag: %s!" % ps.baseBold(flag.title)), type="success", icon="ok", title="YAY!")
 
@@ -163,6 +164,7 @@ class newFlag(flagrPage):
                                 flag[part] = self.members[part]
 
                 flag.commit()
+                fc.updateSearch()
                 self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
                 c.session.pushMessage(("You created flag: %s!" % ps.baseBold(flag.title)), type="success", icon="ok", title="YAY!")
 
@@ -202,6 +204,7 @@ class deleteFlag(flagrPage):
                         return
 
                 flag.delete()
+                fc.updateSearch()
 
                 self.head = ("303 SEE OTHER", [("location", "/flags")])
                 c.session.pushMessage(("The flag %s was deleted" % ps.baseBold(flag.title)), type="error")
@@ -262,6 +265,7 @@ class copyFlag(flagrPage):
                                 flag[part] = self.members[part]
 
                 flag.commit()
+                fc.updateSearch()
                 self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
                 c.session.pushMessage("You made a copy of flag: %s called %s!" % (ps.baseBold(self.members["oldTitle"]), ps.baseBold(flag["title"])), type="success", icon="ok", title="YAY!")
 

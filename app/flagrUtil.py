@@ -36,10 +36,10 @@ def setupLog():
         formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
         %(message)s""")
 
-        logger = logging.getLogger("flagr")
+        logger = logging.getLogger("flagrUtil")
         logger.setLevel(level)
 
-        fh = logging.FileHandler(logFolder+"flagr.log")
+        fh = logging.FileHandler(logFolder+"flagrUtil.log")
         fh.setLevel(level)
         fh.setFormatter(formatter)
         logger.addHandler(fh)
@@ -57,32 +57,22 @@ def setupLog():
                         pass
 
 from simpleDaemon import Daemon
-class app(Daemon):
+class searchIndex(Daemon):
         down = False
         def run(self):
                 setupLog()
-                import seshat.framework as fw
-
-                if self.down:
-                        import controllers.maintenanceController
-                else:
-                        import controllers.controllerMap
-
-                fw.forever()
+                import utils.searchIndex as siu
+                siu.start()
 
 
 if __name__ == "__main__":
-        daemon = app(pidFolder+'flagr.pid')
-        daemon.down=False
         if len(sys.argv) >= 2:
+                if 'searchDaemon' == sys.argv[1]:
+                        daemon = searchIndex(pidFolder+'flagrUtilSearch.pid')
                 if 'noDaemon' in sys.argv:
                         setupLog()
-                        import seshat.framework as fw
-                        if 'maintenance' in sys.argv:
-                                import controllers.maintenanceController
-                        else:
-                                import controllers.controllerMap
-                        fw.forever()
+                        import utils.searchIndex as siu
+                        siu.start()
 
                 elif 'start' in sys.argv:
                         daemon.start()
@@ -93,11 +83,6 @@ if __name__ == "__main__":
                 elif 'restart' in sys.argv:
                         daemon.restart()
 
-                elif 'maintenance' in sys.argv:
-                        daemon.down=True
-                        daemon.stop()
-                        daemon.start()
-
                 else:
                         print "Unknown command"
                         sys.exit(2)
@@ -105,5 +90,5 @@ if __name__ == "__main__":
                 sys.exit(0)
 
         else:
-                print "usage: %s start|stop|restart|noDaemon|(noDaemon) maintenance" % sys.argv[0]
+                print "usage: %s start|stop|restart|noDaemon" % sys.argv[0]
                 sys.exit(2)

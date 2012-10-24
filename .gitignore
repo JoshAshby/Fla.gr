@@ -15,6 +15,7 @@
 *.tmp
 *.scratchpad
 .searchIndex/
+virt/
 
 # Compiled source #
 ###################

@@ -14,12 +14,26 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
+import siteConfig as sc
 import views.pyStrap.pyStrap as ps
 from whoosh.index import create_in
 from whoosh.fields import *
 import flagr.models.flagModel as fm
 from whoosh.index import open_dir
+import gevent
 
+import logging
+logger = logging.getLogger("flagr.flagrConfig")
+
+
+def _update():
+        logger.debug("Sending signal...")
+        sc.zmqSock.send("indexUpdate now")
+        logger.debug("Signal sent...")
+
+def updateSearch():
+        ser = gevent.spawn(_update)
+        ser.join()
 
 def flagThumbnails(flags, width=10):
         if flags:
@@ -93,8 +107,10 @@ def flagThumbnails(flags, width=10):
                         caption += "%s%s<br />" % (flag["description"][:250], ps.baseAnchor("...", link=c.baseURL+"/flag/%s"%flag.id))
 
                         labelLinks = ""
-                        for label in flag["labels"]:
-                                labelLinks += ps.baseAnchor(ps.baseLabel(label, classes="label-info"), link=c.baseURL+"/label/"+label) + " "
+
+                        if flag["labels"]:
+                                for label in flag["labels"]:
+                                        labelLinks += ps.baseAnchor(ps.baseLabel(label, classes="label-info"), link=c.baseURL+"/label/"+label) + " "
 
                         for field in flag.fields:
                                 name = field[0] if type(field) != str else field

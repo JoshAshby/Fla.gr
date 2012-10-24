@@ -54,11 +54,12 @@ def app(env, start_response):
         for url in c.urls:
                 matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
                 if matched:
-                        if c.debug: logger.debug("""----------------------------
+                        if c.debug: logger.debug("""\n\r----------------------------
         Method: %s
         URL: %s
         Object: %s
-""" % (env["REQUEST_METHOD"], env["REQUEST_URI"], url.pageObject.__name__))
+        IP: %s
+""" % (env["REQUEST_METHOD"], env["REQUEST_URI"], url.pageObject.__name__, env["REMOTE_ADDR"]))
 
                         try:
                                 cookie.load(env["HTTP_COOKIE"])
@@ -113,10 +114,11 @@ def app(env, start_response):
                         return data
 
         status = "404 NOT FOUND"
-        if c.debug: logger.debug("""\n\r-------404 NOT FOUND--------
+        if c.debug: logger.warn("""\n\r-------404 NOT FOUND--------
         Method: %s
         URL: %s
-        """ % (env["REQUEST_METHOD"], env["REQUEST_URI"]))
+        IP: %s
+        """ % (env["REQUEST_METHOD"], env["REQUEST_URI"], env["REMOTE_ADDR"]))
         headers = [("Content-type", "text/html")]
         start_response(status, headers)
         return "<html><body><b>404 Not Found</b></body></html>"

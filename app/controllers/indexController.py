@@ -88,15 +88,12 @@ class index(basePage):
                                         content += "<hr>"
 
                 if not content:
-                        content = "Well it would look like we don't have any news to bring you just this moment, however stay tuned!"
+                        content = "We don't have any news to bring you just this moment, however stay tuned!"
 
 
                 self.view.body = hero + content
                 self.view.scripts = ps.baseScript("""
         $('#frontCarousel').carousel()
-        $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
                 """)
 
 
@@ -145,8 +142,3 @@ class postsView(basePage):
                         ])
 
                 self.view["body"] = content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
