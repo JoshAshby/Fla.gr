@@ -28,7 +28,7 @@ logger = logging.getLogger("flagr.flagrConfig")
 
 def _update():
         logger.debug("Sending signal...")
-        sc.zmqSock.send("indexUpdate now")
+        sc.zmqSock.send("indexUpdate increase")
         logger.debug("Signal sent...")
 
 def updateSearch():

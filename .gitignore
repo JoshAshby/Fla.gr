@@ -16,6 +16,7 @@
 *.scratchpad
 .searchIndex/
 virt/
+*.out
 
 # Compiled source #
 ###################

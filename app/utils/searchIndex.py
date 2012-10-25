@@ -71,15 +71,21 @@ def updateIndex():
         while True:
                 logger.debug("Waiting for signal...")
                 reply = zmqSock.recv()
-                if reply:
+                if reply == "indexSearch increase":
                         logger.debug("Got signal to update, increasing count...")
                         count += 1
                         logger.debug("Count is now %i" % count)
-                if count >= 5:
-                        logger.debug("Count at 5 or above, updating index...")
+                        if count >= 5:
+                                logger.debug("Count at 5 or above, updating index...")
+                                update()
+                                count = 0
+                                logger.debug("Index updated, count reset")
+
+                elif reply == "indexSearch now":
+                        logger.debug("Manual rebuild triggered...")
                         update()
                         count = 0
-                        logger.debug("Index updated, count reset")
+                        logger.debug("Index updated, count reset...")
 
 
 def start():
