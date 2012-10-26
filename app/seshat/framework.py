@@ -1,5 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
+Seshat
 Web App/API framework built on top of gevent
 Main framework app
 
@@ -20,7 +21,7 @@ from gevent_fastcgi.server import WSGIServer
 from gevent import queue
 
 import logging
-logger = logging.getLogger("flagr.seshat")
+logger = logging.getLogger("seshat.seshat")
 
 import string
 import random
@@ -32,6 +33,7 @@ import sys
 import models.basic.sessionModel as sm
 import models.blocks.helpers as helpers
 cookie = Cookie.SimpleCookie()
+
 
 def app(env, start_response):
         """
@@ -54,12 +56,13 @@ def app(env, start_response):
         for url in c.urls:
                 matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
                 if matched:
-                        if c.debug: logger.debug("""\n\r----------------------------
+                        if c.debug:
+                                logger.debug("""\n\r----------------------------
         Method: %s
         URL: %s
         Object: %s
         IP: %s
-""" % (env["REQUEST_METHOD"], env["REQUEST_URI"], url.pageObject.__name__, env["REMOTE_ADDR"]))
+""" % (env["REQUEST_METHOD"], env["REQUEST_URI"], url.pageObject.__module__+"."+url.pageObject.__name__, env["REMOTE_ADDR"]))
 
                         try:
                                 cookie.load(env["HTTP_COOKIE"])
@@ -94,11 +97,12 @@ def app(env, start_response):
                         c.session.loggedIn = helpers.boolean(c.session.loggedIn)
 
 
-                        newHTTPObject = url.pageObject(env, members)
+                        pageObject = newHTTPObject = url.pageObject(env, members)
 
                         data, reply = queue.Queue(), queue.Queue()
-                        dataThread = gevent.spawn(newHTTPObject.build, data, reply)
-                        dataThread.join()
+#                        dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+#                        dataThread.join()
+                        newHTTPObject.build(data, reply)
 
                         replyData = reply.get()
                         cookieHeader = ("Set-Cookie", cookie.output(header=""))
@@ -110,6 +114,8 @@ def app(env, start_response):
                         c.session.commit()
 
                         start_response(status, header)
+
+                        del(pageObject)
 
                         return data
 
@@ -148,7 +154,7 @@ def main():
         return server
 
 
-def forever():
+def serveForever():
         """
         Server
 

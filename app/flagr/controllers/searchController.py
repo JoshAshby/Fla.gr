@@ -24,18 +24,18 @@ import models.profileModel as profilem
 import logging
 logger = logging.getLogger("flagr.search")
 
-from flagr.objects.flagrObject import flagrObject as flagrPage
+from flagr.objects.flagrObject import flagrObject
 from seshat.route import route
 
 import views.pyStrap.pyStrap as ps
-import flagr.flagrConfig as fc
+import flagr.config.flagrConfig as fc
 
 from whoosh.index import open_dir
 from whoosh.qparser import MultifieldParser
 
 
 @route("/search/flags")
-class searchFlags_term(flagrPage):
+class searchFlags_term(flagrObject):
         def GET(self):
                 content = ""
                 self.view["title"] = "Search flags"

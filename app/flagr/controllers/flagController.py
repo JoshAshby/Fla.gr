@@ -23,7 +23,7 @@ from flagr.objects.flagrObject import flagrObject as flagrPage
 from seshat.route import route
 
 import views.pyStrap.pyStrap as ps
-import flagr.flagrConfig as fc
+import flagr.config.flagrConfig as fc
 
 
 @route("/flag/(.*)/edit")

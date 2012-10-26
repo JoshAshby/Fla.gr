@@ -1,5 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
+Seshat
 Web App/API framework built on top of gevent
 Config settings
 
@@ -13,11 +14,11 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import re
-import redis
 import os
 
-appName = "fla.gr"
-appNameNav = "<i class=\"icon-flag\"></i> fla.gr"
+appName = "flagr"
+logFolder = "/var/log/python/"
+pidFolder = "/tmp/"
 
 """
 We need to make
@@ -55,14 +56,7 @@ Don't change these following settings unless you know what you're doing!!!
 ##########################################################################
 """
 session = None
-path = os.path.dirname(__file__)
 
 urls = []
 
 authRegex = re.compile("([^_\W]*)")
-
-redisPostServer = redis.Redis("localhost", db=3)
-redisCarouselServer = redisPostServer
-redisSessionServer = redis.Redis("localhost", db=1)
-redisUserServer = redis.Redis("localhost", db=0)
-redisFlagServer = redis.Redis("localhost", db=2)

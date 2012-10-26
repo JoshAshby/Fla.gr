@@ -1,6 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
-
+Seshat
+Web App/API framework built on top of gevent
 
 For more information, see: https://github.com/JoshAshby/
 
@@ -12,6 +13,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
+import siteConfig.dbConfig as dbc
 import models.baseProfile as bpro
 import models.blocks.helpers as helpers
 import markdown
@@ -29,8 +31,8 @@ def profile(userID=None, md=True):
 
 def userList():
         users = []
-        for key in c.redisUserServer.keys("profile:*:id"):
-                if c.redisUserServer.get(key.strip(":id")+":level") == "GOD" and c.session.user["level"] != "GOD":
+        for key in dbc.redisUserServer.keys("profile:*:id"):
+                if dbc.redisUserServer.get(key.strip(":id")+":level") == "GOD" and dbc.session.user["level"] != "GOD":
                         pass
                 else:
                         user = profile(key.strip(":id"))
@@ -39,7 +41,7 @@ def userList():
         return users
 
 def findUser(username):
-        for key in c.redisUserServer.keys("profile:*:username"):
-                if c.redisUserServer.get(key) == username:
+        for key in dbc.redisUserServer.keys("profile:*:username"):
+                if dbc.redisUserServer.get(key) == username:
                         user = profile(key.strip(":username"))
                         return user

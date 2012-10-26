@@ -1,6 +1,8 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
+Seshat
 Web App/API framework built on top of gevent
+response container
 
 For more information, see: https://github.com/JoshAshby/
 
@@ -11,7 +13,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from config import *
 
 
 class baseResponse(object):

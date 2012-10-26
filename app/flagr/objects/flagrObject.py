@@ -13,12 +13,14 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
-import objects.baseObject as bo
-import views.pyStrap.pyStrap as ps
+import seshat.baseObject as bo
+import flagr.views.pyStrap.pyStrap as ps
+import flagr.views.flagrView as fv
 
 
-class flagrObject(bo.baseHTTPPageObject):
+class flagrObject(bo.baseHTTPObject):
        __name__ = "flagr"
+       view = fv.flagrView()
        def finishInit(self):
                """
                if c.session.loggedIn:

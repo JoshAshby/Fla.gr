@@ -1,5 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
+Seshat
 Web App/API framework built on top of gevent
 Database model base so everything builds off this...
 

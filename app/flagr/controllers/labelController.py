@@ -19,15 +19,15 @@ import config as c
 import flagr.models.flagModel as fm
 import flagr.models.labelModel as lm
 
-from flagr.objects.flagrObject import flagrObject as flagrPage
+from flagr.objects.flagrObject import flagrObject
 from seshat.route import route
 
 import views.pyStrap.pyStrap as ps
-import flagr.flagrConfig as fc
+import flagr.config.flagrConfig as fc
 
 
 @route("/labels")
-class labelIndex(flagrPage):
+class labelIndex(flagrObject):
         def GET(self):
                 labelList = lm.labelList()
 
@@ -54,7 +54,7 @@ class labelIndex(flagrPage):
 
 
 @route("/flags")
-class labelPublic(flagrPage):
+class labelPublic(flagrObject):
         def GET(self):
                 if self.members.has_key("view"): view = self.members["view"]
                 else: view = ""
@@ -89,7 +89,7 @@ class labelPublic(flagrPage):
 
 
 @route("/label/(.*)")
-class labelView(flagrPage):
+class labelView(flagrObject):
         def GET(self):
                 label = self.members[0]
                 flags = lm.labeledFlagList(label, md=True)

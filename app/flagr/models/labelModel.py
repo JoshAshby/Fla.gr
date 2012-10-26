@@ -14,9 +14,10 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
+import flagr.config.dbConfig as fdbc
 import flagr.models.flagModel as fm
 import models.blocks.helpers as helpers
-import views.pyStrap.pyStrap as ps
+import flagr.views.pyStrap.pyStrap as ps
 import re
 
 def label(name, count=None):
@@ -33,19 +34,19 @@ def labelList(user=None):
 
         if not user:
                 for key in keys:
-                        if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
-                                labels = c.redisFlagServer.smembers(key)
+                        if helpers.boolean(fdbc.redisFlagServer.get(key.strip(":labels")+":visibility")):
+                                labels = fdbc.redisFlagServer.smembers(key)
                                 labelList = labelList.union(labels)
         else:
                 if user == c.session.userID:
                         for key in keys:
-                                if c.redisFlagServer.get(key.strip(":labels")+":userID") == user:
-                                        labels = c.redisFlagServer.smembers(key)
+                                if fdbc.redisFlagServer.get(key.strip(":labels")+":userID") == user:
+                                        labels = fdbc.redisFlagServer.smembers(key)
                                         labelList = labelList.union(labels)
                 else:
                         for key in keys:
-                                if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")) and c.redisFlagServer.get(key.strip(":labels")+":userID") == user:
-                                        labels = c.redisFlagServer.smembers(key)
+                                if helpers.boolean(fdbc.redisFlagServer.get(key.strip(":labels")+":visibility")) and fdbc.redisFlagServer.get(key.strip(":labels")+":userID") == user:
+                                        labels = fdbc.redisFlagServer.smembers(key)
                                         labelList = labelList.union(labels)
 
         for lab in labelList:
@@ -57,18 +58,18 @@ def labelsUnderList(labs):
         labelList = set()
         returnLabels = ""
 
-        keys = c.redisFlagServer.keys("flag:*:labels")
+        keys = fdbc.redisFlagServer.keys("flag:*:labels")
 
         reg = re.compile("(^%s/*)"%labs)
 
         for key in keys:
-                if c.redisFlagServer.get(key.strip(":labels")+":userID") == c.session.userID:
-                        labels = c.redisFlagServer.smembers(key)
+                if fdbc.redisFlagServer.get(key.strip(":labels")+":userID") == c.session.userID:
+                        labels = fdbc.redisFlagServer.smembers(key)
                         labelList = labelList.union(labels)
 
                 else:
-                        if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
-                                labels = c.redisFlagServer.smembers(key)
+                        if helpers.boolean(fdbc.redisFlagServer.get(key.strip(":labels")+":visibility")):
+                                labels = fdbc.redisFlagServer.smembers(key)
                                 labelList = labelList.union(labels)
 
         for lab in labelList:
@@ -80,20 +81,20 @@ def labelsUnderList(labs):
 def labeledFlagList(label, md=True):
         flagList = []
 
-        keys = c.redisFlagServer.keys("flag:*:labels")
+        keys = fdbc.redisFlagServer.keys("flag:*:labels")
 
         reg = re.compile("(^%s$)" % label)
 
         for key in keys:
-                if c.redisFlagServer.get(key.strip(":labels")+":userID") == c.session.userID:
-                        labels = c.redisFlagServer.smembers(key)
+                if fdbc.redisFlagServer.get(key.strip(":labels")+":userID") == c.session.userID:
+                        labels = fdbc.redisFlagServer.smembers(key)
                         for label in labels:
                                 if reg.match(label):
                                         flagList.append(key.strip(":labels").strip("flag:"))
 
                 else:
-                        if helpers.boolean(c.redisFlagServer.get(key.strip(":labels")+":visibility")):
-                                labels = c.redisFlagServer.smembers(key)
+                        if helpers.boolean(fdbc.redisFlagServer.get(key.strip(":labels")+":visibility")):
+                                labels = fdbc.redisFlagServer.smembers(key)
                                 for label in labels:
                                         if reg.match(label):
                                                 flagList.append(key.strip(":labels").strip("flag:"))

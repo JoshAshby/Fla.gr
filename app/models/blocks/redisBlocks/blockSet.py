@@ -1,5 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
+Seshat
 Web App/API framework built on top of gevent
 Database model base so everything builds off this...
 
@@ -13,6 +14,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
+import siteConfig.dbConfig as dbc
 
 
 class blockSet(object):
@@ -22,8 +24,8 @@ class blockSet(object):
                 self.key = key
 
 
-                if getattr(c, self.dbName).exists(self.key):
-                        members = getattr(c, self.dbName).smembers(self.key)
+                if getattr(dbc, self.dbName).exists(self.key):
+                        members = getattr(dbc, self.dbName).smembers(self.key)
                         self.current = { dataType(i) for i in members }
                         self.previous = self.current
                 else:
@@ -32,13 +34,13 @@ class blockSet(object):
 
         def commit(self):
                 for bit in self.previous.difference(self.current):
-                        getattr(c, self.dbName).srem(self.key, bit)
+                        getattr(dbc, self.dbName).srem(self.key, bit)
 
                 for bit in self.current:
-                        getattr(c, self.dbName).sadd(self.key, bit)
+                        getattr(dbc, self.dbName).sadd(self.key, bit)
 
         def delete(self):
-                getattr(c, self.dbName).delete(self.key)
+                getattr(dbc, self.dbName).delete(self.key)
 
         def __str__(self):
                 reply = u""

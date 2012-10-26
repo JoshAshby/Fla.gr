@@ -19,48 +19,16 @@ import config as c
 import flagr.models.flagModel as fm
 import flagr.models.labelModel as lm
 import models.profileModel as profilem
-import flagr.flagrConfig as fc
+import flagr.config.flagrConfig as fc
 
-from objects.publicProfileObject import publicProfileObject as publicProfilePage
+from flagr.objects.publicObject import publicObject
 from seshat.route import route
 
 import views.pyStrap.pyStrap as ps
 
 
-@route("/people/(.*)/message")
-class userMessage(publicProfilePage):
-        def GET(self):
-                content = ""
-                user = profilem.findUser(self.members[0])
-                self.view["title"] = "Message "+user["username"]
-
-                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link="%s/people/%s" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "%s's Profile"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link="%s/people/%s/flags" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "%s's Flags"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link="%s/people/%s/labels" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "%s's Labels"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("envelope-alt"), link="%s/people/%s/message" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "Message %s"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("envelope-alt"), user["username"]), size=1), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
-                        ])
-
-                self.view.body = pageHead + content
-
-
 @route("/people/(.*)/labels")
-class userViewLabels(publicProfilePage):
+class userViewLabels(publicObject):
         def GET(self):
                 content = ""
                 user = profilem.findUser(self.members[0])
@@ -97,7 +65,7 @@ class userViewLabels(publicProfilePage):
 
 
 @route("/people/(.*)/flags")
-class userViewFlags(publicProfilePage):
+class userViewFlags(publicObject):
         def GET(self):
                 content = ""
                 user = profilem.findUser(self.members[0])
@@ -145,7 +113,7 @@ class userViewFlags(publicProfilePage):
 
 
 @route("/people/(.*)")
-class userView(publicProfilePage):
+class userView(publicObject):
         def GET(self):
                 user = profilem.findUser(self.members[0])
                 self.view["title"] = user["username"]

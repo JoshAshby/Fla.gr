@@ -1,5 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
+Seshat
 Web App/API framework built on top of gevent
 Database model base so everything builds off this...
 
@@ -13,6 +14,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
+import siteConfig.dbConfig as dbc
 
 import string
 import random
@@ -26,11 +28,11 @@ class blockHash(object):
                 self.dataType = dataType
                 self.parts = parts
 
-                if(self.id and getattr(c, self.dbName).exists(self.keyID+self.id)):
-                        self.current = { bit: dataType(getattr(c, self.dbName).hget(self.keyID+self.id, bit)) for bit in self.parts }
+                if(self.id and getattr(dbc, self.dbName).exists(self.keyID+self.id)):
+                        self.current = { bit: dataType(getattr(dbc, self.dbName).hget(self.keyID+self.id, bit)) for bit in self.parts }
                 else:
                         self.current = { bit: dataType(u"") for bit in self.parts }
 
         def commit(self):
                 for bit in self.parts:
-                        getattr(c, self.dbName).hset(self.keyID+self.id, bit, self.parts[bit])
+                        getattr(dbc, self.dbName).hset(self.keyID+self.id, bit, self.parts[bit])

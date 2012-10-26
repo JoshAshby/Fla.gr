@@ -21,18 +21,18 @@ import flagr.models.flagModel as fm
 import flagr.models.labelModel as lm
 import models.profileModel as profilem
 
-from flagr.objects.flagrObject import flagrObject as flagrPage
-from objects.profileObject import profileObject as profilePage
+from flagr.objects.flagrObject import flagrObject
+from flagr.objects.profileObject import profileObject
 from seshat.route import route
 
 import views.pyStrap.pyStrap as ps
-import flagr.flagrConfig as fc
+import flagr.config.flagrConfig as fc
 
 import bcrypt
 
 
 @route("/your/flags")
-class flagIndex(profilePage):
+class flagIndex(profileObject):
         def GET(self):
                 """
                 """
@@ -89,7 +89,7 @@ class flagIndex(profilePage):
 
 
 @route("/your/labels")
-class labelIndex(profilePage):
+class labelIndex(profileObject):
         def GET(self):
                 labelList = lm.labelList(user=c.session.userID)
 
@@ -139,7 +139,7 @@ class labelIndex(profilePage):
 
 
 @route("/you")
-class userIndex(profilePage):
+class userIndex(profileObject):
         def GET(self):
                 self.view["title"] = "You!"
 
@@ -213,7 +213,7 @@ class userIndex(profilePage):
                 self.view.body = pageHead + content
 
 @route("/your/settings")
-class userEdit(profilePage):
+class userEdit(profileObject):
         def GET(self):
                 """
                 """
@@ -316,7 +316,7 @@ class userEdit(profilePage):
 
 
 @route("/your/messages")
-class userMessages(profilePage):
+class userMessages(profileObject):
         def GET(self):
                 self.view.title = "Inbox"
                 tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("inbox"), link=c.baseURL+"/your/messages",
@@ -339,7 +339,7 @@ class userMessages(profilePage):
 
 
 @route("/your/messages/unread")
-class userMessagesUnread(profilePage):
+class userMessagesUnread(profileObject):
         def GET(self):
                 self.view.title = "Unread messages"
                 tabs = "<li>" + ps.baseAnchor(ps.baseIcon("inbox"), link=c.baseURL+"/your/messages",
@@ -362,7 +362,7 @@ class userMessagesUnread(profilePage):
 
 
 @route("/your/messages/new")
-class userMessagesNew(profilePage):
+class userMessagesNew(profileObject):
         def GET(self):
                 self.view.title = "New message"
 
@@ -388,6 +388,6 @@ class userMessagesNew(profilePage):
 
 
 @route("/your/messages/send")
-class userMssagesSend(profilePage):
+class userMssagesSend(profileObject):
         def POST(self):
                 pass
