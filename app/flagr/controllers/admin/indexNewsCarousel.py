@@ -14,16 +14,15 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-from objects.adminObject import adminObject as basePage
+from flagr.objects.adminObject import adminObject
 from seshat.route import route
 
-import models.carouselModel as cm
-
-import views.pyStrap.pyStrap as ps
+import flagr.models.carouselModel as cm
+import flagr.views.pyStrap.pyStrap as ps
 
 
 @route("/admin/carousels")
-class carouselIndex_admin(basePage):
+class carouselIndex_admin(adminObject):
         def GET(self):
                 """
                 """
@@ -103,7 +102,7 @@ class carouselIndex_admin(basePage):
 
 
 @route("/admin/carousels/drafts")
-class carouselDrafts_admin(basePage):
+class carouselDrafts_admin(adminObject):
         def GET(self):
                 """
                 """
@@ -171,7 +170,7 @@ class carouselDrafts_admin(basePage):
 
 
 @route("/admin/carousel/(.*)/edit")
-class carouselEdit_admin(basePage):
+class carouselEdit_admin(adminObject):
         def GET(self):
                 carouselItem = cm.carousel(self.members[0])
 
@@ -208,11 +207,11 @@ class carouselEdit_admin(basePage):
 
                 carouselItem.commit()
                 self.head = ("303 SEE OTHER", [("location", str("/admin/carousel/"+carouselItem.id))])
-                c.session.pushMessage(("You updated the carousel item: %s!" % ps.baseBold(carouselItem.id)), type="success", icon="ok", title="YAY!")
+                c.session.pushAlert(("You updated the carousel item: %s!" % ps.baseBold(carouselItem.id)), type="success", icon="ok", title="YAY!")
 
 
 @route("/admin/carousel/(.*)/delete")
-class carouselDelete_admin(basePage):
+class carouselDelete_admin(adminObject):
         def GET(self):
                 id = self.members[0]
                 carouselItem = cm.carousel(id)
@@ -240,11 +239,11 @@ class carouselDelete_admin(basePage):
                 carouselItem.delete()
 
                 self.head = ("303 SEE OTHER", [("location", "/admin/carousel")])
-                c.session.pushMessage(("The carousel item %s was deleted" % ps.baseBold(carouselItem.id)), title="Bye Bye", icon="trash", type="error")
+                c.session.pushAlert(("The carousel item %s was deleted" % ps.baseBold(carouselItem.id)), title="Bye Bye", icon="trash", type="error")
 
 
 @route("/admin/carousels/new")
-class carouselNew_admin(basePage):
+class carouselNew_admin(adminObject):
         def GET(self):
                 self.view.title = "Creating a new carousel item"
                 title = ps.baseHeading("%s Creating a new carousel..." % (ps.baseIcon("play")), size=1)
@@ -280,12 +279,12 @@ class carouselNew_admin(basePage):
 
                 carouselItem.commit()
                 self.head = ("303 SEE OTHER", [("location", str("/admin/carousel/view/"+carouselItem.id))])
-                c.session.pushMessage(("You created carousel item: %s!" % ps.baseBold(carouselItem.id)), type="success", icon="ok", title="YAY!")
+                c.session.pushAlert(("You created carousel item: %s!" % ps.baseBold(carouselItem.id)), type="success", icon="ok", title="YAY!")
 
 
 @route("/admin/carousel/(.*)")
 @route("/admin/carousel/(.*)/view")
-class carouselView_admin(basePage):
+class carouselView_admin(adminObject):
         def GET(self):
                 """
                 """

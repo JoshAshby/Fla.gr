@@ -32,7 +32,7 @@ def profile(userID=None, md=True):
 def userList():
         users = []
         for key in dbc.redisUserServer.keys("profile:*:id"):
-                if dbc.redisUserServer.get(key.strip(":id")+":level") == "GOD" and dbc.session.user["level"] != "GOD":
+                if dbc.redisUserServer.get(key.strip(":id")+":level") == "GOD" and c.session.user["level"] != "GOD":
                         pass
                 else:
                         user = profile(key.strip(":id"))

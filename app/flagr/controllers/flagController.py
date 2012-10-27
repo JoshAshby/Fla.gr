@@ -17,23 +17,22 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-import flagr.models.flagModel as fm
-
-from flagr.objects.flagrObject import flagrObject as flagrPage
 from seshat.route import route
 
-import views.pyStrap.pyStrap as ps
+import flagr.models.flagModel as fm
+from flagr.objects.flagrObject import flagrObject
+import flagr.views.pyStrap.pyStrap as ps
 import flagr.config.flagrConfig as fc
 
 
 @route("/flag/(.*)/edit")
-class newFlag(flagrPage):
+class newFlag(flagrObject):
         __login__ = True
         def GET(self):
                 flag = fm.flag(self.members[0])
                 if flag["userID"] != c.session.userID:
                         self.head = ("303 SEE OTHER", [("location", str("/flag/%s/copy"%flag.id))])
-                        c.session.pushMessage(("You didn't create the flag: %s, but we can allow you to make a copy of it!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh no!")
+                        c.session.pushAlert(("You didn't create the flag: %s, but we can allow you to make a copy of it!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh no!")
                         return
 
 
@@ -74,7 +73,7 @@ class newFlag(flagrPage):
                 flag = fm.flag(self.members[0])
                 if flag["userID"] != c.session.userID:
                         self.head = ("303 SEE OTHER", [("location", str("/flag/#s/copy"%flag.id))])
-                        c.session.pushMessage(("You didn't create the flag: %s, but we can allow you to make a copy of it!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh no!")
+                        c.session.pushAlert(("You didn't create the flag: %s, but we can allow you to make a copy of it!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh no!")
                         return
 
                 if self.members.has_key("labels"):
@@ -90,11 +89,11 @@ class newFlag(flagrPage):
                 flag.commit()
                 fc.updateSearch()
                 self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
-                c.session.pushMessage(("You updated flag: %s!" % ps.baseBold(flag.title)), type="success", icon="ok", title="YAY!")
+                c.session.pushAlert(("You updated flag: %s!" % ps.baseBold(flag.title)), type="success", icon="ok", title="YAY!")
 
 
 @route("/flags/new")
-class newFlagChoice(flagrPage):
+class newFlagChoice(flagrObject):
         __menu__ = "Make a new Flag"
         __login__ = True
         def GET(self):
@@ -114,7 +113,7 @@ class newFlagChoice(flagrPage):
 
 
 @route("/flags/new/(.*)")
-class newFlag(flagrPage):
+class newFlag(flagrObject):
         __login__ = True
         __menu__ = "Make a New Flag"
         def GET(self):
@@ -166,18 +165,18 @@ class newFlag(flagrPage):
                 flag.commit()
                 fc.updateSearch()
                 self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
-                c.session.pushMessage(("You created flag: %s!" % ps.baseBold(flag.title)), type="success", icon="ok", title="YAY!")
+                c.session.pushAlert(("You created flag: %s!" % ps.baseBold(flag.title)), type="success", icon="ok", title="YAY!")
 
 
 @route("/flag/(.*)/delete")
-class deleteFlag(flagrPage):
+class deleteFlag(flagrObject):
         __login__ = True
         def GET(self):
                 id = self.members[0]
                 flag = fm.flag(id)
                 if flag["userID"] != c.session.userID:
                         self.head = ("303 SEE OTHER", [("location", str("/flags"))])
-                        c.session.pushMessage("You didn't create the flag: %s, so we can't allow you to delete it. Sorry!", type="error", icon="fire", title="Oh no!")
+                        c.session.pushAlert("You didn't create the flag: %s, so we can't allow you to delete it. Sorry!", type="error", icon="fire", title="Oh no!")
                         return
 
                 self.view.title = "Delete flag %s" % flag.title
@@ -200,18 +199,18 @@ class deleteFlag(flagrPage):
 
                 if flag["userID"] != c.session.userID:
                         self.head = ("303 SEE OTHER", [("location", str("/flags"))])
-                        c.session.pushMessage(("You didn't create the flag: %s, so we can't allow you to delete it. Sorry!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh snap!")
+                        c.session.pushAlert(("You didn't create the flag: %s, so we can't allow you to delete it. Sorry!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh snap!")
                         return
 
                 flag.delete()
                 fc.updateSearch()
 
-                self.head = ("303 SEE OTHER", [("location", "/flags")])
-                c.session.pushMessage(("The flag %s was deleted" % ps.baseBold(flag.title)), type="error")
+                self.head = ("303 SEE OTHER", [("location", "/your/flags")])
+                c.session.pushAlert(("The flag %s was deleted" % ps.baseBold(flag.title)), type="error")
 
 
 @route("/flag/(.*)/copy")
-class copyFlag(flagrPage):
+class copyFlag(flagrObject):
         __login__ = True
         def GET(self):
                 flag = fm.flag(self.members[0])
@@ -267,11 +266,11 @@ class copyFlag(flagrPage):
                 flag.commit()
                 fc.updateSearch()
                 self.head = ("303 SEE OTHER", [("location", str("/flag/%s"%flag.id))])
-                c.session.pushMessage("You made a copy of flag: %s called %s!" % (ps.baseBold(self.members["oldTitle"]), ps.baseBold(flag["title"])), type="success", icon="ok", title="YAY!")
+                c.session.pushAlert("You made a copy of flag: %s called %s!" % (ps.baseBold(self.members["oldTitle"]), ps.baseBold(flag["title"])), type="success", icon="ok", title="YAY!")
 
 
 @route("/flag/(.*)")
-class viewFlag(flagrPage):
+class viewFlag(flagrObject):
         def GET(self):
                 """
                 """

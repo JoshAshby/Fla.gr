@@ -22,7 +22,7 @@ class adminObject(bo.baseHTTPObject):
        __level__ = "admin"
        __login__ = True
        __name__ = "admin"
-       view = fv.flagrView()
+       view = fv.flagrView
        def finishInit(self):
                self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Things to do..."},
                 {"link": c.baseURL + "/admin", "name": "%s Front Panel"%ps.baseIcon("dashboard")},

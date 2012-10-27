@@ -14,15 +14,16 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-from flagr.objects.publicObject import publicObject
 from seshat.route import route
 
-import views.pyStrap.pyStrap as ps
+from flagr.objects.publicObject import publicObject
+import flagr.views.pyStrap.pyStrap as ps
+
 import models.profileModel as profilem
 
 
 @route("/auth/login")
-class login(baseHTTPObject):
+class login(publicObject):
         __menu__ = "Login"
         def GET(self):
                 """
@@ -30,7 +31,7 @@ class login(baseHTTPObject):
                 """
                 if c.session.loggedIn:
                         self.head = ("303 SEE OTHER", [("location", "/your/flags")])
-                        c.session.pushMessage("Hey look, you're already signed in!")
+                        c.session.pushAlert("Hey look, you're already signed in!")
 
                 else:
                         loginForm = ps.baseHeading("Please Login...", size=2) + ps.baseHorizontalForm(action=c.baseURL+"/auth/login",
@@ -54,15 +55,15 @@ class login(baseHTTPObject):
                 try:
                         c.session.login(name, passwd)
                         self.head = ("303 SEE OTHER", [("location", "/your/flags")])
-                        c.session.pushMessage("Welcome back, %s!" % name, icon="")
+                        c.session.pushAlert("Welcome back, %s!" % name, icon="")
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/auth/login")])
-                        c.session.pushMessage("Something went wrong:<br>%s Please try again." % exc, type="error", title="Oh no!", icon="fire")
+                        c.session.pushAlert("Something went wrong:<br>%s Please try again." % exc, type="error", title="Oh no!", icon="fire")
 
 
 @route("/auth/logout")
-class logout(baseHTTPObject):
+class logout(publicObject):
         def GET(self):
                 """
                 Simply log the user out. Nothing much to do here.
@@ -72,11 +73,11 @@ class logout(baseHTTPObject):
                 c.session.logout()
 
                 self.head = ("303 SEE OTHER", [("location", ("/auth/login"))])
-                c.session.pushMessage("See you again, next time!", icon="")
+                c.session.pushAlert("See you again, next time!", icon="")
 
 
 @route("/auth/register")
-class register(baseHTTPObject):
+class register(publicObject):
         def GET(self):
                 """
                 """
@@ -106,13 +107,13 @@ class register(baseHTTPObject):
                 """
                 if not self.members["username"] or not self.members["newpassword"] or not self.members["newtwopassword"] or not self.members["email"]:
                         self.head = ("303 SEE OTHER", [("location", "/auth/register")])
-                        c.session.pushMessage("You need to fill out the username, email and both password fields!" % exc, icon="fire", title="OH SNAP!", type="error")
+                        c.session.pushAlert("You need to fill out the username, email and both password fields!" % exc, icon="fire", title="OH SNAP!", type="error")
 
                 try:
                         test = profilem.findUser(self.members["username"])
                         if test:
                                 self.head = ("303 SEE OTHER", [("location", "/auth/register")])
-                                c.session.pushMessage("The username %s is already taken. Pick a new one and try again!" % ps.baseBold(self.members["username"]), icon="fire", title="OH SNAP!", type="error")
+                                c.session.pushAlert("The username %s is already taken. Pick a new one and try again!" % ps.baseBold(self.members["username"]), icon="fire", title="OH SNAP!", type="error")
                         else:
                                 user = profilem.profile()
                                 user["email"] = self.members["email"]
@@ -125,17 +126,17 @@ class register(baseHTTPObject):
                                         user.commit()
 
                                         self.head = ("303 SEE OTHER", [("location", "/auth/thanks")])
-                                        c.session.pushMessage(("You've been registered! Hold tight and we'll send you an email when you're account is active!"), title="Congratulations!", icon="ok", type="success")
+                                        c.session.pushAlert(("You've been registered! Hold tight and we'll send you an email when you're account is active!"), title="Congratulations!", icon="ok", type="success")
 
                                 else:
                                         raise Exception("Passwords need to match!")
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/auth/register")])
-                        c.session.pushMessage("Something went wrong while registering, heres the deal:%s" % exc, icon="fire", title="OH SNAP!", type="error")
+                        c.session.pushAlert("Something went wrong while registering, heres the deal:%s" % exc, icon="fire", title="OH SNAP!", type="error")
 
 
 @route("/auth/thanks")
-class authThanks(basePage):
+class authThanks(publicObject):
         def GET(self):
                 pass

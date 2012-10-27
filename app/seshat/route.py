@@ -17,7 +17,7 @@ import config as c
 
 import baseURL as bu
 import logging
-logger = logging.getLogger("seshat.seshat.route")
+logger = logging.getLogger(c.logName+".seshat.route")
 
 
 def route(routeURL):

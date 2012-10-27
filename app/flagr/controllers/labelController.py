@@ -16,13 +16,12 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-import flagr.models.flagModel as fm
-import flagr.models.labelModel as lm
-
-from flagr.objects.flagrObject import flagrObject
 from seshat.route import route
 
-import views.pyStrap.pyStrap as ps
+import flagr.models.flagModel as fm
+import flagr.models.labelModel as lm
+from flagr.objects.flagrObject import flagrObject
+import flagr.views.pyStrap.pyStrap as ps
 import flagr.config.flagrConfig as fc
 
 

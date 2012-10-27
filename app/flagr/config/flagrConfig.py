@@ -14,21 +14,24 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
-import siteConfig as sc
-import views.pyStrap.pyStrap as ps
+import siteConfig.zmqConfig as zmqc
+
+import flagr.views.pyStrap.pyStrap as ps
+import flagr.models.flagModel as fm
+
 from whoosh.index import create_in
 from whoosh.fields import *
-import flagr.models.flagModel as fm
 from whoosh.index import open_dir
+
 import gevent
 
 import logging
-logger = logging.getLogger("flagr.flagrConfig")
+logger = logging.getLogger(c.logName+".flagrConfig")
 
 
 def _update():
         logger.debug("Sending signal...")
-        sc.zmqSock.send("indexUpdate increase")
+        zmqc.zmqSock.send("indexUpdate increase")
         logger.debug("Signal sent...")
 
 def updateSearch():

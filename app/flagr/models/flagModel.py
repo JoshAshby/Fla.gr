@@ -13,7 +13,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
-import flagr.config.dbConfig as fdbc
+import siteConfig.dbConfig as dbc
 import flagr.models.flags.flags as bf
 import models.blocks.helpers as helpers
 import markdown
@@ -25,7 +25,7 @@ def flag(id=None, flagType=None, md=False):
 
         if id and not flagType:
                 key = "flag:"+id.strip("flag:")
-                flagType = fdbc.redisFlagServer.get(key+":flagType")
+                flagType = dbc.redisFlagServer.get(key+":flagType")
                 returnFlag = getattr(bf, flagType.lower()+"Flag")(id)
                 if md:
                         returnFlag["description"] = markdown.markdown(returnFlag["description"])
@@ -48,7 +48,7 @@ def pushFlag(flagType=None):
                 raise Exception("No flagType supplied, aborting!")
 
 def flagList(userID=None, md=False, flags=[]):
-        keys = fdbc.redisFlagServer.keys("flag:*:id")
+        keys = dbc.redisFlagServer.keys("flag:*:id")
         flagList = []
         def addFlag(key):
                 returnFlag = flag(key)
@@ -66,7 +66,7 @@ def flagList(userID=None, md=False, flags=[]):
                 if not userID:
                         for key in keys:
                                 key = key.strip(":id")
-                                if helpers.boolean(fdbc.redisFlagServer.get(key+":visibility")):
+                                if helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
                                         addFlag(key)
 
                 """
@@ -77,7 +77,7 @@ def flagList(userID=None, md=False, flags=[]):
                 if userID and userID != c.session.userID:
                         for key in keys:
                                 key = key.strip(":id")
-                                if helpers.boolean(fdbc.redisFlagServer.get(key+":visibility")) and c.redisFlagServer.get(key+":userID") == userID:
+                                if helpers.boolean(dbc.redisFlagServer.get(key+":visibility")) and dbc.redisFlagServer.get(key+":userID") == userID:
                                         addFlag(key)
 
                 """
@@ -88,7 +88,7 @@ def flagList(userID=None, md=False, flags=[]):
                 if userID and userID == c.session.userID:
                         for key in keys:
                                 key = key.strip(":id")
-                                if fdbc.redisFlagServer.get(key+":userID") == c.session.userID:
+                                if dbc.redisFlagServer.get(key+":userID") == c.session.userID:
                                         addFlag(key)
         else:
                 """

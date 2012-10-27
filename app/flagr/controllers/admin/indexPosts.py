@@ -14,16 +14,15 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-from objects.adminObject import adminObject as basePage
+from flagr.objects.adminObject import adminObject
 from seshat.route import route
 
-import models.postModel as pm
-
-import views.pyStrap.pyStrap as ps
+import flagr.models.postModel as pm
+import flagr.views.pyStrap.pyStrap as ps
 
 
 @route("/admin/posts")
-class postsIndex_admin(basePage):
+class postsIndex_admin(adminObject):
         def GET(self):
                 """
                 """
@@ -96,7 +95,7 @@ class postsIndex_admin(basePage):
 
 
 @route("/admin/posts/drafts")
-class postsDrafts_admin(basePage):
+class postsDrafts_admin(adminObject):
         def GET(self):
                 """
                 """
@@ -165,7 +164,7 @@ class postsDrafts_admin(basePage):
 
 
 @route("/admin/post/(.*)/edit")
-class postsEdit_admin(basePage):
+class postsEdit_admin(adminObject):
         def GET(self):
                 post = pm.post(self.members[0])
 
@@ -204,11 +203,11 @@ class postsEdit_admin(basePage):
 
                 post.commit()
                 self.head = ("303 SEE OTHER", [("location", str("/admin/post/"+post.id))])
-                c.session.pushMessage(("You updated post: %s!" % ps.baseBold(post.title)), type="success", icon="ok", title="YAY!")
+                c.session.pushAlert(("You updated post: %s!" % ps.baseBold(post.title)), type="success", icon="ok", title="YAY!")
 
 
 @route("/admin/post/(.*)/delete")
-class postsDelete_admin(basePage):
+class postsDelete_admin(adminObject):
         def GET(self):
                 id = self.members[0]
                 post = pm.post(id)
@@ -234,11 +233,11 @@ class postsDelete_admin(basePage):
                 post.delete()
 
                 self.head = ("303 SEE OTHER", [("location", "/admin/posts")])
-                c.session.pushMessage(("The post %s was deleted" % ps.baseBold(post.title)), title="Bye Bye", icon="trash", type="error")
+                c.session.pushAlert(("The post %s was deleted" % ps.baseBold(post.title)), title="Bye Bye", icon="trash", type="error")
 
 
 @route("/admin/posts/new")
-class postsNew_admin(basePage):
+class postsNew_admin(adminObject):
         def GET(self):
                 self.view.title = "Creating a new post"
                 title = ps.baseHeading("%s Creating a new post..." % (ps.baseIcon("rss")), size=1)
@@ -276,12 +275,12 @@ class postsNew_admin(basePage):
 
                 post.commit()
                 self.head = ("303 SEE OTHER", [("location", str("/admin/post/%s"%post.id))])
-                c.session.pushMessage(("You created post: %s!" % ps.baseBold(post.title)), type="success", icon="ok", title="YAY!")
+                c.session.pushAlert(("You created post: %s!" % ps.baseBold(post.title)), type="success", icon="ok", title="YAY!")
 
 
 @route("/admin/post/(.*)")
 @route("/admin/post/(.*)/view")
-class postsView_admin(basePage):
+class postsView_admin(adminObject):
         def GET(self):
                 """
                 """

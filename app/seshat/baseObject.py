@@ -26,7 +26,7 @@ class baseHTTPObject(object):
                 [
                         ("Content-type", "text/html"),
                 ])
-        view = bv.baseView()
+        view = bv.baseView
 
         """
         Base HTTP page response object
@@ -38,6 +38,8 @@ class baseHTTPObject(object):
                 self.members = members
 
                 self.method = env["REQUEST_METHOD"]
+
+                self.view = self.view()
 
                 self.finishInit()
 
@@ -65,12 +67,12 @@ class baseHTTPObject(object):
 
                         elif self.__level__ != c.session.user["level"]:
                                 c.session.pushAlert("You need to have %s rights to access this." % self.__level__)
-                                self.head = ("303 SEE OTHER", [("location", "/")])
+                                self.head = ("303 SEE OTHER", [("location", "/you")])
                                 error = True
 
                 elif helpers.boolean(self.__login__) and not helpers.boolean(c.session.loggedIn):
                         c.session.pushAlert("You need to be logged in to view this.")
-                        self.head = ("303 SEE OTHER", [("location", "/")])
+                        self.head = ("303 SEE OTHER", [("location", "/auth/login")])
                         error = True
 
                 if not error:

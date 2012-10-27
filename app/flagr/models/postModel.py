@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
-import flagr.config.dbConfif as fdbc
+import siteConfig.dbConfig as dbc
 import flagr.models.posts.normalPost as np
 import models.blocks.helpers as helpers
 import markdown
@@ -29,7 +29,7 @@ def post(id=None, md=False):
         return returnPost
 
 def postList(md=False):
-        keys = fdbc.redisPostServer.keys("post:*:id")
+        keys = dbc.redisPostServer.keys("post:*:id")
         postList = []
         def addPost(key):
                 returnPost = post(key, md)

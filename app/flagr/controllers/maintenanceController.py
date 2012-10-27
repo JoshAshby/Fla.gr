@@ -14,14 +14,14 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-from flagr.objects.userObject import userObject
 from seshat.route import route
 
-import views.pyStrap.pyStrap as ps
+from flagr.objects.publicObject import publicObject
+import flagr.views.pyStrap.pyStrap as ps
 
 
 @route("/(.*)")
-class maintenance(baseObject):
+class maintenance(publicObject):
         """
         Returns base maintenance page
         """

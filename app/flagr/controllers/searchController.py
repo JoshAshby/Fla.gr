@@ -17,21 +17,24 @@ joshuaashby@joshashby.com
 """
 import config as c
 
+from seshat.route import route
+
+from flagr.objects.flagrObject import flagrObject
+import flagr.views.pyStrap.pyStrap as ps
+import flagr.config.flagrConfig as fc
 import flagr.models.flagModel as fm
 import flagr.models.labelModel as lm
+
 import models.profileModel as profilem
 
 import logging
-logger = logging.getLogger("flagr.search")
-
-from flagr.objects.flagrObject import flagrObject
-from seshat.route import route
-
-import views.pyStrap.pyStrap as ps
-import flagr.config.flagrConfig as fc
+logger = logging.getLogger(c.logName+".search")
 
 from whoosh.index import open_dir
 from whoosh.qparser import MultifieldParser
+import os
+
+path = os.path.dirname(c.__file__)
 
 
 @route("/search/flags")
@@ -57,7 +60,7 @@ class searchFlags_term(flagrObject):
                 else:
                         term = self.members["search"]
 
-                        ix = open_dir(c.path+"/.searchIndex")
+                        ix = open_dir(path+"/.searchIndex")
                         flags = []
 
                         with ix.searcher() as searcher:

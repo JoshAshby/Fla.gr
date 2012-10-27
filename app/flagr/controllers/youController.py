@@ -17,16 +17,15 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-import flagr.models.flagModel as fm
-import flagr.models.labelModel as lm
-import models.profileModel as profilem
-
-from flagr.objects.flagrObject import flagrObject
-from flagr.objects.profileObject import profileObject
 from seshat.route import route
 
-import views.pyStrap.pyStrap as ps
+import flagr.models.flagModel as fm
+import flagr.models.labelModel as lm
+from flagr.objects.profileObject import profileObject
+import flagr.views.pyStrap.pyStrap as ps
 import flagr.config.flagrConfig as fc
+
+import models.profileModel as profilem
 
 import bcrypt
 
@@ -307,11 +306,11 @@ class userEdit(profileObject):
                         user.commit()
 
                         self.head = ("303 SEE OTHER", [("location", "/you")])
-                        c.session.pushMessage(("You've updated your settings!"), title="Congratulations!", icon="ok", type="success")
+                        c.session.pushAlert(("You've updated your settings!"), title="Congratulations!", icon="ok", type="success")
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/your/settings")])
-                        c.session.pushMessage("Something went wrong while updating your profile.<br>%s Heres the edit form again. Sorry!" % exc, icon="fire", title="OH SNAP!", type="error")
+                        c.session.pushAlert("Something went wrong while updating your profile.<br>%s Heres the edit form again. Sorry!" % exc, icon="fire", title="OH SNAP!", type="error")
 
 
 

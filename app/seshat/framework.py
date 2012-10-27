@@ -21,7 +21,7 @@ from gevent_fastcgi.server import WSGIServer
 from gevent import queue
 
 import logging
-logger = logging.getLogger("seshat.seshat")
+logger = logging.getLogger(c.logName+".seshat")
 
 import string
 import random
@@ -97,12 +97,12 @@ def app(env, start_response):
                         c.session.loggedIn = helpers.boolean(c.session.loggedIn)
 
 
-                        pageObject = newHTTPObject = url.pageObject(env, members)
+                        newHTTPObject = url.pageObject(env, members)
 
                         data, reply = queue.Queue(), queue.Queue()
-#                        dataThread = gevent.spawn(newHTTPObject.build, data, reply)
-#                        dataThread.join()
-                        newHTTPObject.build(data, reply)
+                        dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+                        dataThread.join()
+#                        newHTTPObject.build(data, reply)
 
                         replyData = reply.get()
                         cookieHeader = ("Set-Cookie", cookie.output(header=""))
@@ -115,7 +115,7 @@ def app(env, start_response):
 
                         start_response(status, header)
 
-                        del(pageObject)
+                        del(newHTTPObject)
 
                         return data
 

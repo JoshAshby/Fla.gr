@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
 Web App/API framework built on top of gevent
 controller for authentication stuff.
@@ -14,18 +14,20 @@ joshuaashby@joshashby.com
 """
 import config as c
 
+from seshat.route import route
+
 from flagr.objects.userObject import userObject
 from flagr.objects.godObject import godObject
-from seshat.route import route
-import views.pyStrap.pyStrap as ps
-import models.profileModel as profilem
+import flagr.views.pyStrap.pyStrap as ps
 
 from flagr.controllers.god.allFlags import *
 from flagr.controllers.god.allLabels import *
 
+import models.profileModel as profilem
+
 
 @route("/god")
-class godIndex_god(basePage):
+class godIndex_god(godObject):
         __menu__ = "Deity Panel"
         def GET(self):
                 """
@@ -47,7 +49,7 @@ class godIndex_god(basePage):
 
 
 @route("/god/setup")
-class setup(setupPage):
+class setup(userObject):
         def GET(self):
                 """
                 """

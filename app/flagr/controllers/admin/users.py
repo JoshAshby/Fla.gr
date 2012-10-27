@@ -14,15 +14,15 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-from objects.adminObject import adminObject as basePage
+from flagr.objects.adminObject import adminObject
 from seshat.route import route
 
-import views.pyStrap.pyStrap as ps
+import flagr.views.pyStrap.pyStrap as ps
 import models.profileModel as profilem
 
 
 @route("/admin/users")
-class usersIndex_admin(basePage):
+class usersIndex_admin(adminObject):
         __menu__ = "Users"
         def GET(self):
                 """
@@ -87,7 +87,7 @@ class usersIndex_admin(basePage):
 
 
 @route("/admin/user/(.*)/edit")
-class usersEdit_admin(basePage):
+class usersEdit_admin(adminObject):
         def GET(self):
                 """
                 """
@@ -155,15 +155,15 @@ class usersEdit_admin(basePage):
                         user.commit()
 
                         self.head = ("303 SEE OTHER", [("location", "/admin/users")])
-                        c.session.pushMessage(("The user %s was updated!" % ps.baseBold(user["username"])), title="Congratulations!", icon="ok", type="success")
+                        c.session.pushAlert(("The user %s was updated!" % ps.baseBold(user["username"])), title="Congratulations!", icon="ok", type="success")
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/admin/users")])
-                        c.session.pushMessage("Something went wrong while updateing the user, id: %s. Heres the edit form again. Sorry!" % ps.baseBold(user.id), icon="fire", title="OH SNAP!", type="error")
+                        c.session.pushAlert("Something went wrong while updateing the user, id: %s. Heres the edit form again. Sorry!" % ps.baseBold(user.id), icon="fire", title="OH SNAP!", type="error")
 
 
 @route("/admin/user/(.*)/delete")
-class usersDelete_admin(basePage):
+class usersDelete_admin(adminObject):
         def GET(self):
                 id = self.members[0]
                 user = profilem.profile(id)
@@ -190,11 +190,11 @@ class usersDelete_admin(basePage):
                 user.delete()
 
                 self.head = ("303 SEE OTHER", [("location", "/admin/users")])
-                c.session.pushMessage(("The user %s was deleted" % ps.baseBold(user["username"])), title="Bye!", icon="trash", type="error")
+                c.session.pushAlert(("The user %s was deleted" % ps.baseBold(user["username"])), title="Bye!", icon="trash", type="error")
 
 
 @route("/admin/users/new")
-class usersNew_admin(basePage):
+class usersNew_admin(adminObject):
         def GET(self):
                 """
                 This gives a nice little list of all the users in the system, 
@@ -256,8 +256,8 @@ class usersNew_admin(basePage):
                         user.commit()
 
                         self.head = ("303 SEE OTHER", [("location", "/admin/users")])
-                        c.session.pushMessage(("The user %s was created!" % ps.baseBold(user.username)), title="Congratulations!", icon="ok", type="success")
+                        c.session.pushAlert(("The user %s was created!" % ps.baseBold(user.username)), title="Congratulations!", icon="ok", type="success")
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/admin/users/new")])
-                        c.session.pushMessage("Something went wrong while creating the user: %s. Heres the edit form again. Sorry!" % ps.baseBold(name), icon="fire", title="OH SNAP!", type="error")
+                        c.session.pushAlert("Something went wrong while creating the user: %s. Heres the edit form again. Sorry!" % ps.baseBold(name), icon="fire", title="OH SNAP!", type="error")

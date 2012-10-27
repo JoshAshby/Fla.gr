@@ -14,16 +14,16 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-from flagr.objects.userObject import userObject
 from seshat.route import route
 
+from flagr.objects.publicObject import publicObject
 import flagr.models.postModel as pm
 import flagr.models.carouselModel as cm
 import flagr.views.pyStrap.pyStrap as ps
 
 
 @route("/")
-class index(userObject):
+class index(publicObject):
         __menu__ = "Home"
         """
         Returns base index page.
@@ -91,15 +91,14 @@ class index(userObject):
                         content = "We don't have any news to bring you just this moment, however stay tuned!"
 
 
-                self.view.body = hero + content
+                self.view.body += hero + content
                 self.view.scripts = ps.baseScript("""
         $('#frontCarousel').carousel()
                 """)
 
 
 @route("/post/(.*)")
-@route("/posts/view/(.*)")
-class postsView(userObject):
+class postsView(publicObject):
         def GET(self):
                 """
                 """

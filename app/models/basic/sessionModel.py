@@ -20,16 +20,18 @@ import random
 import bcrypt
 
 import models.basic.baseModel as bm
-
 import models.profileModel as profilem
+
+import flagr.models.messageModel as messagem
+import flagr.views.pyStrap.pyStrap as ps
 
 
 class session(bm.baseRedisModel):
         __dbname__ = "redisSessionServer"
         __dbid__ = "session:"
-        parts = ["history", "userID", "messages", "loggedIn", "redirect"]
+        parts = ["history", "userID", "alerts", "loggedIn", "redirect"]
 
-        def __init__(self, id):
+        def __init__(self, id=""):
                 self.id = id
 
                 if(getattr(dbc, self.__dbname__).exists(self.__dbid__+self.id)):
@@ -37,6 +39,7 @@ class session(bm.baseRedisModel):
                                 setattr(self, bit, getattr(dbc, self.__dbname__).hget(self.__dbid__+self.id, bit))
 
                         self.user = profilem.profile(self.userID)
+                        self.mail = messagem.mail(self.userID)
 
                 else:
                         #No session was found so make a new one
@@ -48,6 +51,7 @@ class session(bm.baseRedisModel):
                         self.loggedIn = False
 
                         self.user = profilem.profile()
+                        self.mail = messagem.mail()
 
         def getAlert(self):
                 returnData = self.alerts
@@ -57,16 +61,16 @@ class session(bm.baseRedisModel):
         def pushAlert(self, message, title="", icon="pushpin", type="info"):
                 content = ""
                 if icon and title:
-                        content += " %s"%title
+                        content += "%s %s" % (ps.baseIcon(icon), title)
                 if icon and not title:
-                        content += ""
+                        content += "%s" % ps.baseIcon(icon)
                 elif title and not icon:
                         content += title
 
                 content += message
 
                 if type:
-                        self.alerts += content
+                        self.alerts += ps.baseAlert(content)
 
         def login(self, username, passwd):
                 foundUser = profilem.findUser(username)
@@ -91,3 +95,4 @@ class session(bm.baseRedisModel):
                 self.loggedIn = False
                 self.user = None
                 self.userID = None
+                self.mail = None

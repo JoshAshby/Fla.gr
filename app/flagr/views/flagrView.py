@@ -38,7 +38,7 @@ class smartView(object):
                 str - String of HTML which represents a HTML page
 
         """
-        __defaultParts__ = [ "title", "navbar", "header", "sidebar", "body", "footer", "page", "messages", "fluid", "scripts"]
+        __defaultParts__ = [ "title", "navbar", "header", "sidebar", "body", "footer", "page", "alerts", "fluid", "scripts", "css"]
         def __init__(self, **kwargs):
                 for part in self.__defaultParts__:
                         setattr(self, part, "")
@@ -99,10 +99,10 @@ class smartView(object):
                         <div class="container%s">
                 """ % fluid
 
-                if c.session.messages:
-                        self.messages = ps.baseRow(ps.baseColumn(c.session.messages, width=10, offset=1))
+                if c.session.alerts:
+                        self.alerts = ps.baseRow(ps.baseColumn(c.session.alerts, width=10, offset=1))
 
-                content += self.messages
+                content += self.alerts
 
                 if self.sidebar:
                         self.sidebar = ps.baseColumn(self.sidebar, width=4)
@@ -129,13 +129,14 @@ class smartView(object):
                 </div>
                 """ %  ps.baseRow(self.footer)
 
-                self.page = bp.baseHTMLView()
+                self.page = bv.baseHTMLView()
 
-                self.page.content = content
+                self.page.body = content
                 self.page.title = self.title
                 self.page.scripts = self.scripts
+                self.page.css = self.css
 
-                self.page.build()
+                return self.page
 
 
 class flagrView(smartView):
@@ -255,4 +256,3 @@ class flagrView(smartView):
                 <hr>
                 %s
                 """ % ps.baseSmall("A project by %s &copy 2012 %s %s" % (ps.baseAnchor(ps.baseIcon("beaker") + " transientBug", link="http://transientBug.com"), ps.baseAnchor(ps.baseIcon("github"), link="http://github.com/transientBug"), ps.baseAnchor(ps.baseIcon("twitter"), link="http://twitter.com/transientBug")))
-

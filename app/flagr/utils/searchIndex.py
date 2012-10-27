@@ -1,21 +1,27 @@
 #!/usr/bin/env python2
 from gevent import monkey; monkey.patch_all()
 import gevent
+
+import config as c
+
 from gevent_zeromq import zmq
 context = zmq.Context()
 zmqSock = context.socket(zmq.SUB)
 zmqSock.connect("tcp://127.0.0.1:5000")
-zmqSock.setsockopt(zmq.SUBSCRIBE, "")
+zmqSock.setsockopt(zmq.SUBSCRIBE, "indexUpdate")
 
 import logging
-logger = logging.getLogger("flagrUtil.searchUpdate")
+logger = logging.getLogger(c.logName+"Util.searchUpdate")
 
 from whoosh.index import create_in
 from whoosh.fields import *
+
 import redis
 import os
+
 import flagr.models.flagModel as fm
-import config as c
+
+path = os.path.dirname(c.__file__)
 
 r = redis.Redis(db=2)
 
@@ -28,11 +34,11 @@ schema = Schema(title=TEXT,
                 time=TEXT,
                 userID=TEXT)
 
-if not os.path.exists(c.path+"/.searchIndex"):
-        os.mkdir(c.path+"/.searchIndex")
+if not os.path.exists(path+"/.searchIndex"):
+        os.mkdir(path+"/.searchIndex")
 
 def update():
-        ix = create_in(c.path+"/.searchIndex", schema)
+        ix = create_in(path+"/.searchIndex", schema)
         writer = ix.writer()
 
         logger.debug("Writer init...")
@@ -69,9 +75,10 @@ def updateIndex():
         count = 0
         logger.debug("Entered update context, count = 0")
         while True:
-                logger.debug("Waiting for signal...")
+                logger.debug("Waiting for signal...\r\n")
                 reply = zmqSock.recv()
-                if reply == "indexSearch increase":
+                logger.debug("Got signal %s" % reply)
+                if reply == "indexUpdate increase":
                         logger.debug("Got signal to update, increasing count...")
                         count += 1
                         logger.debug("Count is now %i" % count)
@@ -81,7 +88,7 @@ def updateIndex():
                                 count = 0
                                 logger.debug("Index updated, count reset")
 
-                elif reply == "indexSearch now":
+                elif reply == "indexUpdate now":
                         logger.debug("Manual rebuild triggered...")
                         update()
                         count = 0

@@ -27,21 +27,21 @@ import config as c
 def setupLog():
         import logging
         level = logging.WARNING
-        if debug:
+        if c.debug:
                 level = logging.DEBUG
 
         formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
         %(message)s""")
 
-        logger = logging.getLogger("flagrUtil")
+        logger = logging.getLogger(c.logName+"Util")
         logger.setLevel(level)
 
-        fh = logging.FileHandler(logFolder+"flagrUtil.log")
+        fh = logging.FileHandler(c.logFolder+c.logName+"Util.log")
         fh.setLevel(level)
         fh.setFormatter(formatter)
         logger.addHandler(fh)
 
-        if debug and "noDaemon" in sys.argv:
+        if c.debug and "noDaemon" in sys.argv:
                 """
                 Make sure we're not in daemon mode if we're logging to console too
                 """
@@ -58,17 +58,17 @@ class searchIndex(Daemon):
         down = False
         def run(self):
                 setupLog()
-                import utils.searchIndex as siu
+                import flagr.utils.searchIndex as siu
                 siu.start()
 
 
 if __name__ == "__main__":
         if len(sys.argv) >= 2:
                 if 'searchDaemon' == sys.argv[1]:
-                        daemon = searchIndex(pidFolder+'flagrUtilSearch.pid')
+                        daemon = searchIndex(c.pidFolder+c.logName+'UtilSearch.pid')
                 if 'noDaemon' in sys.argv:
                         setupLog()
-                        import utils.searchIndex as siu
+                        import flagr.utils.searchIndex as siu
                         siu.start()
 
                 elif 'start' in sys.argv:

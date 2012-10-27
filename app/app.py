@@ -34,10 +34,10 @@ def setupLog():
         formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
         %(message)s""")
 
-        logger = logging.getLogger(c.appName)
+        logger = logging.getLogger(c.logName)
         logger.setLevel(level)
 
-        fh = logging.FileHandler(c.logFolder+c.appName+".log")
+        fh = logging.FileHandler(c.logFolder+c.logName+".log")
         fh.setLevel(level)
         fh.setFormatter(formatter)
         logger.addHandler(fh)
@@ -54,14 +54,17 @@ def setupLog():
                 except:
                         pass
 
+        return logger
+
 from simpleDaemon import Daemon
 class app(Daemon):
         down = False
         def run(self):
-                setupLog()
+                logger = setupLog()
                 import seshat.framework as fw
 
                 if self.down:
+                        logger.warn("Entered Maintenance mode. All URLS routed to maintenanceController!")
                         import flagr.controllers.maintenanceController
                 else:
                         import flagr.controllers.controllerMap
@@ -70,11 +73,11 @@ class app(Daemon):
 
 
 if __name__ == "__main__":
-        daemon = app(c.pidFolder+c.appName+'.pid')
+        daemon = app(c.pidFolder+c.logName+'.pid')
         daemon.down=False
         if len(sys.argv) >= 2:
                 if 'noDaemon' in sys.argv:
-                        setupLog()
+                        logger = setupLog()
                         import seshat.framework as fw
                         if 'maintenance' in sys.argv:
                                 import flagr.controllers.maintenanceController

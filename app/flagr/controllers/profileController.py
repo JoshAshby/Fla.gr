@@ -16,15 +16,15 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-import flagr.models.flagModel as fm
-import flagr.models.labelModel as lm
-import models.profileModel as profilem
-import flagr.config.flagrConfig as fc
-
-from flagr.objects.publicObject import publicObject
 from seshat.route import route
 
-import views.pyStrap.pyStrap as ps
+from flagr.objects.publicObject import publicObject
+import flagr.models.flagModel as fm
+import flagr.models.labelModel as lm
+import flagr.config.flagrConfig as fc
+import flagr.views.pyStrap.pyStrap as ps
+
+import models.profileModel as profilem
 
 
 @route("/people/(.*)/labels")
@@ -45,10 +45,6 @@ class userViewLabels(publicObject):
                 tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("tags"), link="%s/people/%s/labels" % (c.baseURL, user.username),
                                 rel="tooltip",
                                 data=[("original-title", "%s's Labels"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("envelope-alt"), link="%s/people/%s/message" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "Message %s"%user.username),
                                         ("placement", "bottom")]) + "</li>"
 
                 pageHead = ps.baseRow([
@@ -82,10 +78,6 @@ class userViewFlags(publicObject):
                 tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link="%s/people/%s/labels" % (c.baseURL, user.username),
                                 rel="tooltip",
                                 data=[("original-title", "%s's Labels"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("envelope-alt"), link="%s/people/%s/message" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "Message %s"%user.username),
                                         ("placement", "bottom")]) + "</li>"
 
                 pageHead = ps.baseRow([
@@ -133,10 +125,6 @@ class userView(publicObject):
                         tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link="%s/people/%s/labels" % (c.baseURL, user.username),
                                         rel="tooltip",
                                         data=[("original-title", "%s's Labels"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-                        tabs += "<li>" + ps.baseAnchor(ps.baseIcon("envelope-alt"), link="%s/people/%s/message" % (c.baseURL, user.username),
-                                        rel="tooltip",
-                                        data=[("original-title", "Message %s"%user.username),
                                         ("placement", "bottom")]) + "</li>"
 
                         pageHead = ps.baseRow([

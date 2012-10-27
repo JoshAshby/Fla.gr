@@ -51,7 +51,8 @@ class baseMenu(b.brick):
                 for element in self.items:
                         if element == "divider":
                                 links += """<li class="divider"></li>"""
-
+                        elif type(element) == str:
+                                links += """<li>%s</li>""" % element
                         else:
                                 if element.has_key("link"):
                                         links += """

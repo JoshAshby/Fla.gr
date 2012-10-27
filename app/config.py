@@ -15,8 +15,12 @@ joshuaashby@joshashby.com
 """
 import re
 import os
+import models.basic.sessionModel as sm
 
-appName = "flagr"
+appName = "fla.gr"
+appNameNav = "<i class=\"icon-flag\"></i> fla.gr"
+
+logName = appName.replace(".", "")
 logFolder = "/var/log/python/"
 pidFolder = "/tmp/"
 
@@ -55,7 +59,7 @@ levels = ["normal", "admin", "GOD"]
 Don't change these following settings unless you know what you're doing!!!
 ##########################################################################
 """
-session = None
+session = sm.session()
 
 urls = []
 

@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
-import flagr.config.dbConfig as fdbc
+import siteConfig.dbConfig as dbc
 import flagr.models.carousels.newsCarousel as nc
 import models.blocks.helpers as helpers
 import markdown
@@ -29,7 +29,7 @@ def carousel(id=None, md=False):
         return returnCar
 
 def carouselList(md=False):
-        keys = fdbc.redisCarouselServer.keys("newsCarousel:*:id")
+        keys = dbc.redisCarouselServer.keys("newsCarousel:*:id")
         carouselList = []
         def addCarousel(key):
                 returnCarousel = carousel(key)

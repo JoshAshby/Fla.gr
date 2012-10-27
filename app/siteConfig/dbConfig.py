@@ -15,5 +15,8 @@ joshuaashby@joshashby.com
 """
 import redis
 
-redisSessionServer = redis.Redis("localhost", db=1)
 redisUserServer = redis.Redis("localhost", db=0)
+redisSessionServer = redis.Redis("localhost", db=1)
+redisFlagServer = redis.Redis("localhost", db=2)
+redisPostServer = redis.Redis("localhost", db=2)
+redisCarouselServer = redis.Redis("localhost", db=2)

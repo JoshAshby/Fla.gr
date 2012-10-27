@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config as c
-import config.dbConfig as dbc
+import siteConfig.dbConfig as dbc
 import flagr.models.baseMessage as bmess
 import models.blocks.helpers as helpers
 import markdown
@@ -31,8 +31,7 @@ def message(id=None, md=True):
 
 class mail(object):
         def __init__(self, userID=None):
-                id = c.session.userID if c.session else None
-                self.userID = userID if userID else id
+                self.userID = userID if userID else None
                 self.messages = []
 
                 keys = dbc.redisUserServer.keys("message:*:id")

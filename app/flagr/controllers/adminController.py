@@ -14,10 +14,10 @@ joshuaashby@joshashby.com
 """
 import config as c
 
-from flagr.objects.adminObject import adminObject
 from seshat.route import route
 
-import views.pyStrap.pyStrap as ps
+import flagr.views.pyStrap.pyStrap as ps
+from flagr.objects.adminObject import adminObject
 
 from flagr.controllers.admin.users import *
 from flagr.controllers.admin.indexPosts import *

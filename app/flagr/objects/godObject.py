@@ -1,4 +1,4 @@
-!/usr/bin/env python2
+#!/usr/bin/env python
 """
 Web App/API framework built on top of gevent
 baseObject to build pages off of
@@ -15,13 +15,13 @@ joshuaashby@joshashby.com
 import config as c
 import seshat.baseObject as bo
 import flagr.views.pyStrap.pyStrap as ps
-import flagr.views.flagView as fv
+import flagr.views.flagrView as fv
 
 
 class godObject(bo.baseHTTPObject):
        __level__ = "GOD"
        __login__ = True
        __name__ = "god"
-       view = fv.flagrView()
+       view = fv.flagrView
        def finishInit(self):
                self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Your Throne Awaits..."}]))
