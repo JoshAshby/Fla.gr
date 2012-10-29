@@ -94,11 +94,6 @@ class carouselIndex_admin(adminObject):
                         content = "You don't have any carousel items! Why don't you make one?"
 
                 self.view["body"] = pageHead + hero + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
 
 
 @route("/admin/carousels/drafts")
@@ -278,12 +273,11 @@ class carouselNew_admin(adminObject):
                                 carouselItem[part] = self.members[part]
 
                 carouselItem.commit()
-                self.head = ("303 SEE OTHER", [("location", str("/admin/carousel/view/"+carouselItem.id))])
+                self.head = ("303 SEE OTHER", [("location", str("/admin/carousel/"+carouselItem.id))])
                 c.session.pushAlert(("You created carousel item: %s!" % ps.baseBold(carouselItem.id)), type="success", icon="ok", title="YAY!")
 
 
 @route("/admin/carousel/(.*)")
-@route("/admin/carousel/(.*)/view")
 class carouselView_admin(adminObject):
         def GET(self):
                 """
@@ -330,8 +324,3 @@ class carouselView_admin(adminObject):
                         ])
 
                 self.view["body"] = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")

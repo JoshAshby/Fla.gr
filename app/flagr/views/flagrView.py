@@ -256,3 +256,14 @@ class flagrView(smartView):
                 <hr>
                 %s
                 """ % ps.baseSmall("A project by %s &copy 2012 %s %s" % (ps.baseAnchor(ps.baseIcon("beaker") + " transientBug", link="http://transientBug.com"), ps.baseAnchor(ps.baseIcon("github"), link="http://github.com/transientBug"), ps.baseAnchor(ps.baseIcon("twitter"), link="http://twitter.com/transientBug")))
+
+                self.scripts += """
+                <script>
+                $('.btn-group').tooltip({
+                      selector: "a[rel=tooltip]"
+                })
+                $('.nav-tabs').tooltip({
+                        selector: "a[rel=tooltip]"
+                })
+                </script>
+                """

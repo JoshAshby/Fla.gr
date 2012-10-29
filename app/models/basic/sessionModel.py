@@ -69,8 +69,10 @@ class session(bm.baseRedisModel):
 
                 content += message
 
-                if type:
+                if not type:
                         self.alerts += ps.baseAlert(content)
+                else:
+                        self.alerts += ps.baseAlert(content, classes="alert-"+type)
 
         def login(self, username, passwd):
                 foundUser = profilem.findUser(username)
