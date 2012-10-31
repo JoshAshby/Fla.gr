@@ -35,20 +35,6 @@ class flagIndex(profileObject):
         def GET(self):
                 """
                 """
-                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
-                        classes="btn-info", link=c.baseURL+"/flags/new"),
-                        dropdown=ps.baseMenu(name="flagDropdown",
-                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
-                                        {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
-                                ),
-                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
-                                classes="dropdown-toggle btn-info",
-                                data=[("toggle", "dropdown"),
-                                        ("original-title", "Quick select"),
-                                        ("placement", "bottom")],
-                                rel="tooltip"),
-                        classes="pull-right")
-
                 self.view["title"] = "Your Flags"
 
                 flags = fm.flagList(c.session.userID, True)
@@ -69,7 +55,6 @@ class flagIndex(profileObject):
                                 rel="tooltip",
                                 data=[("original-title", "Your Settings"),
                                         ("placement", "bottom")]) +"</li>"
-                tabs += new
 
                 pageHead = ps.baseRow([
                         ps.baseColumn(ps.baseHeading("%s Your Flags" % (ps.baseIcon("flag")), size=1), width=5),
@@ -79,8 +64,7 @@ class flagIndex(profileObject):
                 buildMessage = "You have no flags at the moment, but if you want to add one, simply click the button up above to get started!."
 
                 if flags:
-                        width=10
-                        flagList = fc.flagThumbnails(flags, width)
+                        flagList = fc.flagThumbnails(flags)
                 else:
                         flagList = buildMessage
 
@@ -91,20 +75,6 @@ class flagIndex(profileObject):
 class labelIndex(profileObject):
         def GET(self):
                 labelList = lm.labelList(user=c.session.userID)
-
-                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
-                        classes="btn-info", link=c.baseURL+"/flags/new"),
-                        dropdown=ps.baseMenu(name="flagDropdown",
-                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
-                                        {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
-                                ),
-                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
-                                classes="dropdown-toggle btn-info",
-                                data=[("toggle", "dropdown"),
-                                        ("original-title", "Quick select"),
-                                        ("placement", "bottom")],
-                                rel="tooltip"),
-                        classes="pull-right")
 
                 self.view["title"] = "Your Labels"
 
@@ -124,7 +94,6 @@ class labelIndex(profileObject):
                                 rel="tooltip",
                                 data=[("original-title", "Your Settings"),
                                         ("placement", "bottom")]) +"</li>"
-                tabs += new
 
                 pageHead = ps.baseRow([
                         ps.baseColumn(ps.baseHeading("%s Your Labels" % (ps.baseIcon("tags")), size=1), width=5),
@@ -142,20 +111,6 @@ class userIndex(profileObject):
         def GET(self):
                 self.view["title"] = "You!"
 
-                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
-                        classes="btn-info", link=c.baseURL+"/flags/new"),
-                        dropdown=ps.baseMenu(name="flagDropdown",
-                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
-                                        {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
-                                ),
-                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
-                                classes="dropdown-toggle btn-info",
-                                data=[("toggle", "dropdown"),
-                                        ("original-title", "Quick select"),
-                                        ("placement", "bottom")],
-                                rel="tooltip"),
-                        classes="pull-right")
-
                 tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
                                 rel="tooltip",
                                 data=[("original-title", "Your Profile"),
@@ -172,7 +127,6 @@ class userIndex(profileObject):
                                 rel="tooltip",
                                 data=[("original-title", "Your Settings"),
                                         ("placement", "bottom")]) +"</li>"
-                tabs += new
 
                 pageHead = ps.baseRow([
                         ps.baseColumn(ps.baseHeading("%s You" % (ps.baseIcon("user")), size=1), width=5),
@@ -218,20 +172,6 @@ class userEdit(profileObject):
                 """
                 self.view.sidebar = ""
                 user = profilem.profile(c.session.userID, md=False)
-                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
-                        classes="btn-info", link=c.baseURL+"/flags/new"),
-                        dropdown=ps.baseMenu(name="flagDropdown",
-                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
-                                        {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
-                                ),
-                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
-                                classes="dropdown-toggle btn-info",
-                                data=[("toggle", "dropdown"),
-                                        ("original-title", "Quick select"),
-                                        ("placement", "bottom")],
-                                rel="tooltip"),
-                        classes="pull-right")
-
                 self.view["title"] = "Editing your settings"
 
                 tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
@@ -250,7 +190,6 @@ class userEdit(profileObject):
                                 rel="tooltip",
                                 data=[("original-title", "Your Settings"),
                                         ("placement", "bottom")]) +"</li>"
-                tabs += new
 
                 pageHead = ps.baseRow([
                         ps.baseColumn(ps.baseHeading("%s Your Settings" % (ps.baseIcon("cogs")), size=1), width=5),
@@ -311,7 +250,7 @@ class userEdit(profileObject):
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/your/settings")])
                         c.session.pushAlert("Something went wrong while updating your profile.<br>%s Heres the edit form again. Sorry!" % exc, icon="fire", title="OH SNAP!", type="error")
-
+"""
 
 
 @route("/your/messages")
@@ -390,3 +329,4 @@ class userMessagesNew(profileObject):
 class userMssagesSend(profileObject):
         def POST(self):
                 pass
+"""

@@ -79,11 +79,6 @@ class usersIndex_admin(adminObject):
                         content = "Uh, well this is bad... unless you don't have god permissions and can't see any of the deities..."
 
                 self.view["body"] = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
 
 
 @route("/admin/user/(.*)/edit")

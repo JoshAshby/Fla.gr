@@ -22,6 +22,7 @@ import flagr.views.pyStrap.pyStrap as ps
 import models.profileModel as profilem
 
 
+@route("/login")
 @route("/auth/login")
 class login(publicObject):
         __menu__ = "Login"
@@ -55,13 +56,14 @@ class login(publicObject):
                 try:
                         c.session.login(name, passwd)
                         self.head = ("303 SEE OTHER", [("location", "/your/flags")])
-                        c.session.pushAlert("Welcome back, %s!" % name, icon="")
+                        c.session.pushAlert("Welcome back, %s!" % name)
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/auth/login")])
                         c.session.pushAlert("Something went wrong:<br>%s Please try again." % exc, type="error", title="Oh no!", icon="fire")
 
 
+@route("/logout")
 @route("/auth/logout")
 class logout(publicObject):
         def GET(self):
@@ -76,6 +78,7 @@ class logout(publicObject):
                 c.session.pushAlert("See you again, next time!", icon="")
 
 
+@route("/register")
 @route("/auth/register")
 class register(publicObject):
         def GET(self):

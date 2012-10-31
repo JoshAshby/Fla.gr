@@ -87,11 +87,6 @@ class postsIndex_admin(adminObject):
                         content = "You don't have any posts! Why don't you make one?"
 
                 self.view["body"] = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
 
 
 @route("/admin/posts/drafts")
@@ -156,11 +151,6 @@ class postsDrafts_admin(adminObject):
                         content = "You don't have any draft posts! Why don't you make one?"
 
                 self.view["body"] = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
 
 
 @route("/admin/post/(.*)/edit")
@@ -326,8 +316,3 @@ class postsView_admin(adminObject):
                         ])
 
                 self.view["body"] = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")

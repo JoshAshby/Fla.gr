@@ -89,7 +89,7 @@ class userViewFlags(publicObject):
                 buildMessage = "Uh oh! Looks like they don't have any flags at the moment."
 
                 if flags:
-                        flagList = fc.flagThumbnails(flags, 10)
+                        flagList = fc.flagThumbnails(flags)
                 else:
                         flagList = buildMessage
 
@@ -97,11 +97,6 @@ class userViewFlags(publicObject):
 
 
                 self.view.body = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                        $('.btn-group').tooltip({
-                              selector: "a[rel=tooltip]"
-                        })
-                """)
 
 
 @route("/people/(.*)")

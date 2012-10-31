@@ -34,15 +34,25 @@ def _update():
         zmqc.zmqSock.send("indexUpdate increase")
         logger.debug("Signal sent...")
 
+def _forceUpdate():
+        logger.debug("Sending manual update signal...")
+        zmqc.zmqSock.send("indexUpdate now")
+        logger.debug("Manual update signal sent...")
+
 def updateSearch():
         ser = gevent.spawn(_update)
         ser.join()
 
-def flagThumbnails(flags, width=10):
+def manualUpdateSearch():
+        ser = gevent.spawn(_forceUpdate)
+        ser.join()
+
+def flagThumbnails(flags):
         if flags:
                 flagList = ""
                 for flag in flags:
-                        title = ps.baseAnchor("%s %s" % (ps.baseIcon(flag.icon), flag.title), link=c.baseURL+"/flag/%s"%flag.id)
+                        title = ps.baseAnchor("%s %s..." % (ps.baseIcon(flag.icon), flag["title"][:8].strip(" ")),
+                                        link=c.baseURL+"/flag/%s"%flag.id)
 
                         if not flag["visibility"]:
                                 vis = "%s Private" % ps.baseIcon("eye-close")
@@ -50,64 +60,53 @@ def flagThumbnails(flags, width=10):
                                 vis = "%s Public" % ps.baseIcon("globe")
 
                         who = ps.baseAnchor(flag["author"], link=c.baseURL+"/people/%s"%flag["author"])
+#                        who = flag["author"]
 
                         if c.session.loggedIn and c.session.userID == flag["userID"]:
                                 who = ps.baseAnchor("You!", link=c.baseURL+"/you")
-                                edit = ps.baseSplitDropdown(btn=
+                                who = "You!"
+                                edit = ps.baseButtonGroup([
                                         ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
                                                 link=c.baseURL+"/flag/%s"%flag.id,
                                                 classes="",
                                                 rel="tooltip",
-                                                data=[("original-title", "View this flag")])+
+                                                data=[("original-title", "View flag")]),
                                         ps.baseAButton("%s" % ps.baseIcon("edit"),
                                                 classes="btn-info",
                                                 link=c.baseURL+"/flag/%s/edit"%flag.id,
                                                 rel="tooltip",
-                                                data=[("original-title", "Edit this flag")])
-                                        ,
-                                        dropdown=ps.baseMenu(name="flagDropdown",
-                                                items=[{"name": "%s Copy flag" % ps.baseIcon("copy"),
-                                                        "link": c.baseURL+"/flag/%s/copy"%flag.id},
-                                                {"name": ps.baseBold("%s Delete flag" % ps.baseIcon("trash"),
-                                                        classes="text-error"),
-                                                        "link": c.baseURL+"/flag/%s/delete"%flag.id}]
-                                                ),
-                                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
-                                                classes="dropdown-toggle btn-danger",
-                                                data=[("toggle", "dropdown"),
-                                                        ("original-title", "More actions")],
-                                                rel="tooltip"), classes="pull-right")
+                                                data=[("original-title", "Edit flag")]),
+                                        ps.baseAButton("%s" % ps.baseIcon("trash"),
+                                                classes="btn-danger",
+                                                link=c.baseURL+"/flag/%s/delete"%flag.id,
+                                                rel="tooltip",
+                                                data=[("original-title", "Delete Flag")])
+                                        ])
 
                         elif c.session.loggedIn:
                                 edit = ps.baseButtonGroup([
                                         ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
-                                                        link=c.baseURL+"/flag/%s"%flag.id,
-                                                        classes="", rel="tooltip", data=[("original-title", "View this flag")]),
-                                        ps.baseAButton(ps.baseIcon("copy"),
-                                                link=c.baseURL+"/flag/%s/copy"%flag.id,
-                                                classes="",
-                                                rel="tooltip",
-                                                data=[("original-title", "Copy this flag")])
+                                                link=c.baseURL+"/flag/%s"%flag.id,
+                                                classes="", rel="tooltip", data=[("original-title", "View flag")])
                                         ])
                         else:
                                 edit = ps.baseButtonGroup([
                                         ps.baseAButton("%s" % ps.baseIcon("zoom-in"),
                                                         link=c.baseURL+"/flag/%s"%flag.id,
-                                                        classes="", rel="tooltip", data=[("original-title", "View this flag")])
+                                                        classes="", rel="tooltip", data=[("original-title", "View flag")])
                                         ], classes="pull-right")
 
-                        caption = ps.baseHeading(title, size=3)
+                        caption = ps.baseHeading(title + "   " + ps.baseSmall(ps.baseBold(who, classes="muted")), size=3)
 
-                        caption += ps.baseRow(ps.baseColumn(ps.baseWell(
-                                ps.baseColumn(ps.baseBold("Author:", classes="muted")) +
-                                ps.baseColumn(who) +
+                        caption = ps.baseRow([ps.baseColumn(caption, width=3),
+                                ps.baseColumn(ps.baseWell(
                                 ps.baseColumn(ps.baseBold("When:", classes="muted")) +
                                 ps.baseColumn(flag["time"]) +
                                 ps.baseColumn(vis) +
                                 ps.baseColumn(edit, classes="pull-right")
-                        ), width=width))
+                        ), width=7)])
 
-                        caption += "%s%s<br />" % (flag["description"][:250], ps.baseAnchor("...", link=c.baseURL+"/flag/%s"%flag.id))
+                        caption += "%s" % flag["description"][:250]
 
                         labelLinks = ""
 
@@ -133,52 +132,3 @@ def flagThumbnails(flags, width=10):
                         flagList += caption + "<hr>"
 
         return flagList
-
-
-def flagIndex():
-        ix = open_dir("index")
-        writer = ix.writer()
-
-        for key in r.keys("flag:*:id"):
-                flag = fm.flag(key.strip(":id"))
-                labels = ""
-                for label in flag["labels"]:
-                        labels += "%s ,"%label
-
-                labels = labels.strip(", ")
-
-                url = u""
-
-                for field in flag.fields:
-                        name = field[0] if type(field) != str else field
-                        if name not in ["title", "description", "labels", "time", "visibility", "author", "userID", "flagType"]:
-                                if name in ["url"]:
-                                        url = flag["url"]
-
-                writer.add_document(title=flag["title"],
-                                id=unicode(flag.id),
-                                description=flag["description"],
-                                labels=labels,
-                                url=url,
-                                author=flag["author"],
-                                userID=unicode(flag["userID"]),
-                                time=flag["time"])
-
-        writer.commit()
-
-def flagIndexSetup():
-        schema = Schema(title=TEXT(stored=True),
-                        id=ID(stored=True, unique=True),
-                        description=TEXT,
-                        labels=KEYWORD(stored=True),
-                        url=TEXT(stored=True),
-                        author=TEXT(stored=True),
-                        time=TEXT,
-                        userID=TEXT)
-
-        if not os.path.exists("index"):
-                os.mkdir("index")
-
-        ix = create_in("index", schema)
-        writer = ix.writer()
-        writer.commit()

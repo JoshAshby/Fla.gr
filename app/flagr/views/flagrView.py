@@ -165,13 +165,13 @@ class flagrView(smartView):
 
                         messages = "%s %s" % (ps.baseIcon("envelope-alt"), messCounter)
                         stuffMail = {"name": messages, "link": c.baseURL+"/your/messages"}
-                        stuffProfile = {"name": ps.baseIcon("user"), "link": c.baseURL+"/you"}
+                        stuffProfile = {"name": ps.baseIcon("user"), "link": c.baseURL+"/your/flags"}
                         name = "Heya %s!"%(c.session.user["username"])
                         logout = ps.baseIcon("road") + " Logout"
                         admin = ps.baseIcon("dashboard") + " Admin Panel"
                         flagLink = {"name": ps.baseIcon("flag")+" Your flags", "link": c.baseURL+"/your/flags"}
                         labelLink = {"name": ps.baseIcon("tags") +" Your labels", "link": c.baseURL+"/your/labels"}
-                        profileLink = {"name": ps.baseIcon("user")+" Your profile", "link": c.baseURL+"/you"}
+                        profileLink = {"name": ps.baseIcon("user")+" You!", "link": c.baseURL+"/you"}
                         settingLink = {"name": ps.baseIcon("cogs")+" Your settings", "link": c.baseURL+"/your/settings"}
 
                         adminSub = ps.baseMenu(name="adminSubDropdown",
@@ -197,9 +197,7 @@ class flagrView(smartView):
                                 deity = ps.baseIcon("eye-open") + " Deity Panel"
 
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[flagLink,
-                                                labelLink,
-                                                profileLink,
+                                        items=[profileLink,
                                                 "divider",
                                                 {"subName": deity, "subLink": c.baseURL+"/god", "sub": deitySub},
                                                 {"subName": admin, "subLink": c.baseURL+"/admin", "sub": adminSub},
@@ -209,7 +207,7 @@ class flagrView(smartView):
 
                         elif c.session.user["level"] == "admin":
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[flagLink, labelLink, profileLink,
+                                        items=[profileLink,
                                                 "divider",
                                                 {"subName": admin, "subLink": c.baseURL + "/admin", "sub": adminSub},
                                                 "divider",
@@ -218,11 +216,12 @@ class flagrView(smartView):
 
                         else:
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[flagLink, labelLink, profileLink,
+                                        items=[profileLink,
                                                 "divider",
                                                 settingLink,
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
-                        link=""
+
+                        link = ""
                 else:
                         name = "Ohia Stranger!"
                         loginForm = ps.baseBasicForm(action=c.baseURL+"/auth/login",
@@ -237,18 +236,20 @@ class flagrView(smartView):
 
                         userDropdown = ps.baseMenu(name="userDropdown",
                                         items=[{"form": loginForm}])
-                        link={"name": "Login", "link": c.baseURL+"/auth/login"}
-                        link=ps.baseAButton("Login", link=c.baseURL+"/auth/login")
+                        link = ""
+#                        link=ps.baseAButton("Login", link=c.baseURL+"/auth/login")
 
+#                name = ps.baseSmall(name)
 
                 self.navbar = ps.baseNavbar(
                         classes="navbar-static-top",
                         brand={"name": c.appNameNav, "link": c.baseURL},
                         left=[{"form": search},
                                 {"name": flags, "link": c.baseURL+"/flags"},
-                                {"name": labels, "link": c.baseURL+"/labels"}],
+#                                {"name": labels, "link": c.baseURL+"/labels"}
+                                ],
                         right=[stuffProfile,
-                                stuffMail,
+#                                stuffMail,
                                 link,
                                 {"dropdown": userDropdown, "name": name}])
 

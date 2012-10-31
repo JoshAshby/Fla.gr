@@ -157,11 +157,6 @@ class carouselDrafts_admin(adminObject):
                         content = "You don't have any draft carousel items! Why don't you make one?"
 
                 self.view["body"] = pageHead + content
-                self.view.scripts = ps.baseScript("""
-                $('.btn-group').tooltip({
-                      selector: "a[rel=tooltip]"
-                })
-""")
 
 
 @route("/admin/carousel/(.*)/edit")

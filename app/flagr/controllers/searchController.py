@@ -79,15 +79,10 @@ class searchFlags_term(flagrObject):
                                         flags.pop(flags.index(flag))
 
                         if flags:
-                                flagList = fc.flagThumbnails(flags, 10)
+                                flagList = fc.flagThumbnails(flags)
                         else:
                                 flagList = buildMessage
 
                         content = ps.baseRow(ps.baseColumn(flagList, id="flags"))
 
                         self.view.body = pageHead + content
-                        self.view.scripts = ps.baseScript("""
-                                $('.btn-group').tooltip({
-                                      selector: "a[rel=tooltip]"
-                                })
-                        """)
