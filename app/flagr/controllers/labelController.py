@@ -47,7 +47,7 @@ class labelView(flagrObject):
 
                 stack = stack.strip("/")
 
-                pageHead = ps.baseColumn(ps.baseHeading("%s Flags in label: %s" % (ps.baseIcon("tag"), stack), size=1))
+                pageHead = ps.baseColumn(ps.baseHeading("%s Flags in label: %s" % (ps.baseIcon("tag"), stack), size=2))
 
                 pageHead = ps.baseRow(pageHead)
 

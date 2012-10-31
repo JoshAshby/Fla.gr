@@ -29,6 +29,20 @@ import models.profileModel as profilem
 
 import bcrypt
 
+new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+        classes="btn-info", link=c.baseURL+"/flags/new"),
+        dropdown=ps.baseMenu(name="flagDropdown",
+                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                ),
+        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                classes="dropdown-toggle btn-info",
+                data=[("toggle", "dropdown"),
+                ("original-title", "Quick select"),
+                ("placement", "bottom")],
+                rel="tooltip"),
+        classes="pull-right")
+
 
 @route("/your/flags")
 class flagIndex(profileObject):
@@ -56,8 +70,10 @@ class flagIndex(profileObject):
                                 data=[("original-title", "Your Settings"),
                                         ("placement", "bottom")]) +"</li>"
 
+                tabs += new
+
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Your Flags" % (ps.baseIcon("flag")), size=1), width=5),
+                        ps.baseColumn(ps.baseHeading("%s Your Flags" % (ps.baseIcon("flag")), size=2), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
@@ -95,8 +111,10 @@ class labelIndex(profileObject):
                                 data=[("original-title", "Your Settings"),
                                         ("placement", "bottom")]) +"</li>"
 
+                tabs += new
+
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Your Labels" % (ps.baseIcon("tags")), size=1), width=5),
+                        ps.baseColumn(ps.baseHeading("%s Your Labels" % (ps.baseIcon("tags")), size=2), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
@@ -128,8 +146,10 @@ class userIndex(profileObject):
                                 data=[("original-title", "Your Settings"),
                                         ("placement", "bottom")]) +"</li>"
 
+                tabs += new
+
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s You" % (ps.baseIcon("user")), size=1), width=5),
+                        ps.baseColumn(ps.baseHeading("%s You" % (ps.baseIcon("user")), size=2), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
@@ -191,8 +211,10 @@ class userEdit(profileObject):
                                 data=[("original-title", "Your Settings"),
                                         ("placement", "bottom")]) +"</li>"
 
+                tabs += new
+
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Your Settings" % (ps.baseIcon("cogs")), size=1), width=5),
+                        ps.baseColumn(ps.baseHeading("%s Your Settings" % (ps.baseIcon("cogs")), size=2), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
@@ -250,83 +272,3 @@ class userEdit(profileObject):
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/your/settings")])
                         c.session.pushAlert("Something went wrong while updating your profile.<br>%s Heres the edit form again. Sorry!" % exc, icon="fire", title="OH SNAP!", type="error")
-"""
-
-
-@route("/your/messages")
-class userMessages(profileObject):
-        def GET(self):
-                self.view.title = "Inbox"
-                tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("inbox"), link=c.baseURL+"/your/messages",
-                                rel="tooltip",
-                                data=[("original-title", "Inbox"),
-                                        ("placement", "bottom")]) +"</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("folder-close"), link=c.baseURL+"/your/messages/unread",
-                                rel="tooltip",
-                                data=[("original-title", "Unread"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += ps.baseAButton("%s New" % ps.baseIcon("envelope"), link=c.baseURL+"/your/messages/new", classes="pull-right")
-
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Inbox" % (ps.baseIcon("envelope-alt")), size=1), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
-                        ])
-
-                self.view.body = pageHead
-
-
-@route("/your/messages/unread")
-class userMessagesUnread(profileObject):
-        def GET(self):
-                self.view.title = "Unread messages"
-                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("inbox"), link=c.baseURL+"/your/messages",
-                                rel="tooltip",
-                                data=[("original-title", "Inbox"),
-                                        ("placement", "bottom")]) +"</li>"
-                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("folder-close"), link=c.baseURL+"/your/messages/unread",
-                                rel="tooltip",
-                                data=[("original-title", "Unread"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += ps.baseAButton("%s New" % ps.baseIcon("envelope"), link=c.baseURL+"/your/messages/new", classes="pull-right")
-
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Unread" % (ps.baseIcon("envelope-alt")), size=1), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
-                        ])
-
-                self.view.body = pageHead
-
-
-@route("/your/messages/new")
-class userMessagesNew(profileObject):
-        def GET(self):
-                self.view.title = "New message"
-
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s New Message" % (ps.baseIcon("envelope")), size=1), width=5),
-                        ])
-
-                elements = [
-                ps.baseInput(type="text", classes="span10", name="whoName", placeholder="Who is this for? (Username)"),
-                "<br /><br />",
-                ps.baseInput(type="text", classes="span10", name="subject", placeholder="Subject? (required)"),
-                "<br /><br />",
-                {"content": ps.baseTextarea(classes="span10", name="message"),
-                        "help": ps.baseSmall("Text can be formated with %s" % ps.baseAnchor("Daring Fireball's Markdown", link="http://daringfireball.net/projects/markdown/syntax"), classes="muted")},
-                "<br />"]
-
-                editForm = ps.baseHorizontalForm(action=c.baseURL+"/your/messages/new",
-                                method="POST",
-                                actions=[ps.baseSubmit(ps.baseIcon("save")+" Send!")],
-                                fields=elements)
-
-                self.view.body = pageHead + editForm
-
-
-@route("/your/messages/send")
-class userMssagesSend(profileObject):
-        def POST(self):
-                pass
-"""

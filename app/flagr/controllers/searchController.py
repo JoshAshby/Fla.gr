@@ -45,7 +45,7 @@ class searchFlags_term(flagrObject):
 
                 value = self.members["search"] if self.members.has_key("search") else ""
 
-                pageHead = ps.baseColumn(ps.baseHeading("%s Search flags..."%ps.baseIcon("search"), size=1) +
+                pageHead = ps.baseColumn(ps.baseHeading("%s Search flags..."%ps.baseIcon("search"), size=2) +
                                 ps.baseBasicForm(
                                         action=c.baseURL+"/search/flags",
                                         fields=[

@@ -48,7 +48,7 @@ class userViewLabels(publicObject):
                                         ("placement", "bottom")]) + "</li>"
 
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("tags"), user["username"]), size=1), width=5),
+                        ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("tags"), user["username"]), size=2), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
                 labels = lm.labelList(user.id)
@@ -81,7 +81,7 @@ class userViewFlags(publicObject):
                                         ("placement", "bottom")]) + "</li>"
 
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("flag"), user["username"]), size=1), width=5),
+                        ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("flag"), user["username"]), size=2), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
@@ -123,7 +123,7 @@ class userView(publicObject):
                                         ("placement", "bottom")]) + "</li>"
 
                         pageHead = ps.baseRow([
-                                ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("user"), user["username"]), size=1), width=5),
+                                ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("user"), user["username"]), size=2), width=5),
                                 ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                                 ])
 
@@ -147,4 +147,4 @@ class userView(publicObject):
                         self.view.body = pageHead + content
 
                 else:
-                        self.view.body = ps.baseHeading("How sad!", size=1) + ps.baseParagraph("%s's profile isn't publically visible!"%user["username"])
+                        self.view.body = ps.baseHeading("How sad!", size=2) + ps.baseParagraph("%s's profile isn't publically visible!"%user["username"])

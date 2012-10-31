@@ -70,7 +70,7 @@ class labelPublic(flagrObject):
                                         ("placement", "bottom")]) + "</li>"
 
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Public Flags" % (ps.baseIcon("flag")), size=1), width=5),
+                        ps.baseColumn(ps.baseHeading("%s Public Flags" % (ps.baseIcon("flag")), size=2), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
