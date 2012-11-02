@@ -156,7 +156,7 @@ class usersEdit_admin(adminObject):
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/admin/users")])
-                        c.session.pushAlert("Something went wrong while updateing the user, id: %s. Heres the edit form again. Sorry!" % ps.baseBold(user.id), icon="fire", title="OH SNAP!", type="error")
+                        c.session.pushAlert("Something went wrong while updateing the user, id: %s. Heres the edit form again. Sorry! %s" % (ps.baseBold(user.id), exc), icon="fire", title="OH SNAP!", type="error")
 
 
 @route("/admin/user/(.*)/delete")
@@ -257,4 +257,4 @@ class usersNew_admin(adminObject):
 
                 except Exception as exc:
                         self.head = ("303 SEE OTHER", [("location", "/admin/users/new")])
-                        c.session.pushAlert("Something went wrong while creating the user: %s. Heres the edit form again. Sorry!" % ps.baseBold(name), icon="fire", title="OH SNAP!", type="error")
+                        c.session.pushAlert("Something went wrong while creating the user: %s. Heres the edit form again. Sorry! %s" % (ps.baseBold(user["username"]), exc), icon="fire", title="OH SNAP!", type="error")

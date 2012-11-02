@@ -36,9 +36,6 @@ class godIndex_god(godObject):
                 hero = ps.baseHeading(ps.baseIcon("eye-open") + " Welcome, Deity", size=1)
                 hero += ps.baseParagraph("This is the deity panel. From here, you will be able to control and view information concerning several aspects of the website which no one else has access to.")
 
-                pageHead = ps.baseRow(hero)
-
-
                 page = ps.baseTextThumbnail(label=ps.baseHeading(ps.baseIcon("flag") + " All the Flags"),
                                 caption=ps.baseParagraph("""
 Edit, delete and manage every flag in fla.gr....

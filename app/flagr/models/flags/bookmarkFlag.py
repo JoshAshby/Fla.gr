@@ -13,7 +13,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import flagr.models.baseFlag as bf
 import models.blocks.helpers as helpers
 

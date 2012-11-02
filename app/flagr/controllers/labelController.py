@@ -29,7 +29,6 @@ class labelView(flagrObject):
         def GET(self):
                 label = self.members[0]
                 flags = lm.labeledFlagList(label, md=True)
-                view = self.members["view"] if self.members.has_key("view") else ""
 
                 self.view["title"] = "Flags in label: %s" % label
 

@@ -13,8 +13,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
-
 import string
 import random
 
@@ -27,7 +25,7 @@ class baseBlockModel(object):
                         self.id = u"".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
                 else:
                         self.id = id
- 
+
                 self.key = "%s:%s" % (self.objectID, self.id)
                 for field in self.fields:
                         fType = type(field)

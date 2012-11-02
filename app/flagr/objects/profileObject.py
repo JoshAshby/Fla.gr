@@ -12,7 +12,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import seshat.baseObject as bo
 import flagr.views.flagrView as fv
 

@@ -13,15 +13,11 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import siteConfig.dbConfig as dbc
-
-import string
-import random
 
 
 class blockHash(object):
-        def __init__(self, id, keyID, dbName, dataType=str, parts):
+        def __init__(self, id, keyID, dbName, parts, dataType=str):
                 self.id = id
                 self.keyID = keyID
                 self.dbName = dbName

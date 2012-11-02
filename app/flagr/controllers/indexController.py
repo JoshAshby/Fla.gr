@@ -71,7 +71,7 @@ class index(publicObject):
                                                                 data=[("original-title", "Expand Post")],
                                                                 rel="tooltip"),
                                                         ])
- 
+
                                         content += ps.baseRow(ps.baseColumn(ps.baseAnchor(ps.baseHeading(post.title, size=1), link=c.baseURL+"/post/"+post.id)))
                                         content += ps.baseRow(ps.baseColumn(ps.baseWell(
                                                         ps.baseColumn(ps.baseBold("Author: ", classes="muted"))+

@@ -251,7 +251,6 @@ class carouselDelete_admin(adminObject):
 class carouselNew_admin(adminObject):
         def GET(self):
                 self.view.title = "Creating a new carousel item"
-                title = ps.baseHeading("%s Creating a new carousel..." % (ps.baseIcon("play")), size=1)
 
                 elements = [
                 {"content": ps.baseTextarea(classes="span8", name="content"),

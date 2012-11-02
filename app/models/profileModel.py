@@ -15,7 +15,6 @@ joshuaashby@joshashby.com
 import config as c
 import siteConfig.dbConfig as dbc
 import models.baseProfile as bpro
-import models.blocks.helpers as helpers
 import markdown
 
 def profile(userID=None, md=True):

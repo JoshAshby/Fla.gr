@@ -34,8 +34,6 @@ class adminIndex_admin(adminObject):
                 hero = ps.baseHeading(ps.baseIcon("dashboard") + " Howdy, Admin!", size=1)
                 hero += ps.baseParagraph("This is the admin panel. Here you can manage aspects of the site such as users, front page posts and sometime later, even more!")
 
-                pageHead = ps.baseRow(hero)
-
                 page = ps.baseTextThumbnail(label=ps.baseHeading(ps.baseIcon("rss") + " Blog posts"),
                                 caption=ps.baseParagraph("""
 Edit, delete and create front page blog posts.

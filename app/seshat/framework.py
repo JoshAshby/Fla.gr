@@ -28,7 +28,6 @@ import random
 import Cookie
 import re
 import urllib
-import sys
 
 import models.basic.sessionModel as sm
 import models.blocks.helpers as helpers

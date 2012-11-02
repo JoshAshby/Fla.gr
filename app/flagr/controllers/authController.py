@@ -31,19 +31,30 @@ class login(publicObject):
                 Display the login page.
                 """
                 if c.session.loggedIn:
-                        self.head = ("303 SEE OTHER", [("location", "/your/flags")])
+                        self.head = ("303 SEE OTHER",
+                                [("location", "/your/flags")])
                         c.session.pushAlert("Hey look, you're already signed in!")
 
                 else:
-                        loginForm = ps.baseHeading("Please Login...", size=2) + ps.baseHorizontalForm(action=c.baseURL+"/auth/login",
+                        loginForm = ps.baseHeading("Please Login...", size=2)
+                        loginForm += ps.baseHorizontalForm(action=c.baseURL+"/auth/login",
                                 method="POST",
                                 fields=[
-                                {"content": ps.baseInput(type="text", name="username", placeholder="Username", classes="span6")},
+                                {"content": ps.baseInput(type="text",
+                                    name="username",
+                                    placeholder="Username", classes="span6")},
                                 "<br><br>",
-                                {"content": ps.baseInput(type="password", name="password", placeholder="Password", classes="span6")}],
-                                actions = [ps.baseSubmit("Login"), " or ", ps.baseAnchor("Register", link=c.baseURL+"/auth/register")])
+                                {"content": ps.baseInput(type="password",
+                                    name="password",
+                                    placeholder="Password",
+                                    classes="span6")}],
+                                actions = [ps.baseSubmit("Login"), " or ",
+                                    ps.baseAnchor("Register",
+                                        link=c.baseURL+"/auth/register")])
 
-                        self.view["body"] = ps.baseColumn(loginForm, width=6, offset=2)
+                        self.view["body"] = ps.baseColumn(loginForm,
+                            width=6,
+                            offset=2)
 
         def POST(self):
                 """
@@ -110,7 +121,7 @@ class register(publicObject):
                 """
                 if not self.members["username"] or not self.members["newpassword"] or not self.members["newtwopassword"] or not self.members["email"]:
                         self.head = ("303 SEE OTHER", [("location", "/auth/register")])
-                        c.session.pushAlert("You need to fill out the username, email and both password fields!" % exc, icon="fire", title="OH SNAP!", type="error")
+                        c.session.pushAlert("You need to fill out the username, email and both password fields!", icon="fire", title="OH SNAP!", type="error")
 
                 try:
                         test = profilem.findUser(self.members["username"])

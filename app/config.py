@@ -14,7 +14,6 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import re
-import os
 import models.basic.sessionModel as sm
 
 appName = "fla.gr"
@@ -44,7 +43,7 @@ Next, do you want this framework to do some extra debugging?
 debug = True
 
 """
-Finally we need to define the base url for various 
+Finally we need to define the base url for various
 things such as static assets and what not.
 """
 baseURL = "http://localhost"

@@ -11,10 +11,8 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import siteConfig.dbConfig as dbc
 import flagr.models.baseMessage as bmess
-import models.blocks.helpers as helpers
 import markdown
 
 def message(id=None, md=True):
@@ -53,7 +51,7 @@ class mail(object):
                                 count += 1
                 return count
 
-        def mailBox(unread=False):
+        def mailBox(self, unread=False):
                 returnMess = []
                 returnHTML = ""
                 if unread:

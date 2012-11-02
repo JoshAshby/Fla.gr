@@ -11,7 +11,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import flagr.models.baseCarousel as bc
 
 

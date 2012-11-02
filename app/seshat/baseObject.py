@@ -22,7 +22,7 @@ class baseHTTPObject(object):
         __level__ = None
         __login__ = "False"
         __menu__ = ""
-        head = ("200 OK", 
+        head = ("200 OK",
                 [
                         ("Content-type", "text/html"),
                 ])
@@ -56,7 +56,6 @@ class baseHTTPObject(object):
 
                 content = ""
 
-                matches = c.authRegex.findall(str(self.__class__.__name__))
                 if not error and self.__level__:
                         if c.session.user["level"] == "GOD":
                                 """

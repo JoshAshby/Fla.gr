@@ -242,7 +242,6 @@ class postsDelete_admin(adminObject):
 class postsNew_admin(adminObject):
         def GET(self):
                 self.view.title = "Creating a new post"
-                title = ps.baseHeading("%s Creating a new post..." % (ps.baseIcon("rss")), size=1)
 
                 elements = [
                 ps.baseInput(type="text", classes="span8", name="title", placeholder="Title"),

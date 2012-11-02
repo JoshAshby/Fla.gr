@@ -55,7 +55,14 @@ def update():
 
                 for field in flag.fields:
                         name = field[0] if type(field) != str else field
-                        if name not in ["title", "description", "labels", "time", "visibility", "author", "userID", "flagType"]:
+                        if name not in ["title",
+                            "description",
+                            "labels",
+                            "time",
+                            "visibility",
+                            "author",
+                            "userID",
+                            "flagType"]:
                                 if name in ["url"]:
                                         url = flag["url"]
 

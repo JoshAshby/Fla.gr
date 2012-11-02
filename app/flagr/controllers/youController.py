@@ -598,7 +598,7 @@ class userEdit(profileObject):
                         if self.members["oldpassword"]:
                                 if user["password"] == bcrypt.hashpw(self.members["oldpassword"], user["password"]):
                                         if self.members["newpassword"] == self.members["newtwopassword"]:
-                                                password = self.members["newpassword"]
+                                                user["password"] = self.members["newpassword"]
                                         else:
                                                 raise Exception("New passwords need to match!")
                                 else:

@@ -11,10 +11,8 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import siteConfig.dbConfig as dbc
 import flagr.models.carousels.newsCarousel as nc
-import models.blocks.helpers as helpers
 import markdown
 
 def carousel(id=None, md=False):

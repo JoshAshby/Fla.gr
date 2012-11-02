@@ -86,9 +86,6 @@ class labelPublic(flagrObject):
         </li>
 </ul>""" % (prevClass, prevLink, nextClass, nextLink)
 
-                if self.members.has_key("view"): view = self.members["view"]
-                else: view = ""
-
                 self.view["title"] = "Public Flags"
 
                 tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link="/flags",

@@ -13,11 +13,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import siteConfig.dbConfig as dbc
-
-import string
-import random
 
 
 class blockSet(object):
@@ -25,7 +21,7 @@ class blockSet(object):
                 self.id = id
 
                 if(self.id and getattr(dbc, self.dbName).exists(self.keyID+self.id)):
-                        list = [ dataType(i) for i in getattr(dbc self.dbName).smembers(self.keyID+self.id) ]
+                        list = [ dataType(i) for i in getattr(dbc, self.dbName).smembers(self.keyID+self.id) ]
                         self.current = list
                 else:
                         self.current = list()

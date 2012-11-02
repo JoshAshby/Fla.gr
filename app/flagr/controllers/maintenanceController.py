@@ -12,8 +12,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
-
 from seshat.route import route
 
 from flagr.objects.publicObject import publicObject

@@ -23,9 +23,6 @@ from flagr.objects.flagrObject import flagrObject
 import flagr.views.pyStrap.pyStrap as ps
 import flagr.config.flagrConfig as fc
 import flagr.models.flagModel as fm
-import flagr.models.labelModel as lm
-
-import models.profileModel as profilem
 
 import logging
 logger = logging.getLogger(c.logName+".search")

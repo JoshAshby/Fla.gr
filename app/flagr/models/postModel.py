@@ -11,10 +11,8 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import siteConfig.dbConfig as dbc
 import flagr.models.posts.normalPost as np
-import models.blocks.helpers as helpers
 import markdown
 
 def post(id=None, md=False):

@@ -13,10 +13,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
 import siteConfig.dbConfig as dbc
-import string
-import random
 import bcrypt
 
 import models.basic.baseModel as bm
