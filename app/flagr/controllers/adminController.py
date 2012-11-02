@@ -60,3 +60,4 @@ Edit, delete and create system users.
                                 classes="span3")
 
                 self.view["body"] = ps.baseHero(hero) + ps.baseUL(page, classes="thumbnails")
+                self.view.sidebar = ""

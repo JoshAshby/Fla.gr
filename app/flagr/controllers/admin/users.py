@@ -31,14 +31,15 @@ class usersIndex_admin(adminObject):
                 users = profilem.userList()
 
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Users" % ps.baseIcon("group"), size=1)),
+                        ps.baseColumn(ps.baseHeading("%s Users" % ps.baseIcon("group"), size=2)),
                                 ps.baseButtonGroup([
                                         ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/users/new",
-                                        data=[("original-title", "New User")],
+                                        data=[("original-title", "New User"),
+                                                ("placement", "bottom")],
                                         rel="tooltip",
                                         classes="btn-info")
                                 ], classes="pull-right")
-                        ]) + "<hr>"
+                        ])
 
 
                 if users:
@@ -71,9 +72,10 @@ class usersIndex_admin(adminObject):
                                         ps.baseColumn(actions, classes="pull-right")
                                         ), width=8))
 
-                                content += ps.baseRow([
-                                        ps.baseColumn(ps.baseParagraph("Notes: "+user["adminNotes"]), width=8)
-                                        ])
+                                if user["adminNotes"]:
+                                        content += ps.baseRow([
+                                                ps.baseColumn(ps.baseParagraph("Notes: "+user["adminNotes"]), width=7, offset=1)
+                                                ])
                                 content += "<hr>"
                 else:
                         content = "Uh, well this is bad... unless you don't have god permissions and can't see any of the deities..."
@@ -192,7 +194,7 @@ class usersDelete_admin(adminObject):
 class usersNew_admin(adminObject):
         def GET(self):
                 """
-                This gives a nice little list of all the users in the system, 
+                This gives a nice little list of all the users in the system,
                 with the exception of users marked as having GOD level.
                 """
                 self.view["title"] = "Create a new user"

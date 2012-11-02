@@ -94,7 +94,7 @@ class baseHTMLView(baseView):
                 <link href="%(assetURL)s/css/bootstrap.min.css" rel="stylesheet">
                 <link rel="stylesheet" href="%(assetURL)s/css/font-awesome.css">
         </head>
-        <body>
+        <body style="padding-top: 40px">
                 %(body)s
                 <script src="http://code.jquery.com/jquery-latest.js"></script>
                 <script src="%(assetURL)s/js/bootstrap.js"></script>

@@ -38,7 +38,7 @@ class smartView(object):
                 str - String of HTML which represents a HTML page
 
         """
-        __defaultParts__ = [ "title", "navbar", "header", "sidebar", "body", "footer", "page", "alerts", "fluid", "scripts", "css"]
+        __defaultParts__ = [ "title", "navbar", "header", "sidebar", "body", "footer", "page", "alerts", "fluid", "scripts", "css", "tabbar"]
         def __init__(self, **kwargs):
                 for part in self.__defaultParts__:
                         setattr(self, part, "")
@@ -104,12 +104,17 @@ class smartView(object):
 
                 content += self.alerts
 
-                if self.sidebar:
+                if self.sidebar and self.tabbar:
+                        self.sidebar = ps.baseColumn(self.sidebar, width=3)
+                        self.body = ps.baseColumn(self.body, width=9)
+                        row = ps.baseRow([self.sidebar, self.body])
+                elif self.sidebar:
                         self.sidebar = ps.baseColumn(self.sidebar, width=4)
                         self.body = ps.baseColumn(self.body, width=8)
-
                         row = ps.baseRow([self.sidebar, self.body])
-
+                elif self.tabbar:
+                        self.body = ps.baseColumn(self.body, width=11, offset=1)
+                        row = ps.baseRow(self.body)
                 else:
                         self.body = ps.baseColumn(self.body, width=10, offset=1)
                         row = ps.baseRow(self.body)
@@ -142,10 +147,8 @@ class smartView(object):
 class flagrView(smartView):
         def finishInit(self):
                 flags = ps.baseIcon("flag")
-                labels = ps.baseIcon("tags")
-                public = ps.baseIcon("globe")
 
-                stuffMail = ""
+#                stuffMail = ""
                 stuffProfile = ""
 
                 search = ps.baseBasicForm(
@@ -156,22 +159,20 @@ class flagrView(smartView):
                         classes="form-inline navbar-form")
 
                 if c.session.loggedIn:
-                        messCount = c.session.mail.unreadCount()
-                        readCount = c.session.mail.readCount()
-                        if messCount:
-                                messCounter = ps.baseBadge(ps.baseBadge(messCount, classes="badge-important") + " %s"%readCount, style="padding-left: 0px")
-                        else:
-                                messCounter = ps.baseBadge(str(readCount))
+                        newNote = {"name": "%s New Note Flag"%ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"}
+                        newBookmark = {"name": "%s New Bookmark Flag"%ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}
+#                        messCount = c.session.mail.unreadCount()
+#                        readCount = c.session.mail.readCount()
+#                        if messCount:
+#                                messCounter = ps.baseBadge(ps.baseBadge(messCount, classes="badge-important") + " %s"%readCount, style="padding-left: 0px")
+#                        else:
+#                                messCounter = ps.baseBadge(str(readCount))
 
-                        messages = "%s %s" % (ps.baseIcon("envelope-alt"), messCounter)
-                        stuffMail = {"name": messages, "link": c.baseURL+"/your/messages"}
+#                        messages = "%s %s" % (ps.baseIcon("envelope-alt"), messCounter)
                         stuffProfile = {"name": ps.baseIcon("user"), "link": c.baseURL+"/your/flags"}
                         name = "Heya %s!"%(c.session.user["username"])
                         logout = ps.baseIcon("road") + " Logout"
                         admin = ps.baseIcon("dashboard") + " Admin Panel"
-                        flagLink = {"name": ps.baseIcon("flag")+" Your flags", "link": c.baseURL+"/your/flags"}
-                        labelLink = {"name": ps.baseIcon("tags") +" Your labels", "link": c.baseURL+"/your/labels"}
-                        profileLink = {"name": ps.baseIcon("user")+" You!", "link": c.baseURL+"/you"}
                         settingLink = {"name": ps.baseIcon("cogs")+" Your settings", "link": c.baseURL+"/your/settings"}
 
                         adminSub = ps.baseMenu(name="adminSubDropdown",
@@ -180,24 +181,24 @@ class flagrView(smartView):
                                                 {"name": ps.baseIcon("group")+" Users", "link": c.baseURL+"/admin/users"}])
 
                         deitySub = ps.baseMenu(name="deitySubDropdown",
-                                        items=[{"name": ps.baseIcon("flag")+" All flags", "link": c.baseURL+"/god/flags"},
-                                                {"name": ps.baseIcon("tags")+" All labels", "link": c.baseURL+"/god/labels"}])
+                                        items=[{"name": ps.baseIcon("flag")+" All the Flags", "link": c.baseURL+"/god/flags"},
+                                                {"name": ps.baseIcon("search")+" Search Flags", "link": c.baseURL+"/god/search"},
+                                                {"name": ps.baseIcon("magic")+" Reindex Search", "link": c.baseURL+"/god/search/reindex"}])
 
-                        youSub = {"subName": "%s You"%ps.baseIcon("user"),
-                                "subLink": c.baseURL+"/you",
-                                "sub": ps.baseMenu(name="youSubDropdown",
-                                        items=[
-                                                labelLink,
-                                                settingLink
-                                                ]
-                                        )
-                                }
+                        newSub = {"subName": "%s Your Profile"%ps.baseIcon("user"),
+                                        "subLink": c.baseURL+"/you",
+                                        "sub": ps.baseMenu(name="newSubDropdown",
+                                                items=[
+                                                        newNote,
+                                                        newBookmark
+                                                        ])
+                                        }
 
                         if c.session.user["level"] == "GOD":
                                 deity = ps.baseIcon("eye-open") + " Deity Panel"
 
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[profileLink,
+                                        items=[newSub,
                                                 "divider",
                                                 {"subName": deity, "subLink": c.baseURL+"/god", "sub": deitySub},
                                                 {"subName": admin, "subLink": c.baseURL+"/admin", "sub": adminSub},
@@ -207,7 +208,7 @@ class flagrView(smartView):
 
                         elif c.session.user["level"] == "admin":
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[profileLink,
+                                        items=[newSub,
                                                 "divider",
                                                 {"subName": admin, "subLink": c.baseURL + "/admin", "sub": adminSub},
                                                 "divider",
@@ -216,7 +217,7 @@ class flagrView(smartView):
 
                         else:
                                 userDropdown = ps.baseMenu(name="userDropdown",
-                                        items=[profileLink,
+                                        items=[newSub,
                                                 "divider",
                                                 settingLink,
                                                 {"name": logout, "link": c.baseURL+"/auth/logout"}])
@@ -242,7 +243,8 @@ class flagrView(smartView):
 #                name = ps.baseSmall(name)
 
                 self.navbar = ps.baseNavbar(
-                        classes="navbar-static-top",
+#                        classes="navbar-static-top",
+                        classes="navbar-fixed-top",
                         brand={"name": c.appNameNav, "link": c.baseURL},
                         left=[{"form": search},
                                 {"name": flags, "link": c.baseURL+"/flags"},
@@ -264,6 +266,9 @@ class flagrView(smartView):
                       selector: "a[rel=tooltip]"
                 })
                 $('.nav-tabs').tooltip({
+                        selector: "a[rel=tooltip]"
+                })
+                $('.nav-pills').tooltip({
                         selector: "a[rel=tooltip]"
                 })
                 </script>

@@ -37,21 +37,28 @@ class carouselIndex_admin(adminObject):
 
                 self.view["title"] = "Carousel"
 
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Front page carousel" % ps.baseIcon("play"), size=1)),
-                                ps.baseButtonGroup([
-                                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/carousels/new",
-                                        data=[("original-title", "New Item")],
-                                        rel="tooltip",
-                                        classes="btn-info"),
-                                        ps.baseAButton(ps.baseIcon("wrench"),
-                                                link=c.baseURL+"/admin/carousels/drafts",
-                                                data=[("original-title", "View Drafts")],
-                                                rel="tooltip",
-                                                classes="")
+                tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("play"), link=c.baseURL+"/admin/carousels",
+                                rel="tooltip",
+                                data=[("original-title", "All Items"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("wrench"), link=c.baseURL+"/admin/carousels/drafts",
+                                rel="tooltip",
+                                data=[("original-title", "Draft Items"),
+                                        ("placement", "bottom")]) +"</li>"
 
-                                        ], classes="pull-right")
-                        ]) + "<hr>"
+                tabs += ps.baseButtonGroup([
+                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/carousels/new",
+                        data=[("original-title", "New Item"),
+                                ("placement", "bottom")],
+                        rel="tooltip",
+                        classes="btn-info")
+                        ], classes="pull-right")
+
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Carousels Items" % (ps.baseIcon("play")), size=2), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=3)
+                        ])
 
 
                 if carousel:
@@ -61,7 +68,7 @@ class carouselIndex_admin(adminObject):
                                         other = ps.baseAnchor(ps.baseLabel("%s Draft" % ps.baseIcon("eye-close")), link=c.baseURL+"/admin/carousels/drafts")
                                 else:
                                         other = ps.baseLabel("%s Published" % ps.baseIcon("globe"))
-  
+
                                 content += ps.baseRow([
                                         ps.baseColumn(ps.baseParagraph(carouselItem["content"][:50]+ps.baseAnchor("...", link=c.baseURL+"/admin/carousel/"+carouselItem.id))),
                                         ])
@@ -105,21 +112,29 @@ class carouselDrafts_admin(adminObject):
 
                 self.view["title"] = "Carousel drafts"
 
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Front page carousel: Drafts" % ps.baseIcon("play"), size=1)),
-                                ps.baseButtonGroup([
-                                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/carousels/new",
-                                        data=[("original-title", "New Item")],
-                                        rel="tooltip",
-                                        classes="btn-info"),
-                                        ps.baseAButton(ps.baseIcon("wrench"),
-                                                link=c.baseURL+"/admin/carousels",
-                                                data=[("original-title", "View All")],
-                                                rel="tooltip",
-                                                classes="")
 
-                                        ], classes="pull-right")
-                        ]) + "<hr>"
+                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("play"), link=c.baseURL+"/admin/carousels",
+                                rel="tooltip",
+                                data=[("original-title", "All Items"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("wrench"), link=c.baseURL+"/admin/carousels/drafts",
+                                rel="tooltip",
+                                data=[("original-title", "Draft Items"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += ps.baseButtonGroup([
+                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/carousels/new",
+                        data=[("original-title", "New Item"),
+                                ("placement", "bottom")],
+                        rel="tooltip",
+                        classes="btn-info")
+                        ], classes="pull-right")
+
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Carousels Drafts" % (ps.baseIcon("play")), size=2), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=3)
+                        ])
 
 
                 content = ""

@@ -22,6 +22,7 @@ import flagr.views.pyStrap.pyStrap as ps
 
 from flagr.controllers.god.allFlags import *
 from flagr.controllers.god.allLabels import *
+from flagr.controllers.god.search import *
 
 import models.profileModel as profilem
 
@@ -37,7 +38,24 @@ class godIndex_god(godObject):
 
                 pageHead = ps.baseRow(hero)
 
-                page = ""
+
+                page = ps.baseTextThumbnail(label=ps.baseHeading(ps.baseIcon("flag") + " All the Flags"),
+                                caption=ps.baseParagraph("""
+Edit, delete and manage every flag in fla.gr....
+<br />
+<br />
+%s
+                                        """ % ps.baseAButton("%s Flags"%ps.baseIcon("flag"), link=c.baseURL+"/god/flags", classes="btn-info")),
+                                classes="span3") + ps.baseTextThumbnail(label="",
+                                caption="",
+                                classes="span4") + ps.baseTextThumbnail(label=ps.baseHeading(ps.baseIcon("search") + " Search Update"),
+                                caption=ps.baseParagraph("""
+Update the search index manually
+<br />
+<br />
+%s
+                                        """ % ps.baseAButton("%s Search Update"%ps.baseIcon("search"), link=c.baseURL+"/god/search/reindex", classes="btn-info")),
+                                classes="span3")
 
                 self.view["body"] = ps.baseHero(hero) + ps.baseUL(page, classes="thumbnails")
                 self.view.sidebar = ""
@@ -53,8 +71,8 @@ class setup(userObject):
                 user["level"] = "GOD"
                 user["adminNotes"] = ""
                 user["password"] = "josh"
-                user["about"] = """#Hi there!  
-  
+                user["about"] = """#Hi there!
+
 My names transientBug, but you can also call me Josh. I'm the programmer and developer of fla.gr!
                 """
                 user["visibility"] = True

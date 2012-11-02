@@ -30,7 +30,7 @@ class newFlag(flagrObject):
         __login__ = True
         def GET(self):
                 flag = fm.flag(self.members[0])
-                if flag["userID"] != c.session.userID:
+                if flag["userID"] != c.session.userID and not c.session.user["level"] == "GOD":
                         self.head = ("303 SEE OTHER", [("location", str("/flag/%s/copy"%flag.id))])
                         c.session.pushAlert(("You didn't create the flag: %s, but we can allow you to make a copy of it!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh no!")
                         return
@@ -71,7 +71,7 @@ class newFlag(flagrObject):
 
         def POST(self):
                 flag = fm.flag(self.members[0])
-                if flag["userID"] != c.session.userID:
+                if flag["userID"] != c.session.userID and not c.session.user["level"] == "GOD":
                         self.head = ("303 SEE OTHER", [("location", str("/flag/#s/copy"%flag.id))])
                         c.session.pushAlert(("You didn't create the flag: %s, but we can allow you to make a copy of it!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh no!")
                         return
@@ -174,7 +174,7 @@ class deleteFlag(flagrObject):
         def GET(self):
                 id = self.members[0]
                 flag = fm.flag(id)
-                if flag["userID"] != c.session.userID:
+                if flag["userID"] != c.session.userID and not c.session.user["level"] == "GOD":
                         self.head = ("303 SEE OTHER", [("location", str("/flags"))])
                         c.session.pushAlert("You didn't create the flag: %s, so we can't allow you to delete it. Sorry!", type="error", icon="fire", title="Oh no!")
                         return
@@ -182,7 +182,7 @@ class deleteFlag(flagrObject):
                 self.view.title = "Delete flag %s" % flag.title
 
                 confirm = ps.baseHeading("Are you sure?", size = 1, classes="text-error")
-                confirm += ps.baseParagraph("You are about to delete your flag: %s"% flag.title , classes="text-error")
+                confirm += ps.baseHeading("You are about to delete your flag: %s"% flag.title , classes="text-error", size=3)
                 confirm += ps.baseParagraph("Pressing confirm will delete this flag forever and you will not be able to recover it. Are you sure you would like to continue?", classes="text-warning")
 
                 confirmForm = ps.baseBasicForm(action=c.baseURL+"/flag/%s/delete"%flag.id,
@@ -197,7 +197,7 @@ class deleteFlag(flagrObject):
                 id = self.members[0]
                 flag = fm.flag(id)
 
-                if flag["userID"] != c.session.userID:
+                if flag["userID"] != c.session.userID and not c.session.user["level"] == "GOD":
                         self.head = ("303 SEE OTHER", [("location", str("/flags"))])
                         c.session.pushAlert(("You didn't create the flag: %s, so we can't allow you to delete it. Sorry!" % ps.baseBold(flag.title)), type="error", icon="fire", title="Oh snap!")
                         return
@@ -278,7 +278,7 @@ class viewFlag(flagrObject):
 
                 flag = fm.flag(flagID, md=True)
 
-                if not flag.visibility and flag.userID != c.session.userID:
+                if not flag.visibility and flag.userID != c.session.userID and not c.session.user["level"] == "GOD":
                         content = ps.baseHeading("Oh no!", size=2)
                         content += ps.baseParagraph("This flag isn't public, and your either not logged in, or not the owner of the flag!")
 
@@ -286,7 +286,7 @@ class viewFlag(flagrObject):
                         self.view["title"] = "Viewing flag: %s" % (flag.title)
                         content = ""
 
-                        if c.session.loggedIn and c.session.userID == flag["userID"]:
+                        if c.session.loggedIn and c.session.userID == flag["userID"] or c.session.user["level"] == "GOD":
                                 edit = ps.baseColumn(
                                         ps.baseButtonGroup([
                                                 ps.baseAButton("%s" % ps.baseIcon("copy"),
@@ -325,10 +325,10 @@ class viewFlag(flagrObject):
 
                         content += ps.baseRow(ps.baseColumn(ps.baseWell(
                                         ps.baseColumn(ps.baseBold("Author: ", classes="muted")) +
-                                        ps.baseColumn(author) + 
+                                        ps.baseColumn(author) +
                                         ps.baseColumn(ps.baseBold("When: ", classes="muted")) +
-                                        ps.baseColumn(flag.time) + 
-                                        ps.baseColumn(vis) + 
+                                        ps.baseColumn(flag.time) +
+                                        ps.baseColumn(vis) +
                                         ps.baseColumn(edit, classes="pull-right")
                                 ), width=10
                         ))

@@ -26,6 +26,6 @@ class adminObject(bo.baseHTTPObject):
        def finishInit(self):
                self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Things to do..."},
                 {"link": c.baseURL + "/admin", "name": "%s Front Panel"%ps.baseIcon("dashboard")},
-                {"link": c.baseURL + "/admin/posts", "name": "%s Front Page Posts"%ps.baseIcon("rss")},
-                {"link": c.baseURL + "/admin/carousels", "name": "%s Front Page Carousel"%ps.baseIcon("play")},
-                {"link": c.baseURL + "/admin/users", "name": "%s Manage Some Users" % ps.baseIcon("group")}]))
+                {"link": c.baseURL + "/admin/posts", "name": "%s Blog Posts"%ps.baseIcon("rss")},
+                {"link": c.baseURL + "/admin/carousels", "name": "%s Blog Carousel"%ps.baseIcon("play")},
+                {"link": c.baseURL + "/admin/users", "name": "%s Manage Users" % ps.baseIcon("group")}]))

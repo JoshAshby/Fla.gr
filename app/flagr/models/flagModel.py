@@ -47,7 +47,7 @@ def pushFlag(flagType=None):
         else:
                 raise Exception("No flagType supplied, aborting!")
 
-def flagList(userID=None, md=False, flags=[]):
+def flagList(userID=None, md=False, flags=[], private=False, public=False):
         keys = dbc.redisFlagServer.keys("flag:*:id")
         flagList = []
         def addFlag(key):
@@ -89,7 +89,14 @@ def flagList(userID=None, md=False, flags=[]):
                         for key in keys:
                                 key = key.strip(":id")
                                 if dbc.redisFlagServer.get(key+":userID") == c.session.userID:
-                                        addFlag(key)
+                                        if public:
+                                                if helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
+                                                        addFlag(key)
+                                        elif private:
+                                                if not helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
+                                                        addFlag(key)
+                                        else:
+                                                addFlag(key)
         else:
                 """
                 Someone wants specific flags so it's assumed they
@@ -98,5 +105,42 @@ def flagList(userID=None, md=False, flags=[]):
                 for key in flags:
                         key = key.strip("flag::id")
                         addFlag(key)
+
+        return flagList
+
+def deityFlagList(userID=None, md=False, private=False, public=False):
+        keys = dbc.redisFlagServer.keys("flag:*:id")
+        flagList = []
+        def addFlag(key):
+                returnFlag = flag(key)
+                if md:
+                        returnFlag["description"] = markdown.markdown(returnFlag["description"])
+
+                flagList.append(returnFlag)
+
+        if not userID:
+                for key in keys:
+                        key = key.strip(":id")
+                        if public:
+                                if helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
+                                        addFlag(key)
+                        elif private:
+                                if not helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
+                                        addFlag(key)
+                        else:
+                                addFlag(key)
+
+        else:
+                for key in keys:
+                        key = key.strip(":id")
+                        if dbc.redisFlagServer.get(key+":userID") == userID:
+                                if public:
+                                        if helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
+                                                addFlag(key)
+                                elif private:
+                                        if not helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
+                                                addFlag(key)
+                                else:
+                                        addFlag(key)
 
         return flagList

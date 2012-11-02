@@ -32,39 +32,73 @@ class userViewLabels(publicObject):
         def GET(self):
                 content = ""
                 user = profilem.findUser(self.members[0])
-                self.view["title"] = user["username"] + "'s' labels"
+                if user:
+                        self.view["title"] = user["username"] + "'s' labels"
 
-                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link="%s/people/%s" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "%s's Profile"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link="%s/people/%s/flags" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "%s's Flags"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("tags"), link="%s/people/%s/labels" % (c.baseURL, user.username),
-                                rel="tooltip",
-                                data=[("original-title", "%s's Labels"%user.username),
-                                        ("placement", "bottom")]) + "</li>"
+                        tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link="%s/people/%s" % (c.baseURL, user.username),
+                                        rel="tooltip",
+                                        data=[("original-title", "%s's Profile"%user.username),
+                                                ("placement", "bottom")]) + "</li>"
+                        tabs += "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link="%s/people/%s/flags" % (c.baseURL, user.username),
+                                        rel="tooltip",
+                                        data=[("original-title", "%s's Flags"%user.username),
+                                                ("placement", "bottom")]) + "</li>"
+                        tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("tags"), link="%s/people/%s/labels" % (c.baseURL, user.username),
+                                        rel="tooltip",
+                                        data=[("original-title", "%s's Labels"%user.username),
+                                                ("placement", "bottom")]) + "</li>"
 
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("tags"), user["username"]), size=2), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
-                        ])
-                labels = lm.labelList(user.id)
-                if not labels:
-                        labels = "They have no labels yet!"
+                        pageHead = ps.baseRow([
+                                ps.baseColumn(ps.baseHeading("%s %s" % (ps.baseIcon("tags"), user["username"]), size=2), width=5),
+                                ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                                ])
+                        labels = lm.labelList(user.id)
+                        if not labels:
+                                labels = "They have no labels yet!"
 
-                content += ps.baseRow(ps.baseColumn(labels))
+                        content += ps.baseRow(ps.baseColumn(labels))
 
-                self.view.body = pageHead + content
+                        self.view.body = pageHead + content
+                else:
+                        self.view.body = """Oh no, we can't find that person in our system, are you sure that is their correct username?"""
 
 
 @route("/people/(.*)/flags")
 class userViewFlags(publicObject):
         def GET(self):
-                content = ""
+                start = int(self.members["start"]) if self.members.has_key("start") else 0
+
                 user = profilem.findUser(self.members[0])
+                flags = fm.flagList(user.id, True)
+
+                nextClass = ""
+                prevClass = ""
+
+                if start == 0:
+                        prevClass = "disabled"
+                        prevLink = "#"
+                elif start == 10:
+                        prevLink = c.baseURL+"/flags"
+                else:
+                        prevLink = c.baseURL+"/flags?start=" + str(start-10)
+
+                if len(flags[start+10:start+20]) <= 0:
+                        nextClass = "disabled"
+                        nextLink = "#"
+                else:
+                        nextLink = c.baseURL+"/flags?start=" + str(start+10)
+
+                flags = flags[start:start+10]
+
+                pager = """<ul class="pager">
+        <li class="previous %s">
+                <a href="%s">&larr; Previous</a>
+        </li>
+        <li class="next %s">
+                <a href="%s">Next &rarr;</a>
+        </li>
+</ul>""" % (prevClass, prevLink, nextClass, nextLink)
+                content = ""
                 self.view["title"] = user["username"] + "'s 'flags"
 
                 tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link="%s/people/%s" % (c.baseURL, user.username),
@@ -85,7 +119,6 @@ class userViewFlags(publicObject):
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
-                flags = fm.flagList(user.id, True)
                 buildMessage = "Uh oh! Looks like they don't have any flags at the moment."
 
                 if flags:
@@ -96,7 +129,7 @@ class userViewFlags(publicObject):
                 content += ps.baseRow(ps.baseColumn(flagList, id="flags"))
 
 
-                self.view.body = pageHead + content
+                self.view.body = pageHead + content + pager
 
 
 @route("/people/(.*)")

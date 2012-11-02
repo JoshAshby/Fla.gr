@@ -56,7 +56,7 @@ class labelView(flagrObject):
                 if not labelsUnder:
                         labelsUnder = "You've hit bottom! There's nothing stacked under this label!"
 
-                pageHead += ps.baseRow([ps.baseColumn(ps.baseBold("%s Stacked labels:"%ps.baseIcon("tags"), classes="muted")), ps.baseColumn(labelsUnder)])
+                pageHead += ps.baseRow([ps.baseColumn(ps.baseBold("%s Stacked labels:"%ps.baseIcon("tags"), classes="muted")), ps.baseColumn(labelsUnder)]) + "<br />"
 
 
                 buildMessage = "OH NO! Either something went wrong, or there aren't any publicly visible flags under this label just yet!"

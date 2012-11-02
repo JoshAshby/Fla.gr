@@ -105,3 +105,29 @@ def labeledFlagList(label, md=True):
 
         return flags
 
+def deityLabelList(user=None):
+        labelList = set()
+        returnLabels = ""
+
+        keys = dbc.redisFlagServer.keys("flag:*:labels")
+
+        if not user:
+                for key in keys:
+                        labels = dbc.redisFlagServer.smembers(key)
+                        labelList = labelList.union(labels)
+        else:
+                if user == c.session.userID:
+                        for key in keys:
+                                if dbc.redisFlagServer.get(key.strip(":labels")+":userID") == user:
+                                        labels = dbc.redisFlagServer.smembers(key)
+                                        labelList = labelList.union(labels)
+                else:
+                        for key in keys:
+                                if dbc.redisFlagServer.get(key.strip(":labels")+":userID") == user:
+                                        labels = dbc.redisFlagServer.smembers(key)
+                                        labelList = labelList.union(labels)
+
+        for lab in labelList:
+                returnLabels += label(lab)
+
+        return returnLabels

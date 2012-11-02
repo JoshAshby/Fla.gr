@@ -24,4 +24,8 @@ class godObject(bo.baseHTTPObject):
        __name__ = "god"
        view = fv.flagrView
        def finishInit(self):
-               self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Your Throne Awaits..."}]))
+               self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Your Throne Awaits..."},
+                {"link": c.baseURL + "/god", "name": "%s Front Panel"%ps.baseIcon("dashboard")},
+                {"link": c.baseURL + "/god/flags", "name": "%s All the Flags"%ps.baseIcon("flag")},
+                {"link": c.baseURL + "/god/search", "name": "%s Search Flags"%ps.baseIcon("search")},
+                {"link": c.baseURL + "/god/search/reindex", "name": "%s Reindex Search" % ps.baseIcon("magic")}]))

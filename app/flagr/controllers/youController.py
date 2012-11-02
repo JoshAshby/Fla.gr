@@ -29,19 +29,6 @@ import models.profileModel as profilem
 
 import bcrypt
 
-new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
-        classes="btn-info", link=c.baseURL+"/flags/new"),
-        dropdown=ps.baseMenu(name="flagDropdown",
-                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
-                {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
-                ),
-        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
-                classes="dropdown-toggle btn-info",
-                data=[("toggle", "dropdown"),
-                ("original-title", "Quick select"),
-                ("placement", "bottom")],
-                rel="tooltip"),
-        classes="pull-right")
 
 
 @route("/your/flags")
@@ -49,22 +36,72 @@ class flagIndex(profileObject):
         def GET(self):
                 """
                 """
+                self.view.tabbar = True
                 self.view["title"] = "Your Flags"
 
+                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+                        classes="btn-info", link=c.baseURL+"/flags/new"),
+                        dropdown=ps.baseMenu(name="flagDropdown",
+                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                                {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                                ),
+                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                classes="dropdown-toggle btn-info",
+                                data=[("toggle", "dropdown"),
+                                ("original-title", "Quick select"),
+                                ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
+
+
+                start = int(self.members["start"]) if self.members.has_key("start") else 0
+
                 flags = fm.flagList(c.session.userID, True)
+
+                nextClass = ""
+                prevClass = ""
+
+                if start == 0:
+                        prevClass = "disabled"
+                        prevLink = "#"
+                elif start == 10:
+                        prevLink = c.baseURL+"/your/flags"
+                else:
+                        prevLink = c.baseURL+"/your/flags?start=" + str(start-10)
+
+                if len(flags[start+10:start+20]) <= 0:
+                        nextClass = "disabled"
+                        nextLink = "#"
+                else:
+                        nextLink = c.baseURL+"/your/flags?start=" + str(start+10)
+
+                flags = flags[start:start+10]
+
+                pager = """<ul class="pager">
+        <li class="previous %s">
+                <a href="%s">&larr; Previous</a>
+        </li>
+        <li class="next %s">
+                <a href="%s">Next &rarr;</a>
+        </li>
+</ul>""" % (prevClass, prevLink, nextClass, nextLink)
+
 
                 tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
                                 rel="tooltip",
                                 data=[("original-title", "Your Profile"),
                                         ("placement", "bottom")]) +"</li>"
+
                 tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags",
                                 rel="tooltip",
                                 data=[("original-title", "Your Flags"),
                                         ("placement", "bottom")]) +"</li>"
+
                 tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link=c.baseURL+"/your/labels",
                                 rel="tooltip",
                                 data=[("original-title", "Your Labels"),
                                         ("placement", "bottom")]) +"</li>"
+
                 tabs += "<li>" + ps.baseAnchor(ps.baseIcon("cogs"), link=c.baseURL+"/your/settings",
                                 rel="tooltip",
                                 data=[("original-title", "Your Settings"),
@@ -77,6 +114,32 @@ class flagIndex(profileObject):
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
                         ])
 
+                visTabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags/all",
+                                rel="tooltip",
+                                data=[("original-title", "All Your Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li>" + ps.baseAnchor(ps.baseIcon("globe"), link=c.baseURL+"/your/flags/public",
+                                rel="tooltip",
+                                data=[("original-title", "Your Public Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li>" + ps.baseAnchor(ps.baseIcon("eye-close"), link=c.baseURL+"/your/flags/private",
+                                rel="tooltip",
+                                data=[("original-title", "Your Private Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li>" + ps.baseAnchor(ps.baseIcon("search"), link="#search",
+                                rel="tooltip",
+                                data=[("original-title", "Search Your"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs =  ps.baseColumn(ps.baseUL(visTabs, classes="nav nav-pills"), width=1, classes="pull-right")
+
                 buildMessage = "You have no flags at the moment, but if you want to add one, simply click the button up above to get started!."
 
                 if flags:
@@ -84,7 +147,245 @@ class flagIndex(profileObject):
                 else:
                         flagList = buildMessage
 
-                self.view.body = pageHead + ps.baseRow(ps.baseColumn(flagList, id="flags"))
+                self.view.body = pageHead + ps.baseRow([ps.baseColumn(flagList, width=10), visTabs]) + ps.baseRow(ps.baseColumn(pager, width=10))
+
+
+@route("/your/flags/public")
+class flagIndexPublic(profileObject):
+        def GET(self):
+                """
+                """
+                self.view.tabbar = True
+                self.view["title"] = "Your Flags"
+
+                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+                        classes="btn-info", link=c.baseURL+"/flags/new"),
+                        dropdown=ps.baseMenu(name="flagDropdown",
+                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                                {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                                ),
+                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                classes="dropdown-toggle btn-info",
+                                data=[("toggle", "dropdown"),
+                                ("original-title", "Quick select"),
+                                ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
+
+
+                start = int(self.members["start"]) if self.members.has_key("start") else 0
+
+                flags = fm.flagList(c.session.userID, True, public=True)
+
+                nextClass = ""
+                prevClass = ""
+
+                if start == 0:
+                        prevClass = "disabled"
+                        prevLink = "#"
+                elif start == 10:
+                        prevLink = c.baseURL+"/your/flags/public"
+                else:
+                        prevLink = c.baseURL+"/your/flags/public?start=" + str(start-10)
+
+                if len(flags[start+10:start+20]) <= 0:
+                        nextClass = "disabled"
+                        nextLink = "#"
+                else:
+                        nextLink = c.baseURL+"/your/flags/public?start=" + str(start+10)
+
+                flags = flags[start:start+10]
+
+                pager = """<ul class="pager">
+        <li class="previous %s">
+                <a href="%s">&larr; Previous</a>
+        </li>
+        <li class="next %s">
+                <a href="%s">Next &rarr;</a>
+        </li>
+</ul>""" % (prevClass, prevLink, nextClass, nextLink)
+
+
+                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
+                                rel="tooltip",
+                                data=[("original-title", "Your Profile"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags",
+                                rel="tooltip",
+                                data=[("original-title", "Your Flags"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link=c.baseURL+"/your/labels",
+                                rel="tooltip",
+                                data=[("original-title", "Your Labels"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("cogs"), link=c.baseURL+"/your/settings",
+                                rel="tooltip",
+                                data=[("original-title", "Your Settings"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += new
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Your Flags" % (ps.baseIcon("flag")), size=2), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                        ])
+
+                visTabs = "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags/all",
+                                rel="tooltip",
+                                data=[("original-title", "All Your Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("globe"), link=c.baseURL+"/your/flags/public",
+                                rel="tooltip",
+                                data=[("original-title", "Your Public Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li>" + ps.baseAnchor(ps.baseIcon("eye-close"), link=c.baseURL+"/your/flags/private",
+                                rel="tooltip",
+                                data=[("original-title", "Your Private Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li>" + ps.baseAnchor(ps.baseIcon("search"), link="#search",
+                                rel="tooltip",
+                                data=[("original-title", "Search Your"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs =  ps.baseColumn(ps.baseUL(visTabs, classes="nav nav-pills"), width=1, classes="pull-right")
+
+                buildMessage = "You have no flags at the moment, but if you want to add one, simply click the button up above to get started!."
+
+                if flags:
+                        flagList = fc.flagThumbnails(flags)
+                else:
+                        flagList = buildMessage
+
+                self.view.body = pageHead + ps.baseRow([ps.baseColumn(flagList, width=10), visTabs]) + ps.baseRow(ps.baseColumn(pager, width=10))
+
+
+@route("/your/flags/private")
+class flagIndexPrivate(profileObject):
+        def GET(self):
+                """
+                """
+                self.view.tabbar = True
+                self.view["title"] = "Your Private Flags"
+
+                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+                        classes="btn-info", link=c.baseURL+"/flags/new"),
+                        dropdown=ps.baseMenu(name="flagDropdown",
+                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                                {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                                ),
+                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                classes="dropdown-toggle btn-info",
+                                data=[("toggle", "dropdown"),
+                                ("original-title", "Quick select"),
+                                ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
+
+
+                start = int(self.members["start"]) if self.members.has_key("start") else 0
+
+                flags = fm.flagList(c.session.userID, True, private=True)
+
+                nextClass = ""
+                prevClass = ""
+
+                if start == 0:
+                        prevClass = "disabled"
+                        prevLink = "#"
+                elif start == 10:
+                        prevLink = c.baseURL+"/your/flags/private"
+                else:
+                        prevLink = c.baseURL+"/your/flags/private?start=" + str(start-10)
+
+                if len(flags[start+10:start+20]) <= 0:
+                        nextClass = "disabled"
+                        nextLink = "#"
+                else:
+                        nextLink = c.baseURL+"/your/flags/private?start=" + str(start+10)
+
+                flags = flags[start:start+10]
+
+                pager = """<ul class="pager">
+        <li class="previous %s">
+                <a href="%s">&larr; Previous</a>
+        </li>
+        <li class="next %s">
+                <a href="%s">Next &rarr;</a>
+        </li>
+</ul>""" % (prevClass, prevLink, nextClass, nextLink)
+
+
+                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
+                                rel="tooltip",
+                                data=[("original-title", "Your Profile"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags",
+                                rel="tooltip",
+                                data=[("original-title", "Your Flags"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link=c.baseURL+"/your/labels",
+                                rel="tooltip",
+                                data=[("original-title", "Your Labels"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("cogs"), link=c.baseURL+"/your/settings",
+                                rel="tooltip",
+                                data=[("original-title", "Your Settings"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += new
+
+                pageHead = ps.baseRow([
+                        ps.baseColumn(ps.baseHeading("%s Your Flags" % (ps.baseIcon("flag")), size=2), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
+                        ])
+
+                visTabs = "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/your/flags/all",
+                                rel="tooltip",
+                                data=[("original-title", "All Your Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li>" + ps.baseAnchor(ps.baseIcon("globe"), link=c.baseURL+"/your/flags/public",
+                                rel="tooltip",
+                                data=[("original-title", "Your Public Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("eye-close"), link=c.baseURL+"/your/flags/private",
+                                rel="tooltip",
+                                data=[("original-title", "Your Private Flags"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs += "<li>" + ps.baseAnchor(ps.baseIcon("search"), link="#search",
+                                rel="tooltip",
+                                data=[("original-title", "Search Your"),
+                                        ("placement", "left"),
+                                        ("toggle", "tab")]) +"</li><br />"
+
+                visTabs =  ps.baseColumn(ps.baseUL(visTabs, classes="nav nav-pills"), width=1, classes="pull-right")
+
+                buildMessage = "You have no flags at the moment, but if you want to add one, simply click the button up above to get started!."
+
+                if flags:
+                        flagList = fc.flagThumbnails(flags)
+                else:
+                        flagList = buildMessage
+
+                self.view.body = pageHead + ps.baseRow([ps.baseColumn(flagList, width=10), visTabs]) + ps.baseRow(ps.baseColumn(pager, width=10))
 
 
 @route("/your/labels")
@@ -92,6 +393,19 @@ class labelIndex(profileObject):
         def GET(self):
                 labelList = lm.labelList(user=c.session.userID)
 
+                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+                        classes="btn-info", link=c.baseURL+"/flags/new"),
+                        dropdown=ps.baseMenu(name="flagDropdown",
+                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                                {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                                ),
+                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                classes="dropdown-toggle btn-info",
+                                data=[("toggle", "dropdown"),
+                                ("original-title", "Quick select"),
+                                ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
                 self.view["title"] = "Your Labels"
 
                 tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
@@ -129,6 +443,19 @@ class userIndex(profileObject):
         def GET(self):
                 self.view["title"] = "You!"
 
+                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+                        classes="btn-info", link=c.baseURL+"/flags/new"),
+                        dropdown=ps.baseMenu(name="flagDropdown",
+                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                                {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                                ),
+                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                classes="dropdown-toggle btn-info",
+                                data=[("toggle", "dropdown"),
+                                ("original-title", "Quick select"),
+                                ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
                 tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
                                 rel="tooltip",
                                 data=[("original-title", "Your Profile"),
@@ -194,6 +521,19 @@ class userEdit(profileObject):
                 user = profilem.profile(c.session.userID, md=False)
                 self.view["title"] = "Editing your settings"
 
+                new = ps.baseSplitDropdown(btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
+                        classes="btn-info", link=c.baseURL+"/flags/new"),
+                        dropdown=ps.baseMenu(name="flagDropdown",
+                                items=[{"name": "%s Note" % ps.baseIcon("list-alt"), "link": c.baseURL+"/flags/new/note"},
+                                {"name": "%s Bookmark" % ps.baseIcon("bookmark"), "link": c.baseURL+"/flags/new/bookmark"}]
+                                ),
+                        dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
+                                classes="dropdown-toggle btn-info",
+                                data=[("toggle", "dropdown"),
+                                ("original-title", "Quick select"),
+                                ("placement", "bottom")],
+                                rel="tooltip"),
+                        classes="pull-right")
                 tabs = "<li>" + ps.baseAnchor(ps.baseIcon("user"), link=c.baseURL+"/you",
                                 rel="tooltip",
                                 data=[("original-title", "Your Profile"),
@@ -236,7 +576,7 @@ class userEdit(profileObject):
                                 "<br><br>",
                                 {"content": ps.baseInput(type="password", name="newtwopassword", placeholder="Repeat New password", classes="span10")},
                                 ]
-                       )
+                       , classes="span10")
 
                 self.view["body"] = pageHead + editForm
 

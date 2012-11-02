@@ -61,9 +61,9 @@ class session(bm.baseRedisModel):
         def pushAlert(self, message, title="", icon="pushpin", type="info"):
                 content = ""
                 if icon and title:
-                        content += "%s %s" % (ps.baseIcon(icon), title)
+                        content += "%s %s " % (ps.baseIcon(icon), title)
                 if icon and not title:
-                        content += "%s" % ps.baseIcon(icon)
+                        content += "%s " % ps.baseIcon(icon)
                 elif title and not icon:
                         content += title
 

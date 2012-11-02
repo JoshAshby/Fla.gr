@@ -30,22 +30,28 @@ class postsIndex_admin(adminObject):
 
                 self.view["title"] = "Posts"
 
+                tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("rss"), link=c.baseURL+"/admin/posts",
+                                rel="tooltip",
+                                data=[("original-title", "All Posts"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("wrench"), link=c.baseURL+"/admin/posts/drafts",
+                                rel="tooltip",
+                                data=[("original-title", "Draft Posts"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += ps.baseButtonGroup([
+                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/posts/new",
+                        data=[("original-title", "New Post"),
+                                ("placement", "bottom")],
+                        rel="tooltip",
+                        classes="btn-info")
+                        ], classes="pull-right")
+
+
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Front page posts" % ps.baseIcon("rss"), size=1)),
-                                ps.baseButtonGroup([
-                                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/posts/new",
-                                        data=[("original-title", "New Post")],
-                                        rel="tooltip",
-                                        classes="btn-info"),
-                                        ps.baseAButton(ps.baseIcon("wrench"),
-                                                link=c.baseURL+"/admin/posts/drafts",
-                                                data=[("original-title", "View Drafts")],
-                                                rel="tooltip",
-                                                classes="")
-
-                                        ], classes="pull-right")
-                        ]) + "<hr>"
-
+                        ps.baseColumn(ps.baseHeading("%s Blog Posts" % (ps.baseIcon("rss")), size=2), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=3)
+                        ])
 
                 if posts:
                         content = ""
@@ -98,22 +104,28 @@ class postsDrafts_admin(adminObject):
 
                 self.view["title"] = "Posts"
 
+                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("rss"), link=c.baseURL+"/admin/posts",
+                                rel="tooltip",
+                                data=[("original-title", "All Posts"),
+                                        ("placement", "bottom")]) +"</li>"
+                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("wrench"), link=c.baseURL+"/admin/posts/drafts",
+                                rel="tooltip",
+                                data=[("original-title", "Draft Posts"),
+                                        ("placement", "bottom")]) +"</li>"
+
+                tabs += ps.baseButtonGroup([
+                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/posts/new",
+                        data=[("original-title", "New Post"),
+                                ("placement", "bottom")],
+                        rel="tooltip",
+                        classes="btn-info")
+                        ], classes="pull-right")
+
+
                 pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Front page posts: Drafts" % ps.baseIcon("rss"), size=1)),
-                                ps.baseButtonGroup([
-                                        ps.baseAButton(ps.baseIcon("magic"), link=c.baseURL+"/admin/posts/new",
-                                        data=[("original-title", "New Post")],
-                                        rel="tooltip",
-                                        classes="btn-info"),
-                                        ps.baseAButton(ps.baseIcon("wrench"),
-                                                link=c.baseURL+"/admin/posts",
-                                                data=[("original-title", "View All")],
-                                                rel="tooltip",
-                                                classes="")
-
-                                        ], classes="pull-right")
-                        ]) + "<hr>"
-
+                        ps.baseColumn(ps.baseHeading("%s Blog Drafts" % (ps.baseIcon("rss")), size=2), width=5),
+                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=3)
+                        ])
 
                 content = ""
                 for post in posts:

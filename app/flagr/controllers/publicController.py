@@ -54,10 +54,41 @@ class labelIndex(flagrObject):
 @route("/flags")
 class labelPublic(flagrObject):
         def GET(self):
+                start = int(self.members["start"]) if self.members.has_key("start") else 0
+
+                flags = fm.flagList(md=True)
+
+                nextClass = ""
+                prevClass = ""
+
+                if start == 0:
+                        prevClass = "disabled"
+                        prevLink = "#"
+                elif start == 10:
+                        prevLink = c.baseURL+"/flags"
+                else:
+                        prevLink = c.baseURL+"/flags?start=" + str(start-10)
+
+                if len(flags[start+10:start+20]) <= 0:
+                        nextClass = "disabled"
+                        nextLink = "#"
+                else:
+                        nextLink = c.baseURL+"/flags?start=" + str(start+10)
+
+                flags = flags[start:start+10]
+
+                pager = """<ul class="pager">
+        <li class="previous %s">
+                <a href="%s">&larr; Previous</a>
+        </li>
+        <li class="next %s">
+                <a href="%s">Next &rarr;</a>
+        </li>
+</ul>""" % (prevClass, prevLink, nextClass, nextLink)
+
                 if self.members.has_key("view"): view = self.members["view"]
                 else: view = ""
 
-                flags = fm.flagList(md=True)
                 self.view["title"] = "Public Flags"
 
                 tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link="/flags",
@@ -81,7 +112,7 @@ class labelPublic(flagrObject):
                 else:
                         flagList = buildMessage
 
-                self.view.body = pageHead + ps.baseRow(ps.baseColumn(flagList, id="flags"))
+                self.view.body = pageHead + ps.baseRow(ps.baseColumn(flagList, id="flags")) + pager
 
 
 
