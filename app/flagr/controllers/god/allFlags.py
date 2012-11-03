@@ -30,7 +30,7 @@ class flagsIndex_god(godObject):
         def GET(self):
                 start = int(self.members["start"]) if self.members.has_key("start") else 0
 
-                flags = fm.deityFlagList()
+                flags = fm.flagList(deity=True)
 
                 nextClass = ""
                 prevClass = ""
@@ -84,7 +84,7 @@ class flagsIndex_god(godObject):
                         ps.baseColumn(ps.baseHeading("%s All Flags" % (ps.baseIcon("flag")), size=2), width=5),
                         ps.baseColumn(ps.baseUL(tabs, classes="nav nav-pills pull-right"), width=3)
                         ])
-                content = fc.deityFlagThumbnails(flags)
+                content = fc.flagThumbnails(flags, True)
                 self.view.body = pageHead + content
 
                 self.view.body += pager

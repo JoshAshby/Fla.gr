@@ -47,7 +47,7 @@ def pushFlag(flagType=None):
         else:
                 raise Exception("No flagType supplied, aborting!")
 
-def flagList(userID=None, md=False, flags=[], private=False, public=False):
+def flagList(userID=None, md=False, flags=[], private=False, public=False, deity=False):
         keys = dbc.redisFlagServer.keys("flag:*:id")
         flagList = []
         def addFlag(key):
@@ -58,6 +58,7 @@ def flagList(userID=None, md=False, flags=[], private=False, public=False):
                 flagList.append(returnFlag)
 
         if not flags:
+            if not deity:
                 """
                 #global flag search - everyone but yours
                 if visible and not yours:
@@ -97,43 +98,10 @@ def flagList(userID=None, md=False, flags=[], private=False, public=False):
                                                         addFlag(key)
                                         else:
                                                 addFlag(key)
-        else:
-                """
-                Someone wants specific flags so it's assumed they
-                are only going to show proper flags
-                """
-                for key in flags:
-                        key = key.strip("flag::id")
-                        addFlag(key)
-
-        return flagList
-
-def deityFlagList(userID=None, md=False, private=False, public=False):
-        keys = dbc.redisFlagServer.keys("flag:*:id")
-        flagList = []
-        def addFlag(key):
-                returnFlag = flag(key)
-                if md:
-                        returnFlag["description"] = markdown.markdown(returnFlag["description"])
-
-                flagList.append(returnFlag)
-
-        if not userID:
-                for key in keys:
-                        key = key.strip(":id")
-                        if public:
-                                if helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
-                                        addFlag(key)
-                        elif private:
-                                if not helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
-                                        addFlag(key)
-                        else:
-                                addFlag(key)
-
-        else:
-                for key in keys:
-                        key = key.strip(":id")
-                        if dbc.redisFlagServer.get(key+":userID") == userID:
+            else:
+                if not userID:
+                        for key in keys:
+                                key = key.strip(":id")
                                 if public:
                                         if helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
                                                 addFlag(key)
@@ -142,5 +110,27 @@ def deityFlagList(userID=None, md=False, private=False, public=False):
                                                 addFlag(key)
                                 else:
                                         addFlag(key)
+
+                else:
+                        for key in keys:
+                                key = key.strip(":id")
+                                if dbc.redisFlagServer.get(key+":userID") == userID:
+                                        if public:
+                                                if helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
+                                                        addFlag(key)
+                                        elif private:
+                                                if not helpers.boolean(dbc.redisFlagServer.get(key+":visibility")):
+                                                        addFlag(key)
+                                        else:
+                                                addFlag(key)
+
+        else:
+                """
+                Someone wants specific flags so it's assumed they
+                are only going to show proper flags
+                """
+                for key in flags:
+                        key = key.strip("flag::id")
+                        addFlag(key)
 
         return flagList
