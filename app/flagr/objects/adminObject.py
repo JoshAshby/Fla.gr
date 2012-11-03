@@ -19,13 +19,23 @@ import flagr.views.flagrView as fv
 
 
 class adminObject(bo.baseHTTPObject):
-       __level__ = "admin"
-       __login__ = True
-       __name__ = "admin"
-       view = fv.flagrView
-       def finishInit(self):
-               self.view.sidebar = ps.baseWell(ps.baseNavList(items=[{"header": "Things to do..."},
-                {"link": c.baseURL + "/admin", "name": "%s Front Panel"%ps.baseIcon("dashboard")},
-                {"link": c.baseURL + "/admin/posts", "name": "%s Blog Posts"%ps.baseIcon("rss")},
-                {"link": c.baseURL + "/admin/carousels", "name": "%s Blog Carousel"%ps.baseIcon("play")},
-                {"link": c.baseURL + "/admin/users", "name": "%s Manage Users" % ps.baseIcon("group")}]))
+    __level__ = "admin"
+    __login__ = True
+    __name__ = "admin"
+    view = fv.flagrView
+    def finishInit(self):
+        self.view.sidebar = ps.baseWell(
+            ps.baseNavList(
+                items=[
+                    {"header": "Things to do..."},
+                    {"link": c.baseURL + "/admin",
+                        "name": "%s Front Panel"%ps.baseIcon("dashboard")},
+                    {"link": c.baseURL + "/admin/posts",
+                        "name": "%s Blog Posts"%ps.baseIcon("rss")},
+                    {"link": c.baseURL + "/admin/carousels",
+                        "name": "%s Blog Carousel"%ps.baseIcon("play")},
+                    {"link": c.baseURL + "/admin/users",
+                        "name": "%s Manage Users" % ps.baseIcon("group")}
+                ]
+            )
+        )

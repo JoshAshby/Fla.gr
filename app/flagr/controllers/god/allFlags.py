@@ -24,198 +24,74 @@ import logging
 logger = logging.getLogger(c.logName+".allFlags")
 
 
-@route("/god/flags")
+@route("/god/flags(.*)")
 class flagsIndex_god(godObject):
-        __menu__ = "Deity Flags"
-        def GET(self):
-                start = int(self.members["start"]) if self.members.has_key("start") else 0
+    __menu__ = "Deity Flags"
+    def GET(self):
+        typer = self.members[0].strip("/")
 
-                flags = fm.flagList(deity=True)
-
-                nextClass = ""
-                prevClass = ""
-
-                if start == 0:
-                        prevClass = "disabled"
-                        prevLink = "#"
-                elif start == 10:
-                        prevLink = c.baseURL+"/god/flags"
-                else:
-                        prevLink = c.baseURL+"/god/flags?start=" + str(start-10)
-
-                if len(flags[start+10:start+20]) <= 0:
-                        nextClass = "disabled"
-                        nextLink = "#"
-                else:
-                        nextLink = c.baseURL+"/god/flags?start=" + str(start+10)
-
-                flags = flags[start:start+10]
-
-                pager = """<ul class="pager">
-        <li class="previous %s">
-                <a href="%s">&larr; Previous</a>
-        </li>
-        <li class="next %s">
-                <a href="%s">Next &rarr;</a>
-        </li>
-</ul>""" % (prevClass, prevLink, nextClass, nextLink)
-
-                tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/god/flags",
-                                rel="tooltip",
-                                data=[("original-title", "All Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("globe"), link=c.baseURL+"/god/flags/public",
-                                rel="tooltip",
-                                data=[("original-title", "Public Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("eye-close"), link=c.baseURL+"/god/flags/private",
-                                rel="tooltip",
-                                data=[("original-title", "Private Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("search"), link=c.baseURL+"/god/search",
-                                rel="tooltip",
-                                data=[("original-title", "Find a Flag"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s All Flags" % (ps.baseIcon("flag")), size=2), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-pills pull-right"), width=3)
-                        ])
-                content = fc.flagThumbnails(flags, True)
-                self.view.body = pageHead + content
-
-                self.view.body += pager
+        if typer == "private":
+            flags = fm.flagList(deity=True, private=True)
+            title = "Private Flags"
+            tabs = fc.tabs([
+                {"title": "All Flags",
+                    "link": c.baseURL+"/god/flags",
+                    "icon": "flag"},
+                {"title": "Public Flags",
+                    "link": c.baseURL+"/god/flags/public",
+                    "icon": "globe"},
+                {"active": True,
+                    "title": "Private Flags",
+                    "link": c.baseURL+"/god/flags/private",
+                    "icon": "eye-close"},
+                ])
+        elif typer == "public":
+            flags = fm.flagList(deity=True, public=True)
+            title = "Public Flags"
+            tabs = fc.tabs([
+                {"title": "All Flags",
+                    "link": c.baseURL+"/god/flags",
+                    "icon": "flag"},
+                {"active": True,
+                    "title": "Public Flags",
+                    "link": c.baseURL+"/god/flags/public",
+                    "icon": "globe"},
+                {"title": "Private Flags",
+                    "link": c.baseURL+"/god/flags/private",
+                    "icon": "eye-close"},
+                ])
+        else:
+            flags = fm.flagList(deity=True)
+            title = "All Flags"
+            tabs = fc.tabs([
+                {"active": True,
+                    "title": "All Flags",
+                    "link": c.baseURL+"/god/flags",
+                    "icon": "flag"},
+                {"title": "Public Flags",
+                    "link": c.baseURL+"/god/flags/public",
+                    "icon": "globe"},
+                {"title": "Private Flags",
+                    "link": c.baseURL+"/god/flags/private",
+                    "icon": "eye-close"},
+                ])
 
 
+        flags, pager = fc.listPager(flags, "/god/flags", self.members)
 
-@route("/god/flags/public")
-class flagsIndexPublic_god(godObject):
-        __menu__ = "Deity Public Flags"
-        def GET(self):
-                flags = fm.deityFlagList(public=True)
-                start = int(self.members["start"]) if self.members.has_key("start") else 0
+        pageHead = ps.baseRow([
+            ps.baseColumn(
+                ps.baseHeading("%s %s" % (ps.baseIcon("flag"),
+                        title),
+                    size=2),
+                width=5),
+            ps.baseColumn(tabs,
+                width=3)
+            ])
+        content = fc.flagThumbnails(flags, True)
+        self.view.body = pageHead + content
 
-                nextClass = ""
-                prevClass = ""
-
-                if start == 0:
-                        prevClass = "disabled"
-                        prevLink = "#"
-                elif start == 10:
-                        prevLink = c.baseURL+"/god/flags/public"
-                else:
-                        prevLink = c.baseURL+"/god/flags/public?start=" + str(start-10)
-
-                if len(flags[start+10:start+20]) <= 0:
-                        nextClass = "disabled"
-                        nextLink = "#"
-                else:
-                        nextLink = c.baseURL+"/god/flags/public?start=" + str(start+10)
-
-                flags = flags[start:start+10]
-
-                pager = """<ul class="pager">
-        <li class="previous %s">
-                <a href="%s">&larr; Previous</a>
-        </li>
-        <li class="next %s">
-                <a href="%s">Next &rarr;</a>
-        </li>
-</ul>""" % (prevClass, prevLink, nextClass, nextLink)
-
-                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/god/flags",
-                                rel="tooltip",
-                                data=[("original-title", "All Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("globe"), link=c.baseURL+"/god/flags/public",
-                                rel="tooltip",
-                                data=[("original-title", "Public Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("eye-close"), link=c.baseURL+"/god/flags/private",
-                                rel="tooltip",
-                                data=[("original-title", "Private Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("search"), link=c.baseURL+"/god/search",
-                                rel="tooltip",
-                                data=[("original-title", "Find a Flag"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s All Public Flags" % (ps.baseIcon("flag")), size=2), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-pills pull-right"), width=3)
-                        ])
-                content = fc.deityFlagThumbnails(flags)
-                self.view.body = pageHead + content + pager
-
-
-@route("/god/flags/private")
-class flagsIndexPrivate_god(godObject):
-        __menu__ = "Deity Private Flags"
-        def GET(self):
-                flags = fm.deityFlagList(private=True)
-
-                start = int(self.members["start"]) if self.members.has_key("start") else 0
-
-                nextClass = ""
-                prevClass = ""
-
-                if start == 0:
-                        prevClass = "disabled"
-                        prevLink = "#"
-                elif start == 10:
-                        prevLink = c.baseURL+"/god/flags/private"
-                else:
-                        prevLink = c.baseURL+"/god/flags/private?start=" + str(start-10)
-
-                if len(flags[start+10:start+20]) <= 0:
-                        nextClass = "disabled"
-                        nextLink = "#"
-                else:
-                        nextLink = c.baseURL+"/god/flags/private?start=" + str(start+10)
-
-                flags = flags[start:start+10]
-
-                pager = """<ul class="pager">
-        <li class="previous %s">
-                <a href="%s">&larr; Previous</a>
-        </li>
-        <li class="next %s">
-                <a href="%s">Next &rarr;</a>
-        </li>
-</ul>""" % (prevClass, prevLink, nextClass, nextLink)
-
-                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link=c.baseURL+"/god/flags",
-                                rel="tooltip",
-                                data=[("original-title", "All Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("globe"), link=c.baseURL+"/god/flags/public",
-                                rel="tooltip",
-                                data=[("original-title", "Public Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("eye-close"), link=c.baseURL+"/god/flags/private",
-                                rel="tooltip",
-                                data=[("original-title", "Private Flags"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("search"), link=c.baseURL+"/god/search",
-                                rel="tooltip",
-                                data=[("original-title", "Find a Flag"),
-                                        ("placement", "bottom")]) +"</li>"
-
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s All Private Flags" % (ps.baseIcon("flag")), size=2), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-pills pull-right"), width=3)
-                        ])
-                content = fc.deityFlagThumbnails(flags)
-                self.view.body = pageHead + content + pager
+        self.view.body += pager
 
 
 @route("/god/flags/user")

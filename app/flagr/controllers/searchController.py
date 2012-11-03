@@ -36,81 +36,71 @@ path = os.path.dirname(c.__file__)
 
 @route("/search/flags")
 class searchFlags_term(flagrObject):
-        def GET(self):
-                pager = ""
-                content = ""
-                self.view["title"] = "Search flags"
+    def GET(self):
+        pager = ""
+        content = ""
+        self.view["title"] = "Search flags"
 
-                value = self.members["search"] if self.members.has_key("search") else ""
+        value = self.members["search"] if self.members.has_key("search") else ""
 
-                pageHead = ps.baseColumn(ps.baseHeading("%s Search flags..."%ps.baseIcon("search"), size=2) +
-                                ps.baseBasicForm(
-                                        action=c.baseURL+"/search/flags",
-                                        fields=[
-                                                ps.baseAppend(elements=[ps.baseInput(type="text", name="search", placeholder="Search", classes="span3", value=value), ps.baseButton(ps.baseIcon("search"), type="submit", classes="btn")])
-                                                ],
-                                        classes="form-inline"),
-                                offset=3)
+        pageHead = ps.baseHeading("%s Search flags..."%ps.baseIcon("search"),
+                size=2)
+        pageHead += ps.baseBasicForm(
+            action=c.baseURL+"/search/flags",
+            fields=[
+                ps.baseAppend(elements=[
+                    ps.baseInput(type="text",
+                        name="search",
+                        placeholder="Search",
+                        classes="span3",
+                        value=value),
+                    ps.baseButton(ps.baseIcon("search"),
+                        type="submit",
+                        classes="btn")
+                    ])
+                ],
+            classes="form-inline")
 
-                if not self.members.has_key("search"):
-                        self.view.body = pageHead
+        pageHead = ps.baseColumn(pageHead, offset=3)
 
-                else:
-                        term = self.members["search"]
+        self.view.body = pageHead
 
-                        ix = open_dir(path+"/.searchIndex")
-                        flags = []
+        if self.members.has_key("search") and self.members["search"] != "":
+            term = self.members["search"]
 
-                        with ix.searcher() as searcher:
-                                query = MultifieldParser(["title", "description", "labels", "url", "author"], ix.schema).parse(unicode(term))
-                                results = searcher.search(query)
+            ix = open_dir(path+"/.searchIndex")
+            flags = []
 
-                                for result in results:
-                                        flags.append(fm.flag(result["id"]))
+            with ix.searcher() as searcher:
+                query = MultifieldParser(
+                    ["title",
+                        "description",
+                        "labels",
+                        "url",
+                        "author"],
+                    ix.schema).parse(unicode(term))
+                results = searcher.search(query)
 
-                        self.view["title"] = "Searching flags in: %s" % term
+                for result in results:
+                    flags.append(fm.flag(result["id"]))
 
-                        buildMessage = "Uh oh! Looks like I couldn't find any flags at the moment that fit that search criteria."
+            self.view["title"] = "Searching flags in: %s" % term
 
-                        for flag in flags:
-                                if not flag["visibility"] and flag["userID"] != c.session.userID:
-                                        flags.pop(flags.index(flag))
+            buildMessage = "Uh oh! Looks like I couldn't find any flags at the moment that fit that search criteria."
 
-                        start = int(self.members["start"]) if self.members.has_key("start") else 0
+            for flag in flags:
+                if not flag["visibility"] and flag["userID"] != c.session.userID:
+                    flags.pop(flags.index(flag))
 
-                        nextClass = ""
-                        prevClass = ""
+            flags, pager = fc.listPager(flags,
+                "/search/flags",
+                self.members)
 
-                        if start == 0:
-                                prevClass = "disabled"
-                                prevLink = "#"
-                        elif start == 10:
-                                prevLink = c.baseURL+"/search/flags"
-                        else:
-                                prevLink = c.baseURL+"/search/flags?start=" + str(start-10)
+            if flags:
+                flagList = fc.flagThumbnails(flags)
+            else:
+                flagList = buildMessage
 
-                        if len(flags[start+10:start+20]) <= 0:
-                                nextClass = "disabled"
-                                nextLink = "#"
-                        else:
-                                nextLink = c.baseURL+"/search/flags?start=" + str(start+10)
+            content = ps.baseRow(ps.baseColumn(flagList, id="flags"))
 
-                        flags = flags[start:start+10]
-
-                        pager = """<ul class="pager">
-                <li class="previous %s">
-                        <a href="%s">&larr; Previous</a>
-                </li>
-                <li class="next %s">
-                        <a href="%s">Next &rarr;</a>
-                </li>
-        </ul>""" % (prevClass, prevLink, nextClass, nextLink)
-
-                        if flags:
-                                flagList = fc.flagThumbnails(flags)
-                        else:
-                                flagList = buildMessage
-
-                        content = ps.baseRow(ps.baseColumn(flagList, id="flags"))
-
-                        self.view.body = pageHead + content + pager
+            self.view.body += content + pager

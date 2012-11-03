@@ -26,90 +26,75 @@ import flagr.config.flagrConfig as fc
 
 @route("/labels")
 class labelIndex(flagrObject):
-        def GET(self):
-                labelList = lm.labelList()
+    def GET(self):
+        labelList = lm.labelList()
 
-                self.view["title"] = "Public Labels"
+        self.view["title"] = "Public Labels"
 
-                tabs = "<li>" + ps.baseAnchor(ps.baseIcon("flag"), link="/flags",
-                                rel="tooltip",
-                                data=[("original-title", "Public Flags"),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("tags"), link="/labels",
-                                rel="tooltip",
-                                data=[("original-title", "Public Labels"),
-                                        ("placement", "bottom")]) + "</li>"
+        tabs = fc.tabs([
+            {"title": "Public Flags",
+                "link": c.baseURL+"/flags",
+                "icon": "flag"},
+            {"active": True,
+                "title": "Public Labels",
+                "link": c.baseURL+"/labels",
+                "icon": "tags"},
+            ])
 
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Public Labels" % (ps.baseIcon("tags")), size=2), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
-                        ])
+        pageHead = ps.baseRow([
+            ps.baseColumn(
+                ps.baseHeading("%s Public Labels" % (ps.baseIcon("tags")),
+                    size=2),
+            width=5),
+            ps.baseColumn(tabs,
+                width=5)
+            ])
 
-                if not labelList:
-                        labelList = "Oh no! There are not any public labels currently available!"
+        if not labelList:
+            labelList = "Oh no! There are not any public labels currently available!"
 
-                self.view.body = ps.baseRow(pageHead)+labelList
+        self.view.body = ps.baseRow(pageHead)+labelList
 
 
 @route("/flags")
 class labelPublic(flagrObject):
-        def GET(self):
-                start = int(self.members["start"]) if self.members.has_key("start") else 0
+    def GET(self):
+        flags = fm.flagList(md=True)
 
-                flags = fm.flagList(md=True)
+        flags, pager = fc.listPager(flags,
+            "/flags",
+            self.members)
 
-                nextClass = ""
-                prevClass = ""
+        self.view["title"] = "Public Flags"
 
-                if start == 0:
-                        prevClass = "disabled"
-                        prevLink = "#"
-                elif start == 10:
-                        prevLink = c.baseURL+"/flags"
-                else:
-                        prevLink = c.baseURL+"/flags?start=" + str(start-10)
+        tabs = fc.tabs([
+            {"active": True,
+                "title": "Public Flags",
+                "link": c.baseURL+"/flags",
+                "icon": "flag"},
+            {"title": "Public Labels",
+                "link": c.baseURL+"/labels",
+                "icon": "tags"},
+            ])
 
-                if len(flags[start+10:start+20]) <= 0:
-                        nextClass = "disabled"
-                        nextLink = "#"
-                else:
-                        nextLink = c.baseURL+"/flags?start=" + str(start+10)
+        pageHead = ps.baseRow([
+            ps.baseColumn(
+                ps.baseHeading("%s Public Flags" % (ps.baseIcon("flag")),
+                    size=2),
+            width=5),
+            ps.baseColumn(tabs,
+                width=5)
+        ])
 
-                flags = flags[start:start+10]
+        buildMessage = "OH NO! Either something went wrong, or there aren't any publicly visible flags just yet!"
 
-                pager = """<ul class="pager">
-        <li class="previous %s">
-                <a href="%s">&larr; Previous</a>
-        </li>
-        <li class="next %s">
-                <a href="%s">Next &rarr;</a>
-        </li>
-</ul>""" % (prevClass, prevLink, nextClass, nextLink)
+        if flags:
+            flagList = fc.flagThumbnails(flags)
+        else:
+            flagList = buildMessage
 
-                self.view["title"] = "Public Flags"
-
-                tabs = "<li class=\"active\">" + ps.baseAnchor(ps.baseIcon("flag"), link="/flags",
-                                rel="tooltip",
-                                data=[("original-title", "Public Flags"),
-                                        ("placement", "bottom")]) + "</li>"
-                tabs += "<li>" + ps.baseAnchor(ps.baseIcon("tags"), link="/labels",
-                                rel="tooltip",
-                                data=[("original-title", "Public Labels"),
-                                        ("placement", "bottom")]) + "</li>"
-
-                pageHead = ps.baseRow([
-                        ps.baseColumn(ps.baseHeading("%s Public Flags" % (ps.baseIcon("flag")), size=2), width=5),
-                        ps.baseColumn(ps.baseUL(tabs, classes="nav nav-tabs"), width=5)
-                        ])
-
-                buildMessage = "OH NO! Either something went wrong, or there aren't any publicly visible flags just yet!"
-
-                if flags:
-                        flagList = fc.flagThumbnails(flags)
-                else:
-                        flagList = buildMessage
-
-                self.view.body = pageHead + ps.baseRow(ps.baseColumn(flagList, id="flags")) + pager
-
-
-
+        self.view.body = pageHead
+        self.view.body += ps.baseRow(
+            ps.baseColumn(flagList, id="flags")
+        )
+        self.view.body += pager

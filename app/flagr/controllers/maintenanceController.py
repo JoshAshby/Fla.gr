@@ -20,16 +20,17 @@ import flagr.views.pyStrap.pyStrap as ps
 
 @route("/(.*)")
 class maintenance(publicObject):
+    """
+    Returns base maintenance page
+    """
+    def GET(self):
         """
-        Returns base maintenance page
+
         """
-        def GET(self):
-                """
+        self.view.title = "Down for Maintenance"
+        content = ps.baseHeading("%s Maintenance!" % ps.baseIcon("fire"),
+            size=1)
+        content += ps.baseParagraph("We're crrently down for maintenance! Give us a few minutes and hopefully we'll be back up!")
+        hero = ps.baseHero(content)
 
-                """
-                self.view.title = "Down for Maintenance"
-                content = ps.baseHeading("%s Maintenance!" % ps.baseIcon("fire"), size=1)
-                content += ps.baseParagraph("We're crrently down for maintenance! Give us a few minutes and hopefully we'll be back up!")
-                hero = ps.baseHero(content)
-
-                self.view.body = hero
+        self.view.body = hero

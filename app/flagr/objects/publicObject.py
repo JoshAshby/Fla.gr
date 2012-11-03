@@ -17,5 +17,5 @@ import flagr.views.flagrView as fv
 
 
 class publicObject(bo.baseHTTPObject):
-        __name__ = "public"
-        view = fv.flagrView
+    __name__ = "public"
+    view = fv.flagrView

@@ -40,126 +40,128 @@ def updateSearch(man=False):
     ser.join()
 
 def flagThumbnails(flags, deity=False):
-        if flags:
-                flagList = ""
-                for flag in flags:
-                        title = ps.baseAnchor("%s %s..." %
-                                                (ps.baseIcon(flag.icon),
-                                                flag["title"][:8].strip(" ")
-                                        ),
-                                        link=c.baseURL+"/flag/%s"%flag.id)
+    if flags:
+        flagList = ""
+        for flag in flags:
+            title = ps.baseAnchor("%s %s..." %
+                (
+                    ps.baseIcon(flag.icon),
+                    flag["title"][:10].strip(" ")
+                ),
+                link=c.baseURL+"/flag/%s"%flag.id)
 
-                        if not flag["visibility"]:
-                                vis = "%s Private" % ps.baseIcon("eye-close")
-                        else:
-                                vis = "%s Public" % ps.baseIcon("globe")
+            if not flag["visibility"]:
+                vis = "%s Private" % ps.baseIcon("eye-close")
+            else:
+                vis = "%s Public" % ps.baseIcon("globe")
 
-                        who = ps.baseAnchor(flag["author"],
-                                link=c.baseURL+"/people/%s"%flag["author"])
+            who = ps.baseAnchor(flag["author"],
+                link=c.baseURL+"/people/%s"%flag["author"])
 
-                        if not deity:
-                            width = 7
-                            if c.session.loggedIn and c.session.userID == flag["userID"]:
-                                    who = ps.baseAnchor("You!",
-                                            link=c.baseURL+"/you")
-                                    who = "You!"
-                                    edit = ps.baseButtonGroup([
-                                            ps.baseAButton("%s" % ps.baseIcon("edit"),
-                                                    classes="btn-info",
-                                                    link=c.baseURL+"/flag/%s/edit"%flag.id,
-                                                    rel="tooltip",
-                                                    data=[("original-title", "Edit flag"),
-                                                    ("placement", "bottom")]),
-                                            ps.baseAButton("%s" % ps.baseIcon("trash"),
-                                                    classes="btn-danger",
-                                                    link=c.baseURL+"/flag/%s/delete"%flag.id,
-                                                    rel="tooltip",
-                                                    data=[("original-title", "Delete Flag"),
-                                                    ("placement", "bottom")])
-                                            ])
-
-                            else:
-                                edit = ""
-                        else:
-                            width = 5
-                            edit = ps.baseButtonGroup([
-                                    ps.baseAButton("%s" % ps.baseIcon("edit"),
-                                            classes="btn-info btn-small",
-                                            link=c.baseURL+"/flag/%s/edit"%flag.id,
-                                            rel="tooltip",
-                                            data=[("original-title", "Edit flag"),
-                                            ("placement", "bottom")]),
-                                    ps.baseAButton("%s" % ps.baseIcon("trash"),
-                                            classes="btn-danger btn-small",
-                                            link=c.baseURL+"/flag/%s/delete"%flag.id,
-                                            rel="tooltip",
-                                            data=[("original-title", "Delete Flag"),
-                                            ("placement", "bottom")])
-                                    ])
-                        caption = ps.baseHeading(title + "   " + ps.baseSmall(
-                            ps.baseBold(who, classes="muted")),
-                            size=3)
-                        time = dt.strptime(flag["time"], "%b-%d-%Y %I:%M %p")
-                        time = time.strftime("%b-%d-%y")
-
-                        caption = ps.baseRow([
-                            ps.baseColumn(caption, width=3),
-                            ps.baseColumn(
-                                ps.baseWell(
-                                    ps.baseColumn(
-                                        ps.baseBold("When:", classes="muted")
-                                    ) +
-                                    ps.baseColumn(time) +
-                                    ps.baseColumn(vis) +
-                                    ps.baseColumn(edit, classes="pull-right")
-                                ),
-                            width=width)
-                            ])
-
-                        caption += "%s<br />" % flag["description"][:250]
-
-                        labelLinks = ""
-
-                        if flag["labels"]:
-                                for label in flag["labels"]:
-                                        labelLinks += ps.baseAnchor(
-                                            ps.baseLabel(label,
-                                                classes="label-info"),
-                                            link=c.baseURL+"/label/"+label) + " "
-
-                        for field in flag.fields:
-                                name = field[0] if type(field) != str else field
-                                if name not in ["title",
-                                    "description",
-                                    "labels",
-                                    "time",
-                                    "visibility",
-                                    "author",
-                                    "userID",
-                                    "flagType"]:
-                                        if name in ["url"]:
-                                                d = flag[name]
-                                                value = ps.baseAnchor(d,
-                                                    link=d)
-                                        else:
-                                                value = flag[name]
-                                        caption += "%s: %s" %(
-                                            ps.baseBold(name.lower().title(),
-                                                classes="muted"),
-                                            value)
-
-                        caption += ps.baseRow([
-                                ps.baseColumn(
-                                    ps.baseBold("Labels: ", classes="muted")
-                                ),
-                                ps.baseColumn(labelLinks)
+            if not deity:
+                width = 7
+                if c.session.loggedIn and c.session.userID == flag["userID"]:
+                    who = ps.baseAnchor("You!",
+                        link=c.baseURL+"/you")
+                    edit = ps.baseButtonGroup([
+                        ps.baseAButton("%s" % ps.baseIcon("edit"),
+                            classes="btn-info btn-small",
+                            link=c.baseURL+"/flag/%s/edit"%flag.id,
+                            rel="tooltip",
+                            data=[("original-title", "Edit flag"),
+                            ("placement", "bottom")]),
+                        ps.baseAButton("%s" % ps.baseIcon("trash"),
+                            classes="btn-danger btn-small",
+                            link=c.baseURL+"/flag/%s/delete"%flag.id,
+                            rel="tooltip",
+                            data=[("original-title", "Delete Flag"),
+                            ("placement", "bottom")])
                         ])
+                else:
+                    edit = ""
+            else:
+                width = 5
+                edit = ps.baseButtonGroup([
+                    ps.baseAButton("%s" % ps.baseIcon("edit"),
+                        classes="btn-info btn-small",
+                        link=c.baseURL+"/flag/%s/edit"%flag.id,
+                        rel="tooltip",
+                        data=[("original-title", "Edit flag"),
+                        ("placement", "bottom")]),
+                    ps.baseAButton("%s" % ps.baseIcon("trash"),
+                        classes="btn-danger btn-small",
+                        link=c.baseURL+"/flag/%s/delete"%flag.id,
+                        rel="tooltip",
+                        data=[("original-title", "Delete Flag"),
+                        ("placement", "bottom")])
+                    ])
 
-                        flagList += caption + "<hr>"
+            caption = ps.baseHeading(title + "   " + ps.baseSmall(
+                ps.baseBold(who, classes="muted")),
+                size=3)
 
-                return flagList
-        else:
-                return ""
+            time = dt.strptime(flag["time"], "%b-%d-%Y %I:%M %p")
+            time = time.strftime("%b-%d-%y")
+
+            caption = ps.baseRow([
+                ps.baseColumn(caption, width=3),
+                ps.baseColumn(
+                    ps.baseWell(
+                        ps.baseColumn(
+                            ps.baseBold("When:", classes="muted")
+                        ) +
+                        ps.baseColumn(time) +
+                        ps.baseColumn(vis) +
+                        ps.baseColumn(edit, classes="pull-right")
+                    ),
+                width=width)
+                ])
+
+            caption += "%s<br />" % flag["description"][:250]
+
+            labelLinks = ""
+
+            if flag["labels"]:
+                for label in flag["labels"]:
+                    labelLinks += ps.baseAnchor(
+                        ps.baseLabel(label,
+                            classes="label-info"),
+                        link=c.baseURL+"/label/"+label) + " "
+
+            for field in flag.fields:
+                name = field[0] if type(field) != str else field
+                if name not in ["title",
+                    "description",
+                    "labels",
+                    "time",
+                    "visibility",
+                    "author",
+                    "userID",
+                    "flagType"]:
+                    if name in ["url"]:
+                        d = flag[name]
+                        value = ps.baseAnchor(d,
+                            link=d)
+                    else:
+                        value = flag[name]
+
+                    caption += "%s: %s" %(
+                        ps.baseBold(name.lower().title(),
+                            classes="muted"),
+                        value)
+
+            caption += ps.baseRow([
+                ps.baseColumn(
+                    ps.baseBold("Labels: ", classes="muted")
+                ),
+                ps.baseColumn(labelLinks)
+            ])
+
+            flagList += caption + "<hr>"
+
+        return flagList
+    else:
+        return ""
 
 newFlagButton = ps.baseSplitDropdown(
     btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),

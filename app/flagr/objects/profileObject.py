@@ -17,6 +17,6 @@ import flagr.views.flagrView as fv
 
 
 class profileObject(bo.baseHTTPObject):
-       __login__ = True
-       __name__ = "profile"
-       view = fv.flagrView
+    __login__ = True
+    __name__ = "profile"
+    view = fv.flagrView
