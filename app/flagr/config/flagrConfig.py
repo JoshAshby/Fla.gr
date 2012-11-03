@@ -163,22 +163,34 @@ def flagThumbnails(flags, deity=False):
     else:
         return ""
 
-newFlagButton = ps.baseSplitDropdown(
-    btn=ps.baseAButton("%s New Flag" % ps.baseIcon("flag"),
-        classes="btn-info", link=c.baseURL+"/flags/new"),
-    dropdown=ps.baseMenu(name="flagDropdown",
-        items=[{"name": "%s Note" % ps.baseIcon("list-alt"),
-            "link": c.baseURL+"/flags/new/note"},
-        {"name": "%s Bookmark" % ps.baseIcon("bookmark"),
-            "link": c.baseURL+"/flags/new/bookmark"}]
-        ),
-    dropBtn=ps.baseAButton("""<i class="icon-chevron-down"></i>""",
-        classes="dropdown-toggle btn-info",
-        data=[("toggle", "dropdown"),
-        ("original-title", "Quick select"),
-        ("placement", "bottom")],
-        rel="tooltip"),
-    classes="pull-right")
+newFlagButton = """
+<div class=" pull-right  btn-group ">
+    <a class=" btn-info  btn " href="http://localhost/flags/new">
+        <i class=" icon-flag "></i> New Flag</a>
+    <a class="dropdown-toggle btn-info  btn"
+        rel="tooltip"
+        href=""
+        data-toggle="dropdown"
+        data-original-title="Quick select"
+        data-placement="bottom">
+            <i class="icon-chevron-down"></i>
+    </a>
+    <ul class=" dropdown-menu ">
+        <li>
+            <a
+                tabindex="-1"
+                href="http://localhost/flags/new/note">
+                    <i class=" icon-list-alt "></i> Note</a>
+        </li>
+        <li>
+            <a
+                tabindex="-1"
+                href="http://localhost/flags/new/bookmark">
+                    <i class=" icon-bookmark "></i> Bookmark</a>
+        </li>
+    </ul>
+</div>
+"""
 
 def tabs(tabs, extra="", classes="tabs"):
     returnHTML = ""

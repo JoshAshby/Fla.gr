@@ -39,7 +39,7 @@ class flagIndexPublic(profileObject):
         typer = self.members[0].strip("/")
 
         if typer == "private":
-            title = "Private"
+            title = "Private "
             flags = fm.flagList(c.session.userID, True, private=True)
             visTabsDict = [{"link": c.baseURL+"/your/flags",
                     "icon": "flag",
@@ -279,7 +279,7 @@ class userEdit(profileObject):
             ])
 
         editForm = ps.baseHorizontalForm(
-                action=(c.baseURL+"/your/settings"),
+            action=(c.baseURL+"/your/settings"),
             method="POST",
             actions=[ps.baseSubmit("%s Update!"%ps.baseIcon("save"),
                 classes="btn-info")],
@@ -326,7 +326,7 @@ class userEdit(profileObject):
                 ],
             classes="span10")
 
-        self.view["body"] = pageHead + editForm
+        self.view["body"] = pageHead + ps.baseRow(editForm)
 
     def POST(self):
         """
