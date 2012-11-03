@@ -24,7 +24,8 @@ import flagr.models.labelModel as lm
 from flagr.objects.profileObject import profileObject
 import flagr.views.pyStrap.pyStrap as ps
 import flagr.config.flagrConfig as fc
-
+import logging
+logger = logging.getLogger(c.logName+".flags")
 import models.profileModel as profilem
 
 import bcrypt

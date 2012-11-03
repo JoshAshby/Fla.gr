@@ -49,5 +49,8 @@ class blockSet(object):
                 return reply
 
         def __repr__(self):
-                reply = u"%s" % self.current
+                reply = u""
+                for bit in self.current:
+                        reply += u"%s, " % bit
+                reply = reply.strip(", ")
                 return reply

@@ -17,7 +17,8 @@ import siteConfig.dbConfig as dbc
 import flagr.models.flags.flags as bf
 import models.blocks.helpers as helpers
 import markdown
-
+import json as js
+import bson as bs
 
 def flag(id=None, flagType=None, md=False):
         if id:
@@ -47,15 +48,18 @@ def pushFlag(flagType=None):
         else:
                 raise Exception("No flagType supplied, aborting!")
 
-def flagList(userID=None, md=False, flags=[], private=False, public=False, deity=False):
+def flagList(userID=None, md=False, flags=[], private=False, public=False, deity=False, json=False, bson=False):
         keys = dbc.redisFlagServer.keys("flag:*:id")
         flagList = []
         def addFlag(key):
                 returnFlag = flag(key)
                 if md:
-                        returnFlag["description"] = markdown.markdown(returnFlag["description"])
+                    returnFlag["description"] = markdown.markdown(returnFlag["description"])
 
-                flagList.append(returnFlag)
+                if json or bson:
+                    flagList.append(returnFlag._buildDict())
+                else:
+                    flagList.append(returnFlag)
 
         if not flags:
             if not deity:
@@ -133,4 +137,8 @@ def flagList(userID=None, md=False, flags=[], private=False, public=False, deity
                         key = key.strip("flag::id")
                         addFlag(key)
 
+        if json:
+            return js.dumps(flagList)
+        if bson:
+            return bs.dumps(flagList)
         return flagList

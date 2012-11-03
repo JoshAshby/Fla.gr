@@ -15,7 +15,8 @@ joshuaashby@joshashby.com
 """
 import string
 import random
-
+import json
+import bson
 import models.blocks.redisBlocks.redisBlocks as rb
 
 
@@ -100,12 +101,18 @@ class baseBlockModel(object):
                         """ % (name, getattr(self, name))
                 return reply
 
-        def __repr__(self):
-                reply = "id: %s" % self.id
-                for field in self.fields:
-                        fType = type(field)
-                        name = field[0] if fType != str else field
-                        reply += """
-        %s: %s
-                        """ % (name, getattr(self, name))
-                return reply
+        def _buildDict(self):
+            reply = {}
+            for field in self.fields:
+                fType = type(field)
+                name = field[0] if fType != str else field
+                reply[name] = repr(getattr(self, name))
+            return reply
+
+        def json(self):
+            reply = self._buildDict()
+            return json.dumps(reply)
+
+        def bson(self):
+            reply = self._buildDict()
+            return bson.dumps(reply)
