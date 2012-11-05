@@ -15,7 +15,12 @@ joshuaashby@joshashby.com
 """
 import config as c
 import siteConfig.zmqConfig as zmqc
+import flagr.models.flagModel as fm
+from whoosh.index import open_dir
+from whoosh.qparser import MultifieldParser
+import os
 
+path = os.path.dirname(c.__file__)
 import flagr.views.pyStrap.pyStrap as ps
 from datetime import datetime as dt
 
@@ -246,3 +251,53 @@ def listPager(lists, link, members):
 </ul>""" % (prevClass, prevLink, nextClass, nextLink)
 
     return lists, pager
+
+def flagSearch(user=None, deity=False, members=[]):
+    if members.has_key("search") and members["search"] != "":
+        term = members["search"]
+
+        ix = open_dir(path+"/.searchIndex")
+        flags = []
+
+        with ix.searcher() as searcher:
+            query = MultifieldParser(
+                ["title",
+                    "description",
+                    "labels",
+                    "url",
+                    "author"],
+                ix.schema).parse(unicode(term))
+            results = searcher.search(query)
+
+            for result in results:
+                flags.append(fm.flag(result["id"]))
+
+
+        buildMessage = "Uh oh! Looks like I couldn't find any flags at the moment that fit that search criteria."
+
+        if not deity and not user:
+            for flag in flags:
+                if not flag["visibility"] and flag["userID"] != c.session.userID:
+                    flags.pop(flags.index(flag))
+        elif user and not deity and user != c.session.userID:
+            for flag in flags:
+                if not flag["visibility"] and flag["userID"] != c.session.userID and flag["userID"] != user:
+                    flags.pop(flags.index(flag))
+        elif user and deity:
+            for flag in flags:
+                if not flag["userID"] == user:
+                    flags.pop(flags.index(flag))
+
+        flags, pager = listPager(flags,
+            "/search/flags",
+            members)
+
+        if flags:
+            flagList = flagThumbnails(flags)
+        else:
+            flagList = buildMessage
+
+        content = ps.baseRow(ps.baseColumn(flagList, id="flags")) + pager
+
+        return content
+    return ""

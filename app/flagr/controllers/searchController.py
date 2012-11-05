@@ -22,23 +22,14 @@ from seshat.route import route
 from flagr.objects.flagrObject import flagrObject
 import flagr.views.pyStrap.pyStrap as ps
 import flagr.config.flagrConfig as fc
-import flagr.models.flagModel as fm
 
 import logging
 logger = logging.getLogger(c.logName+".search")
-
-from whoosh.index import open_dir
-from whoosh.qparser import MultifieldParser
-import os
-
-path = os.path.dirname(c.__file__)
 
 
 @route("/search/flags")
 class searchFlags_term(flagrObject):
     def GET(self):
-        pager = ""
-        content = ""
         self.view["title"] = "Search flags"
 
         value = self.members["search"] if self.members.has_key("search") else ""
@@ -65,42 +56,7 @@ class searchFlags_term(flagrObject):
 
         self.view.body = pageHead
 
-        if self.members.has_key("search") and self.members["search"] != "":
-            term = self.members["search"]
-
-            ix = open_dir(path+"/.searchIndex")
-            flags = []
-
-            with ix.searcher() as searcher:
-                query = MultifieldParser(
-                    ["title",
-                        "description",
-                        "labels",
-                        "url",
-                        "author"],
-                    ix.schema).parse(unicode(term))
-                results = searcher.search(query)
-
-                for result in results:
-                    flags.append(fm.flag(result["id"]))
-
-            self.view["title"] = "Searching flags in: %s" % term
-
-            buildMessage = "Uh oh! Looks like I couldn't find any flags at the moment that fit that search criteria."
-
-            for flag in flags:
-                if not flag["visibility"] and flag["userID"] != c.session.userID:
-                    flags.pop(flags.index(flag))
-
-            flags, pager = fc.listPager(flags,
-                "/search/flags",
-                self.members)
-
-            if flags:
-                flagList = fc.flagThumbnails(flags)
-            else:
-                flagList = buildMessage
-
-            content = ps.baseRow(ps.baseColumn(flagList, id="flags"))
-
-            self.view.body += content + pager
+        content = fc.flagSearch(members=self.members)
+        if content:
+            self.view.body += content
+            self.view["title"] = "Searching flags in: %s" % value
