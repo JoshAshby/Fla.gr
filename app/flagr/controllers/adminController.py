@@ -18,7 +18,6 @@ from seshat.route import route
 
 import flagr.views.pyStrap.pyStrap as ps
 from flagr.objects.adminObject import adminObject
-
 from flagr.controllers.admin.users import *
 from flagr.controllers.admin.indexPosts import *
 from flagr.controllers.admin.indexNewsCarousel import *
