@@ -344,7 +344,14 @@ class copyFlag(flagrObject):
 
         for field in flag.fields:
             name = field[0] if type(field) != str else field
-            if name not in ["title", "description", "labels", "time", "visibility", "author", "userID", "flagType"]:
+            if name not in ["title",
+                "description",
+                "labels",
+                "time",
+                "visibility",
+                "author",
+                "userID",
+                "flagType"]:
                 name = field[0].lower() if type(field) != str else field.lower()
                 elements.append(ps.baseInput(type="text",
                     classes="span10",
@@ -411,13 +418,19 @@ class viewFlag(flagrObject):
                         ps.baseButtonGroup([
                             ps.baseAButton("%s" % ps.baseIcon("copy"),
                                 link=c.baseURL+"/flag/%s/copy"%flag.id,
-                                classes="", rel="tooltip", data=[("original-title", "Copy Flag")]),
+                                classes="",
+                                rel="tooltip",
+                                data=[("original-title", "Copy Flag")]),
                             ps.baseAButton("%s" % ps.baseIcon("edit"),
                                 link=c.baseURL+"/flag/%s/edit"%flag.id,
-                                classes="btn-info ", rel="tooltip", data=[("original-title", "Edit Flag")]),
+                                classes="btn-info ",
+                                rel="tooltip",
+                                data=[("original-title", "Edit Flag")]),
                             ps.baseAButton("%s" % ps.baseIcon("trash"),
                                 link=c.baseURL+"/flag/%s/delete"%flag.id,
-                                classes="btn-danger ", rel="tooltip", data=[("original-title", "Delete Flag")])
+                                classes="btn-danger ",
+                                rel="tooltip",
+                                data=[("original-title", "Delete Flag")])
                         ])
                      )
                 elif c.session.loggedIn and c.session.userID != flag["userID"]:
@@ -425,7 +438,9 @@ class viewFlag(flagrObject):
                         ps.baseButtonGroup([
                             ps.baseAButton("%s" % ps.baseIcon("copy"),
                                 link=c.baseURL+"/flag/%s/copy"%flag.id,
-                                classes="", rel="tooltip", data=[("original-title", "Copy Flag")])
+                                classes="",
+                                rel="tooltip",
+                                data=[("original-title","Copy Flag")])
                         ])
                      )
                 else:
