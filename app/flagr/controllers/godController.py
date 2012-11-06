@@ -42,9 +42,9 @@ Edit, delete and manage every flag in fla.gr....
 <br />
 <br />
 %s
-                                """ % ps.baseAButton("%s Flags"%ps.baseIcon("flag"),
-                                    link=c.baseURL+"/god/flags",
-                                    classes="btn-info")
+""" % ps.baseAButton("%s Flags"%ps.baseIcon("flag"),
+                link=c.baseURL+"/god/flags",
+                classes="btn-info")
                 ),
             classes="span3")
         page += ps.baseTextThumbnail(
