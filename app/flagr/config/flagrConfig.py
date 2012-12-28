@@ -109,15 +109,18 @@ def flagThumbnails(flags, deity=False):
             time = time.strftime("%b-%d-%y")
 
             caption = ps.baseRow([
-                ps.baseColumn(caption, width=3),
+                ps.baseColumn(caption,
+                    width=3),
                 ps.baseColumn(
                     ps.baseWell(
                         ps.baseColumn(
-                            ps.baseBold("When:", classes="muted")
+                            ps.baseBold("When:",
+                                classes="muted")
                         ) +
                         ps.baseColumn(time) +
                         ps.baseColumn(vis) +
-                        ps.baseColumn(edit, classes="pull-right")
+                        ps.baseColumn(edit,
+                            classes="pull-right")
                     ),
                 width=width)
                 ])
@@ -157,7 +160,8 @@ def flagThumbnails(flags, deity=False):
 
             caption += ps.baseRow([
                 ps.baseColumn(
-                    ps.baseBold("Labels: ", classes="muted")
+                    ps.baseBold("Labels: ",
+                        classes="muted")
                 ),
                 ps.baseColumn(labelLinks)
             ])
