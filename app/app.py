@@ -11,6 +11,8 @@ For more information, see: https://github.com/JoshAshby/
 Make sure you look through and change things in config.py
 before running this file, to be sure it runs the way you want it to
 
+This is a test
+
 http://xkcd.com/353/
 
 Josh Ashby
