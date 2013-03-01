@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <!--[if IE 7]>
+        <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css">
+        <![endif]-->
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+
+        <div class="navbar navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#"><i class="icon-flag"></i> fla.gr</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li class="active"><a href="#home"><i class="icon-dashboard"></i></a></li>
+                            <li><a href="#search"><i class="icon-search"></i></a></li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Heya, JoshAshby <i class="icon-chevron-down"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#newFlag"><i class="icon-flag"></i> Create a flag</a></li>
+                                    <li class="nav-header">Or...</li>
+                                    <li><a href="#settings"><i class="icon-cogs"></i> Account Settings</a></li>
+                                    <li><a href="#logout"><i class="icon-signout"></i> Log out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <!-- Start tabs and page header -->
+            <div class="row">
+                <div class="span11 offset1">
+                    <div class="row">
+                        <div class="span5">
+                            <h3><i class="icon-dashboard"></i> Dashboard <small><b>Your flags</b></small></h3>
+                        </div>
+                        <div class="span5 tabs-below">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#flags"><i class="icon-flag"></i></a></li>
+                                <li><a href="#labels"><i class="icon-tags"></i></a></li>
+                                <li><a href="#settings"><i class="icon-cogs"></i></a></li>
+                                <a style="margin-top: 5px" href="#newFlag" class="btn btn-info pull-right"><i class="icon-flag"></i> New flag</a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End tabs and page header -->
+
+            <div class="row">
+                <div class="span10 offset1">
+                    <!-- Start of flag overview template -->
+                    <div class="row">
+                        <div class="media">
+                            <a href="#flagAddress">
+                                <i class="span1 icon-bookmark icon-4x media-object pull-left"></i>
+                            </a>
+                            <div class="media-body">
+                                <div class="row media-heading">
+                                    <div class="span3">
+                                        <h3>
+                                            <a href="#flagAddress">Flag Title</a>
+                                            <small>
+                                                <a href="#authorAddress">Author</a>
+                                            </small>
+                                        </h3>
+                                    </div>
+                                    <div class="span5 pull-right">
+                                        <div class="well">
+                                            <div class="span">
+                                                <i class="icon-calendar muted"></i> <small class="muted">2/14/2013 @ 1:52pm</small>
+                                            </div>
+                                            <div class="span">
+                                                <span class="label"><i class="icon-lock"></i> Private</span>
+                                            </div>
+                                            <div class="span pull-right">
+                                                <div class="btn-group">
+                                                    <a class="btn-info btn-small btn" rel="tooltip" href="#editFlag" data-original-title="Edit flag" data-placement="bottom">
+                                                        <i class="icon-edit"></i>
+                                                    </a>
+                                                    <a class="btn-danger btn-small btn" rel="tooltip" href="#deleteFlag" data-original-title="Delete Flag" data-placement="bottom">
+                                                        <i class="icon-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>This is a sample flag text... Congratulations - you just destroyed the Enterprise. I think you've let your personal feelings cloud your judgement. I'd like to think that I haven't changed those things, sir. Earl Grey tea, watercress sandwiches... and Bularian canapés? Are you up for promotion?
+                                </p>
+                                <b class="muted"><i class="icon-tags"></i> Labels: </b><span class="label label-info">test/label</span> <span class="label label-info">alpha</span><br>
+                                <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="#">http://somewhere.overtherainb.ow</a><br>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- End of flag overview template -->
+                    <!-- Start of flag overview template -->
+                    <div class="row">
+                        <div class="media">
+                            <a href="#flagAddress">
+                                <i class="span1 icon-list-alt icon-4x media-object pull-left"></i>
+                            </a>
+                            <div class="media-body">
+                                <div class="row media-heading">
+                                    <div class="span3">
+                                        <h3>
+                                            <a href="#flagAddress">Flag Title</a>
+                                            <small>
+                                                <a href="#authorAddress">Author</a>
+                                            </small>
+                                        </h3>
+                                    </div>
+                                    <div class="span5 pull-right">
+                                        <div class="well">
+                                            <div class="span">
+                                                <i class="icon-calendar muted"></i> <small class="muted">2/14/2013 @ 2:49pm</small>
+                                            </div>
+                                            <div class="span">
+                                                <span class="label"><i class="icon-unlock"></i> Public</span>
+                                            </div>
+                                            <div class="span pull-right">
+                                                <div class="btn-group">
+                                                    <a class="btn-info btn-small btn" rel="tooltip" href="#editFlag" data-original-title="Edit flag" data-placement="bottom">
+                                                        <i class="icon-edit"></i>
+                                                    </a>
+                                                    <a class="btn-danger btn-small btn" rel="tooltip" href="#deleteFlag" data-original-title="Delete Flag" data-placement="bottom">
+                                                        <i class="icon-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>This is a sample flag text... Yes, absolutely, I do indeed concur, wholeheartedly! Ensign Babyface! I recommend you don't fire until you're within 40,000 kilometers. This is not about revenge. This is about justice. I'll alert the crew. You're going to be an interesting companion, Mr. Data. When has justice ever been as simple as a rule book?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- End of flag overview template -->
+
+
+                </div>
+                <div class="span1">
+                    <ul class="nav nav-pills">
+                        <li class="active"><a href="#all"><i class="icon-flag"></i></a></li>
+                        <li><a href="#public"><i class="icon-globe"></i></a></li>
+                        <li><a href="#private"><i class="icon-eye-close"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr>
+
+            <footer>
+            <small>
+                A project by <a href="http://transientBug.com"><i class="icon-beaker"></i> transientBug</a>
+                &copy 2012 <a href="http://github.com/transientBug"><i class="icon-github"></i></a>
+                <a href="http://twitter.com/transientBug"><i class="icon-twitter"></i></a>
+            </small>
+            </footer>
+
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script> -->
+    </body>
+</html>

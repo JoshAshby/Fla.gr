@@ -1,0 +1,86 @@
+#extends bootstrapSkeleton
+
+#def body
+#if $flags
+    #for $flag in $flags
+        <!-- Start of flag overview template -->
+        <div class="row">
+            <div class="media">
+                <a href="$flag.id">
+                    <i class="span1 icon-#if $flag.has_key('url') and $flag.url#bookmark#else#list-alt#end if# icon-4x media-object pull-left"></i>
+                </a>
+                <div class="media-body">
+                    <div class="row media-heading">
+                        <div class="span3">
+                            <h3>
+                                <a href="$flag.id">$flag.title</a>
+                                <small>
+                                    <a href="$flag.author">$flag.author</a>
+                                </small>
+                            </h3>
+                        </div>
+                        <div class="span5 pull-right">
+                            <div class="well">
+                                <div class="span">
+                                    <i class="icon-calendar muted"></i> <small class="muted">$flag.date</small>
+                                </div>
+                                <div class="span">
+                                    #if $flag.visible
+                                        <span class="label"><i class="icon-unlock"></i> Public</span>
+                                    #else
+                                        <span class="label"><i class="icon-lock"></i> Private</span>
+                                    #end if
+                                </div>
+                                <div class="span pull-right">
+                                    <div class="btn-group">
+                                        <a class="btn-info btn-small btn" rel="tooltip" href="#editFlag" data-original-title="Edit flag" data-placement="bottom" href="$flag.id">
+                                            <i class="icon-edit"></i>
+                                        </a>
+                                        <a class="btn-danger btn-small btn" rel="tooltip" href="#deleteFlag" data-original-title="Delete Flag" data-placement="bottom" href="$flag.id">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    $flag.content
+
+                    <br>
+
+                    #if $flag.has_key('labels') and $flag.labels
+                        <b class="muted"><i class="icon-tags"></i> Labels: </b>
+                            #for $label in $flag.labels
+                                <a href="$label"><span class="label label-info">$label</span></a>
+                            #end for
+                        <br>
+                    #end if
+                    #if $flag.has_key('url') and $flag.url
+                        <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
+                    #end if
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!-- End of flag overview template -->
+    #end for
+    #else
+        <div class="page-header">
+            <h1>Oh no! <small> It looks like we don't have any flags!</small></h1>
+        </div>
+        <p>If you want to make a new flag and help fill this void, feel free to do so!</p>
+    #end if
+#end def
+
+#def rightExtra
+    #if $page=='flags' and $flags
+        <div class="span1">
+            <ul class="nav nav-pills">
+                <li class="active"><a href="#all"><i class="icon-flag"></i></a></li>
+                <li><a href="#public"><i class="icon-unlock"></i></a></li>
+                <li><a href="#private"><i class="icon-lock"></i></a></li>
+            </ul>
+        </div>
+    #end if
+#end def

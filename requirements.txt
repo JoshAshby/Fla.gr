@@ -1,0 +1,6 @@
+Cheetah==2.4.4
+Markdown==2.2.1
+gevent==0.13.8
+gevent-fastcgi==0.1.15dev
+greenlet==0.4.0
+wsgiref==0.1.2

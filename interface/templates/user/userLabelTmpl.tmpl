@@ -1,0 +1,11 @@
+#extends bootstrapSkeleton
+
+#def body
+<!-- Start label overview template -->
+<div>
+#for $label in $labels
+     <a href="$label.link"><span class="label label-info">$label.label</span></a>
+#end for
+</div>
+<!-- End label overview template -->
+#end def

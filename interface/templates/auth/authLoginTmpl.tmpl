@@ -1,0 +1,20 @@
+#extends views.bootstrapSkeleton
+
+#def body
+<div class="span6 offset2">
+    <h2>Please log in...</h1>
+    <form class="form form-horizontal" method="POST" action="/auth/login">
+        <div class="control-group">
+            <input type="text" placeholder="username..." name="username" class="span6">
+        </div>
+        <div class="control-group">
+            <input type="password" placeholder="password..." name="password" class="span6">
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Log in</button>
+            <b class="muted">Or...</b>
+            <a href="/auth/register">Request an invite</a>
+        </div>
+    </form>
+</div>
+#end def
