@@ -1,3 +1,9 @@
+*!!!WARNING!!!!*
+###################################################################
+This branch (which should now be the `master`) is broken at every joint!
+Do not use it, only the index and auth/login pages are working, everything else
+is old code, currently from the branch `old`
+
 fla.gr - ALL THE BOOKMARKS
 ##########################
 
