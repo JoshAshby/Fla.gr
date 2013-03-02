@@ -72,7 +72,7 @@ class userORM(Document):
     password = TextField()
     joined = DateTimeField(default=datetime.now)
     sessionID = TextField()
-    docType=TextField(default="user")
+    docType = TextField(default="user")
 
     @classmethod
     def new(cls, username, password):
@@ -114,6 +114,8 @@ class userORM(Document):
                     user = cls.load(db.couchServer, foundUser.id)
                     user.sessionID = cookieID
                     user.loggedIn = True
+                    user.alerts = db.redisSessionServer.hget(cookieID, "alerts")
+                    db.redisSessionServer.hset(cookieID, "alerts", "")
                     user.store(db.couchServer)
                     return user
                 else:

@@ -19,10 +19,13 @@ regex below
 import re
 
 appName = "fla.gr"
+baseFolder = '/home/josh/repos/flagr/flagr_core'
 
 logName = appName.replace(".", "")
-logFolder = "./logs/"
-pidFolder = "./pid/"
+logFolder = baseFolder+"/logs/"
+pidFolder = baseFolder+"/pid/"
+stdout = baseFolder+'/logs/out'
+stderr = baseFolder+'/logs/error'
 
 """
 We need to make

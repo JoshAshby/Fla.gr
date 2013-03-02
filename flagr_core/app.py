@@ -70,7 +70,7 @@ class app(Daemon):
 
 
 if __name__ == "__main__":
-        daemon = app(c.pidFolder+c.logName+'.pid')
+        daemon = app(c.pidFolder+c.logName+'.pid', stderr=c.stderr)
         daemon.down = False
         if len(sys.argv) >= 2:
                 if 'noDaemon' in sys.argv:
