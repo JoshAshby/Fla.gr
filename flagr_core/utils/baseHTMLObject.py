@@ -17,6 +17,10 @@ from seshat.baseObject import baseHTTPObject
 
 class baseHTMLObject(baseHTTPObject):
     def finishInit(self):
-        self.__name__ = self.__name__ or "untitledFlagrPage"
+        try:
+            self.__name__ = self.__name__
+        except:
+            self.__name__ = "untitledFlagrPage"
+
         self.head = ("200 OK", [("Content-type", "text/html")])
         self.tmplSearchList = {"user": self.session, "page": (self.__name__)}

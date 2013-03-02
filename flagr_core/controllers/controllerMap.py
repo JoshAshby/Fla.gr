@@ -31,8 +31,13 @@ from controllers.auth.authRegisterController import * #/auth/register/
 #from controllers.labels.labelsPublicController  import * #/labels/public/
 
 #Next, /user/ controllers
-#from controllers.user.userDashboardController  import * #/user/dashboard/
 #from controllers.user.userFlagsController  import * #/user/flags/
 #from controllers.user.userLabelsController  import * #/user/labels/
 #from controllers.user.userProfileController  import * #/user/profile/
-#from controllers.user.userSettingsController  import * #/user/settings/
+
+#Finally, /you/ controllers
+from controllers.you.youDashboardController  import * #/you/dashboard/
+#from controllers.you.youFlagsController  import * #/you/flags/
+#from controllers.you.youLabelsController  import * #/you/labels/
+#from controllers.you.youProfileController  import * #/you/profile/
+#from controllers.you.youSettingsController  import * #/you/settings/

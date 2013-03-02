@@ -113,6 +113,8 @@ class userORM(Document):
                     db.redisSessionServer.hset(cookieID, "userID", foundUser.id)
                     user = cls.load(db.couchServer, foundUser.id)
                     user.sessionID = cookieID
+                    user.loggedIn = True
+                    user.store(db.coudbServer)
                     return user
                 else:
                     raise Exception("Your password appears to be wrong.")
@@ -128,4 +130,9 @@ class userORM(Document):
         :return: Nothing
         """
         self.loggedIn = False
+        self.store(db.couchServer)
         db.redisSessionServer.hdel(self.sessionID, "userID")
+
+    def save(self):
+        self.store(db.couchServer)
+        return True
