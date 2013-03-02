@@ -1,0 +1,25 @@
+#extends views.bootstrapSkeleton
+
+#def body
+<!-- Start tabs and you page header -->
+<div class="row">
+    <div class="span11 offset1">
+        <div class="row">
+            <div class="span5">
+                <h3><i class="icon-dashboard"></i> Dashboard</h3>
+            </div>
+            <div class="span5 tabs-below">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
+                    <li><a href="/your/flags"><i class="icon-flag"></i></a></li>
+                    <li><a href="/your/labels"><i class="icon-tags"></i></a></li>
+                    <li><a href="/your/settings"><i class="icon-cogs"></i></a></li>
+                    <a style="margin-top: 5px" href="/flags/new" class="btn btn-info pull-right"><i class="icon-flag"></i> New flag</a>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End tabs and page header -->
+
+#end def

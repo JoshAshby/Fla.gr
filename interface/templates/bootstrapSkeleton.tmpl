@@ -50,7 +50,7 @@
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             #if $user.loggedIn
-                                <li #if $page in ('labels', 'settings', 'flags')#class="active"#end if#><a href="/user/dashboard"><i class="icon-dashboard"></i></a></li>
+                                <li #if $page in ('labels', 'settings', 'flags', 'dashboard')#class="active"#end if#><a href="/user/dashboard"><i class="icon-dashboard"></i></a></li>
                             #else
                                 <li #if $page=='home'#class="active"#end if#><a href="/"><i class="icon-home"></i></a></li>
                             #end if
