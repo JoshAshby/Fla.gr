@@ -25,7 +25,8 @@ class index(baseHTMLObject):
     __name__ = "home"
     def GET(self):
         """
-
+        Nothing much, just get the cheetah template for index and return it
+        so Seshat can get cheetah to render it and then return it to the browser
         """
         view = indexTmpl(searchList=[self.tmplSearchList])
         return view

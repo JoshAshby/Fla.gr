@@ -12,19 +12,19 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import route
-from seshat.baseHTMLObject import baseHTMLObject
+from utils.baseHTMLObject import baseHTMLObject
 
-import models.user.userModel as um
 
 @route("/auth/logout")
-class logout(baseHTMLObject):
+class authLogout(baseHTMLObject):
     def GET(self):
         """
         Simply log the user out. Nothing much to do here.
 
         redirect to login page after we're done.
         """
-        um.logout(self.session)
+        if self.session.logout():
+            self.session.pushAlert("Come back soon!")
 
         self.head = ("303 SEE OTHER", [("location", ("/auth/login"))])
 

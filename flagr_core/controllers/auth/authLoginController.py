@@ -24,6 +24,7 @@ class authLogin(baseHTMLObject):
     """
 
     """
+    __name__ = "login"
     def GET(self):
         """
         Display the login page or redirect to their dashboard if they are already logged in

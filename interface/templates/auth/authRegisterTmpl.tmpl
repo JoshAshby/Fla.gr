@@ -3,19 +3,15 @@
 #def body
 <div class="span6 offset2">
     <h2>Request an invite...</h1>
-    <p>Welcome! We just need to get your email from you, so we can send you an invite. When an invite becomes open, we'll send you an email letting you know!</p>
-    <form class="form form-horizontal" method="POST" action="/auth/register">
-        <div class="control-group">
-            <label>Email</label>
-            <div class="controls">
-                <input type="text" placeholder="email..." name="username" class="span6">
-                <span class="help-block">iWe promise to not give your email out, or to send you spam mail.</span>
-            </div>
+    <p>Welcome! We just need to get your email from you, so we can send you an invite when a spot becomes open!</p>
+    <form class="form form-horizontal" method="POST" action="/request">
+        <div class="control-group #if $getVar('emailError', False)#error#end if#">
+            <input type="text" placeholder="email..." name="email" class="span6">
+            <span class="help-block">#if $getVar('emailError', False)#Uh oh, you need to enter an email! #end if#We promise to not give your email out, or to send you spam mail.</span>
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Request invite...</button>
         </div>
     </form>
-</div>:w
-
+</div>
 #end def

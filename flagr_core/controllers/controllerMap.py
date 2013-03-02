@@ -17,8 +17,8 @@ from controllers.indexController import * #/
 
 #Next, /auth/ controllers
 from controllers.auth.authLoginController import * #/auth/login/
-#from controllers.auth.authLogoutController import * #/auth/logout/
-#from controllers.auth.authRegisterController import * #/auth/register/
+from controllers.auth.authLogoutController import * #/auth/logout/
+from controllers.auth.authRegisterController import * #/auth/register/
 
 #Next, /flags/ controllers
 #from controllers.flags.flagDelController  import * #/flags/delete/

@@ -12,16 +12,17 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import route
-from seshat.baseHTMLObject import baseHTMLObject
+from utils.baseHTMLObject import baseHTMLObject
 
 from views.auth.authRegisterTmpl import authRegisterTmpl
 
-import models.request.requestModel as rm
+#import models.request.requestModel as rm
 
 
-@route("/register")
+@route("/request")
 @route("/auth/register")
-class register(baseHTMLObject):
+class authRegister(baseHTMLObject):
+    __name__ = "request an invite"
     def GET(self):
         """
         """
@@ -33,8 +34,13 @@ class register(baseHTMLObject):
         """
         email = self.env["members"]["email"]
 
-        newRequest = rm.requestORM(email)
-        newRequest.save()
+#        newRequest = rm.requestORM(email)
+#        newRequest.save()
 
-        self.head = ("303 SEE OTHER",
-            [("location", "/auth/thanks")])
+        if email:
+            self.head = ("303 SEE OTHER",
+                [("location", "/auth/thanks")])
+        else:
+            view = authRegisterTmpl(searchList=[self.tmplSearchList])
+            view.emailError = True
+            return view
