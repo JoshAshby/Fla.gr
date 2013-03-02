@@ -28,7 +28,6 @@ def session(cookieID):
     if not c.dummySession:
         userID = db.redisSessionServer.hget(cookieID, "userID")
         user = userModel.findUserByID(userID)
-        print user
         if user:
             return user
         else:

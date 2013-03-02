@@ -114,7 +114,7 @@ class userORM(Document):
                     user = cls.load(db.couchServer, foundUser.id)
                     user.sessionID = cookieID
                     user.loggedIn = True
-                    user.store(db.coudbServer)
+                    user.store(db.couchServer)
                     return user
                 else:
                     raise Exception("Your password appears to be wrong.")

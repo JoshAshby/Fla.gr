@@ -12,9 +12,17 @@ joshuaashby@joshashby.com
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
+from views.you.youDashboardTmpl import youDashboardTmpl
+
 
 @route("/you/dashboard(.*)")
 @route("/your/dashboard(.*)")
 class youDashboard(baseHTMLObject):
+    """
+    """
+    __name__="dashboard"
     def GET(self):
-        return "hello, " + self.session.username
+        """
+        """
+        view = youDashboardTmpl(searchList=[self.tmplSearchList])
+        return view
