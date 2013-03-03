@@ -34,7 +34,7 @@
     </div>
 #end def
 
-#def dangerAlert($quip, $message)
+#def errorAlert($quip, $message)
     <div class="alert alert-error #if len($message) > 160#alert-block#end if#">
         <button type="button" class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></button>
         #if len($message) > 160

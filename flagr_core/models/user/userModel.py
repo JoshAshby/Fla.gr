@@ -18,6 +18,8 @@ import config.dbBase as db
 
 import bcrypt
 
+import json
+
 
 def findUserByID(userID):
     """
@@ -62,7 +64,6 @@ class userORM(Document):
     username = TextField()
     email = TextField()
     about = TextField()
-    alerts = TextField(default="")
     disable = BooleanField(default=False)
     emailVisibility = BooleanField(default=False)
     history = TextField()
@@ -92,10 +93,19 @@ class userORM(Document):
             raise Exception("That username is taken, please choose again.")
 
     def clearAlerts(self):
-        self.alerts = ""
+        for alert in self.alerts:
+            if alert["expire"] == "next":
+                self.alerts.pop(self.alerts.index(alert))
 
-    def pushAlert(self, alert):
-        self.alerts += alert
+    def pushAlert(self, alert, expire="next"):
+        self.alerts.append({"expire": expire, "alert": alert})
+
+    def getAlerts(self):
+        alerts = ""
+        for alert in self.alerts:
+            alerts += alert["alert"]
+
+        return alerts
 
     @classmethod
     def login(cls, user, password, cookieID):
@@ -115,7 +125,6 @@ class userORM(Document):
                     user.sessionID = cookieID
                     user.loggedIn = True
                     user.alerts = db.redisSessionServer.hget(cookieID, "alerts")
-                    db.redisSessionServer.hset(cookieID, "alerts", "")
                     user.store(db.couchServer)
                     return user
                 else:
@@ -137,4 +146,5 @@ class userORM(Document):
 
     def save(self):
         self.store(db.couchServer)
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
         return True

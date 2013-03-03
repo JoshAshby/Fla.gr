@@ -105,8 +105,8 @@
                 <div class="span10 offset1">
                 <!-- If there is an alert, display it, if not, don't put
                 anything else above the content -->
-                    #if $user.alerts
-                        $user.alerts
+                    #if $user.getAlerts()
+                        $user.getAlerts()
                     #end if
                 </div>
                 #if $page in ('labels', 'settings', 'flags')

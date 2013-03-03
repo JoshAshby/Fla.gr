@@ -16,6 +16,8 @@ joshuaashby@joshashby.com
 import models.user.userModel as userModel
 import config.config as c
 import config.dbBase as db
+import json
+
 
 def session(cookieID):
     """
@@ -28,12 +30,16 @@ def session(cookieID):
     if not c.dummySession:
         userID = db.redisSessionServer.hget(cookieID, "userID")
         user = userModel.findUserByID(userID)
-        if user:
-            return user
-        else:
+        if not user:
             user = dummySession(cookieID)
-            user.alerts = db.redisSessionServer.hget(cookieID, "alerts")
-            return user
+
+        try:
+            user.alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
+        except:
+            user.alerts = []
+
+        return user
+
     else:
         dummy = dummySession()
 
@@ -44,19 +50,24 @@ class dummySession(object):
     def __init__(self, cookieID):
         self.loggedIn = False
         self.username = ""
-        self.alerts = ""
         self.history = ""
         self.redirect = ""
         self.sessionID = cookieID
 
     def clearAlerts(self):
-        self.alerts = ""
+        for alert in self.alerts:
+            if alert["expire"] == "next":
+                self.alerts.pop(self.alerts.index(alert))
 
-    def pushAlert(self, message):
-        self.alerts = message
+    def pushAlert(self, alert, expire="next"):
+        self.alerts.append({"expire": expire, "alert": alert})
 
     def getAlerts(self):
-        return self.alerts
+        alerts = ""
+        for alert in self.alerts:
+            alerts += alert["alert"]
+
+        return alerts
 
     def store(self, dbDummy):
-        db.redisSessionServer.hset(self.sessionID, "alerts", self.alerts)
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
