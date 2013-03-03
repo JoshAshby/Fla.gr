@@ -4,11 +4,21 @@
 <div class="span6 offset2">
     <h2>Please log in...</h1>
     <form class="form form-horizontal" method="POST" action="/auth/login">
-        <div class="control-group">
-            <input type="text" placeholder="username..." name="username" class="span6">
+        <div class="control-group #if $getVar('usernameError', False)#error#end if#">
+            <input type="text" placeholder="username or email..." name="username" class="span6" #if $getVar('passwordError', False)#value="$getVar('username', '')"#end if#>
+            #if $getVar('usernameError', False)
+                <span class="help-block">
+                    Uh oh, we couldn't find your infomation, are you sure your username or email is correct?
+                </span>
+            #end if
         </div>
-        <div class="control-group">
+        <div class="control-group #if $getVar('passwordError', False)#error#end if#">
             <input type="password" placeholder="password..." name="password" class="span6">
+            #if $getVar('passwordError', False)
+                <span class="help-block">
+                    This doesn't match what we have on file! Try again please?
+                </span>
+            #end if
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Log in</button>

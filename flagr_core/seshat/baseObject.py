@@ -13,7 +13,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config.dbBase as db
 import models.basic.sessionModel as sm
 
 class baseHTTPObject(object):
@@ -66,8 +65,10 @@ class baseHTTPObject(object):
                 if not error:
                         content = getattr(self, self.env["method"])()
                         content = str(content)
-                        if self.env["method"] == "GET" or self.env["method"] == "HEAD":
-                                self.session.clearAlerts()
+                        if (self.env["method"] == "GET" or self.env["method"] == "HEAD"):
+                            self.session.clearAlerts()
+                        if self.head[0] != "303 SEE OTHER":
+                            self.session.clearAlerts()
 
 
                 data.put(content)
@@ -75,8 +76,6 @@ class baseHTTPObject(object):
 
                 reply.put(self.head)
                 reply.put(StopIteration)
-
-                self.session.store(db.couchServer)
 
         def HEAD(self):
                 return self.GET()

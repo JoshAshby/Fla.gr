@@ -50,14 +50,14 @@
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             #if $user.loggedIn
-                                <li #if $page in ('labels', 'settings', 'flags', 'dashboard')#class="active"#end if#><a href="/user/dashboard"><i class="icon-dashboard"></i></a></li>
+                                <li #if $page in ('labels', 'settings', 'flags', 'dashboard')#class="active"#end if#><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
                             #else
                                 <li #if $page=='home'#class="active"#end if#><a href="/"><i class="icon-home"></i></a></li>
                             #end if
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle #if $page=='search'#active#end if#" data-toggle="dropdown"><i class="icon-search"></i></a>
                                 <ul class="dropdown-menu">
-                                    <form style="padding-left: 20px; padding-right: 20px; padding-top:20px" action="#searchAddress">
+                                    <form style="padding-left: 20px; padding-right: 20px; padding-top:20px" action="/search">
                                         <fieldset>
                                             <div class="input-append">
                                                 <input class="span3" type="text" placeholder="Search flags">
@@ -86,10 +86,10 @@
                                 #else if $user.loggedIn
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Heya, $user.username <i class="icon-chevron-down"></i></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#newFlag"><i class="icon-flag"></i> Create a flag</a></li>
+                                        <li><a href="/flags/new"><i class="icon-flag"></i> Create a flag</a></li>
                                         <li class="nav-header">Or...</li>
-                                        <li><a href="#settings"><i class="icon-cogs"></i> Account Settings</a></li>
-                                        <li><a href="#logout"><i class="icon-signout"></i> Log out</a></li>
+                                        <li><a href="/your/settings"><i class="icon-cogs"></i> Account Settings</a></li>
+                                        <li><a href="/auth/logout"><i class="icon-signout"></i> Log out</a></li>
                                     </ul>
                                 #end if
                             </li>
@@ -109,29 +109,17 @@
                         $user.getAlerts()
                     #end if
                 </div>
-                #if $page in ('labels', 'settings', 'flags')
-                    <!-- Start tabs and page header -->
-                    <div class="row">
-                        <div class="offset1 span5">
-                            <h3><i class="icon-dashboard"></i> Dashboard <small><b>Your $page</b></small></h3>
-                        </div>
-                        <div class="span5 tabs-below">
-                            <ul class="nav nav-tabs">
-                                <li #if $page=="flags"# class="active"#end if#><a href="#flags"><i class="icon-flag"></i></a></li>
-                                <li #if $page=="labels"# class="active"#end if#><a href="#labels"><i class="icon-tags"></i></a></li>
-                                <li #if $page=="settings"# class="active"#end if#><a href="#settings"><i class="icon-cogs"></i></a></li>
-                                <a style="margin-top: 5px" href="#newFlag" class="btn btn-info pull-right"><i class="icon-flag"></i> New flag</a>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- End tabs and page header -->
-                #end if
-                <div class="row">
-                    <div class="offset1 span10">
-                        $body
-                    </div>
-                    $getVar('rightExtra', '')
+            </div>
+            <div class="row">
+                <div class="offset1 span10">
+                    $getVar('topExtra', '')
                 </div>
+            </div>
+            <div class="row">
+                <div class="offset1 span10">
+                    $body
+                </div>
+                $getVar('rightExtra', '')
             </div>
 
             <hr>

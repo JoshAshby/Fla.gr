@@ -24,6 +24,7 @@ interface/resources/js/bootstrap/
 interface/compiled_templates/
 flagr_core/logs/
 flagr_core/pid/
+flagr_core/views/
 
 # Compiled source #
 ###################

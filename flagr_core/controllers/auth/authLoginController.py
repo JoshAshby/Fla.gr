@@ -17,6 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.auth.authLoginTmpl import authLoginTmpl
 
 import models.user.userModel as um
+import utils.sessionExceptions as use
 
 
 @route("/auth/login")
@@ -32,7 +33,7 @@ class authLogin(baseHTMLObject):
         if self.session.loggedIn:
             self.head = ("303 SEE OTHER",
                 [("location", "/your/dashboard")])
-            self.session.pushAlert("Hey look, you're already signed in!")
+            self.session.pushAlert("It looks like you're already signed in!", "Hey there!", "info")
 
         else:
             loginForm = authLoginTmpl(searchList=[self.tmplSearchList])
@@ -49,8 +50,18 @@ class authLogin(baseHTMLObject):
         try:
             um.userORM.login(name, passwd, self.env["cookie"])
             self.head = ("303 SEE OTHER", [("location", "/your/dashboard")])
-            self.session.pushAlert("Welcome back, %s!" % name)
+            self.session.pushAlert("Welcome back, %s!" % name, "Ohia!", "success")
 
         except Exception as exc:
-            self.head = ("303 SEE OTHER", [("location", "/auth/login")])
-            self.session.pushAlert("Something went wrong:<br>%s Please try again." % exc)
+            self.session.pushAlert("%s <br/>Please try again." % exc, "Uh oh...", "error")
+            loginForm = authLoginTmpl(searchList=[self.tmplSearchList])
+
+            if type(exc) == use.usernameError:
+                loginForm.usernameError = True
+            elif type(exc) == use.passwordError:
+                loginForm.passwordError = True
+                loginForm.username = name
+            elif type(exc) == use.banError:
+                loginForm = ""
+
+            return loginForm

@@ -16,6 +16,7 @@ joshuaashby@joshashby.com
 import models.user.userModel as userModel
 import config.config as c
 import config.dbBase as db
+import utils.alerts as ua
 import json
 
 
@@ -29,8 +30,9 @@ def session(cookieID):
     """
     if not c.dummySession:
         userID = db.redisSessionServer.hget(cookieID, "userID")
-        user = userModel.findUserByID(userID)
-        if not user:
+        if userID:
+            user = userModel.findUserByID(userID)
+        else:
             user = dummySession(cookieID)
 
         try:
@@ -59,8 +61,8 @@ class dummySession(object):
             if alert["expire"] == "next":
                 self.alerts.pop(self.alerts.index(alert))
 
-    def pushAlert(self, alert, expire="next"):
-        self.alerts.append({"expire": expire, "alert": alert})
+    def pushAlert(self, message, quip="", alertType="info", expire="next"):
+        self.alerts.append({"expire": expire, "alert": ua.alert(message, quip, alertType)})
 
     def getAlerts(self):
         alerts = ""
@@ -71,3 +73,9 @@ class dummySession(object):
 
     def store(self, dbDummy):
         db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+
+    def save(self):
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+
+    def logout(self):
+        return False

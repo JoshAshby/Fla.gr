@@ -24,7 +24,7 @@ class authLogout(baseHTMLObject):
         redirect to login page after we're done.
         """
         if self.session.logout():
-            self.session.pushAlert("Come back soon!")
+            self.session.pushAlert("Come back soon!", "B'ahBye...", "info")
 
         self.head = ("303 SEE OTHER", [("location", ("/auth/login"))])
 

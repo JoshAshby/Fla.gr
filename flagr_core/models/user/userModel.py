@@ -15,9 +15,10 @@ from couchdb.mapping import Document, TextField, DateTimeField, BooleanField
 from datetime import datetime
 
 import config.dbBase as db
+import utils.alerts as ua
+import utils.sessionExceptions as use
 
 import bcrypt
-
 import json
 
 
@@ -31,7 +32,7 @@ def findUserByID(userID):
         `None` if no user is found
     """
     users = userORM.view(db.couchServer, 'typeViews/user', key=userID)
-    if not users:
+    if not users.rows:
         return None
     elif len(users)>1:
         raise Exception("Multiple Users")
@@ -53,11 +54,12 @@ def findUserByUsername(username):
     for user in users:
         if user.username == username:
             foundUser.append(user)
+    if not foundUser:
+        return None
     if len(foundUser)>1:
         raise Exception("Multiple Users")
     else:
         return foundUser[0]
-    pass
 
 
 class userORM(Document):
@@ -85,6 +87,7 @@ class userORM(Document):
         :param password: The plain text password that should be used for the password.
         :return: `userORM` if the username is available,
         """
+        print "hello"
         if not findUserByUsername(username):
             passwd = bcrypt.hashpw(password, bcrypt.gensalt())
             user = cls(username=username, password=passwd)
@@ -97,8 +100,8 @@ class userORM(Document):
             if alert["expire"] == "next":
                 self.alerts.pop(self.alerts.index(alert))
 
-    def pushAlert(self, alert, expire="next"):
-        self.alerts.append({"expire": expire, "alert": alert})
+    def pushAlert(self, message, quip="", alertType="info", expire="next"):
+        self.alerts.append({"expire": expire, "alert": ua.alert(message, quip, alertType)})
 
     def getAlerts(self):
         alerts = ""
@@ -128,10 +131,10 @@ class userORM(Document):
                     user.store(db.couchServer)
                     return user
                 else:
-                    raise Exception("Your password appears to be wrong.")
+                    raise use.passwordError("Your password appears to be wrong.")
             else:
-                raise Exception("Your user is currently disabled. Please contact an admin for additional information.")
-        raise Exception("We can't find your user, are you sure you have the correct information?")
+                raise use.banError("Your user is currently disabled. Please contact an admin for additional information.")
+        raise use.usernameError("We can't find your user, are you sure you have the correct information?")
 
     def logout(self):
         """
@@ -143,6 +146,7 @@ class userORM(Document):
         self.loggedIn = False
         self.store(db.couchServer)
         db.redisSessionServer.hdel(self.sessionID, "userID")
+        return True
 
     def save(self):
         self.store(db.couchServer)
