@@ -1,6 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
-fla.gr controller for authentication login
+fla.gr controller for view a list of current users
 
 For more information, see: https://github.com/JoshAshby/
 

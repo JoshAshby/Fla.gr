@@ -1,6 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
-fla.gr controller for authentication login
+fla.gr controller for making new users
 
 For more information, see: https://github.com/JoshAshby/
 
@@ -54,7 +54,7 @@ class adminUsers(baseHTMLObject):
 
         else:
             view = adminNewUserTmpl(searchList=[self.tmplSearchList])
-            view.passwordMatchError = True
+            view.passwordError = True
 
             self.session.pushAlert("Those passwords don't match, please try again.", "", "error")
 

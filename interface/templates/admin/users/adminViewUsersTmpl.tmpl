@@ -22,19 +22,19 @@ $adminTabs.tabs($page)
             <td><a href="/admin/users/$userItem.id/edit">$userItem.email</a></td>
             <td>$userItem.joined</td>
             <td>
-                #if $userItem.level == "normal"
-                    <span class="label">User</span>
-                #else if $userItem.level == "admin"
-                    <span class="label label-success">Admin</span>
-                #else if $userItem.level == "GOD"
-                    <span class="label label-important">All Mighty</span>
+                #if $userItem.level < 50
+                    <span class="label"><i class="icon-user"></i> User</span>
+                #else if $userItem.level >= 50
+                    <span class="label label-success"><i class="icon-user-md"></i> Admin</span>
+                #else if $userItem.level == 100
+                    <span class="label label-important"><i class="icon-fire"></i> All Mighty</span>
                 #end if
             </td>
             <td>
                 #if $userItem.disable
-                    <span class="label label-inverse">Disabled</span>
+                    <span class="label label-inverse"><i class="icon-ban-circle"></i> Disabled</span>
                 #else
-                    <span class="label label-success">Active</span>
+                 <span class="label label-success"><i class="icon-okay"></i> Active</span>
                 #end if
             </td>
         </tr>
