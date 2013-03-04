@@ -1,0 +1,24 @@
+#@staticmethod
+#def tabs($page)
+<!-- Start tabs and you page header -->
+<div class="row">
+<!--    <div class="span11 offset1">
+        <div class="row"> -->
+            <div class="span5">
+                <h3><i class="icon-wrench"></i> Admin #if $page!="admin panel"#<small>$page</small>#end if#</h3>
+            </div>
+            <div class="span5 tabs-below">
+                <ul class="nav nav-tabs">
+                    <li #if $page=="admin panel"#class="active"#end if#><a href="/admin"><i class="icon-wrench"></i></a></li>
+                    <li #if $page=="admin flags"#class="active"#end if#><a href="/admin/flags"><i class="icon-flag"></i></a></li>
+                    <li #if $page=="admin users"#class="active"#end if#><a href="/admin/users"><i class="icon-user"></i></a></li>
+                    #if $page=="admin users"
+                        <a style="margin-top: 5px" href="/admin/users/new" class="pull-right btn btn-danger"><i class="icon-user"></i> New User</a>
+                    #end if
+                </ul>
+            </div>
+<!--        </div>
+    </div> -->
+</div>
+<!-- End tabs and page header -->
+#end def

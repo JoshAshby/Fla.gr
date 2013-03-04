@@ -69,7 +69,7 @@ class userORM(Document):
     disable = BooleanField(default=False)
     emailVisibility = BooleanField(default=False)
     history = TextField()
-    level = TextField(default="normal")
+    level = TextField(default=1)
     loggedIn = BooleanField(default=False)
     redirect = BooleanField(default=False)
     password = TextField()
@@ -87,7 +87,6 @@ class userORM(Document):
         :param password: The plain text password that should be used for the password.
         :return: `userORM` if the username is available,
         """
-        print "hello"
         if not findUserByUsername(username):
             passwd = bcrypt.hashpw(password, bcrypt.gensalt())
             user = cls(username=username, password=passwd)

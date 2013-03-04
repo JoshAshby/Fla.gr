@@ -15,8 +15,8 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.you.youDashboardTmpl import youDashboardTmpl
 
 
-@route("/you/dashboard(.*)")
-@route("/your/dashboard(.*)")
+@route("/you")
+@route("/your/dashboard")
 class youDashboard(baseHTMLObject):
     """
     """

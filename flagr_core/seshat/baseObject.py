@@ -16,7 +16,7 @@ joshuaashby@joshashby.com
 import models.basic.sessionModel as sm
 
 class baseHTTPObject(object):
-        __level__ = None
+        __level__ = 0
         __login__ = False
 
         """
@@ -45,17 +45,17 @@ class baseHTTPObject(object):
                 content = ""
 
                 if not error and self.__level__:
-                        if self.session.user["level"] == "GOD":
-                                """
-                                Duh, This user is obviously omnicious and has access to every
-                                area in the site.
-                                """
-                                pass
+                    if self.session.user["level"] == 100:
+                        """
+                        Duh, This user is obviously omnicious and has access to every
+                        area in the site.
+                        """
+                        pass
 
-                        elif self.__level__ != self.session.user["level"]:
-                                self.session.pushAlert("You need to have %s rights to access this." % self.__level__)
-                                self.head = ("303 SEE OTHER", [("location", "/you")])
-                                error = True
+                    elif self.__level__ > self.session.level:
+                        self.session.pushAlert("You don't have the rights to access this.")
+                        self.head = ("303 SEE OTHER", [("location", "/your")])
+                        error = True
 
                 elif self.__login__ and not self.session.loggedIn:
                         self.session.pushAlert("You need to be logged in to view this page.")

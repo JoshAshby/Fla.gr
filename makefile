@@ -1,4 +1,5 @@
 BOOTSTRAP_LESS = ./interface/resources/less/bootstrap/bootstrap.less
+BOOTSTRAP_ADMIN_LESS = ./interface/resources/less/bootstrap/adminBootstrap.less
 BOOTSTRAP_RESPONSIVE_LESS = ./interface/resources/less/bootstrap/responsive.less
 FONTAWESOME_LESS = ./interface/resources/less/fontawesome/font-awesome.less
 CUSTOM_LESS = ./interface/resources/less/custom_styles.less
@@ -14,6 +15,8 @@ bootstrap:
 	mkdir -p interface/resources/css/bootstrap
 	./node_modules/.bin/recess --compile ${BOOTSTRAP_LESS} > interface/resources/css/bootstrap/bootstrap.css
 	./node_modules/.bin/recess --compress ${BOOTSTRAP_LESS} > interface/resources/css/bootstrap/bootstrap.min.css
+	./node_modules/.bin/recess --compile ${BOOTSTRAP_ADMIN_LESS} > interface/resources/css/bootstrap/adminBootstrap.css
+	./node_modules/.bin/recess --compress ${BOOTSTRAP_ADMIN_LESS} > interface/resources/css/bootstrap/adminBootstrap.min.css
 	./node_modules/.bin/recess --compile ${BOOTSTRAP_RESPONSIVE_LESS} > interface/resources/css/bootstrap/bootstrap-responsive.css
 	./node_modules/.bin/recess --compress ${BOOTSTRAP_RESPONSIVE_LESS} > interface/resources/css/bootstrap/bootstrap-responsive.min.css
 	@echo "Done ${CHECK}"

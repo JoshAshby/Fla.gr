@@ -101,7 +101,7 @@ def app(env, start_response):
 
                         start_response(status, header)
 
-                        newHTTPObject.session.save()
+#                        newHTTPObject.session.save()
 
                         del(newHTTPObject)
 
