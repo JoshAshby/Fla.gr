@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from couchdb.mapping import Document, TextField, DateTimeField, BooleanField
+from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, IntegerField
 from datetime import datetime
 
 import config.dbBase as db
@@ -69,7 +69,7 @@ class userORM(Document):
     disable = BooleanField(default=False)
     emailVisibility = BooleanField(default=False)
     history = TextField()
-    level = TextField(default=1)
+    level = IntegerField(default=1)
     loggedIn = BooleanField(default=False)
     redirect = BooleanField(default=False)
     password = TextField()

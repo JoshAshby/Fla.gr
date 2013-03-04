@@ -24,7 +24,7 @@ $adminTabs.tabs($page)
             <td>
                 #if $userItem.level < 50
                     <span class="label"><i class="icon-user"></i> User</span>
-                #else if $userItem.level >= 50
+                #else if $userItem.level >= 50 and $userItem.level < 100
                     <span class="label label-success"><i class="icon-user-md"></i> Admin</span>
                 #else if $userItem.level == 100
                     <span class="label label-important"><i class="icon-fire"></i> All Mighty</span>

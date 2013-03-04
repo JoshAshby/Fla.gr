@@ -30,9 +30,10 @@ class adminUsers(baseHTMLObject):
         view = adminViewUsersTmpl(searchList=[self.tmplSearchList])
 
         users = userORM.view(db.couchServer, 'typeViews/user')
-        for user in users:
-            if user > self.session.level:
-                users.pop(users.index(user))
+        #Don't let you see people higher than you
+        for user in users.rows:
+            if user.level > self.session.level:
+                users.rows.pop(users.rows.index(user))
         view.users = users
 
         return view

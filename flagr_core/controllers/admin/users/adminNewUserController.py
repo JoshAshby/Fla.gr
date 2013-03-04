@@ -31,7 +31,7 @@ class adminUsers(baseHTMLObject):
         return view
 
     def POST(self):
-        name = self.env["members"]["name"]
+        name = self.env["members"]["username"]
         password = self.env["members"]["password"]
         passwordTwice = self.env["members"]["passwordTwice"]
 

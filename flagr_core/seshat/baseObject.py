@@ -45,7 +45,7 @@ class baseHTTPObject(object):
                 content = ""
 
                 if not error and self.__level__:
-                    if self.session.user["level"] == 100:
+                    if self.session.level == 100:
                         """
                         Duh, This user is obviously omnicious and has access to every
                         area in the site.

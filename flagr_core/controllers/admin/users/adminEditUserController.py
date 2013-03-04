@@ -1,6 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
-fla.gr controller for authentication login
+fla.gr controller for editing users
 
 For more information, see: https://github.com/JoshAshby/
 
@@ -14,13 +14,13 @@ joshuaashby@joshashby.com
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-from views.admin.users.adminNewUserTmpl import adminNewUserTmpl
+from views.admin.users.adminEditUserTmpl import adminEditUserTmpl
 
 import config.dbBase as db
 from models.user.userModel import userORM
 
 
-@route("/admin/users/new")
+@route("/admin/users/(.*)/edit")
 class adminUsers(baseHTMLObject):
     __name__ = "admin users"
     __level__ = 50
@@ -30,7 +30,7 @@ class adminUsers(baseHTMLObject):
         id = self.env["members"][0]
 
         user = userORM.load(db.couchServer, id)
-        view = adminNewUserTmpl(searchList=[self.tmplSearchList])
+        view = adminEditUserTmpl(searchList=[self.tmplSearchList])
 
         view.editUser = user
 
@@ -53,7 +53,7 @@ class adminUsers(baseHTMLObject):
                     [("location", "/admin/users/%s/edit"%user.id)])
 
             else:
-                view = adminNewUserTmpl(searchList=[self.tmplSearchList])
+                view = adminEditUserTmpl(searchList=[self.tmplSearchList])
                 view.passwordMatchError = True
 
                 self.session.pushAlert("Those passwords don't match, please try again.", "", "error")

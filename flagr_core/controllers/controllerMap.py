@@ -11,7 +11,7 @@ from controllers.admin.adminController import * #/admin
 #from controllers.admin.flags.adminViewFlagsController  import * #/admin/flags/(.*)
 # -> /admin/users/
 #from controllers.admin.users.adminDelUserController  import * #/admin/users/(.*)/delete
-#from controllers.admin.users.adminEditUserController  import * #/admin/users/(.*)/edit
+from controllers.admin.users.adminEditUserController  import * #/admin/users/(.*)/edit
 from controllers.admin.users.adminNewUserController  import * #/admin/users/new
 from controllers.admin.users.adminViewUsersController  import * #/admin/users
 
