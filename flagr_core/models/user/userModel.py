@@ -148,6 +148,10 @@ class userORM(Document):
         db.redisSessionServer.hdel(self.sessionID, "userID")
         return True
 
+    def saveAlerts(self):
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+        return True
+
     def save(self):
         self.store(db.couchServer)
         db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))

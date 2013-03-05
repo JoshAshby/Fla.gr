@@ -31,7 +31,7 @@ $adminTabs.tabs($page)
                     #end for
                 </select>
             #else
-                <span class="help-block">You're not allowed to change your own level to avoid accidental down leveling</span>
+                <span class="help-block muted">You're not allowed to change your own level to avoid accidental down leveling</span>
             #end if
         </div>
         <div class="control-group">
@@ -50,7 +50,7 @@ $adminTabs.tabs($page)
                 </label>
                 <span class="help-block">If checked then the users account will be disabled until reenabled by an admin.</span>
             #else
-                <span class="help-block">You're not allowed to disable your own account, to avoid locking yourself out.</span>
+                <span class="help-block muted">You're not allowed to disable your own account, to avoid locking yourself out.</span>
             #end if
         </div>
         <legend>Password...</legend>
@@ -65,7 +65,7 @@ $adminTabs.tabs($page)
             <input type="password" placeholder="renter new password" name="passwordTwice" class="span6">
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn btn-danger">Update user</button>
+            <button type="submit" class="btn btn-danger">Update user</button>#if $editUser.id != $user.id# <b>Or...</b> <a href="/admin/users/$editUser.id/delete" class="btn-inverse btn">Delete user</a>#end if#
         </div>
     </form>
 </div>

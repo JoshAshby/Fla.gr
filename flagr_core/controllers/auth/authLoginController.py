@@ -62,6 +62,6 @@ class authLogin(baseHTMLObject):
                 loginForm.passwordError = True
                 loginForm.username = name
             elif type(exc) == use.banError:
-                loginForm = ""
+                loginForm.banError = True
 
             return loginForm

@@ -72,4 +72,4 @@ class adminUsers(baseHTMLObject):
         self.session.pushAlert("User `%s` updated" % user.username, "Yay", "success")
 
         self.head = ("303 SEE OTHER",
-            [("location", str("/admin/users/%s/edit"%user.id))])
+            [("location", "/admin/users")])

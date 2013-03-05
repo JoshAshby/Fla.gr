@@ -55,6 +55,7 @@ class dummySession(object):
         self.history = ""
         self.redirect = ""
         self.sessionID = cookieID
+        self.alerts = []
 
     def clearAlerts(self):
         for alert in self.alerts:
@@ -73,6 +74,10 @@ class dummySession(object):
 
     def store(self, dbDummy):
         db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+
+    def saveAlerts(self):
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+        return True
 
     def save(self):
         db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
