@@ -29,7 +29,7 @@ $adminTabs.tabs($page)
         <legend>Useful stuff...</legend>
         <div class="control-group">
             <label>User level</label>
-            <select class="span6">
+            <select class="span6" name="level">
                 #for $item in $getVar('levels', (("user", 1), (("admin", 50), "all mighty", 100)))
                     #if $item[1] <= $user.level
                         <option value="$item[1]" #if $item[1] == 1#selected="selected"#end if#>$item[0]</option>
@@ -51,10 +51,6 @@ $adminTabs.tabs($page)
                 <input type="checkbox" name="disable"> Disable users account?
             </label>
             <span class="help-block">If checked then the users account will be disabled until reenabled by an admin.</span>
-        </div>
-        <legend>Profile Stuff...</legend>
-        <div class="control-group">
-            <textarea placeholder="about them..." name="abount" class="span6"></textarea>
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-danger">Make user</button>

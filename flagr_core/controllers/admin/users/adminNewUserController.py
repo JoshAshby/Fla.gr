@@ -35,15 +35,26 @@ class adminUsers(baseHTMLObject):
         password = self.env["members"]["password"]
         passwordTwice = self.env["members"]["passwordTwice"]
 
+        level = self.env["members"]["level"] or ""
+        email = self.env["members"]["email"] or ""
+        emailVis = True if self.env["members"].has_key("emailVis") else False
+        disable = True if self.env["members"].has_key("disable") else False
+
+
         if password == passwordTwice:
             try:
                 newUser = userORM.new(name, password)
+
+                newUser.level = level
+                newUser.email = email
+                newUser.emailVisibility = emailVis
+                newUser.disable = disable
                 newUser.save()
 
                 self.session.pushAlert("New user with username `%s` created" % name, "Yay", "success")
 
                 self.head = ("303 SEE OTHER",
-                    [("location", "/admin/users/%s/edit"%newUser.id)])
+                    [("location", str("/admin/users/%s/edit"%newUser.id))])
             except:
                 view = adminNewUserTmpl(searchList=[self.tmplSearchList])
                 view.usernameError = True

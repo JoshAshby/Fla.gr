@@ -13,22 +13,26 @@ $adminTabs.tabs($page)
 </ul>
 <div class="offset2 span6">
 
-    <h2>Editing user: $editUser.username</h2>
+    <h2>Editing user: $editUser.username #if $user.id == $editUser.id#<small>(This is you)</small>#end if#</h2>
     <form class="form form-horizontal" method="POST" action="/admin/users/$editUser.id/edit">
         <legend>Profile Stuff...</legend>
         <div class="control-group">
-            <textarea placeholder="about them..." name="abount" class="span6">$editUser.about</textarea>
+            <textarea placeholder="about them..." name="about" class="span6">$editUser.about</textarea>
         </div>
         <legend>Useful stuff...</legend>
         <div class="control-group">
-            <label>User level</label>
-            <select class="span6">
-                #for $item in $getVar('levels', (("user", 1), ("admin", 50), ("all mighty", 100)))
-                    #if $item[1] <= $user.level
-                        <option value="$item[1]" #if $editUser.level == $item[1]#selected="selected"#end if#>$item[0]</option>
-                    #end if
-                #end for
-            </select>
+            #if $user.id != $editUser.id
+                <label>User level</label>
+                <select class="span6" name="level">
+                    #for $item in $getVar('levels', (("user", 1), ("admin", 50), ("all mighty", 100)))
+                        #if $item[1] <= $user.level
+                            <option value="$item[1]" #if $editUser.level == $item[1]#selected="selected"#end if#>$item[0]</option>
+                        #end if
+                    #end for
+                </select>
+            #else
+                <span class="help-block">You're not allowed to change your own level to avoid accidental down leveling</span>
+            #end if
         </div>
         <div class="control-group">
             <input type="email" placeholder="email" name="email" class="span6" value="$editUser.email">
@@ -40,10 +44,14 @@ $adminTabs.tabs($page)
             <span class="help-block">If checked then the users email will be visible on their profile.</span>
         </div>
         <div class="control-group">
-            <label class="checkbox">
-                <input type="checkbox" name="disable" #if $editUser.disable#checked#end if#> Disable users account?
-            </label>
-            <span class="help-block">If checked then the users account will be disabled until reenabled by an admin.</span>
+            #if $user.id != $editUser.id
+                <label class="checkbox">
+                    <input type="checkbox" name="disable" #if $editUser.disable#checked#end if#> Disable users account?
+                </label>
+                <span class="help-block">If checked then the users account will be disabled until reenabled by an admin.</span>
+            #else
+                <span class="help-block">You're not allowed to disable your own account, to avoid locking yourself out.</span>
+            #end if
         </div>
         <legend>Password...</legend>
 <!--        <small> You don't have to change this, but if you want to, just enter your current password, and the new password below</small>
@@ -57,7 +65,7 @@ $adminTabs.tabs($page)
             <input type="password" placeholder="renter new password" name="passwordTwice" class="span6">
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn btn-danger">Make user</button>
+            <button type="submit" class="btn btn-danger">Update user</button>
         </div>
     </form>
 </div>

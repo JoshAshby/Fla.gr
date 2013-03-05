@@ -23,7 +23,7 @@ $adminTabs.tabs($page)
     <tbody>
     #for $userItem in $users
         <tr>
-            <td><a href="/admin/users/$userItem.id/edit">$userItem.username</a></td>
+            <td><a href="/admin/users/$userItem.id/edit">$userItem.username #if $user.id == $userItem.id#(You)#end if#</a></td>
             <td><a href="/admin/users/$userItem.id/edit">$userItem.email</a></td>
             <td>$userItem.joined</td>
             <td>

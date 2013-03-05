@@ -76,6 +76,7 @@ class userORM(Document):
     joined = DateTimeField(default=datetime.now)
     sessionID = TextField()
     docType = TextField(default="user")
+    alerts = ""
 
     @classmethod
     def new(cls, username, password):
@@ -151,3 +152,13 @@ class userORM(Document):
         self.store(db.couchServer)
         db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
         return True
+
+    def setPassword(self, password):
+        """
+        Sets the users password to `password`
+
+        :param password: plain text password to hash
+        :return: `True`
+        """
+        self.password = bcrypt.hashpw(password, bcrypt.gensalt())
+        self.store(db.couchServer)

@@ -40,17 +40,26 @@ class adminUsers(baseHTMLObject):
         id = self.env["members"][0]
         password = self.env["members"]["password"] if self.env["members"].has_key("password") else None
         passwordTwice = self.env["members"]["passwordTwice"] if self.env["members"].has_key("passwordTwice") else None
+        about = self.env["members"]["about"] or ""
+        level = self.env["members"]["level"] or 1
+        email = self.env["members"]["email"] or ""
+        emailVis = True if self.env["members"].has_key("emailVis") else False
+        disable = True if self.env["members"].has_key("disable") else False
+
+        user = userORM.load(db.couchServer, id)
+        user.about = about
+        #Not allowed to edit your own level,
+        #or disable to avoid down leveling or locking out on accident
+        if self.session.id != id:
+            user.level = level
+            user.disable = disable
+        user.email = email
+        user.emailVisibility = emailVis
+        user.store(db.couchServer)
 
         if password and passwordTwice:
             if password == passwordTwice:
-                user = userORM.load(db.couchServer, id)
                 user.setPassword(password)
-                user.save()
-
-                self.session.pushAlert("User `%s` updated" % user.username, "Yay", "success")
-
-                self.head = ("303 SEE OTHER",
-                    [("location", "/admin/users/%s/edit"%user.id)])
 
             else:
                 view = adminEditUserTmpl(searchList=[self.tmplSearchList])
@@ -59,3 +68,8 @@ class adminUsers(baseHTMLObject):
                 self.session.pushAlert("Those passwords don't match, please try again.", "", "error")
 
                 return view
+
+        self.session.pushAlert("User `%s` updated" % user.username, "Yay", "success")
+
+        self.head = ("303 SEE OTHER",
+            [("location", str("/admin/users/%s/edit"%user.id))])
