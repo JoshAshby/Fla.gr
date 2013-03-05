@@ -43,4 +43,4 @@ from controllers.you.youDashboardController  import * #/you/dashboard
 #from controllers.you.youFlagsController  import * #/you/flags
 #from controllers.you.youLabelsController  import * #/you/labels
 #from controllers.you.youProfileController  import * #/you/profile
-#from controllers.you.youSettingsController  import * #/you/settings
+from controllers.you.youSettingsController  import * #/you/settings

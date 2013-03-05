@@ -18,6 +18,7 @@ $adminTabs.tabs($page)
         <legend>Profile Stuff...</legend>
         <div class="control-group">
             <textarea placeholder="about them..." name="about" class="span6">$editUser.about</textarea>
+            <span class="help-block"><small>Text can be formated with <a href="http://daringfireball.net/projects/markdown/syntax">Daring Fireball's Markdown</a></small></span>
         </div>
         <legend>Useful stuff...</legend>
         <div class="control-group">
@@ -64,8 +65,8 @@ $adminTabs.tabs($page)
         <div class="control-group">
             <input type="password" placeholder="renter new password" name="passwordTwice" class="span6">
         </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn-danger">Update user</button>#if $editUser.id != $user.id# <b>Or...</b> <a href="/admin/users/$editUser.id/delete" class="btn-inverse btn">Delete user</a>#end if#
+        <div class="well text-center">
+            <button type="submit" class="btn btn-danger"><i class="icon-ok"></i> Update user</button>#if $editUser.id != $user.id# <b>Or...</b> <a href="/admin/users/$editUser.id/delete" class="btn-inverse btn"><i class="icon-remove"></i> Delete user</a>#end if#
         </div>
     </form>
 </div>
