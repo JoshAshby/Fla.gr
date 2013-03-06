@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-fla.gr controller for editing users
+fla.gr controller for deleting users
 
 For more information, see: https://github.com/JoshAshby/
 
@@ -21,7 +21,7 @@ from models.user.userModel import userORM
 
 
 @route("/admin/users/(.*)/delete")
-class adminUsers(baseHTMLObject):
+class adminDelUser(baseHTMLObject):
     __name__ = "admin users"
     __level__ = 50
     def GET(self):

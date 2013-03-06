@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 """
-fla.gr controller for authentication login
+fla.gr controller for authentication logout
 
 For more information, see: https://github.com/JoshAshby/
 

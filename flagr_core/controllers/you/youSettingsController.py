@@ -22,7 +22,7 @@ import bcrypt
 
 
 @route("/your/settings")
-class adminUsers(baseHTMLObject):
+class youSettings(baseHTMLObject):
     __name__ = "settings"
     def GET(self):
         """

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-fla.gr controller for viewing the logged in users flags
+fla.gr controller for viewing the logged in users profile
 
 For more information, see: https://github.com/JoshAshby/
 
@@ -18,7 +18,7 @@ from views.you.youProfileTmpl import youProfileTmpl
 
 
 @route("/your/profile")
-class adminUsers(baseHTMLObject):
+class youProfile(baseHTMLObject):
     __name__ = "profile"
     def GET(self):
         """

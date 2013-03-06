@@ -34,7 +34,7 @@ from controllers.auth.authRegisterController import * #/auth/register
 #from controllers.public.publicFlagsController  import * #/public/flags
 
 #Next, /user/ controllers
-#from controllers.user.userFlagsController  import * #/user/(.*)/flags
+from controllers.user.userFlagsController  import * #/user/(.*)/flags
 #from controllers.user.userLabelsController  import * #/user/(.*)/labels
 from controllers.user.userProfileController  import * #/user/(.*)/profile
 

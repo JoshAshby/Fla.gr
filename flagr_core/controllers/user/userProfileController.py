@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-fla.gr controller for viewing the logged in users flags
+fla.gr controller for viewing a specific users profile
 
 For more information, see: https://github.com/JoshAshby/
 

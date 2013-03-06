@@ -20,7 +20,7 @@ import models.flag.flagModel as fm
 
 
 @route("/your/flags")
-class adminUsers(baseHTMLObject):
+class youFlags(baseHTMLObject):
     __name__ = "flags"
     def GET(self):
         """
