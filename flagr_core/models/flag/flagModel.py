@@ -14,6 +14,8 @@ from datetime import datetime
 
 import config.dbBase as db
 
+import markdown
+
 
 def listFlagsByUserID(userID):
     """
@@ -33,17 +35,23 @@ def listFlagsByUserID(userID):
             flags.append(flag)
     return flags
 
+def formatFlags(flagsList):
+    for flag in flagsList:
+        flag.formatedDescription = markdown.markdown(flag.description)
+
+    return flagsList
+
 
 class flagORM(Document):
     userID = TextField()
     title = TextField()
-    flag = TextField()
+    description = TextField()
     url = TextField()
     labels = ListField(TextField())
     visibility = BooleanField(default=False)
     created = DateTimeField(default=datetime.now)
-    lastEdited = DateTimeField(default=datetime.now)
     docType=TextField(default="flag")
+    formatedDescription = ""
 
     def save(self):
         self.store(db.couchServer)

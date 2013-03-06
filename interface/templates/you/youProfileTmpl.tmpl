@@ -1,5 +1,6 @@
 #extends views.bootstrapSkeleton
 #from views.partials.tabs.dashboardTabsTmpl import dashboardTabsTmpl as dashTabs
+#import markdown
 
 #def topExtra
 $dashTabs.tabs($page)
@@ -14,12 +15,12 @@ $dashTabs.tabs($page)
                 <span class="label label"><i class="icon-lock"></i> Private Email</span>
             #end if
         </div>
-        <div class="span4">
+        <div class="span3">
             $user.email
         </div>
     </div>
     <div class="row">
-        $user.about
+        $markdown.markdown($user.about)
     </div>
 </div>
 #end def

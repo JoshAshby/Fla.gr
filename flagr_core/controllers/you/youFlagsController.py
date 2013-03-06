@@ -28,6 +28,8 @@ class adminUsers(baseHTMLObject):
         view = youFlagsTmpl(searchList=[self.tmplSearchList])
 
         flags = fm.listFlagsByUserID(self.session.id)
+        if flags:
+            flags = fm.formatFlags(flags)
 
         view.flags = flags
 

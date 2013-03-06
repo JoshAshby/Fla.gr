@@ -1,4 +1,5 @@
 #extends views.bootstrapSkeleton
+#import markdown
 
 #def body
 <div class="offset2 span6">
@@ -11,14 +12,14 @@
                 <span class="label label-success"><i class="icon-unlock"></i> Public Email</span>
             #end if
         </div>
-        <div class="span4">
+        <div class="span3">
             #if $userProfile.emailVisibility
                 $userProfile.email
             #end if
         </div>
     </div>
     <div class="row">
-        $userProfile.about
+        $markdown.markdown($userProfile.about)
     </div>
 </div>
 #end def
