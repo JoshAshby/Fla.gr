@@ -42,5 +42,5 @@ from controllers.auth.authRegisterController import * #/auth/register
 from controllers.you.youDashboardController  import * #/your/dashboard
 from controllers.you.youFlagsController  import * #/your/flags
 #from controllers.you.youLabelsController  import * #/your/labels
-#from controllers.you.youProfileController  import * #/your/profile
+from controllers.you.youProfileController  import * #/your/profile
 from controllers.you.youSettingsController  import * #/your/settings
