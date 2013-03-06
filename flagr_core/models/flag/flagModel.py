@@ -20,7 +20,8 @@ def listFlagsByUserID(userID):
     Searches couchdb for flags by the requested userID
 
     :param userID: The userID to search for
-    :return: A list of `flagORM` instances at least one flag is found,
+    :return: A list of `flagORM` instances at least one flag is found, and the
+        `userORM` object for the flags author
         `None` if no flags are found
     """
     foundFlags = flagORM.view(db.couchServer, 'typeViews/flag')
@@ -35,11 +36,13 @@ def listFlagsByUserID(userID):
 
 class flagORM(Document):
     userID = TextField()
+    title = TextField()
     flag = TextField()
     url = TextField()
-    tags = ListField()
-    public = BooleanField(default=False)
-    made = DateTimeField(default=datetime.now)
+    labels = ListField(TextField())
+    visibility = BooleanField(default=False)
+    created = DateTimeField(default=datetime.now)
+    lastEdited = DateTimeField(default=datetime.now)
     docType=TextField(default="flag")
 
     def save(self):

@@ -21,10 +21,10 @@ from controllers.auth.authLogoutController import * #/auth/logout
 from controllers.auth.authRegisterController import * #/auth/register
 
 #Next, /flags/ controllers
-#from controllers.flags.flagDelController  import * #/flags/(.*)/delete
-#from controllers.flags.flagEditController  import * #/flags/(.*)/edit
-#from controllers.flags.flagNewController  import * #/flags/new
-#from controllers.flags.flagViewController  import * #/flags/(.*)
+#from controllers.flags.flagDelController  import * #/flag/(.*)/delete
+#from controllers.flags.flagEditController  import * #/flag/(.*)/edit
+#from controllers.flags.flagNewController  import * #/flag/new
+#from controllers.flags.flagViewController  import * #/flag/(.*)
 
 #Next, /labels/ controllers
 #from controllers.labels.labelsViewController import * #/labels/(.*)
@@ -39,8 +39,8 @@ from controllers.auth.authRegisterController import * #/auth/register
 #from controllers.user.userProfileController  import * #/user/(.*)/profile
 
 #Finally, /you/ controllers
-from controllers.you.youDashboardController  import * #/you/dashboard
-#from controllers.you.youFlagsController  import * #/you/flags
-#from controllers.you.youLabelsController  import * #/you/labels
-#from controllers.you.youProfileController  import * #/you/profile
-from controllers.you.youSettingsController  import * #/you/settings
+from controllers.you.youDashboardController  import * #/your/dashboard
+from controllers.you.youFlagsController  import * #/your/flags
+#from controllers.you.youLabelsController  import * #/your/labels
+#from controllers.you.youProfileController  import * #/your/profile
+from controllers.you.youSettingsController  import * #/your/settings

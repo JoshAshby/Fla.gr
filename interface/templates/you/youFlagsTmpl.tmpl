@@ -5,4 +5,74 @@
 $dashTabs.tabs($page)
 #end def
 #def body
+#if $flags
+    #for $flag in $flags
+        <!-- Start of flag overview template -->
+        <div class="row">
+            <div class="media">
+                <a href="/flag/$flag.id">
+                    <i class="span1 icon-bookmark icon-4x media-object pull-left"></i>
+                </a>
+                <div class="media-body">
+                    <div class="row media-heading">
+                        <div class="span3">
+                            <h3>
+                                <a href="/flag/$flag.id">$flag.title</a>
+                                <small>
+                                    <a href="/user/$user.username">$user.username</a>
+                                </small>
+                            </h3>
+                        </div>
+                        <div class="span5 pull-right">
+                            <div class="well">
+                                <div class="span">
+                                    <i class="icon-calendar muted"></i> <small class="muted">$flag.created</small>
+                                </div>
+                                <div class="span">
+                                    #if $flag.visibility
+                                        <span class="label"><i class="icon-unlock"></i> Public</span>
+                                    #else
+                                        <span class="label"><i class="icon-lock"></i> Private</span>
+                                    #end if
+                                </div>
+                                <div class="span pull-right">
+                                    <div class="btn-group">
+                                        <a class="btn-info btn-small btn" rel="tooltip" href="/flag/%s/edit"%$flag.id data-original-title="Edit flag" data-placement="bottom">
+                                            <i class="icon-edit"></i>
+                                        </a>
+                                        <a class="btn-danger btn-small btn" rel="tooltip" href="/flag/%s/delete"%$flag.id data-original-title="Delete Flag" data-placement="bottom">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    $flag.description
+                    <br>
+                    #if $flag.labels
+                        <b class="muted"><i class="icon-tags"></i> Labels: </b>
+                        #for $label in $flag.labels
+                            <a href="/labels/$label"><span class="label label-info">$label</span></a>
+                        #end for
+                    #end if
+                    #if $flag.url
+                        <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
+                    #end if
+                    <b class="muted">Last updated:</b> <i class="icon-calendar"></i> $flag.lastEdited
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!-- End of flag overview template -->
+    #end for
+#else
+    <div class="row">
+        <div class="offset2 span6">
+            <h2>Oh no!</h2>
+            <p>We couldn't find any flags for you, why don't you make one?<p>
+            <a href="/flag/new" class="btn btn-info"><i class="icon-flag"></i> New flag</a>
+        </div>
+    </div>
+#end if
 #end def
