@@ -17,7 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.user.userFlagsTmpl import userFlagsTmpl
 
 import models.flag.flagModel as fm
-
+import models.user.userModel as um
 
 @route("/user/(.*)/flags")
 class userFlags(baseHTMLObject):
@@ -25,16 +25,19 @@ class userFlags(baseHTMLObject):
     def GET(self):
         """
         """
+        user = self.env["members"][0]
         view = userFlagsTmpl(searchList=[self.tmplSearchList])
+        user = um.findUserByID(user) or um.findUserByUsername(user)
 
-        flags = fm.listFlagsByUserID(self.session.id)
+        flags = fm.listFlagsByUserID(user.id)
         if flags:
             flags = fm.formatFlags(flags)
 
-        for flag in flags:
-            if not flag.visibility:
-                flags.pop(flags.index(flag))
+            for flag in flags:
+                if not flag.visibility:
+                    flags.pop(flags.index(flag))
 
         view.flags = flags
+        view.flagAuthor = user
 
         return view

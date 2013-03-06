@@ -1,6 +1,10 @@
 #extends views.bootstrapSkeleton
 #from views.partials.tabs.dashboardTabsTmpl import dashboardTabsTmpl as dashTabs
+#from views.partials.rightExtras.flagsRightExtraTmpl import flagsRightExtraTmpl as flagsRE
 
+#def rightExtra
+$flagsRE.rightExtra($page, $flags)
+#end def
 #def topExtra
 $dashTabs.tabs($page)
 #end def
@@ -48,8 +52,10 @@ $dashTabs.tabs($page)
                             </div>
                         </div>
                     </div>
-                    $flag.dformatedDescription
+                    $flag.dformatedDescription[:160]...
+
                     <br>
+
                     #if $flag.labels
                         <b class="muted"><i class="icon-tags"></i> Labels: </b>
                         #for $label in $flag.labels
@@ -59,7 +65,6 @@ $dashTabs.tabs($page)
                     #if $flag.url
                         <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
                     #end if
-                    <b class="muted">Last updated:</b> <i class="icon-calendar"></i> $flag.lastEdited
                 </div>
             </div>
         </div>

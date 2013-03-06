@@ -38,7 +38,6 @@ def listFlagsByUserID(userID):
 def formatFlags(flagsList):
     for flag in flagsList:
         flag.formatedDescription = markdown.markdown(flag.description)
-
     return flagsList
 
 

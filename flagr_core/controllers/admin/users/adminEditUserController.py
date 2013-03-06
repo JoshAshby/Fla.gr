@@ -27,9 +27,9 @@ class adminEditUser(baseHTMLObject):
     def GET(self):
         """
         """
-        id = self.env["members"][0]
+        userid = self.env["members"][0]
 
-        user = userORM.load(db.couchServer, id)
+        user = userORM.load(db.couchServer, userid)
         view = adminEditUserTmpl(searchList=[self.tmplSearchList])
 
         view.editUser = user
@@ -37,7 +37,7 @@ class adminEditUser(baseHTMLObject):
         return view
 
     def POST(self):
-        id = self.env["members"][0]
+        userid = self.env["members"][0]
         password = self.env["members"]["password"] if self.env["members"].has_key("password") else None
         passwordTwice = self.env["members"]["passwordTwice"] if self.env["members"].has_key("passwordTwice") else None
         about = self.env["members"]["about"] or ""
@@ -46,11 +46,11 @@ class adminEditUser(baseHTMLObject):
         emailVis = True if self.env["members"].has_key("emailVis") else False
         disable = True if self.env["members"].has_key("disable") else False
 
-        user = userORM.load(db.couchServer, id)
+        user = userORM.load(db.couchServer, userid)
         user.about = about
         #Not allowed to edit your own level,
         #or disable to avoid down leveling or locking out on accident
-        if self.session.id != id:
+        if self.session.id != userid:
             user.level = level
             user.disable = disable
         user.email = email

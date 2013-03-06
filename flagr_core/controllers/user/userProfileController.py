@@ -24,9 +24,9 @@ class adminUsers(baseHTMLObject):
     def GET(self):
         """
         """
-        id = self.env["members"][0]
+        userID = self.env["members"][0]
 
-        user = um.findUserByID(id) or um.findUserByUsername(id)
+        user = um.findUserByID(userID) or um.findUserByUsername(userID)
         view = userProfileTmpl(searchList=[self.tmplSearchList])
 
         view.userProfile = user

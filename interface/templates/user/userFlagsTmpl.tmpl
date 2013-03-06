@@ -1,4 +1,4 @@
-#extends bootstrapSkeleton
+#extends views.bootstrapSkeleton
 
 #def body
 #if $flags
@@ -15,7 +15,7 @@
                             <h3>
                                 <a href="$flag.id">$flag.title</a>
                                 <small>
-                                    <a href="$flag.author">$flag.author</a>
+                                    <a href="$flagAuthor.username">$flagAuthor.username</a>
                                 </small>
                             </h3>
                         </div>
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    $flag.content
+                    $flag.content[:160]...
 
                     <br>
 
@@ -65,22 +65,14 @@
         <hr>
         <!-- End of flag overview template -->
     #end for
-    #else
-        <div class="page-header">
-            <h1>Oh no! <small> It looks like we don't have any flags!</small></h1>
+#else
+    <div class="row">
+        <div class="offset2 span6">
+            <div class="page-header">
+                <h1>Oh no! <small> It looks like we don't have any flags for this user!</small></h1>
+                <p>$flagAuthor.username doesn't seem to have any public flags right now. Check back later and maybe they'll have something!</p>
+            </div>
         </div>
-        <p>If you want to make a new flag and help fill this void, feel free to do so!</p>
-    #end if
-#end def
-
-#def rightExtra
-    #if $page=='flags' and $flags
-        <div class="span1">
-            <ul class="nav nav-pills">
-                <li class="active"><a href="#all"><i class="icon-flag"></i></a></li>
-                <li><a href="#public"><i class="icon-unlock"></i></a></li>
-                <li><a href="#private"><i class="icon-lock"></i></a></li>
-            </ul>
-        </div>
-    #end if
+    </div>
+#end if
 #end def
