@@ -14,6 +14,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.baseObject import baseHTTPObject
+from utils.devConfig import cfg
 
 class baseHTMLObject(baseHTTPObject):
     def finishInit(self):
@@ -23,4 +24,5 @@ class baseHTMLObject(baseHTTPObject):
             self.__name__ = "untitledFlagrPage"
 
         self.head = ("200 OK", [("Content-type", "text/html")])
-        self.tmplSearchList = {"user": self.session, "page": (self.__name__)}
+        self.tmplSearchList = {"user": self.session, "page": (self.__name__), "cfg": cfg}
+        self.env["cfg"] = cfg

@@ -10,67 +10,71 @@ $dashTabs.tabs($page)
 #end def
 #def body
 #if $flags
+#if not $getVar('cfg.enableWideFlags', False)
+    <div class="span6 offset2">
+#end if
     #for $flag in $flags
         <!-- Start of flag overview template -->
         <div class="row">
-            <div class="media">
-                <a href="/flag/$flag.id">
-                    <i class="span1 icon-bookmark icon-4x media-object pull-left"></i>
-                </a>
-                <div class="media-body">
-                    <div class="row media-heading">
-                        <div class="span3">
-                            <h3>
-                                <a href="/flag/$flag.id">$flag.title</a>
-                                <small>
-                                    <a href="/user/$user.username">$user.username</a>
-                                </small>
-                            </h3>
-                        </div>
-                        <div class="span5 pull-right">
-                            <div class="well">
-                                <div class="span">
-                                    <i class="icon-calendar muted"></i> <small class="muted">$flag.created</small>
-                                </div>
-                                <div class="span">
-                                    #if $flag.visibility
-                                        <span class="label"><i class="icon-unlock"></i> Public</span>
-                                    #else
-                                        <span class="label"><i class="icon-lock"></i> Private</span>
-                                    #end if
-                                </div>
-                                <div class="span pull-right">
-                                    <div class="btn-group">
-                                        <a class="btn-info btn-small btn" rel="tooltip" href="/flag/%s/edit"%$flag.id data-original-title="Edit flag" data-placement="bottom">
-                                            <i class="icon-edit"></i>
-                                        </a>
-                                        <a class="btn-danger btn-small btn" rel="tooltip" href="/flag/%s/delete"%$flag.id data-original-title="Delete Flag" data-placement="bottom">
-                                            <i class="icon-trash"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="span#if $getVar('cfg.enableWideFlags', False)#4#else#6#end if#">
+                <h3>
+                    <a href="/flag/$flag.id">$flag.title[:50]</a>
+                </h3>
+                <b class="muted">
+                    By <a class="muted" href="/user/$user.username">$user.username</a>
+                </b>
+            </div>
+            <div class="span6 pull-right">
+                <div class="well">
+                    <div class="span">
+                        <i class="icon-calendar muted"></i> <small class="muted">$flag.formatedDate</small>
+                    </div>
+                    <div class="span">
+                        #if $flag.visibility
+                            <span class="label"><i class="icon-unlock"></i> Public</span>
+                        #else
+                            <span class="label"><i class="icon-lock"></i> Private</span>
+                        #end if
+                    </div>
+                    <div class="span pull-right">
+                        <div class="btn-group">
+                            <a class="btn-info btn-small btn" rel="tooltip" href="/flag/$flag.id/edit" data-original-title="Edit flag" data-placement="bottom">
+                                <i class="icon-edit"></i>
+                            </a>
+                            <a class="btn-danger btn-small btn" rel="tooltip" href="/flag/$flag.id/delete" data-original-title="Delete Flag" data-placement="bottom">
+                                <i class="icon-trash"></i>
+                            </a>
                         </div>
                     </div>
-                    $flag.formatedDescription[:160]...
-
-                    <br>
-
-                    #if $flag.labels
-                        <b class="muted"><i class="icon-tags"></i> Labels: </b>
-                        #for $label in $flag.labels
-                            <a href="/labels/$label"><span class="label label-info">$label</span></a>
-                        #end for
-                    #end if
-                    #if $flag.url
-                        <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
-                    #end if
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span#if $getVar('cfg.enableWideFlags', False)#10#else#6#end if#">
+            $flag.formatedDescription[:160]
+            </div>
+        </div>
+        <div class="row">
+            <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
+                #if $flag.labels
+                    <b class="muted"><i class="icon-tags"></i> Labels: </b>
+                    #for $label in $flag.labels
+                        <a href="/labels/$label"><span class="label label-info">$label</span></a>
+                    #end for
+                #end if
+            </div>
+            <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
+                #if $flag.url
+                    <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
+                #end if
             </div>
         </div>
         <hr>
         <!-- End of flag overview template -->
     #end for
+#if not $getVar('cfg.enableWideFlags', False)
+    </div>
+#end if
 #else
     <div class="row">
         <div class="offset2 span6">

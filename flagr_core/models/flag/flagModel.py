@@ -37,6 +37,7 @@ def listFlagsByUserID(userID):
 def formatFlags(flagsList):
     for flag in flagsList:
         flag.formatedDescription = mdu.markClean(flag.description)
+        flag.formatedDate = datetime.strftime(flag.created, "%a %b %d, %Y @ %H:%I%p")
     return flagsList
 
 
@@ -50,6 +51,7 @@ class flagORM(Document):
     created = DateTimeField(default=datetime.now)
     docType=TextField(default="flag")
     formatedDescription = ""
+    formatedDate = ""
 
     def save(self):
         self.store(db.couchServer)

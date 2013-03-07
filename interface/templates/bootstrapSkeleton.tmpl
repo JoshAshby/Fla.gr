@@ -29,7 +29,7 @@
 
         #if $getVar('stylesheets', '')
             #for $stylesheets in $stylesheets
-                <script src="$resources/css/$stylesheets.css"></script>
+                <script src="$resources/css/${stylesheets}.css"></script>
             #end for
         #end if
 
@@ -148,7 +148,7 @@
 
         #if $getVar('scripts', '')
             #for $script in $scripts
-                <script src="$resources/js/$script.js"></script>
+                <script src="$resources/js/${script}.js"></script>
             #end for
         #end if
 
