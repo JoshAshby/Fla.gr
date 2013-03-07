@@ -62,8 +62,9 @@ def findUserByUsername(username):
     if len(foundUser)>1:
         raise Exception("Multiple Users")
     else:
-        users.formatedAbout = mdu.markClean(user.about)
-        return foundUser[0]
+        user = foundUser[0]
+        user.formatedAbout = mdu.markClean(user.about)
+        return user
 
 
 class userORM(Document):

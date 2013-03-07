@@ -16,13 +16,13 @@ import bleach as bl
 import markdown as md
 
 cleanTags = bl.ALLOWED_TAGS
-cleanTags.append(['p', 'img', 'small', 'pre'])
+cleanTags.extend(['p', 'img', 'small', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
 cleanAttr = bl.ALLOWED_ATTRIBUTES
 cleanAttr["img"] = ["src", "width", "height"]
 cleanAttr["i"] = ["class"]
 
 def markClean(markdown):
     mark = md.markdown(markdown)
-    cleanedMark = bl.clean(mark, cleanTags, cleanAttr)
+    cleanedMark = bl.clean(mark, tags=cleanTags, attributes=cleanAttr)
 
     return cleanedMark
