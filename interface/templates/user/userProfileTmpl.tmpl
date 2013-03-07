@@ -4,7 +4,7 @@
 #def body
 <div class="offset2 span6">
     <div class="row">
-        <h2><i class="icon-user"></i> $userProfile.username</h2>
+        <h2><i class="icon-user"></i> $userProfile.username <small>profile</small></h2>
     </div>
     <div class="well row">
         <div class="span2">
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="row">
-        $markdown.markdown($userProfile.about)
+        $userProfile.formatedAbout
     </div>
 </div>
 #end def

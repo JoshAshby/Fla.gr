@@ -13,8 +13,7 @@ from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, Li
 from datetime import datetime
 
 import config.dbBase as db
-
-import markdown
+import utils.markdownUtils as mdu
 
 
 def listFlagsByUserID(userID):
@@ -37,7 +36,7 @@ def listFlagsByUserID(userID):
 
 def formatFlags(flagsList):
     for flag in flagsList:
-        flag.formatedDescription = markdown.markdown(flag.description)
+        flag.formatedDescription = mdu.markClean(flag.description)
     return flagsList
 
 

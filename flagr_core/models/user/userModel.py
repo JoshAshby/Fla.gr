@@ -17,6 +17,7 @@ from datetime import datetime
 import config.dbBase as db
 import utils.alerts as ua
 import utils.sessionExceptions as use
+import utils.markdownUtils as mdu
 
 import bcrypt
 import json
@@ -37,7 +38,9 @@ def findUserByID(userID):
     elif len(users)>1:
         raise Exception("Multiple Users")
     else:
-        return users.rows[0]
+        user = users.rows[0]
+        user.formatedAbout = mdu.markClean(user.about)
+        return user
 
 def findUserByUsername(username):
     """
@@ -59,6 +62,7 @@ def findUserByUsername(username):
     if len(foundUser)>1:
         raise Exception("Multiple Users")
     else:
+        users.formatedAbout = mdu.markClean(user.about)
         return foundUser[0]
 
 
@@ -77,6 +81,7 @@ class userORM(Document):
     sessionID = TextField()
     docType = TextField(default="user")
     alerts = ""
+    formatedAbout = ""
 
     @classmethod
     def new(cls, username, password):
