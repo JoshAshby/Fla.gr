@@ -31,7 +31,7 @@ class userFlags(baseHTMLObject):
 
         flags = fm.listFlagsByUserID(user.id)
         if flags:
-            flags = fm.formatFlags(flags)
+            flags = fm.formatFlags(flags, False)
 
             for flag in flags:
                 if not flag.visibility:

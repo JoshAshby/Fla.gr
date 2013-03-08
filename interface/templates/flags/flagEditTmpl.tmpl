@@ -1,9 +1,6 @@
 #extends views.bootstrapSkeleton
 
 #def body
-<div class="row">
-<div class="offset2 span6">
-
     <h2>Updating flag  <small>$title</small></h2>
     <form class="form form-horizontal" method="POST" action="/flags/new">
         <div class="control-group #if $getVar('titleError', False)#error#end if#">
@@ -28,9 +25,9 @@
             <input type="text" id="labelInput" class="span5" placehlder="labels...">
             <a id="addLabels" class="btn btn-info"><i class="icon-plus"></i></a>
             <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be stripped.</span>
-            <input type="hidden" name="labels" id="labels" value="$labels">
+            <input type="hidden" name="labels" id="labels" value='$getVar('labels', '')'>
         #else
-            <input type="text" name="labels" class="span6" placeholder="labels..." value="$getVar('labels', '')">
+            <input type="text" name="labels" class="span6" placeholder="labels..." value='$getVar('labels', '')'>
             <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be striped. (Hint, tags will be removed if you click on them.)</span>
         #end if
         </div>
@@ -44,6 +41,4 @@
             <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> Make it so!</button>
         </div>
     </form>
-</div>
-</div>
 #end def

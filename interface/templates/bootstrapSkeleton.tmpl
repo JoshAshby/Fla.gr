@@ -123,10 +123,15 @@
                 </div>
             </div>
             <div class="row">
-                <div class="offset1 span10">
-                    $body
+                <div class="span10 offset1">
+                    $getVar('headLines', '')
+                    <div class="offset2 span6">
+                        $body
+                    </div>
                 </div>
-                $getVar('rightExtra', '')
+                <div class="span1">
+                    $getVar('rightExtra', '')
+                </div>
             </div>
 
             <hr>

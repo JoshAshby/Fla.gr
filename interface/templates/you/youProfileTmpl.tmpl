@@ -6,27 +6,17 @@
 $dashTabs.tabs($page)
 #end def
 #def body
-<div class="row">
-<div class="offset2 span6">
-    <div class="row">
-        <div class="well">
-            <div class="span2">
-                #if $user.emailVisibility
-                    <span class="label label-success"><i class="icon-unlock"></i> Public Email</span>
-                #else
-                    <span class="label label"><i class="icon-lock"></i> Private Email</span>
-                #end if
-            </div>
-            <div class="span3">
-                $user.email
-            </div>
+    <div class="well">
+        <div class="span2">
+            #if $user.emailVisibility
+                <span class="label label-success"><i class="icon-unlock"></i> Public Email</span>
+            #else
+                <span class="label label"><i class="icon-lock"></i> Private Email</span>
+            #end if
+        </div>
+        <div class="span3">
+            $user.email
         </div>
     </div>
-    <div class="row">
-        <div class="span6">
-            $user.formatedAbout
-        </div>
-    </div>
-</div>
-</div>
+    $user.formatedAbout
 #end def

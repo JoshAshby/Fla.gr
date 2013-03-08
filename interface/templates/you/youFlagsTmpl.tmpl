@@ -1,6 +1,7 @@
 #extends views.bootstrapSkeleton
 #from views.partials.tabs.dashboardTabsTmpl import dashboardTabsTmpl as dashTabs
 #from views.partials.rightExtras.flagsRightExtraTmpl import flagsRightExtraTmpl as flagsRE
+#from views.partials.flags.flagsListTmpl import flagsListTmpl as flagsList
 
 #def rightExtra
 $flagsRE.rightExtra($page, $flags)
@@ -10,77 +11,10 @@ $dashTabs.tabs($page)
 #end def
 #def body
 #if $flags
-    #if not $getVar('cfg.enableWideFlags', False)
-    <div class="row">
-        <div class="span6 offset2">
-        #end if
-        #for $flag in $flags
-            <!-- Start of flag overview template -->
-            <div class="row">
-                <div class="span#if $getVar('cfg.enableWideFlags', False)#4#else#6#end if#">
-                    <h3>
-                        <a href="/flags/$flag.id">$flag.title</a>
-                    </h3>
-                </div>
-                <div class="span6 pull-right">
-                    <div class="well">
-                        <div class="span">
-                            <i class="icon-calendar muted"></i> <small class="muted">$flag.formatedDate</small>
-                        </div>
-                        <div class="span">
-                            #if $flag.visibility
-                                <span class="label"><i class="icon-unlock"></i> Public</span>
-                            #else
-                                <span class="label"><i class="icon-lock"></i> Private</span>
-                            #end if
-                        </div>
-                        <div class="span pull-right">
-                            <div class="btn-group">
-                                <a class="btn-info btn-small btn" rel="tooltip" href="/flags/$flag.id/edit" data-original-title="Edit flag" data-placement="bottom">
-                                    <i class="icon-edit"></i>
-                                </a>
-                                <a class="btn-danger btn-small btn" rel="tooltip" href="/flags/$flag.id/delete" data-original-title="Delete Flag" data-placement="bottom">
-                                    <i class="icon-trash"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="span#if $getVar('cfg.enableWideFlags', False)#10#else#6#end if#">
-                $flag.formatedDescription[:160]
-                </div>
-            </div>
-            <div class="row">
-                <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
-                    #if $flag.labels and $flag.labels != [""]
-                        <b class="muted"><i class="icon-tags"></i> Labels: </b>
-                        #for $label in $flag.labels
-                            <a href="/labels/$label"><span class="label label-info">$label</span></a>
-                        #end for
-                    #end if
-                </div>
-                <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
-                    #if $flag.url
-                        <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
-                    #end if
-                </div>
-            </div>
-            <hr>
-            <!-- End of flag overview template -->
-        #end for
-        #if not $getVar('cfg.enableWideFlags', False)
-        </div>
-    </div>
-    #end if
+    $flagsList.flagsList($flags, $user)
 #else
-    <div class="row">
-        <div class="offset2 span6">
-            <h2>Oh no!</h2>
-            <p>We couldn't find any flags for you, why don't you make one?<p>
-            <a href="/flag/new" class="btn btn-info"><i class="icon-flag"></i> New flag</a>
-        </div>
-    </div>
+    <h2>Oh no!</h2>
+    <p>We couldn't find any flags for you, why don't you make one?<p>
+    <a href="/flag/new" class="btn btn-info"><i class="icon-flag"></i> New flag</a>
 #end if
 #end def

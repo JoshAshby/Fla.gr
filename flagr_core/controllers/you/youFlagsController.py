@@ -29,7 +29,7 @@ class youFlags(baseHTMLObject):
 
         flags = fm.listFlagsByUserID(self.session.id)
         if flags:
-            flags = fm.formatFlags(flags)
+            flags = fm.formatFlags(flags, True)
 
         view.flags = flags
 

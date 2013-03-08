@@ -1,67 +1,14 @@
 #extends views.bootstrapSkeleton
+#from views.partials.flags.flagsListTmpl import flagsListTmpl as flagsList
 
 #def body
 <div class="row">
     <div class="offset2 span6">
-        <div class="row">
             <h2><i class="icon-user"></i> $flagAuthor.username <small>flags</small></h2>
-        </div>
     </div>
 </div>
 #if $flags
-    #if not $getVar('cfg.enableWideFlags', False)
-        <div class="row">
-            <div class="span6 offset2">
-            #end if
-            #for $flag in $flags
-                <!-- Start of flag overview template -->
-                <div class="row">
-                    <div class="span#if $getVar('cfg.enableWideFlags', False)#4#else#6#end if#">
-                        <h3>
-                            <a href="/flags/$flag.id">$flag.title</a>
-                        </h3>
-                        <b class="muted">
-                            By <a class="muted" href="/user/$flagAuthor.username">$flagAuthor.username</a>
-                        </b>
-                    </div>
-                    <div class="span6 pull-right">
-                        <div class="well">
-                            <div class="span">
-                                <i class="icon-calendar muted"></i> <small class="muted">$flag.formatedDate</small>
-                            </div>
-                            <div class="span">
-                                <span class="label"><i class="icon-unlock"></i> Public</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span#if $getVar('cfg.enableWideFlags', False)#10#else#6#end if#">
-                    $flag.formatedDescription[:160]
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
-                        #if $flag.labels and $flag.labels != [""]
-                            <b class="muted"><i class="icon-tags"></i> Labels: </b>
-                            #for $label in $flag.labels
-                                <a href="/labels/$label"><span class="label label-info">$label</span></a>
-                            #end for
-                        #end if
-                    </div>
-                    <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
-                        #if $flag.url
-                            <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
-                        #end if
-                    </div>
-                </div>
-                <hr>
-                <!-- End of flag overview template -->
-            #end for
-        #if not $getVar('cfg.enableWideFlags', False)
-            </div>
-        </div>
-    #end if
+    $flagsList.flagsList($flags, $user, $flagAuthor)
 #else
     <div class="row">
         <div class="offset2 span6">

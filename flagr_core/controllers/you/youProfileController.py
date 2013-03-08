@@ -24,5 +24,4 @@ class youProfile(baseHTMLObject):
         """
         """
         view = youProfileTmpl(searchList=[self.tmplSearchList])
-
         return view
