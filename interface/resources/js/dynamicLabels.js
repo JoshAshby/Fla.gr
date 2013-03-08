@@ -28,14 +28,33 @@
     */
 
     refreshLabels = function() {
-      var input, labels_input_break, _j, _len1;
+      var input, labels_input_break, labels_input_reduced, reduceSet, _j, _k, _len1, _len2;
       input = $("#labelInput").val();
       if (input !== "") {
+        /*
+        #So long as the input field ins't empty, strip all spaces from the
+        #input then break it into an array, by commas followed by merging
+        #it with the existing array of labels, then we reduce it, removing
+        #duplicates and finally push it to the template and hidden input
+        #field
+        */
+
         labels_input_break = input.replace(/\s+/g, '');
         labels_input_break = labels_input_break.split(",");
+        labels_input_break = labels_input_break.concat(labels);
+        reduceSet = {};
+        labels_input_reduced = [];
         for (_j = 0, _len1 = labels_input_break.length; _j < _len1; _j++) {
           label = labels_input_break[_j];
-          labels.push(label);
+          reduceSet[label] = true;
+        }
+        for (label in reduceSet) {
+          labels_input_reduced.push(label);
+        }
+        labels = labels_input_reduced;
+        $("#dynamicLabels").html("");
+        for (_k = 0, _len2 = labels.length; _k < _len2; _k++) {
+          label = labels[_k];
           $("#dynamicLabels").append(labelsCompiledTemplate({
             "label": label
           }));

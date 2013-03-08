@@ -19,10 +19,25 @@ $ ->
     refreshLabels = ->
         input = $("#labelInput").val()
         if input isnt ""
+            ###
+            #So long as the input field ins't empty, strip all spaces from the
+            #input then break it into an array, by commas followed by merging
+            #it with the existing array of labels, then we reduce it, removing
+            #duplicates and finally push it to the template and hidden input
+            #field
+            ###
             labels_input_break = input.replace /\s+/g, ''
             labels_input_break = labels_input_break.split ","
+            labels_input_break = labels_input_break.concat labels
+            reduceSet = {}
+            labels_input_reduced = []
             for label in labels_input_break
-                labels.push label
+                reduceSet[label] = true
+            for label of reduceSet
+                labels_input_reduced.push label
+            labels = labels_input_reduced
+            $("#dynamicLabels").html ""
+            for label in labels
                 $("#dynamicLabels").append labelsCompiledTemplate {"label": label}
             $("#labels").val $.toJSON labels
             $("#labelInput").val ""
