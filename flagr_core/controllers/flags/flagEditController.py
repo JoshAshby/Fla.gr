@@ -32,6 +32,7 @@ class flagEdit(baseHTMLObject):
         view = flagEditTmpl(searchList=[self.tmplSearchList])
 
         flag = fm.flagORM.load(db.couchServer, flagid)
+        view.id = flagid
 
         view.title = flag.title
         view.description = flag.description
@@ -61,13 +62,14 @@ class flagEdit(baseHTMLObject):
             view.description = description
             view.labels = labels
             view.url = url
+            view.id = flagid
 
             return view
 
         try:
-            labels = json.loads(labels)
+            labels = list(set(json.loads(labels)))
         except:
-            labels = ""
+            labels = list(set(labels.strip(" ").split(",")))
 
         flag = fm.flagORM.load(db.couchServer, flagid)
         flag.title = title

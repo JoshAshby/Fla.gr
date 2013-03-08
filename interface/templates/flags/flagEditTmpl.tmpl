@@ -2,7 +2,7 @@
 
 #def body
     <h2>Updating flag  <small>$title</small></h2>
-    <form class="form form-horizontal" method="POST" action="/flags/new">
+    <form class="form form-horizontal" method="POST" action="/flags/$id/edit">
         <div class="control-group #if $getVar('titleError', False)#error#end if#">
             <input type="text" name="title" class="span6" placeholder="title..." value="$getVar('title', '')">
             #if $getVar('titleError', False)

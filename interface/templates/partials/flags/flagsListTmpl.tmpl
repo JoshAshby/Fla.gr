@@ -5,9 +5,9 @@
         <div class="row">
             <div class="span6">
                 <h2>
-                    <i class="icon-flag"></i> $flag.title
+                    <a href="/flags/$flag.id" class="flagLink"><i class="icon-flag"></i> $flag.title</a>
                     <small>
-                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a href="/users/$flagAuthor.username">$flagAuthor.username</a>#end if#</b>
+                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/users/$flagAuthor.username">$flagAuthor.username</a>#end if#</b>
                     </small>
                 </h2>
             </div>
@@ -15,16 +15,18 @@
         <div class="row">
             <div class="span6">
                 <div class="well">
-                    <span class="muted"><i class="icon-calendar"></i> $flag.formatedDate</span>
-                    #if not $flag.visibility and $flag.userID == $user.id
-                        <span class="label"><i class="icon-lock"></i> Private</span>
-                        <div class="btn-group pull-right">
-                            <a href="/flags/$flag.id/edit" class="btn btn-info"><i class="icon-edit"></i></a>
-                            <a href="/flags/$flag.id/delete" class="btn btn-danger"><i class="icon-trash"></i></a>
-                        </div>
-                    #else
-                        <span class="label"><i class="icon-unlock"></i> Public</span>
-                    #end if
+                <span class="muted"><i class="icon-calendar"></i> $flag.formatedDate</span>
+                #if not $flag.visibility
+                    <span class="label"><i class="icon-lock"></i> Private</span>
+               #else
+                    <span class="label"><i class="icon-unlock"></i> Public</span>
+                #end if
+                #if  $flag.userID == $user.id
+                     <div class="btn-group pull-right">
+                        <a href="/flags/$flag.id/edit" class="btn btn-info"><i class="icon-edit"></i></a>
+                        <a href="/flags/$flag.id/delete" class="btn btn-danger"><i class="icon-trash"></i></a>
+                    </div>
+                #end if
                 </div>
             </div>
         </div>
@@ -35,7 +37,7 @@
         </div>
         <div class="row">
             <div class="span6">
-                #if $flag.labels and len($flag.labels) > 0
+                #if $flag.labels and $flag.labels != [""]
                     <b class="muted"><i class="icon-tags"></i> Labels: </b>
                     #for $label in $flag.labels
                         <a href="/labels/$label"><span class="label label-info">$label</span></a>

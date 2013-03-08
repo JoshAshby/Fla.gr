@@ -52,9 +52,9 @@ class flagNew(baseHTMLObject):
             return view
 
         try:
-            labels = json.loads(labels)
+            labels = list(set(json.loads(labels)))
         except:
-            labels = ""
+            labels = list(set(labels.strip(" ").split(",")))
 
         newFlag = fm.flagORM(title=title, description=description, labels=labels, url=url, userID=self.session.id, visibility=visibility)
 
