@@ -5,12 +5,15 @@
 $adminTabs.tabs($page)
 #end def
 #def body
+<div class="row">
 <ul class="breadcrumb">
     You are here:<span class="divider"></span>
     <li><a href="/admin">Admin Panel</a> <span class="divider">/</span></li>
     <li><a href="/admin/users">Users</a> <span class="divider">/</span></li>
     <li class="active">New user</li>
 </ul>
+</div>
+<div class="row">
 <div class="offset2 span6">
 
     <h2>Making a new user...</h2>
@@ -56,5 +59,6 @@ $adminTabs.tabs($page)
             <button type="submit" class="btn btn-danger"><i class="icon-ok"></i> Make user</button>
         </div>
     </form>
+</div>
 </div>
 #end def

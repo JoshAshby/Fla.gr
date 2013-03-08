@@ -10,71 +10,70 @@ $dashTabs.tabs($page)
 #end def
 #def body
 #if $flags
-#if not $getVar('cfg.enableWideFlags', False)
-    <div class="span6 offset2">
-#end if
-    #for $flag in $flags
-        <!-- Start of flag overview template -->
-        <div class="row">
-            <div class="span#if $getVar('cfg.enableWideFlags', False)#4#else#6#end if#">
-                <h3>
-                    <a href="/flag/$flag.id">$flag.title[:50]</a>
-                </h3>
-                <b class="muted">
-                    By <a class="muted" href="/user/$user.username">$user.username</a>
-                </b>
-            </div>
-            <div class="span6 pull-right">
-                <div class="well">
-                    <div class="span">
-                        <i class="icon-calendar muted"></i> <small class="muted">$flag.formatedDate</small>
-                    </div>
-                    <div class="span">
-                        #if $flag.visibility
-                            <span class="label"><i class="icon-unlock"></i> Public</span>
-                        #else
-                            <span class="label"><i class="icon-lock"></i> Private</span>
-                        #end if
-                    </div>
-                    <div class="span pull-right">
-                        <div class="btn-group">
-                            <a class="btn-info btn-small btn" rel="tooltip" href="/flag/$flag.id/edit" data-original-title="Edit flag" data-placement="bottom">
-                                <i class="icon-edit"></i>
-                            </a>
-                            <a class="btn-danger btn-small btn" rel="tooltip" href="/flag/$flag.id/delete" data-original-title="Delete Flag" data-placement="bottom">
-                                <i class="icon-trash"></i>
-                            </a>
+    #if not $getVar('cfg.enableWideFlags', False)
+    <div class="row">
+        <div class="span6 offset2">
+        #end if
+        #for $flag in $flags
+            <!-- Start of flag overview template -->
+            <div class="row">
+                <div class="span#if $getVar('cfg.enableWideFlags', False)#4#else#6#end if#">
+                    <h3>
+                        <a href="/flags/$flag.id">$flag.title</a>
+                    </h3>
+                </div>
+                <div class="span6 pull-right">
+                    <div class="well">
+                        <div class="span">
+                            <i class="icon-calendar muted"></i> <small class="muted">$flag.formatedDate</small>
+                        </div>
+                        <div class="span">
+                            #if $flag.visibility
+                                <span class="label"><i class="icon-unlock"></i> Public</span>
+                            #else
+                                <span class="label"><i class="icon-lock"></i> Private</span>
+                            #end if
+                        </div>
+                        <div class="span pull-right">
+                            <div class="btn-group">
+                                <a class="btn-info btn-small btn" rel="tooltip" href="/flags/$flag.id/edit" data-original-title="Edit flag" data-placement="bottom">
+                                    <i class="icon-edit"></i>
+                                </a>
+                                <a class="btn-danger btn-small btn" rel="tooltip" href="/flags/$flag.id/delete" data-original-title="Delete Flag" data-placement="bottom">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="span#if $getVar('cfg.enableWideFlags', False)#10#else#6#end if#">
-            $flag.formatedDescription[:160]
+            <div class="row">
+                <div class="span#if $getVar('cfg.enableWideFlags', False)#10#else#6#end if#">
+                $flag.formatedDescription[:160]
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
-                #if $flag.labels
-                    <b class="muted"><i class="icon-tags"></i> Labels: </b>
-                    #for $label in $flag.labels
-                        <a href="/labels/$label"><span class="label label-info">$label</span></a>
-                    #end for
-                #end if
+            <div class="row">
+                <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
+                    #if $flag.labels and $flag.labels != [""]
+                        <b class="muted"><i class="icon-tags"></i> Labels: </b>
+                        #for $label in $flag.labels
+                            <a href="/labels/$label"><span class="label label-info">$label</span></a>
+                        #end for
+                    #end if
+                </div>
+                <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
+                    #if $flag.url
+                        <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
+                    #end if
+                </div>
             </div>
-            <div class="span#if $getVar('cfg.enableWideFlags', False)#5#else#6#end if#">
-                #if $flag.url
-                    <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
-                #end if
-            </div>
+            <hr>
+            <!-- End of flag overview template -->
+        #end for
+        #if not $getVar('cfg.enableWideFlags', False)
         </div>
-        <hr>
-        <!-- End of flag overview template -->
-    #end for
-#if not $getVar('cfg.enableWideFlags', False)
     </div>
-#end if
+    #end if
 #else
     <div class="row">
         <div class="offset2 span6">

@@ -1,3 +1,3 @@
 class cfg(object):
-    enableWideFlags = True
+    enableWideFlags = False
     enableDynamicLabels = True

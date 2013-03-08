@@ -12,12 +12,11 @@
     those labels get into the array and the div list
     */
 
-    base = $("#labels").val() || "";
+    base = $("#labels").val();
     if (base !== "") {
-      base = $("#labels").split(",");
-      for (_i = 0, _len = base.length; _i < _len; _i++) {
-        label = base[_i];
-        labels.push(label);
+      labels = $.secureEvalJSON(base);
+      for (_i = 0, _len = labels.length; _i < _len; _i++) {
+        label = labels[_i];
         $("#dynamicLabels").append(labelsCompiledTemplate({
           "label": label
         }));
@@ -29,26 +28,19 @@
     */
 
     refreshLabels = function() {
-      var input, labels_input_break, labels_string, _j, _k, _len1, _len2;
+      var input, labels_input_break, _j, _len1;
       input = $("#labelInput").val();
       if (input !== "") {
-        labels_string = "";
-        for (_j = 0, _len1 = labels.length; _j < _len1; _j++) {
-          label = labels[_j];
-          labels_string += label + ", ";
-        }
         labels_input_break = input.replace(/\s+/g, '');
         labels_input_break = labels_input_break.split(",");
-        for (_k = 0, _len2 = labels_input_break.length; _k < _len2; _k++) {
-          label = labels_input_break[_k];
+        for (_j = 0, _len1 = labels_input_break.length; _j < _len1; _j++) {
+          label = labels_input_break[_j];
           labels.push(label);
           $("#dynamicLabels").append(labelsCompiledTemplate({
             "label": label
           }));
-          labels_string += label + ",";
         }
-        labels_string = labels_string.substring(0, labels_string.length - 2);
-        $("#labels").val(labels_string);
+        $("#labels").val($.toJSON(labels));
         return $("#labelInput").val("");
       }
     };
@@ -79,14 +71,8 @@
     */
 
     return $(document).on("click", "#dynamicLabels>span.label", function() {
-      var labels_string, _j, _len1;
       labels.splice(labels.indexOf($(this).text()), 1);
-      labels_string = "";
-      for (_j = 0, _len1 = labels.length; _j < _len1; _j++) {
-        label = labels[_j];
-        labels_string += label + ", ";
-      }
-      $("#labels").val(labels_string);
+      $("#labels").val($.toJSON(labels));
       return $(this).remove();
     });
   });

@@ -14,6 +14,7 @@ from datetime import datetime
 
 import config.dbBase as db
 import utils.markdownUtils as mdu
+import json
 
 
 def listFlagsByUserID(userID):
@@ -38,7 +39,21 @@ def formatFlags(flagsList):
     for flag in flagsList:
         flag.formatedDescription = mdu.markClean(flag.description)
         flag.formatedDate = datetime.strftime(flag.created, "%a %b %d, %Y @ %H:%I%p")
+        try:
+            flag.formatedLabels = json.loads(flag.labels)
+        except:
+            pass
     return flagsList
+
+
+def formatFlag(flag):
+    flag.formatedDescription = mdu.markClean(flag.description)
+    flag.formatedDate = datetime.strftime(flag.created, "%a %b %d, %Y @ %H:%I%p")
+    try:
+        flag.formatedLabels = json.loads(flag.labels)
+    except:
+        pass
+    return flag
 
 
 class flagORM(Document):
@@ -52,6 +67,7 @@ class flagORM(Document):
     docType=TextField(default="flag")
     formatedDescription = ""
     formatedDate = ""
+    formatedLabels = []
 
     def save(self):
         self.store(db.couchServer)

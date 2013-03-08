@@ -5,12 +5,15 @@
 $adminTabs.tabs($page)
 #end def
 #def body
+<div class="row">
 <ul class="breadcrumb">
     You are here:<span class="divider"></span>
     <li><a href="/admin">Admin Panel</a> <span class="divider">/</span></li>
     <li><a href="/admin/users">Users</a> <span class="divider">/</span></li>
     <li class="active">Edit user</li>
 </ul>
+</div>
+<div class="row">
 <div class="offset2 span6">
 
     <h2>Editing user: $editUser.username #if $user.id == $editUser.id#<small>(This is you)</small>#end if#</h2>
@@ -69,5 +72,6 @@ $adminTabs.tabs($page)
             <button type="submit" class="btn btn-danger"><i class="icon-ok"></i> Update user</button>#if $editUser.id != $user.id# <b>Or...</b> <a href="/admin/users/$editUser.id/delete" class="btn-inverse btn"><i class="icon-remove"></i> Delete user</a>#end if#
         </div>
     </form>
+</div>
 </div>
 #end def

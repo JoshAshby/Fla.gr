@@ -6,11 +6,10 @@ $ ->
     The hidden label may have labels preloaded, so we need to make sure
     those labels get into the array and the div list
     ###
-    base = $("#labels").val() or ""
+    base = $("#labels").val()
     if base isnt ""
-        base = $("#labels").split ","
-        for label in base
-            labels.push label
+        labels = $.secureEvalJSON base
+        for label in labels
             $("#dynamicLabels").append labelsCompiledTemplate {"label": label}
 
     ###
@@ -20,17 +19,12 @@ $ ->
     refreshLabels = ->
         input = $("#labelInput").val()
         if input isnt ""
-            labels_string = ""
-            labels_string += (label + ", ") for label in labels
             labels_input_break = input.replace /\s+/g, ''
             labels_input_break = labels_input_break.split ","
             for label in labels_input_break
                 labels.push label
-
                 $("#dynamicLabels").append labelsCompiledTemplate {"label": label}
-                labels_string += (label + ",")
-            labels_string = labels_string.substring 0, (labels_string.length - 2)
-            $("#labels").val labels_string
+            $("#labels").val $.toJSON labels
             $("#labelInput").val ""
 
 
@@ -58,7 +52,5 @@ $ ->
     ###
     $(document).on "click", "#dynamicLabels>span.label", ->
         labels.splice labels.indexOf($(this).text()), 1
-        labels_string = ""
-        labels_string += (label + ", ") for label in labels
-        $("#labels").val labels_string
+        $("#labels").val $.toJSON labels
         $(this).remove()

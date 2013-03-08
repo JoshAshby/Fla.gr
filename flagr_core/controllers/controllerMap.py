@@ -22,9 +22,9 @@ from controllers.auth.authRegisterController import * #/auth/register
 
 #Next, /flags/ controllers
 #from controllers.flags.flagDelController  import * #/flag/(.*)/delete
-#from controllers.flags.flagEditController  import * #/flag/(.*)/edit
+from controllers.flags.flagEditController  import * #/flag/(.*)/edit
 from controllers.flags.flagNewController  import * #/flag/new
-#from controllers.flags.flagViewController  import * #/flag/(.*)
+from controllers.flags.flagViewController  import * #/flag/(.*)
 
 #Next, /labels/ controllers
 #from controllers.labels.labelsViewController import * #/labels/(.*)

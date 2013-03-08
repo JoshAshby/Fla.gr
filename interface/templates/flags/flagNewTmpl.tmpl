@@ -1,6 +1,7 @@
 #extends views.bootstrapSkeleton
 
 #def body
+<div class="row">
 <div class="offset2 span6">
 
     <h2>Making a new flag... <small>Be sure to save!</small></h2>
@@ -26,8 +27,8 @@
             </div>
             <input type="text" id="labelInput" class="span5" placehlder="labels...">
             <a id="addLabels" class="btn btn-info"><i class="icon-plus"></i></a>
-            <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be striped.</span>
-            <input type="hidden" name="labels" id="labels">
+            <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be stripped. (Hint, tags can also be removed by clicking on them.)</span>
+            <input type="hidden" name="labels" id="labels" value="$getVar('lebales', '')">
         #else
             <input type="text" name="labels" class="span6" placeholder="labels..." value="$getVar('labels', '')">
             <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be striped.</span>
@@ -43,5 +44,6 @@
             <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> Make it so!</button>
         </div>
     </form>
+</div>
 </div>
 #end def

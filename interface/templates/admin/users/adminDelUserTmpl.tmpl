@@ -5,12 +5,15 @@
 $adminTabs.tabs($page)
 #end def
 #def body
+<div class="row">
 <ul class="breadcrumb">
     You are here:<span class="divider"></span>
     <li><a href="/admin">Admin Panel</a> <span class="divider">/</span></li>
     <li><a href="/admin/users">Users</a> <span class="divider">/</span></li>
     <li class="active">Delete user</li>
 </ul>
+</div>
+<div class="row">
 <div class="offset2 span6">
     <h1 class="text-center"><i class="icon-warning-sign"></i> Warning <i class="icon-warning-sign"></i></h1>
     <h2 class="text-center">Deleting user: $editUser.username</h2>
@@ -20,5 +23,6 @@ $adminTabs.tabs($page)
         <button type="submit" class="btn btn-inverse"><i class="icon-remove"></i> Delete user</button> <b>Or...</b> <a href="/admin/users/$editUser.id/edit" class="btn btn-info"><i class="icon-reply"></i> Cancel</a>
         </form>
     </div>
+</div>
 </div>
 #end def

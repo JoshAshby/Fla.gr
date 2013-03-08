@@ -17,6 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.flags.flagNewTmpl import flagNewTmpl
 
 import models.flag.flagModel as fm
+import json
 
 
 @route("/flags/new")
@@ -28,7 +29,7 @@ class flagNew(baseHTMLObject):
         view = flagNewTmpl(searchList=[self.tmplSearchList])
 
         if self.env["cfg"].enableDynamicLabels:
-            view.scripts = ["handlebars_1.0.min", "dynamicLabels"]
+            view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "dynamicLabels"]
 
         return view
 
@@ -50,11 +51,16 @@ class flagNew(baseHTMLObject):
 
             return view
 
-        labels = labels.strip(" ").split(",")
+        try:
+            labels = json.loads(labels)
+        except:
+            labels = ""
 
         newFlag = fm.flagORM(title=title, description=description, labels=labels, url=url, userID=self.session.id, visibility=visibility)
 
         newFlag.save()
+
+        self.session.pushAlert("Hey look, you've made another flag!", "Horay!", "success")
 
         self.head = ("303 SEE OTHER",
             [("location", str("/flags/%s"%newFlag.id))])
