@@ -56,6 +56,7 @@ class dummySession(object):
         self.redirect = ""
         self.sessionID = cookieID
         self.alerts = []
+        self.id = 0
 
     def clearAlerts(self):
         for alert in self.alerts:

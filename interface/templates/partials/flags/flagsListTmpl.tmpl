@@ -7,7 +7,7 @@
                 <h2>
                     <a href="/flags/$flag.id" class="flagLink"><i class="icon-flag"></i> $flag.title</a>
                     <small>
-                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/users/$flagAuthor.username">$flagAuthor.username</a>#end if#</b>
+                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/user/$flagAuthor.username">$flagAuthor.username</a>#end if#</b>
                     </small>
                 </h2>
             </div>

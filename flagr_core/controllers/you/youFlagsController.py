@@ -22,6 +22,7 @@ import models.flag.flagModel as fm
 @route("/your/flags")
 class youFlags(baseHTMLObject):
     __name__ = "flags"
+    __login__ = True
     def GET(self):
         """
         """

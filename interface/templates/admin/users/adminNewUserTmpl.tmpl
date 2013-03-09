@@ -1,4 +1,4 @@
-#extends views.bootstrapSkeleton
+#extends views.admin.adminBootstrapSkeleton
 #from views.partials.tabs.adminTabsTmpl import adminTabsTmpl as adminTabs
 
 #def topExtra
@@ -14,51 +14,50 @@ $adminTabs.tabs($page)
 </ul>
 </div>
 <div class="row">
-<div class="offset2 span6">
-
-    <h2>Making a new user...</h2>
-    <form class="form form-horizontal" method="POST" action="/admin/users/new">
-        <legend>Basics...</legend>
-        <div class="control-group #if $getVar('usernameError', False)#error#end if#">
-            <input type="text" placeholder="username..." name="username" class="span6">
-            <span class="help-block">Pick a username for the new user</span>
-        </div>
-        <div class="control-group #if $getVar('passwordError', False)#error#end if#">
-            <input type="password" placeholder="password" name="password" class="span6">
-        </div>
-        <div class="control-group">
-            <input type="password" placeholder="renter password" name="passwordTwice" class="span6">
-        </div>
-        <legend>Useful stuff...</legend>
-        <div class="control-group">
-            <label>User level</label>
-            <select class="span6" name="level">
-                #for $item in $getVar('levels', (("user", 1), (("admin", 50), "all mighty", 100)))
-                    #if $item[1] <= $user.level
-                        <option value="$item[1]" #if $item[1] == 1#selected="selected"#end if#>$item[0]</option>
-                    #end if
-                #end for
-            </select>
-        </div>
-        <div class="control-group">
-            <input type="email" placeholder="email" name="email" class="span6">
-        </div>
-        <div class="control-group">
-            <label class="checkbox">
-                <input type="checkbox" name="emailVis"> Email Visibility
-            </label>
-            <span class="help-block">If checked then the users email will be visible on their profile.</span>
-        </div>
-        <div class="control-group">
-            <label class="checkbox">
-                <input type="checkbox" name="disable"> Disable users account?
-            </label>
-            <span class="help-block">If checked then the users account will be disabled until reenabled by an admin.</span>
-        </div>
-        <div class="well text-center">
-            <button type="submit" class="btn btn-danger"><i class="icon-ok"></i> Make user</button>
-        </div>
-    </form>
-</div>
+    <div class="offset2 span6">
+        <h2>Making a new user...</h2>
+        <form class="form form-horizontal" method="POST" action="/admin/users/new">
+            <legend>Basics...</legend>
+            <div class="control-group #if $getVar('usernameError', False)#error#end if#">
+                <input type="text" placeholder="username..." name="username" class="span6">
+                <span class="help-block">Pick a username for the new user</span>
+            </div>
+            <div class="control-group #if $getVar('passwordError', False)#error#end if#">
+                <input type="password" placeholder="password" name="password" class="span6">
+            </div>
+            <div class="control-group">
+                <input type="password" placeholder="renter password" name="passwordTwice" class="span6">
+            </div>
+            <legend>Useful stuff...</legend>
+            <div class="control-group">
+                <label>User level</label>
+                <select class="span6" name="level">
+                    #for $item in $getVar('levels', (("user", 1), (("admin", 50), "all mighty", 100)))
+                        #if $item[1] <= $user.level
+                            <option value="$item[1]" #if $item[1] == 1#selected="selected"#end if#>$item[0]</option>
+                        #end if
+                    #end for
+                </select>
+            </div>
+            <div class="control-group">
+                <input type="email" placeholder="email" name="email" class="span6">
+            </div>
+            <div class="control-group">
+                <label class="checkbox">
+                    <input type="checkbox" name="emailVis"> Email Visibility
+                </label>
+                <span class="help-block">If checked then the users email will be visible on their profile.</span>
+            </div>
+            <div class="control-group">
+                <label class="checkbox">
+                    <input type="checkbox" name="disable"> Disable users account?
+                </label>
+                <span class="help-block">If checked then the users account will be disabled until reenabled by an admin.</span>
+            </div>
+            <div class="well text-center">
+                <button type="submit" class="btn btn-danger"><i class="icon-ok"></i> Make user</button>
+            </div>
+        </form>
+    </div>
 </div>
 #end def

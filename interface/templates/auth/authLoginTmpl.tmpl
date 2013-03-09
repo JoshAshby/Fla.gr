@@ -1,7 +1,6 @@
 #extends views.bootstrapSkeleton
 
 #def body
-<div class="span6 offset2">
     <h2>Please log in...</h1>
     <form class="form form-horizontal" method="POST" action="/auth/login">
         <div class="control-group #if $getVar('usernameError', False)#error#end if#">
@@ -26,5 +25,4 @@
             <a href="/request">Request an invite</a>
         </div>
     </form>
-</div>
 #end def

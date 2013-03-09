@@ -24,6 +24,7 @@ class adminIndex(baseHTMLObject):
     """
     __name__ = "admin panel"
     __level__ = 50
+    __login__ = True
     def GET(self):
         """
         Nothing much, just get the cheetah template for index and return it

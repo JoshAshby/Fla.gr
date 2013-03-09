@@ -5,7 +5,7 @@
     var base, label, labels, labelsCompiledTemplate, labelsTemplate, refreshLabels, _i, _len,
       _this = this;
     labels = [];
-    labelsTemplate = " <span class=\"label\">{{label}}</span> ";
+    labelsTemplate = " <span class=\"label label-info\">{{label}}</span> ";
     labelsCompiledTemplate = Handlebars.compile(labelsTemplate);
     /*
     The hidden label may have labels preloaded, so we need to make sure

@@ -23,6 +23,7 @@ from models.user.userModel import userORM
 class adminNewUser(baseHTMLObject):
     __name__ = "admin users"
     __level__ = 50
+    __login__ = True
     def GET(self):
         """
         """

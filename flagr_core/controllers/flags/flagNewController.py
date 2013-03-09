@@ -23,6 +23,7 @@ import json
 @route("/flags/new")
 class flagNew(baseHTMLObject):
     __name__ = "new flag"
+    __login__ = True
     def GET(self):
         """
         """

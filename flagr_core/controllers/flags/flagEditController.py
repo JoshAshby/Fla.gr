@@ -25,6 +25,7 @@ import json
 @route("/flags/(.*)/edit")
 class flagEdit(baseHTMLObject):
     __name__ = "edit flag"
+    __login__ = True
     def GET(self):
         """
         """

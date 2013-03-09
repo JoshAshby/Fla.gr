@@ -22,6 +22,7 @@ class youDashboard(baseHTMLObject):
     """
     """
     __name__="dashboard"
+    __login__ = True
     def GET(self):
         """
         """
