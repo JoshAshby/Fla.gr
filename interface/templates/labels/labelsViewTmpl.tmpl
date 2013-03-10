@@ -1,0 +1,10 @@
+#extends views.bootstrapSkeleton
+#from views.partials.flags.publicFlagsListTmpl import publicFlagsListTmpl as publicFlagsList
+
+#def body
+<h2>Flags in label: $baseLabel</h2>
+<p> These labels are stacked under this label:</p>
+#for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for#
+<hr>
+$publicFlagsList.publicFlagsList($flags, $user)
+#end def

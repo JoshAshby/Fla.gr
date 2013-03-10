@@ -41,6 +41,6 @@ from controllers.user.userProfileController  import * #/user/(.*)/profile
 #Finally, /you/ controllers
 from controllers.you.youDashboardController  import * #/your/dashboard
 from controllers.you.youFlagsController  import * #/your/flags
-#from controllers.you.youLabelsController  import * #/your/labels
+from controllers.you.youLabelsController  import * #/your/labels
 from controllers.you.youProfileController  import * #/your/profile
 from controllers.you.youSettingsController  import * #/your/settings

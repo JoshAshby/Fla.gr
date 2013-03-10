@@ -1,11 +1,10 @@
-#extends bootstrapSkeleton
+#extends views.bootstrapSkeleton
 
 #def body
-<!-- Start label overview template -->
-<div>
-#for $label in $labels
-     <a href="$label.link"><span class="label label-info">$label.label</span></a>
-#end for
-</div>
-<!-- End label overview template -->
+#if $labels
+    #for $label in $labels# <a href="/user/$labelAuthor/labels/$label"><span class="label label-info">$label</span></a> #end for#
+#else
+    <h2>Oh no!</h2>
+    <p>We couldn't find any labels for this user!<p>
+#end if
 #end def
