@@ -1,0 +1,28 @@
+#extends views.admin.adminBootstrapSkeleton
+#from views.partials.tabs.adminTabsTmpl import adminTabsTmpl as adminTabs
+
+#def topExtra
+$adminTabs.tabs($page)
+#end def
+#def body
+<div class="row">
+    <ul class="breadcrumb">
+        You are here:<span class="divider"></span>
+        <li><a href="/admin">Admin Panel</a> <span class="divider">/</span></li>
+        <li><a href="/admin/flags">Flags</a> <span class="divider">/</span></li>
+        <li class="active">Delete flag</li>
+    </ul>
+</div>
+<div class="row">
+    <div class="offset2 span6">
+        <h1 class="text-center"><i class="icon-warning-sign"></i> Warning <i class="icon-warning-sign"></i></h1>
+        <h2 class="text-center">Deleting flag: $flag.title</h2>
+        <p class="text-error">This action is not reversable. Deleting this flag will delete it from all of fla.gr forever.</p>
+        <div class="text-center">
+            <form action="/admin/flags/$flag.id/delete" method="POST">
+            <button type="submit" class="btn btn-inverse"><i class="icon-remove"></i> Delete flag</button> <b>Or...</b> <a href="/admin/flags/$flag.id/edit" class="btn btn-info"><i class="icon-reply"></i> Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+#end def

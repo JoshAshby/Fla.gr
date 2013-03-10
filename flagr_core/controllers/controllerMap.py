@@ -6,8 +6,8 @@ from controllers.indexController import * #/
 #Next, /admin/ controllers
 from controllers.admin.adminController import * #/admin
 # -> /admin/flags/
-#from controllers.admin.flags.adminDelFlagController  import * #/admin/flags/(.*)/delete
-#from controllers.admin.flags.adminEditFlagController  import * #/admin/flags/(.*)/edit
+from controllers.admin.flags.adminDelFlagController  import * #/admin/flags/(.*)/delete
+from controllers.admin.flags.adminEditFlagController  import * #/admin/flags/(.*)/edit
 from controllers.admin.flags.adminViewFlagsController  import * #/admin/flags/(.*)
 # -> /admin/users/
 from controllers.admin.users.adminDelUserController  import * #/admin/users/(.*)/delete
@@ -31,7 +31,7 @@ from controllers.flags.flagViewController  import * #/flag/(.*)
 
 #Next, /public/ controllers
 #from controllers.public.publicLabelsController  import * #/public/labels
-#from controllers.public.publicFlagsController  import * #/public/flags
+from controllers.public.publicFlagsController  import * #/public/flags
 
 #Next, /user/ controllers
 from controllers.user.userFlagsController  import * #/user/(.*)/flags

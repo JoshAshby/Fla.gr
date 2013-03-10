@@ -1,0 +1,22 @@
+#extends views.bootstrapSkeleton
+#from views.partials.flags.publicFlagsListTmpl import publicFlagsListTmpl as publicFlagsList
+
+#def body
+<div class="row">
+    <div class="span6">
+            <h2><i class="icon-flag"></i> Public flags</h2>
+    </div>
+</div>
+#if $flags
+    $publicFlagsList.publicFlagsList($flags, $user)
+#else
+    <div class="row">
+        <div class="span6">
+            <div class="page-header">
+                <h1>Oh no!</h1>
+                <p>We have no public flags to show you! Sorry :(</p>
+            </div>
+        </div>
+    </div>
+#end if
+#end def

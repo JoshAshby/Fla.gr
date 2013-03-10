@@ -49,6 +49,7 @@ class flagNew(baseHTMLObject):
             view.description = description
             view.labels = labels
             view.url = url
+            view.vis = visibility
 
             return view
 

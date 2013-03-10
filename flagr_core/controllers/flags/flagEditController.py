@@ -38,6 +38,7 @@ class flagEdit(baseHTMLObject):
         view.title = flag.title
         view.description = flag.description
         view.url = flag.url
+        view.vis = flag.visibility
 
         if self.env["cfg"].enableDynamicLabels:
             view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "dynamicLabels"]
@@ -64,6 +65,7 @@ class flagEdit(baseHTMLObject):
             view.labels = labels
             view.url = url
             view.id = flagid
+            view.vis = visibility
 
             return view
 
