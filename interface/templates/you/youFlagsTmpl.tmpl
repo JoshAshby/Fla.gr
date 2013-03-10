@@ -4,17 +4,23 @@
 #from views.partials.flags.flagsListTmpl import flagsListTmpl as flagsList
 
 #def rightExtra
-$flagsRE.rightExtra($page, $flags)
+$flagsRE.rightExtra($page, $section)
 #end def
 #def topExtra
-$dashTabs.tabs($page)
+$dashTabs.tabs($page, $section)
 #end def
 #def body
 #if $flags
     $flagsList.flagsList($flags, $user)
 #else
-    <h2>Oh no!</h2>
-    <p>We couldn't find any flags for you, why don't you make one?<p>
-    <a href="/flag/new" class="btn btn-info"><i class="icon-flag"></i> New flag</a>
+    #if $section not in ('public', 'private')
+        <h2>Oh no!</h2>
+        <p>We couldn't find any flags for you, why don't you make one?<p>
+        <a href="/flags/new" class="btn btn-info"><i class="icon-flag"></i> New flag</a>
+    #else
+        <h2>Oh no!</h2>
+        <p>You don't have any $section flags! Why don't you make one?<p>
+        <a href="/flags/new" class="btn btn-info"><i class="icon-flag"></i> New flag</a>
+    #end if
 #end if
 #end def

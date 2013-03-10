@@ -10,11 +10,11 @@
             #end if
         </div>
         <div class="control-group">
-            <textarea placeholder="flag content" name="description" class="span6" style="height: 100px;">$getVar('description', '')</textarea>
+            <textarea placeholder="flag content" name="description" class="span6" style="height: 225px;">$getVar('description', '')</textarea>
             <span class="help-block"><small>Text can be formated with <a href="http://daringfireball.net/projects/markdown/syntax">Daring Fireball's Markdown</a>. Most HTML is escaped.</small></span>
         </div>
         <div class="control-group">
-            <input type="text" name="url" class="span6" value="$getVar('url', '')">
+            <input type="text" name="url" class="span6" value="$getVar('url', '')" placeholder="url...">
             <span class="help-block">You can attach a URL to this flag if you wish (optional).</span>
         </div>
         <div class="control-group">
@@ -22,7 +22,7 @@
             <div class="well">
                 <b class="muted">Labels: </b> <span id="dynamicLabels"></span>
             </div>
-            <input type="text" id="labelInput" class="span5" placehlder="labels...">
+            <input type="text" id="labelInput" class="span5" placeholder="labels...">
             <a id="addLabels" class="btn btn-info"><i class="icon-plus"></i></a>
             <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be stripped. (Hint, tags can also be removed by clicking on them.)</span>
             <input type="hidden" name="labels" id="labels" value="$getVar('lebales', '')">

@@ -26,11 +26,25 @@ class youFlags(baseHTMLObject):
     def GET(self):
         """
         """
+        page = self.env["members"]["page"] if self.env["members"].has_key("page") else ""
+        viewType = self.env["members"]["v"] if self.env["members"].has_key("v") else ""
+
         view = youFlagsTmpl(searchList=[self.tmplSearchList])
 
         flags = fm.listFlagsByUserID(self.session.id)
         if flags:
-            flags = fm.formatFlags(flags, True)
+            if viewType == "public":
+                flags = fm.formatFlags(flags, False)
+                view.section = "public"
+            elif viewType == "private":
+                flags = fm.formatFlags(flags, True)
+                for flag in flags:
+                    if flag.visibility:
+                        flags.pop(flags.index(flag))
+                view.section = "private"
+            else:
+                flags = fm.formatFlags(flags, True)
+                view.section = "all"
 
         view.flags = flags
 

@@ -21,7 +21,7 @@ import models.flag.flagModel as fm
 
 
 @route("/flags/(.*)/delete")
-class adminDelUser(baseHTMLObject):
+class flagDel(baseHTMLObject):
     __name__ = "delete flag"
     __login__ = True
     def GET(self):

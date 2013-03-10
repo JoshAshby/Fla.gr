@@ -35,17 +35,31 @@ def listFlagsByUserID(userID):
     return flags
 
 def formatFlags(flagsList, showAll):
+    """
+    Takes a list of `flagORM`s and formates the datetime and markdown
+    for templates. Also can remove non public flags, if `showAll` is `False`
+
+    :params flagsList: A list object of `flagORMs` to format
+    :params showAll: If `False` Then private flags will be removed from the list
+    :return: A list of formated `flagORM` objects
+    """
     for flag in flagsList:
         if not flag.visibility and not showAll:
             flagsList.pop(flagsList.index(flag))
         else:
-            flag.formatedDescription = mdu.markClean(flag.description)
-            flag.formatedDate = datetime.strftime(flag.created, "%a %b %d, %Y @ %H:%I%p")
+            flag = formatFlag(flag)
 
     return flagsList
 
 
 def formatFlag(flag):
+    """
+    Same as above, however takes a single `flagORM` and formates the datetime
+    markdown.
+
+    :param flag: The `flagORM` object of the flag to format
+    :return:
+    """
     flag.formatedDescription = mdu.markClean(flag.description)
     flag.formatedDate = datetime.strftime(flag.created, "%a %b %d, %Y @ %H:%I%p")
     return flag
@@ -62,6 +76,7 @@ class flagORM(Document):
     docType=TextField(default="flag")
     formatedDescription = ""
     formatedDate = ""
+    author = ""
 
     def save(self):
         self.store(db.couchServer)

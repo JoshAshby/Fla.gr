@@ -8,7 +8,7 @@ from controllers.admin.adminController import * #/admin
 # -> /admin/flags/
 #from controllers.admin.flags.adminDelFlagController  import * #/admin/flags/(.*)/delete
 #from controllers.admin.flags.adminEditFlagController  import * #/admin/flags/(.*)/edit
-#from controllers.admin.flags.adminViewFlagsController  import * #/admin/flags/(.*)
+from controllers.admin.flags.adminViewFlagsController  import * #/admin/flags/(.*)
 # -> /admin/users/
 from controllers.admin.users.adminDelUserController  import * #/admin/users/(.*)/delete
 from controllers.admin.users.adminEditUserController  import * #/admin/users/(.*)/edit

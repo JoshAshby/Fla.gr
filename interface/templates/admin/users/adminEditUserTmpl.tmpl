@@ -19,7 +19,7 @@ $adminTabs.tabs($page)
         <form class="form form-horizontal" method="POST" action="/admin/users/$editUser.id/edit">
             <legend>Profile Stuff...</legend>
             <div class="control-group">
-                <textarea placeholder="about them..." name="about" class="span6">$editUser.about</textarea>
+                <textarea placeholder="about them..." name="about" class="span6" style="height: 225px;">$editUser.about</textarea>
                 <span class="help-block"><small>Text can be formated with <a href="http://daringfireball.net/projects/markdown/syntax">Daring Fireball's Markdown</a></small></span>
             </div>
             <legend>Useful stuff...</legend>

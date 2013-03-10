@@ -1,11 +1,11 @@
 #@staticmethod
-#def tabs($page)
+#def tabs($page, $section="")
 <!-- Start tabs and you page header -->
 <div class="row">
 <!--    <div class="span11 offset1">
         <div class="row"> -->
             <div class="span5">
-                <h3><i class="icon-dashboard"></i> Dashboard #if $page!="dashboard"#<small>$page</small>#end if#</h3>
+                <h3><i class="icon-dashboard"></i> Dashboard #if $page!="dashboard"#<small>$page #if $section# - $section#end if#</small>#end if#</h3>
             </div>
             <div class="span5 tabs-below">
                 <ul class="nav nav-tabs">

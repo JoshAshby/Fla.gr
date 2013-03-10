@@ -19,7 +19,7 @@ from views.user.userProfileTmpl import userProfileTmpl
 import models.user.userModel as um
 
 @route("/user/(.*)")
-class adminUsers(baseHTMLObject):
+class userProfile(baseHTMLObject):
     __name__ = "user profile"
     def GET(self):
         """
