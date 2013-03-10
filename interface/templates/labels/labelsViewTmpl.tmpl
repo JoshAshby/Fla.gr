@@ -2,9 +2,29 @@
 #from views.partials.flags.publicFlagsListTmpl import publicFlagsListTmpl as publicFlagsList
 
 #def body
-<h2>Flags in label: $baseLabel</h2>
-<p> These labels are stacked under this label:</p>
-#for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for#
-<hr>
-$publicFlagsList.publicFlagsList($flags, $user)
+<h2><i class="icon-tags"></i> Label <small>$baseLabel</small></h2>
+<ul class="breadcrumb">
+    <li>Label: </li>
+    #for $lab in $baseLabel.split('/')
+        #if $baseLabel.split('/').index($lab) == (len($baseLabel.split('/'))-1)
+            <li class="active">$lab</li>
+        #else
+            <li><a href="/labels/$lab">$lab</a> <span class="divider">/</span></li>
+        #end if
+    #end for
+</ul>
+<div class="well">
+    #if $labels
+        <p>Stacked labels:</p>
+        #for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for#
+    #else
+        <p>Oh no, we don't have any labels stacked under this label!</p>
+    #end if
+</div>
+#if $flags
+    $publicFlagsList.publicFlagsList($flags, $user)
+#else
+    <h2>Oh no!</h2>
+    <p>We don't have any flags with this label!</p>
+#end if
 #end def
