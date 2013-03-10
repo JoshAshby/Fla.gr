@@ -30,19 +30,17 @@ from controllers.flags.flagViewController  import * #/flag/(.*)
 from controllers.labels.labelsViewController import * #/labels/(.*)
 
 #Next, /public/ controllers
-#from controllers.public.publicLabelsController  import * #/public/labels
+from controllers.public.publicLabelsController  import * #/public/labels
 from controllers.public.publicFlagsController  import * #/public/flags
 
 #Next, /user/ controllers
 from controllers.user.userFlagsController  import * #/user/(.*)/flags
-#from controllers.user.userLabelsController  import * #/user/(.*)/labels
-#from controllers.user.userViewLabelController import * #/user/(.*)/labels/(.*)
+from controllers.user.userLabelsController  import * #/user/(.*)/labels
 from controllers.user.userProfileController  import * #/user/(.*)/profile
 
 #Finally, /you/ controllers
 from controllers.you.youDashboardController  import * #/your/dashboard
 from controllers.you.youFlagsController  import * #/your/flags
 from controllers.you.youLabelsController  import * #/your/labels
-#from controllers.you.youViewLabelController import * #/your/labels/(.*)
 from controllers.you.youProfileController  import * #/your/profile
 from controllers.you.youSettingsController  import * #/your/settings

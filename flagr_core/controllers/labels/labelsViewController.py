@@ -21,7 +21,7 @@ import re
 
 
 @route("/labels/(.*)")
-class youLabels(baseHTMLObject):
+class labelsView(baseHTMLObject):
     __name__ = "labels"
     __login__ = True
     def GET(self):
@@ -45,6 +45,6 @@ class youLabels(baseHTMLObject):
 
         view.labels = labels
         view.baseLabel = baseLabel
-        view.flags = matchedFlags
+        view.flags = fm.formateFlags(matchedFlags)
 
         return view

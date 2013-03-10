@@ -2,7 +2,7 @@
 
 #def body
 #if $labels
-    #for $label in $labels# <a href="/user/$labelAuthor/labels/$label"><span class="label label-info">$label</span></a> #end for#
+    #for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for#
 #else
     <h2>Oh no!</h2>
     <p>We couldn't find any labels for this user!<p>
