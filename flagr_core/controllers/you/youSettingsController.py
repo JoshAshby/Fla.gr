@@ -65,7 +65,7 @@ class youSettings(baseHTMLObject):
 
                 return view
 
-        self.session.pushAlert("Settings updates", "Yay", "success")
+        self.session.pushAlert("Settings updated", "Yay", "success")
 
         self.head = ("303 SEE OTHER",
             [("location", "/your/dashboard")])
