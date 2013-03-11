@@ -34,6 +34,7 @@ cookie = Cookie.SimpleCookie()
 
 
 def app(env, start_response):
+        print env
         """
         WSGI app and controller
 
@@ -52,7 +53,10 @@ def app(env, start_response):
         it's all added together, then returned rather than sent out in chunks.
         """
         for url in c.urls:
-                matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
+                try:
+                    matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
+                except:
+                    matched = url.regex.match(env["PATH_INFO"])
                 if matched:
                         if c.debug:
                                 logURL(env, url)
@@ -92,12 +96,15 @@ def app(env, start_response):
                         dataThread = gevent.spawn(newHTTPObject.build, data, reply)
                         dataThread.join()
 
+                        content = data.get()
+
                         replyData = reply.get()
                         cookieHeader = ("Set-Cookie", cookie.output(header=""))
                         header = replyData[1]
                         header.append(cookieHeader)
 
                         status = replyData[0]
+                        header.append(("Content-Length", str(len(content))))
 
                         start_response(status, header)
 
@@ -105,29 +112,35 @@ def app(env, start_response):
 
                         del(newHTTPObject)
 
-                        return data
+                        return [str(content)]
 
         if c.debug: log404(env)
         status = "404 NOT FOUND"
-        headers = [("Content-type", "text/html")]
+        content = "<html><body><b>404 Not Found</b></body></html>"
+        headers = [("Content-Type", "text/html"), ("Content-Length", str(len(content)))]
         start_response(status, headers)
-        return "<html><body><b>404 Not Found</b></body></html>"
+        return [content]
 
 def logURL(env, url):
+    uri = env["REQUEST_URI"] if env.has_key("REQUEST_URI") else env["PATH_INFO"]
+    remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "locahost")
     logger.debug("""\n\r----------------------------
     Method: %s
     URL: %s
     Object: %s
     IP: %s
-""" % (env["REQUEST_METHOD"], env["REQUEST_URI"], url.pageObject.__module__+"."+url.pageObject.__name__, env["REMOTE_ADDR"]))
+""" % (env["REQUEST_METHOD"], uri, url.pageObject.__module__+"."+url.pageObject.__name__, remote))
 
 
 def log404(env):
+    uri = env["REQUEST_URI"] if env.has_key("REQUEST_URI") else env["PATH_INFO"]
+    remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "locahost")
+
     logger.warn("""\n\r-------404 NOT FOUND--------
     Method: %s
     URL: %s
     IP: %s
-    """ % (env["REQUEST_METHOD"], env["REQUEST_URI"], env["REMOTE_ADDR"]))
+    """ % (env["REQUEST_METHOD"], uri, remote))
 
 
 def main():

@@ -23,6 +23,6 @@ class baseHTMLObject(baseHTTPObject):
         except:
             self.__name__ = "untitledFlagrPage"
 
-        self.head = ("200 OK", [("Content-type", "text/html")])
+        self.head = ("200 OK", [("Content-Type", "text/html")])
         self.tmplSearchList = {"user": self.session, "page": (self.__name__), "cfg": cfg}
         self.env["cfg"] = cfg
