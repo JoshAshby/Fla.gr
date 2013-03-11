@@ -49,11 +49,11 @@
                     <a class="brand" href="/"><i class="icon-flag"></i> fla.gr</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            #if $user.loggedIn
-                                <li #if $page in ('labels', 'settings', 'flags', 'dashboard')#class="active"#end if#><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
-                            #else
+                            #if not $user.loggedIn
                                 <li #if $page=='home'#class="active"#end if#><a href="/"><i class="icon-home"></i></a></li>
                             #end if
+                            <li #if $page=="public flags"#class="active"#end if#><a href="/flags"><i class="icon-flag"></i></a></li>
+                            <li #if $page=="public labels"#class="active"#end if#><a href="/labels"><i class="icon-tags"></i></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle #if $page=='search'#active#end if#" data-toggle="dropdown"><i class="icon-search"></i></a>
                                 <ul class="dropdown-menu">
@@ -68,7 +68,11 @@
                                 </ul>
                             </li>
                         </ul>
+                        <!-- Right hand drop down -->
                         <ul class="nav pull-right">
+                            #if $user.loggedIn
+                                <li #if $page in ('labels', 'settings', 'flags', 'dashboard')#class="active"#end if#><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
+                            #end if
                             <li class="dropdown">
                                 #if not $user.loggedIn and $page!='login'
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ohia, Stranger! <i class="icon-chevron-down"></i></a>
@@ -98,6 +102,7 @@
                                 #end if
                             </li>
                         </ul>
+                        <!-- End right hand drop down -->
                     </div><!--/.nav-collapse -->
                 </div>
             </div>

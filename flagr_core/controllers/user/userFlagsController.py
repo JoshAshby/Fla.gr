@@ -21,7 +21,7 @@ import models.user.userModel as um
 
 @route("/user/(.*)/flags")
 class userFlags(baseHTMLObject):
-    __name__ = "user flags"
+    __name__ = "flags"
     def GET(self):
         """
         """

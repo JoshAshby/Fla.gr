@@ -1,11 +1,10 @@
 #extends views.bootstrapSkeleton
+#from views.partials.tabs.userTabsTmpl import userTabsTmpl as userTabs
 
+#def topExtra
+$userTabs.tabs($page, $userProfile)
+#end def
 #def body
-    <div class="row">
-        <div class="span6">
-            <h2><i class="icon-user"></i> $userProfile.username <small>profile</small></h2>
-        </div>
-    </div>
     <div class="row">
         <div class="span6">
             <div class="well">

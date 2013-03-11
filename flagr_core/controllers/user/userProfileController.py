@@ -20,7 +20,7 @@ import models.user.userModel as um
 
 @route("/user/(.*)")
 class userProfile(baseHTMLObject):
-    __name__ = "user profile"
+    __name__ = "profile"
     def GET(self):
         """
         """
