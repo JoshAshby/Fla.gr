@@ -22,7 +22,7 @@ class url(object):
         which gets entered into the route table.
         """
         def __init__(self, urlStr, pageObject):
-                self.regex = re.compile("^" + urlStr +"(|/)$")
+                self.regex = re.compile("^" + urlStr +"(|.json|/)$")
                 self.url = urlStr
                 self.pageObject = pageObject
                 self.name = pageObject.__name__ or "unnamedFalgrPage"

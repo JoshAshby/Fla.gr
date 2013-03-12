@@ -24,6 +24,7 @@ import seshat.coreApp as seshat
 from seshat.route import route
 from seshat.baseObject import baseHTTPObject
 
+
 @route("/basic")
 class baic(baseHTTPObject):
     """
