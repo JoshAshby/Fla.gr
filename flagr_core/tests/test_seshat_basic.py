@@ -24,9 +24,11 @@ import seshat.coreApp as seshat
 from seshat.route import route
 from seshat.baseObject import baseHTTPObject
 
+basic_urls = []
 
-@route("/basic")
-class baic(baseHTTPObject):
+
+@route("/basic", basic_urls)
+class basic(baseHTTPObject):
     """
     Returns a basic page, and response codes for various
     """
@@ -60,13 +62,15 @@ class test_seshat_base(object):
     """
     Tests basic routing and the GET POST PUT and DELETE methods
     """
-    def setup(self):
-        self.app = TestApp(seshat.app)
+    @classmethod
+    def setup_class(cls):
+        cls.app = TestApp(seshat.app)
+        seshat.c.urls = basic_urls
 
-    def teardown(self):
-        del(self.app)
+    @classmethod
+    def teardown_class(cls):
+        del(cls.app)
 
-    @nst.with_setup(setup, teardown)
     def seshat_test_get(self):
         """
         Tests the GET method of the baseHTTPObject in Seshat
@@ -83,7 +87,6 @@ class test_seshat_base(object):
         print "Make sure the content is the same as we expect..."
         assert get_reply.normal_body.replace(" ", "") == ("""<html><head><title>Test page</title></head><body>This is a test HTML page body</body></html>""").replace(" ", "")
 
-    @nst.with_setup(setup, teardown)
     def seshat_test_post(self):
         """
         Should return with a 201 CREATED header, and a location
@@ -93,7 +96,6 @@ class test_seshat_base(object):
         assert post_reply.status == "201 CREATED"
 
     @nst.raises(AppError)
-    @nst.with_setup(setup, teardown)
     def seshat_test_put(self):
         """
         Should return with a 405 NOT ALLOWED
@@ -105,7 +107,6 @@ class test_seshat_base(object):
         print put_reply
         assert put_reply.normal_body == "This isn't allowed"
 
-    @nst.with_setup(setup, teardown)
     def seshat_test_delete(self):
         """
         Should return a 303 SEE OTHER which we'll follow back to /basic

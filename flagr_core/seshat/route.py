@@ -20,10 +20,10 @@ import logging
 logger = logging.getLogger(c.logName+".seshat.route")
 
 
-def route(routeURL):
+def route(routeURL, urls=c.urls):
         def wrapper(HTTPObject):
                 urlObject = bu.url(routeURL, HTTPObject)
-                c.urls.append(urlObject)
+                urls.append(urlObject)
                 HTTPObject.__url__ = routeURL
                 if c.debug: logger.debug("""Made route table entry for:
         Object: %(objectName)s

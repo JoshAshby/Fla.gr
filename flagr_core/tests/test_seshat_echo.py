@@ -24,8 +24,10 @@ import seshat.coreApp as seshat
 from seshat.route import route
 from seshat.baseObject import baseHTTPObject
 
+echo_urls = []
 
-@route("/echo")
+
+@route("/echo", echo_urls)
 class getEcho(baseHTTPObject):
     """
     Returns a basic page, and response codes for various
@@ -65,13 +67,15 @@ class test_seshat_echo(object):
     """
     Tests to make sure the query sting and other parameters get to the objects
     """
-    def setup(self):
-        self.app = TestApp(seshat.app)
+    @classmethod
+    def setup_class(cls):
+        cls.app = TestApp(seshat.app)
+        seshat.c.urls = echo_urls
 
-    def teardown(self):
-        del(self.app)
+    @classmethod
+    def teardown_class(cls):
+        del(cls.app)
 
-    @nst.with_setup(setup, teardown)
     def seshat_test_get_echo(self):
         """
         Sends "hello" and expects it to be echoed back in an HTML page through GET
@@ -82,3 +86,24 @@ class test_seshat_echo(object):
         assert echo_get_reply.status == "200 OK"
 
         assert echo_get_reply.normal_body.replace(" ", "") == ("""<html><head><title>echo</title></head><body>%s</body></html>""" % test_param).replace(" ", "")
+
+    @nst.raises(AppError)
+    def seshat_test_post_echo(self):
+        """
+        AppError for the 405
+        """
+        echo_post_reply = self.app.post('/echo')
+
+    @nst.raises(AppError)
+    def seshat_test_put_echo(self):
+        """
+        AppError for the 405
+        """
+        echo_put_reply = self.app.post('/echo')
+
+    @nst.raises(AppError)
+    def seshat_test_delete_echo(self):
+        """
+        AppError for the 405
+        """
+        echo_delete_reply = self.app.post('/echo')
