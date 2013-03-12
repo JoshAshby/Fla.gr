@@ -95,20 +95,24 @@ def app(env, start_response):
                         content = data.get()
 
                         replyData = reply.get()
-                        cookieHeader = ("Set-Cookie", cookie.output(header=""))
                         header = replyData[1]
-                        header.append(cookieHeader)
+                        if content:
+                            cookieHeader = ("Set-Cookie", cookie.output(header=""))
+                            header.append(cookieHeader)
 
                         status = replyData[0]
-                        header.append(("Content-Length", str(len(content))))
+
+                        if content:
+                            header.append(("Content-Length", str(len(content))))
 
                         start_response(status, header)
 
-#                        newHTTPObject.session.save()
-
                         del(newHTTPObject)
 
-                        return [str(content)]
+                        if content:
+                            return [str(content)]
+                        else:
+                            return []
 
         if c.debug: log404(env)
         status = "404 NOT FOUND"

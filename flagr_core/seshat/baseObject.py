@@ -63,13 +63,12 @@ class baseHTTPObject(object):
                         error = True
 
                 if not error:
-                        content = getattr(self, self.env["method"])()
+                        content = getattr(self, self.env["method"])() or ""
                         content = str(content)
 
                 if self.head[0] != "303 SEE OTHER":
                     self.session.clearAlerts()
                 self.session.saveAlerts()
-
 
                 data.put(content)
                 data.put(StopIteration)

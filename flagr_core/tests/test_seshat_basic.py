@@ -15,6 +15,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from webtest import TestApp
+from webtest.app import AppError
 
 import nose.tools as nst
 
@@ -43,17 +44,20 @@ class baic(baseHTTPObject):
 """
 
     def POST(self):
-        pass
+        self.head = ("201 CREATED", [("Location", "/basic")])
 
     def PUT(self):
-        pass
+        self.head = ("405 NOT ALLOWED", [("Allow", "GET,POST"),
+            ("Content-Type", "text/plain")])
+        return "This isn't allowed"
 
     def DELETE(self):
-        pass
+        self.head = ("303 SEE OTHER", [("Location", "/basic")])
 
 
 class test_seshat_base(object):
     """
+    Tests basic routing and the GET POST PUT and DELETE methods
     """
     def setup(self):
         self.app = TestApp(seshat.app)
@@ -80,12 +84,35 @@ class test_seshat_base(object):
 
     @nst.with_setup(setup, teardown)
     def seshat_test_post(self):
-        pass
+        """
+        Should return with a 201 CREATED header, and a location
+        """
+        post_reply = self.app.post('/basic')
 
+        assert post_reply.status == "201 CREATED"
+
+    @nst.raises(AppError)
     @nst.with_setup(setup, teardown)
     def seshat_test_put(self):
-        pass
+        """
+        Should return with a 405 NOT ALLOWED
+        """
+        put_reply = self.app.put('/basic')
+
+        assert put_reply.status == "405 NOT ALLOWED"
+
+        print put_reply
+        assert put_reply.normal_body == "This isn't allowed"
 
     @nst.with_setup(setup, teardown)
     def seshat_test_delete(self):
-        pass
+        """
+        Should return a 303 SEE OTHER which we'll follow back to /basic
+        """
+        delete_reply = self.app.delete('/basic')
+
+        assert delete_reply.status == "303 SEE OTHER"
+
+        follow = delete_reply.follow()
+
+        assert follow.status == "200 OK"
