@@ -39,6 +39,10 @@ def adminBucketDict():
     return returnBuckets
 
 
+def adminBucketToggle(bucketID):
+    current = toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
+    return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
+
 def toBoolean(str):
     if str[0] == 'T':
         return True

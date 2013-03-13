@@ -17,6 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.admin.dev.adminDevViewBucketsTmpl import adminDevViewBucketsTmpl
 
 import models.bucket.bucketModel as bm
+import json
 
 
 @route("/admin/dev/buckets")
@@ -29,6 +30,15 @@ class adminDevViewBuckets(baseHTMLObject):
         """
         view = adminDevViewBucketsTmpl(searchList=[self.tmplSearchList])
 
+        view.scripts = ["jquery.json-2.4.min", "devBucketsButtons"]
         view.buckets = bm.adminBucketDict()
 
         return view
+
+    def POST(self):
+        self.head = ("200 OK", [("Content-Type", "application/json")])
+        bucket = json.loads(self.env["members"]["json"])
+
+        reply = bm.adminBucketToggle(bucket["bucket"])
+
+        return json.dumps({"status": reply})

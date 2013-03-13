@@ -22,7 +22,7 @@
             <td>$buckets[$bucket]["description"][:100]...</td>
             <td class="changeBtns" width=15%>
                 #if $buckets[$bucket]["value"]
-                    <a class="btn btn-success pull-right" href="#$bucket" role="button" data-toggle="modal"><i class="icon-bolt"></i> Active</a>
+                    <a class="btn btn-success pull-right" href="#$bucket" role="button" data-toggle="modal"><i class="icon-bolt"></i> Enabled</a>
                 #else
                     <a class="btn btn-inverse pull-right" href="#$bucket" role="button" data-toggle="modal"><i class="icon-off"></i> Disabled</a>
                 #end if
@@ -40,9 +40,9 @@
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Nevermind...</button>
                 #if not $buckets[$bucket]["value"]
-                    <button data-bucket="$bucket" class="btn btn-success modal-options-btn"><i class="icon-bolt"></i> Activate</button>
+                    <button data-bucket="$bucket" class="btn btn-inverse modal-options-btn"><i class="icon-off"></i> Disabled</button>
                 #else
-                    <button data-bucket="$bucket" class="btn btn-inverse modal-options-btn"><i class="icon-off"></i> Deactivate</button>
+                    <button data-bucket="$bucket" class="btn btn-success modal-options-btn"><i class="icon-bolt"></i> Enabled</button>
                 #end if
             </div>
         </div>
