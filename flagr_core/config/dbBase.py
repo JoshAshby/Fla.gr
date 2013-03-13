@@ -13,7 +13,7 @@ import redis
 from couchdb import Server
 
 server = Server('http://localhost:5984/')
-
 couchServer = server['flagr']
 
 redisSessionServer = redis.Redis("localhost", db=3)
+redisBucketServer = redis.Redis("localhost", db=4)

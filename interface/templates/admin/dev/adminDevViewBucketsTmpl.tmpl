@@ -1,0 +1,52 @@
+#extends views.admin.adminBootstrapSkeleton
+
+#def body
+<ul class="breadcrumb">
+    You are here:<span class="divider"></span>
+    <li><a href="/admin">Admin Panel</a> <span class="divider">/</span></li>
+    <li class="active">Dev Buckets</li>
+</ul>
+<table class="table table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>Bucket id and name</th>
+            <th>Bucket description</th>
+            <th>Bucket status</th>
+        </tr>
+    </thead>
+    <tbody>
+    #for $bucket in $buckets
+        <tr>
+            <td width=35%><a href="#buckets/$bucket">$bucket</a><br>
+            <a href="#buckets/$bucket">$buckets[$bucket]["name"]</a></td>
+            <td>$buckets[$bucket]["description"][:100]...</td>
+            <td class="changeBtns" width=15%>
+                #if $buckets[$bucket]["value"]
+                    <a class="btn btn-success pull-right" href="#$bucket" role="button" data-toggle="modal"><i class="icon-bolt"></i> Active</a>
+                #else
+                    <a class="btn btn-inverse pull-right" href="#$bucket" role="button" data-toggle="modal"><i class="icon-off"></i> Disabled</a>
+                #end if
+            </td>
+        </tr>
+        <div id="$bucket" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="${bucket}Label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+                <h3 id="${bucket}Label">Change `$bucket` Status?</h3>
+            </div>
+            <div class="modal-body">
+                <p>Here you can choose to either close this window, or activate or deactivate the selected bucket.</p>
+                <p>$buckets[$bucket]["description"]</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Nevermind...</button>
+                #if not $buckets[$bucket]["value"]
+                    <button class="btn btn-success"><i class="icon-bolt"></i> Activate</button>
+                #else
+                    <button class="btn btn-inverse"><i class="icon-off"></i> Deactivate</button>
+                #end if
+            </div>
+        </div>
+    #end for
+    </tbody>
+</table>
+#end def

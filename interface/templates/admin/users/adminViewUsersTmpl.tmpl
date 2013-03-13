@@ -1,11 +1,6 @@
 #extends views.admin.adminBootstrapSkeleton
-#from views.partials.tabs.adminTabsTmpl import adminTabsTmpl as adminTabs
-#from datetime import datetime
-
-#def topExtra
-$adminTabs.tabs($page)
-#end def
 #def body
+
 <ul class="breadcrumb">
     You are here:<span class="divider"></span>
     <li><a href="/admin">Admin Panel</a> <span class="divider">/</span></li>
@@ -26,7 +21,6 @@ $adminTabs.tabs($page)
         <tr>
             <td><a href="/admin/users/$userItem.id/edit">$userItem.username #if $user.id == $userItem.id#(You)#end if#</a></td>
             <td><a href="/admin/users/$userItem.id/edit">$userItem.email</a></td>
-##            <td>$datetime.strftime($userItem.joined, "%a %b %d, %Y")</td>
             <td>$userItem.joined</td>
             <td>
                 #if $userItem.level < 50

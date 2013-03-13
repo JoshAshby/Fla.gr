@@ -84,8 +84,10 @@
                                                 <button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Log in</button>
                                             </fieldset>
                                         </form>
-                                        <li class="nav-header">Or...</li>
-                                        <li><a href="/request">Request an invite</a></li>
+                                        #if $cfg.enableRequests
+                                            <li class="nav-header">Or...</li>
+                                            <li><a href="/request">Request an invite</a></li>
+                                        #end if
                                     </ul>
                                 #else if $user.loggedIn
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Heya, $user.username <i class="icon-chevron-down"></i></a>

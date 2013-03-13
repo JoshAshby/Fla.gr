@@ -16,6 +16,8 @@ joshuaashby@joshashby.com
 from seshat.baseObject import baseHTTPObject
 from utils.devConfig import cfg
 
+import models.bucket.bucketModel as bm
+
 class baseHTMLObject(baseHTTPObject):
     def finishInit(self):
         try:
@@ -24,5 +26,5 @@ class baseHTMLObject(baseHTTPObject):
             self.__name__ = "untitledFlagrPage"
 
         self.head = ("200 OK", [("Content-Type", "text/html")])
-        self.tmplSearchList = {"user": self.session, "page": (self.__name__), "cfg": cfg}
-        self.env["cfg"] = cfg
+        self.env["cfg"] = bm.cfgBuckets()
+        self.tmplSearchList = {"user": self.session, "page": (self.__name__), "cfg": self.env["cfg"]}

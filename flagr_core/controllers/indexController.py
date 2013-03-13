@@ -30,12 +30,3 @@ class index(baseHTMLObject):
         """
         view = indexTmpl(searchList=[self.tmplSearchList])
         return view
-
-
-import models.user.userModel as um
-@route("/setup")
-class setup(baseHTMLObject):
-    def GET(self):
-        user = um.userORM.new("Josh", "test")
-        user.save()
-        return "User `Josh` created with password `test`"

@@ -1,4 +1,5 @@
 #set $resources="/static"
+#from views.partials.tabs.adminTabsTmpl import adminTabsTmpl as adminTabs
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -38,7 +39,7 @@
         <![endif]-->
 
         <!-- Begin nav bar template -->
-        <div class="navbar #if $page in ('admin panel', 'admin users', 'admin flags')#navbar-inverse#end if# navbar-fixed-top">
+        <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -80,8 +81,10 @@
                                                 <button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Log in</button>
                                             </fieldset>
                                         </form>
-                                        <li class="nav-header">Or...</li>
-                                        <li><a href="/request">Request an invite</a></li>
+                                        #if $cfg.enableRequests
+                                            <li class="nav-header">Or...</li>
+                                            <li><a href="/request">Request an invite</a></li>
+                                        #end if
                                     </ul>
                                 #else if $user.loggedIn
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Heya, $user.username <i class="icon-chevron-down"></i></a>
@@ -117,6 +120,7 @@
             <div class="row">
                 <div class="offset1 span10">
                     $getVar('topExtra', '')
+                    $adminTabs.tabs($page, $user, $cfg)
                 </div>
             </div>
             <div class="row">

@@ -14,6 +14,8 @@ from controllers.admin.users.adminDelUserController  import * #/admin/users/(.*)
 from controllers.admin.users.adminEditUserController  import * #/admin/users/(.*)/edit
 from controllers.admin.users.adminNewUserController  import * #/admin/users/new
 from controllers.admin.users.adminViewUsersController  import * #/admin/users
+# -> /admin/dev
+from controllers.admin.dev.adminDevViewBucketsController import * #/admin/dev/buckets
 
 #Next, /auth/ controllers
 from controllers.auth.authLoginController import * #/auth/login
