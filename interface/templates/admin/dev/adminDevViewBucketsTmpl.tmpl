@@ -40,9 +40,9 @@
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Nevermind...</button>
                 #if not $buckets[$bucket]["value"]
-                    <button class="btn btn-success"><i class="icon-bolt"></i> Activate</button>
+                    <button data-bucket="$bucket" class="btn btn-success modal-options-btn"><i class="icon-bolt"></i> Activate</button>
                 #else
-                    <button class="btn btn-inverse"><i class="icon-off"></i> Deactivate</button>
+                    <button data-bucket="$bucket" class="btn btn-inverse modal-options-btn"><i class="icon-off"></i> Deactivate</button>
                 #end if
             </div>
         </div>
