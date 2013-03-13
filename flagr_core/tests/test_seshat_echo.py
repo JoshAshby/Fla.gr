@@ -24,28 +24,20 @@ import seshat.coreApp as seshat
 from seshat.route import route
 from seshat.baseObject import baseHTTPObject
 
-echo_urls = []
+basic_echo_urls = []
 
 
-@route("/echo", echo_urls)
-class getEcho(baseHTTPObject):
+@route("/echo", basic_echo_urls)
+class basic_echo(baseHTTPObject):
     """
-    Returns a basic page, and response codes for various
+    Returns a basic page through GET which places one parameter from env["members"]
+    into an HTML page, and returns 405 NOT ALLOWED for all other Methods
     """
     def GET(self):
         echo = self.env["members"]["echo"]
-        self.head = ("200 OK", [("Content-Type", "text/html")])
+        self.head = ("200 OK", [("Content-Type", "text/plain")])
 
-        return """
-<html>
-    <head>
-        <title>echo</title>
-    </head>
-    <body>
-        %s
-    </body>
-</html>
-""" % echo
+        return echo
 
     def POST(self):
         self.head = ("405 NOT ALLOWED", [("Allow", "GET,POST"),
@@ -63,47 +55,62 @@ class getEcho(baseHTTPObject):
         return "This isn't allowed"
 
 
-class test_seshat_echo(object):
+class test_seshat_basic_echo(object):
     """
     Tests to make sure the query sting and other parameters get to the objects
     """
     @classmethod
     def setup_class(cls):
+        """
+        Make a new instance of the Seshat core app, and replace it's
+        URL list with our own so this test's routing is isolated
+        """
         cls.app = TestApp(seshat.app)
-        seshat.c.urls = echo_urls
+        seshat.c.urls = basic_echo_urls
+
+        cls.url = "/echo"
+        cls.params = {"echo": "hello"}
 
     @classmethod
     def teardown_class(cls):
+        """
+        Destroy the created Seshat core app instance
+        """
         del(cls.app)
 
-    def seshat_test_get_echo(self):
+    def test_seshat_basic_echo_get(self):
         """
         Sends "hello" and expects it to be echoed back in an HTML page through GET
         """
-        test_param = "hello"
-        echo_get_reply = self.app.get('/echo', {"echo": test_param})
+        get_reply = self.app.get(self.url, self.params)
 
-        assert echo_get_reply.status == "200 OK"
+        assert get_reply.status == "200 OK"
 
-        assert echo_get_reply.normal_body.replace(" ", "") == ("""<html><head><title>echo</title></head><body>%s</body></html>""" % test_param).replace(" ", "")
-
-    @nst.raises(AppError)
-    def seshat_test_post_echo(self):
-        """
-        AppError for the 405
-        """
-        echo_post_reply = self.app.post('/echo')
+        assert get_reply.normal_body.replace(" ", "") == ("""<html><head><title>echo</title></head><body>%s</body></html>""" % self.params["echo"]).replace(" ", "")
 
     @nst.raises(AppError)
-    def seshat_test_put_echo(self):
+    def test_seshat_basic_echo_post(self):
         """
-        AppError for the 405
+        AppError for the 405 POST
         """
-        echo_put_reply = self.app.post('/echo')
+        post_reply = self.app.post(self.url)
+
+        assert post_reply.status == "405 NOT ALLOWED"
 
     @nst.raises(AppError)
-    def seshat_test_delete_echo(self):
+    def test_seshat_basic_echo_put(self):
         """
-        AppError for the 405
+        AppError for the 405 PUT
         """
-        echo_delete_reply = self.app.post('/echo')
+        put_reply = self.app.post(self.url)
+
+        assert put_reply.status == "405 NOT ALLOWED"
+
+    @nst.raises(AppError)
+    def test_seshat_basic_echo_delete(self):
+        """
+        AppError for the 405 DELETE
+        """
+        delete_reply = self.app.post(self.url)
+
+        assert delete_reply.status == "405 NOT ALLOWED"
