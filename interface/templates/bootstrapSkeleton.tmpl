@@ -47,64 +47,66 @@
                         <span class="icon-bar"></span>
                     </a>
                     <a class="brand" href="/"><i class="icon-flag"></i> fla.gr</a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            #if not $user.loggedIn
-                                <li #if $page=='home'#class="active"#end if#><a href="/"><i class="icon-home"></i></a></li>
-                            #end if
-                            <li #if $page=="public flags"#class="active"#end if#><a href="/flags"><i class="icon-flag"></i></a></li>
-                            <li #if $page=="public labels"#class="active"#end if#><a href="/labels"><i class="icon-tags"></i></a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle #if $page=='search'#active#end if#" data-toggle="dropdown"><i class="icon-search"></i></a>
-                                <ul class="dropdown-menu">
-                                    <form style="padding-left: 20px; padding-right: 20px; padding-top:20px" action="/search">
-                                        <fieldset>
-                                            <div class="input-append">
-                                                <input class="span3" type="text" placeholder="Search flags">
-                                                <button type="submit" class="btn"><i class="icon-search"></i></button>
-                                            </div>
-                                        </fieldset>
-                                    </form>
-                                </ul>
-                            </li>
-                        </ul>
-                        <!-- Right hand drop down -->
-                        <ul class="nav pull-right">
-                            #if $user.loggedIn
-                                <li #if $page in ('labels', 'settings', 'flags', 'dashboard')#class="active"#end if#><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
-                            #end if
-                            <li class="dropdown">
-                                #if not $user.loggedIn and $page!='login'
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ohia, Stranger! <i class="icon-chevron-down"></i></a>
+                    #if $page is not "maintenance"
+                        <div class="nav-collapse collapse">
+                            <ul class="nav">
+                                #if not $user.loggedIn
+                                    <li #if $page=='home'#class="active"#end if#><a href="/"><i class="icon-home"></i></a></li>
+                                #end if
+                                <li #if $page=="public flags"#class="active"#end if#><a href="/flags"><i class="icon-flag"></i></a></li>
+                                <li #if $page=="public labels"#class="active"#end if#><a href="/labels"><i class="icon-tags"></i></a></li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle #if $page=='search'#active#end if#" data-toggle="dropdown"><i class="icon-search"></i></a>
                                     <ul class="dropdown-menu">
-                                        <form style="padding-left: 20px; padding-right: 20px" action="/auth/login" method="POST">
+                                        <form style="padding-left: 20px; padding-right: 20px; padding-top:20px" action="/search">
                                             <fieldset>
-                                                <input class="span3" type="text" placeholder="Email" name="username">
-                                                <input class="span3" type="password" placeholder="Password" name="password">
-                                                <button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Log in</button>
+                                                <div class="input-append">
+                                                    <input class="span3" type="text" placeholder="Search flags">
+                                                    <button type="submit" class="btn"><i class="icon-search"></i></button>
+                                                </div>
                                             </fieldset>
                                         </form>
-                                        #if $cfg.enableRequests
-                                            <li class="nav-header">Or...</li>
-                                            <li><a href="/request">Request an invite</a></li>
-                                        #end if
                                     </ul>
-                                #else if $user.loggedIn
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Heya, $user.username <i class="icon-chevron-down"></i></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/flags/new"><i class="icon-flag"></i> Create a flag</a></li>
-                                        #if $user.level >= 50
-                                            <li class="nav-header">Toys...</li>
-                                            <li><a href="/admin"><i class="icon-wrench"></i> Admin Panel</a></li>
-                                        #end if
-                                        <li class="nav-header">Or...</li>
-                                        <li><a href="/your/settings"><i class="icon-cogs"></i> Account Settings</a></li>
-                                        <li><a href="/auth/logout"><i class="icon-signout"></i> Log out</a></li>
-                                    </ul>
+                                </li>
+                            </ul>
+                            <!-- Right hand drop down -->
+                            <ul class="nav pull-right">
+                                #if $user.loggedIn
+                                    <li #if $page in ('labels', 'settings', 'flags', 'dashboard')#class="active"#end if#><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
                                 #end if
-                            </li>
-                        </ul>
-                        <!-- End right hand drop down -->
+                                <li class="dropdown">
+                                    #if not $user.loggedIn and $page!='login'
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ohia, Stranger! <i class="icon-chevron-down"></i></a>
+                                        <ul class="dropdown-menu">
+                                            <form style="padding-left: 20px; padding-right: 20px" action="/auth/login" method="POST">
+                                                <fieldset>
+                                                    <input class="span3" type="text" placeholder="Email" name="username">
+                                                    <input class="span3" type="password" placeholder="Password" name="password">
+                                                    <button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Log in</button>
+                                                </fieldset>
+                                            </form>
+                                            #if $cfg.enableRequests
+                                                <li class="nav-header">Or...</li>
+                                                <li><a href="/request">Request an invite</a></li>
+                                            #end if
+                                        </ul>
+                                    #else if $user.loggedIn
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Heya, $user.username <i class="icon-chevron-down"></i></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/flags/new"><i class="icon-flag"></i> Create a flag</a></li>
+                                            #if $user.level >= 50
+                                                <li class="nav-header">Toys...</li>
+                                                <li><a href="/admin"><i class="icon-wrench"></i> Admin Panel</a></li>
+                                            #end if
+                                            <li class="nav-header">Or...</li>
+                                            <li><a href="/your/settings"><i class="icon-cogs"></i> Account Settings</a></li>
+                                            <li><a href="/auth/logout"><i class="icon-signout"></i> Log out</a></li>
+                                        </ul>
+                                    #end if
+                                </li>
+                            </ul>
+                            <!-- End right hand drop down -->
+                        #end if
                     </div><!--/.nav-collapse -->
                 </div>
             </div>
