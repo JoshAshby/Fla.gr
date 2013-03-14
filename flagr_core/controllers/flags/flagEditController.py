@@ -20,6 +20,8 @@ import models.flag.flagModel as fm
 from datetime import datetime
 import config.dbBase as db
 import json
+import utils.markdownUtils as mdu
+
 
 
 @route("/flags/(.*)/edit")
@@ -76,8 +78,11 @@ class flagEdit(baseHTMLObject):
         except:
             labels = list(set(labels.replace(" ", "").split(",")))
 
+        for label in range(len(labels)):
+            labels[label] = mdu.cleanInput(labels[label])
+
         flag = fm.flagORM.load(db.couchServer, flagid)
-        flag.title = title
+        flag.title = mdu.cleanInput(title)
         flag.description = description
         flag.labels = labels
         flag.url = url

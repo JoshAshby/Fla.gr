@@ -27,6 +27,8 @@ import Cookie
 import re
 import urllib
 
+import controllers.errorController as errorController
+
 cookie = Cookie.SimpleCookie()
 
 
@@ -48,78 +50,79 @@ def app(env, start_response):
         this all works, at the moment data can not be streammed. As a result
         it's all added together, then returned rather than sent out in chunks.
         """
+        try:
+                cookie.load(env["HTTP_COOKIE"])
+        except:
+                cookie["sid"] = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
+
+        sessionID = cookie.output(header="")[5:]
+
+        members = {}
+
+        newHTTPObject = None
+
         for url in c.urls:
                 try:
                     matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
                 except:
                     matched = url.regex.match(env["PATH_INFO"])
                 if matched:
-                        if c.debug:
-                                logURL(env, url)
-                        try:
-                                cookie.load(env["HTTP_COOKIE"])
-                        except:
-                                cookie["sid"] = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
+                    newHTTPObject = url.pageObject(env, members, sessionID)
+                    if c.debug:
+                            logURL(env, url)
 
-                        members = {}
+                    matchedItems = matched.groups()
+                    for item in range(len(matchedItems)):
+                            members.update({item: matchedItems[item]})
 
-                        matchedItems = matched.groups()
-                        for item in range(len(matchedItems)):
-                                members.update({item: matchedItems[item]})
+                    for item in env['QUERY_STRING'].split("&"):
+                            if item:
+                                    parts = item.split("&")
+                                    for part in parts:
+                                            query = part.split("=")
+                                            members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
 
-                        for item in env['QUERY_STRING'].split("&"):
-                                if item:
-                                        parts = item.split("&")
-                                        for part in parts:
-                                                query = part.split("=")
-                                                members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+                    for item in env['wsgi.input']:
+                            if item:
+                                    parts = item.split("&")
+                                    for part in parts:
+                                            query = part.split("=")
+                                            members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
 
-                        for item in env['wsgi.input']:
-                                if item:
-                                        parts = item.split("&")
-                                        for part in parts:
-                                                query = part.split("=")
-                                                members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+        if not newHTTPObject:
+            newHTTPObject = errorController.error404(env, members, sessionID)
+            if c.debug: log404(env)
 
-                        sessionID = cookie.output(header="")[5:]
 
-                        newHTTPObject = url.pageObject(env, members, sessionID)
+        if env["REQUEST_METHOD"] == "GET":
+                newHTTPObject.session.history = env["REQUEST_URI"] if env.has_key("REQUEST_URL") else env["PATH_INFO"]
 
-                        if env["REQUEST_METHOD"] == "GET":
-                                newHTTPObject.session.history = env["REQUEST_URI"] if env.has_key("REQUEST_URL") else env["PATH_INFO"]
+        data, reply = queue.Queue(), queue.Queue()
+        dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+        dataThread.join()
 
-                        data, reply = queue.Queue(), queue.Queue()
-                        dataThread = gevent.spawn(newHTTPObject.build, data, reply)
-                        dataThread.join()
+        content = data.get()
 
-                        content = data.get()
+        replyData = reply.get()
+        header = replyData[1]
+        if content:
+            cookieHeader = ("Set-Cookie", cookie.output(header=""))
+            header.append(cookieHeader)
 
-                        replyData = reply.get()
-                        header = replyData[1]
-                        if content:
-                            cookieHeader = ("Set-Cookie", cookie.output(header=""))
-                            header.append(cookieHeader)
+        status = replyData[0]
 
-                        status = replyData[0]
+        if content:
+            header.append(("Content-Length", str(len(content))))
 
-                        if content:
-                            header.append(("Content-Length", str(len(content))))
+        start_response(status, header)
 
-                        start_response(status, header)
+        del(newHTTPObject)
 
-                        del(newHTTPObject)
+        if content:
+            return [str(content)]
+        else:
+            return []
 
-                        if content:
-                            return [str(content)]
-                        else:
-                            return []
-
-        if c.debug: log404(env)
-        status = "404 NOT FOUND"
-        content = "<html><body><b>404 Not Found</b></body></html>"
-        headers = [("Content-Type", "text/html"), ("Content-Length", str(len(content)))]
-        start_response(status, headers)
-        return [content]
 
 def logURL(env, url):
     uri = env["REQUEST_URI"] if env.has_key("REQUEST_URI") else env["PATH_INFO"]

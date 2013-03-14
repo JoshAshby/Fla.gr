@@ -10,8 +10,8 @@ $flagsRE.rightExtra($page, $section)
 $dashTabs.tabs($page, $section)
 #end def
 #def body
-#if $flags
-    $flagsList.flagsList($flags, $user)
+#if $flags.items
+    $flagsList.flagsList($flags, $user, "/your/flags")
 #else
     #if $section not in ('public', 'private')
         <h2>Oh no!</h2>

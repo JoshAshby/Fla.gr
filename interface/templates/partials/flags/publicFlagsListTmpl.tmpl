@@ -1,6 +1,6 @@
 #@staticmethod
-#def publicFlagsList($flags, $user)
-    #for $flag in $flags
+#def publicFlagsList($flags, $user, $pageURL)
+    #for $flag in $flags.getItems
         <!-- Start of flag overview template -->
         <div class="row">
             <div class="span6">
@@ -55,4 +55,21 @@
         <hr>
         <!-- End of flag overview template -->
     #end for
+    <div class="pagination pagination-centered">
+        <ul>
+            #if $flags.hasPrev
+                <li><a href="$pageURL?p=${flags.currentPage-1}">&laquo;</a></li>
+            #else
+                <li class="disabled"><span>&laquo;</span></li>
+            #end if
+            #for $item in $flags.listPages()
+                <li #if $item == $flags.currentPage#class="active"#end if#><a href="$pageURL?p=$item">$item</a></li>
+            #end for
+            #if $flags.hasNext
+                <li><a href="$pageURL?p=${flags.currentPage+1}">&raquo;</a></li>
+            #else
+                <li class="disabled"><span>&raquo;</span></li>
+            #end if
+        </ul>
+    </div>
 #end def

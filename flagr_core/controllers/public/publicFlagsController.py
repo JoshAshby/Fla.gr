@@ -20,6 +20,8 @@ import config.dbBase as db
 from models.user.userModel import userORM
 import models.flag.flagModel as fm
 
+import utils.pagination as p
+
 
 @route("/flags")
 @route("/public/flags")
@@ -28,6 +30,7 @@ class publicFlags(baseHTMLObject):
     def GET(self):
         """
         """
+        page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
         view = publicFlagsTmpl(searchList=[self.tmplSearchList])
 
         flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
@@ -36,6 +39,6 @@ class publicFlags(baseHTMLObject):
         for flag in flags:
             flag.author = userORM.load(db.couchServer, flag.userID)
 
-        view.flags = flags
+        view.flags = p.pagination(flags, 10, int(page))
 
         return view

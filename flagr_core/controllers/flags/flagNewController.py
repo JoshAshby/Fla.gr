@@ -18,6 +18,7 @@ from views.flags.flagNewTmpl import flagNewTmpl
 
 import models.flag.flagModel as fm
 import json
+import utils.markdownUtils as mdu
 
 
 @route("/flags/new")
@@ -58,7 +59,10 @@ class flagNew(baseHTMLObject):
         except:
             labels = list(set(labels.strip(" ").split(",")))
 
-        newFlag = fm.flagORM(title=title, description=description, labels=labels, url=url, userID=self.session.id, visibility=visibility)
+        for label in range(len(labels)):
+            labels[label] = mdu.cleanInput(labels[label])
+
+        newFlag = fm.flagORM(title=mdu.cleanInput(title), description=description, labels=labels, url=url, userID=self.session.id, visibility=visibility)
 
         newFlag.save()
 

@@ -7,23 +7,28 @@ $userTabs.tabs($page, $userProfile)
 #def body
     <div class="row">
         <div class="span6">
-            <div class="well">
-                <div class="span2">
-                    #if $userProfile.emailVisibility
+            #if $userProfile.emailVisibility
+                <div class="well">
+                    <div class="span2">
                         <span class="label label-success"><i class="icon-unlock"></i> Public Email</span>
-                    #end if
+                    </div>
+                    <div class="span3">
+                        #if $userProfile.emailVisibility
+                            $userProfile.email
+                        #end if
+                    </div>
                 </div>
-                <div class="span3">
-                    #if $userProfile.emailVisibility
-                        $userProfile.email
-                    #end if
-                </div>
-            </div>
+            #end if
         </div>
     </div>
     <div class="row">
         <div class="span6">
-            $userProfile.formatedAbout
+            #if $userProfile.formatedAbout
+                $userProfile.formatedAbout
+            #else
+                <h2>Whoa...</h2>
+                <p>$userProfile.username doesn't have any profile information right now! Sorry!</p>
+            #end if
         </div>
     </div>
 #end def

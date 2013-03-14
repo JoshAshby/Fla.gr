@@ -18,6 +18,8 @@ from views.you.youFlagsTmpl import youFlagsTmpl
 
 import models.flag.flagModel as fm
 
+import utils.pagination as p
+
 
 @route("/your/flags")
 class youFlags(baseHTMLObject):
@@ -26,7 +28,7 @@ class youFlags(baseHTMLObject):
     def GET(self):
         """
         """
-        page = self.env["members"]["page"] if self.env["members"].has_key("page") else ""
+        page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
         viewType = self.env["members"]["v"] if self.env["members"].has_key("v") else ""
 
         view = youFlagsTmpl(searchList=[self.tmplSearchList])
@@ -46,6 +48,6 @@ class youFlags(baseHTMLObject):
                 flags = fm.formatFlags(flags, True)
                 view.section = "all"
 
-        view.flags = flags
+        view.flags = p.pagination(flags, 10, int(page))
 
         return view

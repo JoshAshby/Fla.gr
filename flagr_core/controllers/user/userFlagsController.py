@@ -19,6 +19,9 @@ from views.user.userFlagsTmpl import userFlagsTmpl
 import models.flag.flagModel as fm
 import models.user.userModel as um
 
+import utils.pagination as p
+
+
 @route("/user/(.*)/flags")
 class userFlags(baseHTMLObject):
     __name__ = "flags"
@@ -26,6 +29,8 @@ class userFlags(baseHTMLObject):
         """
         """
         user = self.env["members"][0]
+        page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
+
         view = userFlagsTmpl(searchList=[self.tmplSearchList])
         user = um.findUserByID(user) or um.findUserByUsername(user)
 
@@ -37,7 +42,7 @@ class userFlags(baseHTMLObject):
                 if not flag.visibility:
                     flags.pop(flags.index(flag))
 
-        view.flags = flags
+        view.flags = p.pagination(flags, 10, int(page))
         view.flagAuthor = user
 
         return view
