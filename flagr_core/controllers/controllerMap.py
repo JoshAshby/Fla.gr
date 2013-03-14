@@ -1,7 +1,7 @@
 #Low level controllers first
 from controllers.indexController import * #/
-#from controllers.errorController import * #/error
-#from controllers.searchController import * #/search
+from controllers.errorController import * #/error
+from controllers.searchController import * #/search
 
 #Next, /admin/ controllers
 from controllers.admin.adminController import * #/admin

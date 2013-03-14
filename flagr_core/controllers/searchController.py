@@ -15,48 +15,25 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config as c
+import config.config as c
 
 from seshat.route import route
+from utils.baseHTMLObject import baseHTMLObject
 
-from flagr.objects.flagrObject import flagrObject
-import flagr.views.pyStrap.pyStrap as ps
-import flagr.config.flagrConfig as fc
+#import search.flag.flagSearch as fs
 
-import logging
-logger = logging.getLogger(c.logName+".search")
+from views.searchTmpl import searchTmpl
 
 
 @route("/search/flags")
-class searchFlags_term(flagrObject):
+class searchFlagsController(baseHTMLObject):
     def GET(self):
-        self.view["title"] = "Search flags"
+        value = self.env["members"]["s"] if self.env["members"].has_key("s") else ""
 
-        value = self.members["search"] if self.members.has_key("search") else ""
+#        results = fs.search(value)
 
-        pageHead = ps.baseHeading("%s Search flags..."%ps.baseIcon("search"),
-                size=2)
-        pageHead += ps.baseBasicForm(
-            action=c.baseURL+"/search/flags",
-            fields=[
-                ps.baseAppend(elements=[
-                    ps.baseInput(type="text",
-                        name="search",
-                        placeholder="Search",
-                        classes="span3",
-                        value=value),
-                    ps.baseButton(ps.baseIcon("search"),
-                        type="submit",
-                        classes="btn")
-                    ])
-                ],
-            classes="form-inline")
+        view = searchTmpl(searchList=[self.tmplSearchList])
 
-        pageHead = ps.baseColumn(pageHead, offset=3)
+#        view.results = results
 
-        self.view.body = pageHead
-
-        content = fc.flagSearch(members=self.members)
-        if content:
-            self.view.body += content
-            self.view["title"] = "Searching flags in: %s" % value
+        return view

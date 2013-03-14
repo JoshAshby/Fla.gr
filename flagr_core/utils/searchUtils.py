@@ -17,7 +17,8 @@ import config.zmqConfig as zmqc
 import gevent
 
 import logging
-logger = logging.getLogger(c.logName+".flagrSearch")
+logger = logging.getLogger(c.logName+".searchUtils")
+
 
 def _update(message):
     """
@@ -30,6 +31,7 @@ def _update(message):
     zmqc.zmqSock.send(message)
     logger.debug("Signal sent")
 
+
 def updateSearch(man=False):
     """
     Triggers fla.gr's search index to be updated
@@ -40,7 +42,7 @@ def updateSearch(man=False):
     if man:
         message += "now"
     else:
-        message += "increase"
+        message += "up"
 
     ser = gevent.spawn(_update, message)
     ser.join()
