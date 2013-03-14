@@ -45,6 +45,6 @@ class labelsView(baseHTMLObject):
 
         view.labels = labels
         view.baseLabel = baseLabel
-        view.flags = fm.formateFlags(matchedFlags)
+        view.flags = fm.formatFlags(matchedFlags)
 
         return view

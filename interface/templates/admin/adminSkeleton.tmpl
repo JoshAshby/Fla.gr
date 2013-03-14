@@ -1,0 +1,33 @@
+#from views.partials.tabs.adminTabsTmpl import adminTabsTmpl as adminTabs
+#extends views.bootstrapSkeleton
+
+
+#def mainStyle#adminBootstrap.min.css#end def#
+
+#def altNavbar#navbar-inverse#end def#
+
+#def mainContent
+    <div class="row">
+        <div class="span10 offset1">
+        <!-- If there is an alert, display it, if not, don't put
+        anything else above the content -->
+            #if $user.getAlerts()
+                $user.getAlerts()
+            #end if
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset1 span10">
+            $getVar('topExtra', '')
+            $adminTabs.tabs($page, $user, $cfg)
+        </div>
+    </div>
+    <div class="row">
+        <div class="span10 offset1">
+            $body
+        </div>
+        <div class="span1">
+            $getVar('rightExtra', '')
+        </div>
+    </div>
+#end def

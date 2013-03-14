@@ -9,7 +9,6 @@
       return $.post("/admin/dev/buckets", {
         json: "{\"bucket\": \"" + bucket + "\"}"
       }, function(data) {
-        data = $.secureEvalJSON(data);
         if (data["status"]) {
           if (elem.hasClass("btn-inverse")) {
             elem.removeClass("btn-inverse");

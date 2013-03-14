@@ -44,7 +44,7 @@ class flagEdit(baseHTMLObject):
             view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "dynamicLabels"]
             view.labels = json.dumps(flag.labels)
         else:
-            view.labels = flag.labels.join(", ")
+            view.labels = ", ".join(flag.labels).strip(", ")
 
         return view
 
@@ -72,7 +72,7 @@ class flagEdit(baseHTMLObject):
         try:
             labels = list(set(json.loads(labels)))
         except:
-            labels = list(set(labels.strip(" ").split(",")))
+            labels = list(set(labels.replace(" ", "").split(",")))
 
         flag = fm.flagORM.load(db.couchServer, flagid)
         flag.title = title

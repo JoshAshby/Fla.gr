@@ -1,4 +1,4 @@
-#set $resources="/static"
+#set global $resources="/static"
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -10,7 +10,7 @@
         <title>fla.gr - $page</title>
         <meta name="description" content="#description">
         <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="$resources/css/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="$resources/css/bootstrap/$getVar('mainStyle', 'bootstrap.min.css')">
         <style>
             body {
                 padding-top: 60px;
@@ -38,7 +38,7 @@
         <![endif]-->
 
         <!-- Begin nav bar template -->
-        <div class="navbar #if $page in ('admin panel', 'admin users', 'admin flags')#navbar-inverse#end if# navbar-fixed-top">
+        <div class="navbar $getVar('altNavbar', '') navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -112,31 +112,7 @@
         <!-- End nav bar template -->
 
         <div class="container">
-            <div class="row">
-                <div class="span10 offset1">
-                <!-- If there is an alert, display it, if not, don't put
-                anything else above the content -->
-                    #if $user.getAlerts()
-                        $user.getAlerts()
-                    #end if
-                </div>
-            </div>
-            <div class="row">
-                <div class="offset1 span10">
-                    $getVar('topExtra', '')
-                </div>
-            </div>
-            <div class="row">
-                <div class="span10 offset1">
-                    $getVar('headLines', '')
-                    <div class="offset2 span6">
-                        $body
-                    </div>
-                </div>
-                <div class="span1">
-                    $getVar('rightExtra', '')
-                </div>
-            </div>
+            $mainContent
 
             <hr>
 
