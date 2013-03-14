@@ -14,7 +14,7 @@
 .sw[nop]
 *.tmp
 *.scratchpad
-.searchIndex/
+.flagSearchIndex/
 virt/
 *.out
 node_modules

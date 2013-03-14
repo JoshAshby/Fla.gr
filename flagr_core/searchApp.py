@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
         if 'search' == sys.argv[1]:
             if 'build' in sys.argv:
-                setupLog()
+#                setupLog()
                 import search.searchController as siu
                 siu.buildIndexes()
                 sys.exit(0)

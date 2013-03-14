@@ -55,14 +55,14 @@
                                 #end if
                                 <li #if $page=="public flags"#class="active"#end if#><a href="/flags"><i class="icon-flag"></i></a></li>
                                 <li #if $page=="public labels"#class="active"#end if#><a href="/labels"><i class="icon-tags"></i></a></li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle #if $page=='search'#active#end if#" data-toggle="dropdown"><i class="icon-search"></i></a>
+                                <li class="dropdown #if $page=='search'#active#end if#">
+                                    <a href="#" id="dropdownSearchToggle" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i></a>
                                     <ul class="dropdown-menu">
                                         <form style="padding-left: 20px; padding-right: 20px; padding-top:20px" action="/search">
                                             <fieldset>
                                                 <div class="input-append">
-                                                    <input class="span3" type="text" placeholder="Search flags">
-                                                    <button type="submit" class="btn"><i class="icon-search"></i></button>
+                                                    <input class="span3" id="dropdownSearchInput" type="text" placeholder="Search..." name="s" value="$getVar('s', '')">
+                                                    <button type="submit" class="btn btn-primary"><i class="icon-search"></i></button>
                                                 </div>
                                             </fieldset>
                                         </form>
@@ -76,12 +76,12 @@
                                 #end if
                                 <li class="dropdown">
                                     #if not $user.loggedIn and $page!='login'
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ohia, Stranger! <i class="icon-chevron-down"></i></a>
+                                        <a href="#" id="dropdownLoginToggle" class="dropdown-toggle" data-toggle="dropdown">Ohia, Stranger! <i class="icon-chevron-down"></i></a>
                                         <ul class="dropdown-menu">
                                             <form style="padding-left: 20px; padding-right: 20px" action="/auth/login" method="POST">
                                                 <fieldset>
-                                                    <input class="span3" type="text" placeholder="Email" name="username">
-                                                    <input class="span3" type="password" placeholder="Password" name="password">
+                                                    <input id="dropdownLoginEmail" class="span3" type="text" placeholder="Email" name="username">
+                                                    <input id="dropdownLoginPassword" class="span3" type="password" placeholder="Password" name="password">
                                                     <button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Log in</button>
                                                 </fieldset>
                                             </form>
@@ -133,11 +133,19 @@
 
         <script src="$resources/js/bootstrap.min.js"></script>
 
+        <!-- start global fla.gr scripts -->
+        #if $getVar('flagrCoreScripts', '')
+            #for $script in $flagrCoreScripts
+                <script src="$resources/js/${script}.js"></script>
+            #end for
+        #end if
+        <!-- End global fla.gr scripts, start local page scripts -->
         #if $getVar('scripts', '')
             #for $script in $scripts
                 <script src="$resources/js/${script}.js"></script>
             #end for
         #end if
+        <!-- end local page scripts -->
 
         <!-- <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];

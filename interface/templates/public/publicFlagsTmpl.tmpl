@@ -7,15 +7,13 @@
             <h2><i class="icon-flag"></i> Public flags</h2>
     </div>
 </div>
-#if $flags
+#if $flags.items
     $publicFlagsList.publicFlagsList($flags, $user, "/flags")
 #else
     <div class="row">
         <div class="span6">
-            <div class="page-header">
-                <h1>Oh no!</h1>
-                <p>We have no public flags to show you! Sorry :(</p>
-            </div>
+            <h1>Oh no!</h1>
+            <p>We have no public flags to show you! Sorry :(</p>
         </div>
     </div>
 #end if

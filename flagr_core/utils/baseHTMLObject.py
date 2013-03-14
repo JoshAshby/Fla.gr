@@ -14,7 +14,6 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.baseObject import baseHTTPObject
-from utils.devConfig import cfg
 
 import models.bucket.bucketModel as bm
 
@@ -27,4 +26,4 @@ class baseHTMLObject(baseHTTPObject):
 
         self.head = ("200 OK", [("Content-Type", "text/html")])
         self.env["cfg"] = bm.cfgBuckets()
-        self.tmplSearchList = {"user": self.session, "page": (self.__name__), "cfg": self.env["cfg"]}
+        self.tmplSearchList = {"user": self.session, "page": (self.__name__), "cfg": self.env["cfg"], "flagrCoreScripts": ["main"]}

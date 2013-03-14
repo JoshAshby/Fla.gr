@@ -51,43 +51,46 @@ def app(env, start_response):
         it's all added together, then returned rather than sent out in chunks.
         """
         try:
-                cookie.load(env["HTTP_COOKIE"])
+            cookie.load(env["HTTP_COOKIE"])
+            sessionCookie = { value.key: value.value for key, value in cookie.iteritems() }
+            sessionID = sessionCookie["flagr_sid"]
         except:
-                cookie["sid"] = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
+            sessionID = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
+            sessionCookie = {"flagr_sid": sessionID}
 
-        sessionID = cookie.output(header="")[5:]
 
         members = {}
 
         newHTTPObject = None
 
         for url in c.urls:
-                try:
-                    matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
-                except:
-                    matched = url.regex.match(env["PATH_INFO"])
-                if matched:
-                    newHTTPObject = url.pageObject(env, members, sessionID)
-                    if c.debug:
-                            logURL(env, url)
+            try:
+                matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
+            except:
+                matched = url.regex.match(env["PATH_INFO"])
+            if matched:
+                newHTTPObject = url.pageObject(env, members, sessionID)
+                if c.debug:
+                        logURL(env, url)
 
-                    matchedItems = matched.groups()
-                    for item in range(len(matchedItems)):
-                            members.update({item: matchedItems[item]})
+                matchedItems = matched.groups()
+                for item in range(len(matchedItems)):
+                        members.update({item: matchedItems[item]})
 
-                    for item in env['QUERY_STRING'].split("&"):
-                            if item:
-                                    parts = item.split("&")
-                                    for part in parts:
-                                            query = part.split("=")
-                                            members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+                for item in env['QUERY_STRING'].split("&"):
+                        if item:
+                                parts = item.split("&")
+                                for part in parts:
+                                        query = part.split("=")
+                                        members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
 
-                    for item in env['wsgi.input']:
-                            if item:
-                                    parts = item.split("&")
-                                    for part in parts:
-                                            query = part.split("=")
-                                            members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+                for item in env['wsgi.input']:
+                        if item:
+                                parts = item.split("&")
+                                for part in parts:
+                                        query = part.split("=")
+                                        members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+                break
 
         if not newHTTPObject:
             newHTTPObject = errorController.error404(env, members, sessionID)
@@ -106,14 +109,12 @@ def app(env, start_response):
         replyData = reply.get()
         header = replyData[1]
         if content:
-            cookieHeader = ("Set-Cookie", cookie.output(header=""))
-            header.append(cookieHeader)
-
-        status = replyData[0]
-
-        if content:
+            for morsal in sessionCookie:
+                cookieHeader = ("Set-Cookie", ("%s=%s")%(morsal, sessionCookie[morsal]))
+                header.append(cookieHeader)
             header.append(("Content-Length", str(len(content))))
 
+        status = replyData[0]
         start_response(status, header)
 
         del(newHTTPObject)

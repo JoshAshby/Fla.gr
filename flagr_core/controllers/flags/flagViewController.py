@@ -29,6 +29,7 @@ class flagView(baseHTMLObject):
         """
         flagid = self.env["members"][0]
         flag = fm.flagORM.load(db.couchServer, flagid)
+        print flag
         if not flag.visibility and flag.userID != self.session.id:
             self.session.pushAlert("This is a private flag! Sorry but we can't let you see it.", "Hold it.", "error")
             self.head = ("303 SEE OTHER", [("location", "/flags")])

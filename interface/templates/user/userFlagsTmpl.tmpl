@@ -6,15 +6,13 @@
 $userTabs.tabs($page, $flagAuthor)
 #end def
 #def body
-#if $flags
+#if $flags.items
     $flagsList.flagsList($flags, $user, "/user/%s/flags"%$user.username, $flagAuthor)
 #else
     <div class="row">
         <div class="span6">
-            <div class="page-header">
-                <h1>Oh no!</h1>
-                <p>$flagAuthor.username doesn't seem to have any public flags right now. Check back later and maybe they'll have something!</p>
-            </div>
+            <h1>Oh no!</h1>
+            <p>$flagAuthor.username doesn't seem to have any public flags right now. Check back later and maybe they'll have something!</p>
         </div>
     </div>
 #end if

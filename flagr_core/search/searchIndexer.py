@@ -8,7 +8,8 @@ zmqSock = context.socket(zmq.SUB)
 zmqSock.connect("tcp://127.0.0.1:5000")
 zmqSock.setsockopt(zmq.SUBSCRIBE, "indexUpdate")
 
-from whoosh.index import create_in
+from whoosh.filedb.filestore import FileStorage
+
 from whoosh.fields import *
 
 import os
@@ -34,12 +35,14 @@ flagSearchIndex = "/.flagSearchIndex"
 
 if not os.path.exists(c.baseFolder+flagSearchIndex):
     os.mkdir(c.baseFolder+flagSearchIndex)
-    logger.debug("Made directory: "+c.baseFolder+flagSearchIndex)
+#    logger.debug("Made directory: "+c.baseFolder+flagSearchIndex)
+
+storage = FileStorage(c.baseFolder+flagSearchIndex)
 
 
 def buildIndexes():
-    logger.debug("Making new index of flags...")
-    ix = create_in(c.baseFolder+flagSearchIndex, flagSchema)
+#    logger.debug("Making new index of flags...")
+    ix = storage.create_index(flagSchema)
 
     writer = ix.writer()
 
@@ -47,7 +50,7 @@ def buildIndexes():
     flags = fm.formatFlags(flags, True)
 
     for flag in flags:
-        logger.debug("Flag: " +flag.id+" Indexed")
+#        logger.debug("Flag: " +flag.id+" Indexed")
         labels = ", ".join(flag.labels)
 
         writer.update_document(title=flag.title,
@@ -63,7 +66,7 @@ def buildIndexes():
 
 def updateFlags():
     logger.debug("Rebuilding index of flags...")
-    ix = open(c.baseFolder+flagSearchIndex)
+    ix = storage.open_index()
 
     flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
     flags = fm.formatFlags(flags, True)
