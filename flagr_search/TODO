@@ -1,2 +1,0 @@
-Rewrite everything, have to change over from Redis to couchdb
-and get zmq working again, after fla.gr's core gets rebuilt

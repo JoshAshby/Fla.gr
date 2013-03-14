@@ -53,6 +53,7 @@ def setupLog():
 
         return logger
 
+
 from utils.simpleDaemon import Daemon
 class app(Daemon):
         down = False

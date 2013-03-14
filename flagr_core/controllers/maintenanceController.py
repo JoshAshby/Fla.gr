@@ -12,7 +12,7 @@ joshuaashby@joshashby.com
 """
 from seshat.route import route
 
-from seshat.baseObject import baseHTMLObject
+from utils.baseHTMLObject import baseHTMLObject
 
 from views.maintenanceTmpl import maintenanceTmpl
 
