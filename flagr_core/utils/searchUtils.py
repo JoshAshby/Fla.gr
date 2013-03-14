@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config.config as c
-import config.zmqConfig as zmqc
+import config.zmqBase as zmqc
 
 import gevent
 
@@ -38,7 +38,7 @@ def updateSearch(man=False):
 
     :param man: True or False for if this is a manual update
     """
-    message = "indexUpdate "
+    message = "flagIndexUpdate "
     if man:
         message += "now"
     else:

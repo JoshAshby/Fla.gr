@@ -6,7 +6,7 @@ from gevent_zeromq import zmq
 context = zmq.Context()
 zmqSock = context.socket(zmq.SUB)
 zmqSock.connect("tcp://127.0.0.1:5000")
-zmqSock.setsockopt(zmq.SUBSCRIBE, "indexUpdate")
+zmqSock.setsockopt(zmq.SUBSCRIBE, "")
 
 from whoosh.filedb.filestore import FileStorage
 
@@ -20,7 +20,7 @@ import config.dbBase as db
 import config.config as c
 
 import logging
-logger = logging.getLogger(c.logName+".search")
+logger = logging.getLogger(c.logName+"Search")
 
 
 flagSchema = Schema(title=TEXT,
@@ -35,13 +35,13 @@ flagSearchIndex = "/.flagSearchIndex"
 
 if not os.path.exists(c.baseFolder+flagSearchIndex):
     os.mkdir(c.baseFolder+flagSearchIndex)
-#    logger.debug("Made directory: "+c.baseFolder+flagSearchIndex)
+    logger.debug("Made directory: "+c.baseFolder+flagSearchIndex)
 
 storage = FileStorage(c.baseFolder+flagSearchIndex)
 
 
 def buildIndexes():
-#    logger.debug("Making new index of flags...")
+    logger.debug("Making new index of flags...")
     ix = storage.create_index(flagSchema)
 
     writer = ix.writer()
@@ -50,7 +50,7 @@ def buildIndexes():
     flags = fm.formatFlags(flags, True)
 
     for flag in flags:
-#        logger.debug("Flag: " +flag.id+" Indexed")
+        logger.debug("Flag: " +flag.id+" Indexed")
         labels = ", ".join(flag.labels)
 
         writer.update_document(title=flag.title,
@@ -104,25 +104,27 @@ def updateIndex():
         reply = zmqSock.recv()
         logger.debug("Got: "+reply)
         if reply == "flagIndexUpdate up":
-            logger.debug("Got count, count is currently: "+count)
+            logger.debug("Got count, count is currently: "+str(count))
             count += 1
             if count >= 5:
-                update()
+                updateFlags()
                 count = 0
 
             elif reply == "flagIndexUpdate now":
                 logger.debug("Got manual, updating index.")
-                update()
+                updateFlags()
                 count = 0
-        logger.debug("Count is now: "+count)
+        logger.debug("Count is now: "+str(count))
 
 
 def start():
+    logger.debug("Starting up...")
     ser = gevent.spawn(updateIndex)
     try:
         ser.join()
     except Exception as exc:
         gevent.shutdown
+        logger.debug("Got exception: " + exc)
     except KeyboardInterrupt:
         gevent.shutdown
     else:

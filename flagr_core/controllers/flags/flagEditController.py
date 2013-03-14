@@ -22,6 +22,7 @@ import config.dbBase as db
 import json
 import utils.markdownUtils as mdu
 
+import utils.searchUtils as su
 
 
 @route("/flags/(.*)/edit")
@@ -32,9 +33,15 @@ class flagEdit(baseHTMLObject):
         """
         """
         flagid = self.env["members"][0]
-        view = flagEditTmpl(searchList=[self.tmplSearchList])
-
         flag = fm.flagORM.load(db.couchServer, flagid)
+
+        if flag.userID != self.session.id:
+            self.head = ("303 SEE OTHER", [("Location", "/flags/%s"%flagid)])
+            self.session.pushAlert("You can't edit someone else's flag! We're working on a cloning feature but until then, just hold tight or copy and paste the flag.", "Hold it!", "error")
+
+            return
+
+        view = flagEditTmpl(searchList=[self.tmplSearchList])
         view.id = flagid
 
         view.title = flag.title
@@ -57,6 +64,14 @@ class flagEdit(baseHTMLObject):
         labels = self.env["members"]["labels"] or ""
         url = self.env["members"]["url"] or ""
         visibility = True if self.env["members"].has_key("vis") and self.env["members"]["vis"] == "on" else False
+
+        flag = fm.flagORM.load(db.couchServer, flagid)
+
+        if flag.userID != self.session.id:
+            self.head = ("303 SEE OTHER", [("Location", "/flags/%s"%flagid)])
+            self.session.pushAlert("You can't edit someone else's flag! We're working on a cloning feature but until then, just hold tight or copy and paste the flag.", "Hold it!", "error")
+
+            return
 
         if not title:
             self.session.pushAlert("We can't make a flag with no title!", "Whoa there kiddo...", "error")
@@ -81,7 +96,6 @@ class flagEdit(baseHTMLObject):
         for label in range(len(labels)):
             labels[label] = mdu.cleanInput(labels[label])
 
-        flag = fm.flagORM.load(db.couchServer, flagid)
         flag.title = mdu.cleanInput(title)
         flag.description = description
         flag.labels = labels
@@ -90,6 +104,8 @@ class flagEdit(baseHTMLObject):
         flag.created = datetime.now()
 
         flag.save()
+
+        su.updateSearch()
 
         self.session.pushAlert("The flag `%s` has been updated"%flag.title, "Yay!", "success")
 

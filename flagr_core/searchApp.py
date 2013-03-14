@@ -28,12 +28,12 @@ def setupLog():
         import logging
         level = logging.WARNING
         if c.debug:
-                level = logging.DEBUG
+            level = logging.DEBUG
 
         formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
         %(message)s""")
 
-        logger = logging.getLogger(c.logName+".search")
+        logger = logging.getLogger(c.logName+"Search")
         logger.setLevel(level)
 
         fh = logging.FileHandler(c.logFolder+c.logName+"Search.log")
@@ -58,26 +58,26 @@ def setupLog():
 
 class searchIndex(Daemon):
     def run(self):
-        setupLog()
-        import search.searchController as siu
+        logger = setupLog()
+        import search.searchIndexer as siu
         siu.start()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) >= 2:
+    if sys.argv:
         noDaemon = False
         if 'noDaemon' in sys.argv:
             noDaemon = True
 
         if 'search' == sys.argv[1]:
             if 'build' in sys.argv:
-#                setupLog()
-                import search.searchController as siu
+                logger = setupLog()
+                import search.searchIndexer as siu
                 siu.buildIndexes()
                 sys.exit(0)
 
-            if noDaemon:
-                daemon = searchIndex(c.pidFolder+c.logName+'SearchDaemon.pid')
+            if not noDaemon:
+                daemon = searchIndex(c.pidFolder+c.logName+'SearchDaemon.pid', stderr=c.stderr)
 
                 if 'start' in sys.argv:
                     daemon.start()
@@ -91,13 +91,13 @@ if __name__ == "__main__":
                 else:
                     print "Unknown command"
                     sys.exit(2)
+                sys.exit(0)
 
             else:
-                setupLog()
-                import search.searchController as siu
+                logger = setupLog()
+                import search.searchIndexer as siu
                 siu.start()
-
-        sys.exit(0)
+                sys.exit(0)
 
     else:
         print "usage: %s start|stop|restart|noDaemon" % sys.argv[0]

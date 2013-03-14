@@ -20,6 +20,8 @@ import models.flag.flagModel as fm
 import json
 import utils.markdownUtils as mdu
 
+import utils.searchUtils as su
+
 
 @route("/flags/new")
 class flagNew(baseHTMLObject):
@@ -65,6 +67,8 @@ class flagNew(baseHTMLObject):
         newFlag = fm.flagORM(title=mdu.cleanInput(title), description=description, labels=labels, url=url, userID=self.session.id, visibility=visibility)
 
         newFlag.save()
+
+        su.updateSearch()
 
         self.session.pushAlert("Hey look, you've made another flag!", "Horay!", "success")
 
