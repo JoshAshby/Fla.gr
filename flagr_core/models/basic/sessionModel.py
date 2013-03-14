@@ -57,6 +57,7 @@ class dummySession(object):
         self.sessionID = cookieID
         self.alerts = []
         self.id = 0
+        self.level = 0
 
     def clearAlerts(self):
         for alert in self.alerts:

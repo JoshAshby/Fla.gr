@@ -53,8 +53,11 @@ class baseHTTPObject(object):
                         pass
 
                     elif self.__level__ > self.session.level:
+                        loc = "/"
+                        if self.session.loggedIn:
+                            loc = "/your/flags"
                         self.session.pushAlert("You don't have the rights to access this.")
-                        self.head = ("303 SEE OTHER", [("location", "/your")])
+                        self.head = ("303 SEE OTHER", [("location", loc)])
                         error = True
 
                 elif self.__login__ and not self.session.loggedIn:

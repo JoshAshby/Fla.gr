@@ -22,13 +22,13 @@
             <td>$buckets[$bucket]["description"][:100]...</td>
             <td class="changeBtns" width=15%>
                 #if $buckets[$bucket]["value"]
-                    <a class="btn btn-success pull-right" href="#$bucket" role="button" data-toggle="modal"><i class="icon-bolt"></i> Enabled</a>
+                    <a class="btn btn-success pull-right" id="${bucket}ModalButton" href="#${bucket}Modal" role="button" data-toggle="modal"><i class="icon-bolt"></i> Enabled</a>
                 #else
-                    <a class="btn btn-inverse pull-right" href="#$bucket" role="button" data-toggle="modal"><i class="icon-off"></i> Disabled</a>
+                    <a class="btn btn-inverse pull-right" id="${bucket}ModalButton" href="#${bucket}Modal" role="button" data-toggle="modal"><i class="icon-off"></i> Disabled</a>
                 #end if
             </td>
         </tr>
-        <div id="$bucket" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="${bucket}Label" aria-hidden="true">
+        <div id="${bucket}Modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="${bucket}Label" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
                 <h3 id="${bucket}Label">Change `$bucket` Status?</h3>

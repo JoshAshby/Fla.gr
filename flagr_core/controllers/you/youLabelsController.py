@@ -31,7 +31,7 @@ class youLabels(baseHTMLObject):
 
         flags = fm.listFlagsByUserID(self.session.id)
         if flags:
-            labels = lu.listLabels(flags)
+            labels = lu.listLabels(flags, True)
 
         view.labels = labels
 

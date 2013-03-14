@@ -30,7 +30,7 @@ class publicFlags(baseHTMLObject):
         """
         view = publicFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.flagORM.view(db.couchServer, 'typeViews/flag')
+        flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
         flags = fm.formatFlags(flags, False)
 
         for flag in flags:

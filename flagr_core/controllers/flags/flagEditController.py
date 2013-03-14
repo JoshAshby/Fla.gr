@@ -69,6 +69,8 @@ class flagEdit(baseHTMLObject):
 
             return view
 
+        #Will only work if self.env["cfg"].enableDynamicLabels is enabled
+        #otherwise it will fall over to the except
         try:
             labels = list(set(json.loads(labels)))
         except:

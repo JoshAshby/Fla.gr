@@ -30,9 +30,9 @@ class publicLabels(baseHTMLObject):
         """
         view = publicLabelsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.flagORM.view(db.couchServer, 'typeViews/flag')
+        flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
 
-        labels = lu.listLabels(flags)
+        labels = lu.listLabels(flags, False)
 
         view.labels = labels
 

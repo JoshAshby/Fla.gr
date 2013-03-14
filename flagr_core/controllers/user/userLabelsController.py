@@ -36,7 +36,7 @@ class userLabels(baseHTMLObject):
                 if not flag.visibility:
                     flags.pop(flags.index(flag))
 
-        labels = lu.listLabels(flags)
+        labels = lu.listLabels(flags, False)
 
         view.labels = labels
         view.flagAuthor = user

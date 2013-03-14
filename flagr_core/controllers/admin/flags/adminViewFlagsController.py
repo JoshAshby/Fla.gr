@@ -31,7 +31,7 @@ class adminViewFlags(baseHTMLObject):
         """
         view = adminViewFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.flagORM.view(db.couchServer, 'typeViews/flag')
+        flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
         flags = fm.formatFlags(flags, True)
 
         for flag in flags:

@@ -21,8 +21,10 @@
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary"><i class="icon-signin"></i> Log in</button>
-            <b class="muted">Or...</b>
-            <a href="/request">Request an invite</a>
+            #if $cfg.enableRequests
+                <b class="muted">Or...</b>
+                <a href="/request">Request an invite</a>
+            #end if
         </div>
     </form>
 #end def

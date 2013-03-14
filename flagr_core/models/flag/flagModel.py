@@ -43,13 +43,15 @@ def formatFlags(flagsList, showAll):
     :params showAll: If `False` Then private flags will be removed from the list
     :return: A list of formated `flagORM` objects
     """
+    flags = []
     for flag in flagsList:
-        if not flag.visibility and not showAll:
-            flagsList.pop(flagsList.index(flag))
+        if showAll:
+            flags.append(formatFlag(flag))
         else:
-            flag = formatFlag(flag)
+            if flag.visibility:
+                flags.append(formatFlag(flag))
 
-    return flagsList
+    return flags
 
 
 def formatFlag(flag):
