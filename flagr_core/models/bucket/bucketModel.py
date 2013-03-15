@@ -52,7 +52,8 @@ def toBoolean(str):
 
 class cfgBuckets(object):
     def __init__(self):
-        keys = { key.strip("bucket value").strip(":"):toBoolean(db.redisBucketServer.get(key)) for key in db.redisBucketServer.keys("bucket:*:value") }
+        keys = { key.split(":")[1]:toBoolean(db.redisBucketServer.get(key)) for key in db.redisBucketServer.keys("bucket:*:value") }
+#        keys = { key.strip("bucket value").strip(":"):toBoolean(db.redisBucketServer.get(key)) for key in db.redisBucketServer.keys("bucket:*:value") }
         for key in keys:
             setattr(self, key, keys[key])
 #            setattr(self, key+"Users", userKeys[key])

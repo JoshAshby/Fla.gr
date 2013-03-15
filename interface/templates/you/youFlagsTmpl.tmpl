@@ -11,7 +11,7 @@ $dashTabs.tabs($page, $section)
 #end def
 #def body
 #if $flags.items
-    $flagsList.flagsList($flags, $user, "/your/flags")
+    $flagsList.flagsList($flags, $user, "/your/flags", $cfg)
 #else
     #if $section not in ('public', 'private')
         <h2>Oh no!</h2>

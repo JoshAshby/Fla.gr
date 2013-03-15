@@ -7,7 +7,7 @@ $userTabs.tabs($page, $flagAuthor)
 #end def
 #def body
 #if $flags.items
-    $flagsList.flagsList($flags, $user, "/user/%s/flags"%$user.username, $flagAuthor)
+    $flagsList.flagsList($flags, $user, "/user/%s/flags"%$user.username, $cfg, $flagAuthor)
 #else
     <div class="row">
         <div class="span6">
