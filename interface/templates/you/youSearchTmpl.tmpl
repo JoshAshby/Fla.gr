@@ -1,6 +1,10 @@
 #extends regularSkeleton
 #from views.partials.flags.flagsListTmpl import flagsListTmpl as flagsList
+#from views.partials.tabs.dashboardTabsTmpl import dashboardTabsTmpl as dashTabs
 
+#def topExtra
+$dashTabs.tabs($page)
+#end def
 #def headLines
     <!-- Start search overview template -->
     <div class="offset3">

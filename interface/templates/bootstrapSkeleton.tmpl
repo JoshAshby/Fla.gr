@@ -72,7 +72,7 @@
                             <!-- Right hand drop down -->
                             <ul class="nav pull-right">
                                 #if $user.loggedIn
-                                    <li #if $page in ('labels', 'settings', 'flags', 'dashboard')#class="active"#end if#><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
+                                    <li #if $page in ('labels', 'settings', 'flags', 'dashboard') and $page not in ('public labels')#class="active"#end if#><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
                                 #end if
                                 <li class="dropdown">
                                     #if not $user.loggedIn and $page!='login'

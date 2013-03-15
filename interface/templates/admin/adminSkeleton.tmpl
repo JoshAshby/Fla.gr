@@ -23,7 +23,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="span10 offset1">
+        #if $getVar('leftExtra', '')
+            <div class="span1">
+                $getVar('leftExtra', '')
+            </div>
+            <div class="span10">
+        #else
+            <div class="span10 offset1">
+        #end if
             $body
         </div>
         <div class="span1">

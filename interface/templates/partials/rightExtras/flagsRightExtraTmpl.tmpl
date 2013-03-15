@@ -1,10 +1,12 @@
 #@staticmethod
 #def rightExtra($page, $section)
     #if $page=='flags'
-        <ul class="nav nav-pills">
-            <li #if $section=="all"#class="active"#end if#><a href="/your/flags"><i class="icon-flag"></i></a></li>
-            <li #if $section=="public"#class="active"#end if#><a href="/your/flags?v=public"><i class="icon-unlock"></i></a></li>
-            <li #if $section=="private"#class="active"#end if#><a href="/your/flags?v=private"><i class="icon-lock"></i></a></li>
+    <div class="tabs-left">
+        <ul class="nav nav-tabs">
+            <li #if $section=="all"#class="active"#end if#><a href="/your/flags"><i class="icon-flag"></i> All</a></li>
+            <li #if $section=="public"#class="active"#end if#><a href="/your/flags?v=public"><i class="icon-unlock"></i> Public</a></li>
+            <li #if $section=="private"#class="active"#end if#><a href="/your/flags?v=private"><i class="icon-lock"></i> Private</a></li>
         </ul>
+    </div>
     #end if
 #end def

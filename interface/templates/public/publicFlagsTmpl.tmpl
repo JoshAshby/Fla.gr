@@ -1,19 +1,21 @@
 #extends views.regularSkeleton
 #from views.partials.flags.publicFlagsListTmpl import publicFlagsListTmpl as publicFlagsList
 
-#def body
+#def topExtra
 <div class="row">
-    <div class="span6">
-            <h2><i class="icon-flag"></i> Public flags</h2>
+    <div class="span5">
+            <h3><i class="icon-flag"></i> Public flags</h3>
     </div>
 </div>
+#end def
+#def body
 #if $flags.items
     $publicFlagsList.publicFlagsList($flags, $user, "/flags", $cfg)
 #else
     <div class="row">
         <div class="span6">
             <h1>Oh no!</h1>
-            <p>We have no public flags to show you! Sorry :(</p>
+            <p>We don't have any public flags to show you! Sorry :(</p>
         </div>
     </div>
 #end if

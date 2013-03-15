@@ -1,22 +1,29 @@
 #extends views.regularSkeleton
 #from views.partials.flags.publicFlagsListTmpl import publicFlagsListTmpl as publicFlagsList
 
-#def body
-<ul class="breadcrumb">
-    <li><h3><i class="icon-tags"></i> Label </h3></li>
-    #for $lab in $baseLabel.split('/')
-        #if $baseLabel.split('/').index($lab) == (len($baseLabel.split('/'))-1)
-            <li class="active">$lab</li>
-        #else
-            <li><a href="/labels/#echo "/".join($baseLabel.split("/")[:$baseLabel.split("/").index($lab)+1]) #">$lab</a> <span class="divider">/</span></li>
-        #end if
-    #end for
-</ul>
-#if $labels
-    <div class="well">
-        <p>Stacked labels:</p>
-        #for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for#
+#def topExtra
+<div class="row">
+    <div class="span5">
+        <h3><i class="icon-tags"></i> Label <small>
+        #for $lab in $baseLabel.split('/')
+            #if $baseLabel.split('/').index($lab) == (len($baseLabel.split('/'))-1)
+                $lab
+            #else
+                <a href="/labels/#echo "/".join($baseLabel.split("/")[:$baseLabel.split("/").index($lab)+1]) #">$lab</a> <span class="divider">/</span>
+            #end if
+        #end for
+        </small></h3>
     </div>
+    <div class="span5">
+    </div>
+</div>
+#end def
+
+#def body
+#if $labels
+    <span>Stacked labels:
+    #for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for# </span>
+    <hr>
 #end if
 #if $flags.items
     $publicFlagsList.publicFlagsList($flags, $user, "/labels/%s"%$baseLabel, $cfg)
