@@ -70,7 +70,7 @@ def findUserByUsername(username):
 class userORM(Document):
     username = TextField()
     email = TextField()
-    about = TextField()
+    about = TextField(default="")
     disable = BooleanField(default=False)
     emailVisibility = BooleanField(default=False)
     history = TextField()

@@ -19,6 +19,8 @@ from views.labels.labelsViewTmpl import labelsViewTmpl
 import models.flag.flagModel as fm
 import re
 
+import utils.pagination as p
+
 
 @route("/labels/(.*)")
 class labelsView(baseHTMLObject):
@@ -27,6 +29,7 @@ class labelsView(baseHTMLObject):
     def GET(self):
         """
         """
+        page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
         baseLabel = self.env["members"][0]
         view = labelsViewTmpl(searchList=[self.tmplSearchList])
         labelRe = re.compile(baseLabel+'(.*)')
@@ -45,6 +48,7 @@ class labelsView(baseHTMLObject):
 
         view.labels = labels
         view.baseLabel = baseLabel
-        view.flags = fm.formatFlags(matchedFlags)
+        flags = fm.formatFlags(matchedFlags, False)
+        view.flags = p.pagination(flags, 10, int(page))
 
         return view

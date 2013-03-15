@@ -22,7 +22,7 @@
     #end if
 </div>
 #if $flags
-    $publicFlagsList.publicFlagsList($flags, $user)
+    $publicFlagsList.publicFlagsList($flags, $user, "/labels/%s"%$baseLabel)
 #else
     <h2>Oh no!</h2>
     <p>We don't have any flags with this label!</p>
