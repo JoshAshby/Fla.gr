@@ -55,7 +55,7 @@
             #end if
         </div>
     </div>
-    #if $cfg.enableModalFlagDeletes
+    #if $cfg.enableModalFlagDeletes and $flag.userID == $user.id
         <div id="flagDeleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labeledby="flagDeleteModal" aria-hidden="true">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
