@@ -40,8 +40,8 @@ class flagNew(baseHTMLObject):
     def POST(self):
         title = self.env["members"]["title"] if self.env["members"].has_key("title") else None
         description = self.env["members"]["description"] or ""
-        labels = self.env["members"]["labels"] or ""
-        url = self.env["members"]["url"] or ""
+        labels = self.env["members"]["labels"] if self.env["members"].has_key("labels") else ""
+        url = self.env["members"]["url"] if self.env["members"].has_key("url") else ""
         visibility = True if self.env["members"].has_key("vis") and self.env["members"]["vis"] == "on" else False
 
         if not title:
