@@ -39,6 +39,9 @@ class publicFlags(baseHTMLObject):
         for flag in flags:
             flag.author = userORM.load(db.couchServer, flag.userID)
 
+        if self.env["cfg"].enableModalFlagDeletes:
+            view.scripts = ["handlebars_1.0.min", "deleteFlagModal"]
+
         view.flags = p.pagination(flags, 10, int(page))
 
         return view

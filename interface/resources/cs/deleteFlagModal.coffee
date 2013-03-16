@@ -13,7 +13,7 @@ $ ->
                 <form action="/flags/{{id}}/delete" method="POST">
                     <div class="btn-group">
                         <a class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                        <button class="btn btn-danger" type="submit"><i class="icon-trash"></i> Delete</button>
+                        <button class="btn btn-danger" type="submit" id="deleteButton" data-loading-text="Deleting..."><i class="icon-trash"></i> Delete</button>
                     </div>
                 </form>
             </div>
@@ -28,17 +28,23 @@ $ ->
     the compiled Handlebars template from above to generate the modal
     and finally put it into the page and display it
     ###
-    $("#flagDeleteButton").click ->
+    $(".flagDeleteButton").click ->
         title = $(this).data "title"
         id = $(this).data "id"
         $("#modal").html modalTmpl {"title": title, "id": id}
         $("#flagDeleteModal").modal()
         $("#flagDeleteModal").modal 'show'
 
-    ###
-    Clear the HTML we threw into the page after the modal is gone,
-    not sure if this is needed since the page probably will redirect
-    to /your/flags if I'm correct...
-    ###
-    $('#flagDeleteModal').on 'hidden', ->
-        $("modal").html ""
+        $("#flagDeleteModal").on 'shown', ->
+            $("#deleteButton").button()
+
+            $("#deleteButton").click ->
+                $(this).button 'loading'
+
+        ###
+        Clear the HTML we threw into the page after the modal is gone,
+        not sure if this is needed since the page probably will redirect
+        to /your/flags if I'm correct...
+        ###
+        $('#flagDeleteModal').on 'hidden', ->
+            $("modal").html ""

@@ -48,6 +48,9 @@ class youFlags(baseHTMLObject):
                 flags = fm.formatFlags(flags, True)
                 view.section = "all"
 
+        if self.env["cfg"].enableModalFlagDeletes:
+            view.scripts = ["handlebars_1.0.min", "deleteFlagModal"]
+
         view.flags = p.pagination(flags, 10, int(page))
 
         return view

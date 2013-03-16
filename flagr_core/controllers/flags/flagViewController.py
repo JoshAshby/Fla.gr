@@ -43,5 +43,8 @@ class flagView(baseHTMLObject):
         user = um.userORM.load(db.couchServer, flag.userID)
         view.flagAuthor = user
 
+        if self.env["cfg"].enableModalFlagDeletes:
+            view.scripts = ["handlebars_1.0.min", "deleteFlagModal"]
+
         return view
 

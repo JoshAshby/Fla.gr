@@ -46,6 +46,9 @@ class labelsView(baseHTMLObject):
         if baseLabel in labels:
             labels.pop(labels.index(baseLabel))
 
+        if self.env["cfg"].enableModalFlagDeletes:
+            view.scripts = ["handlebars_1.0.min", "deleteFlagModal"]
+
         view.labels = labels
         view.baseLabel = baseLabel
         flags = fm.formatFlags(matchedFlags, False)

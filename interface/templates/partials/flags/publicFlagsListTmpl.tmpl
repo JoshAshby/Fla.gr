@@ -1,5 +1,6 @@
 #@staticmethod
 #def publicFlagsList($flags, $user, $pageURL, $cfg)
+<div id="modal"></div>
     #for $flag in $flags.getItems
         <!-- Start of flag overview template -->
         <div class="row">
@@ -25,7 +26,7 @@
                      <div class="btn-group pull-right">
                         <a href="/flags/$flag.id/edit" class="btn btn-info"><i class="icon-edit"></i></a>
                         #if $cfg.enableModalFlagDeletes
-                            <a href="#flagDeleteModal_$flag.id" class="btn btn-danger" id="flagDeleteModalToggle" role="button" data-toggle="modal"><i class="icon-trash"></i></a>
+                            <a href="#" class="btn btn-danger flagDeleteButton" data-title="$flag.title" data-id="$flag.id"><i class="icon-trash"></i></a>
                         #else
                             <a href="/flags/$flag.id/delete" class="btn btn-danger"><i class="icon-trash"></i></a>
                         #end if
@@ -56,26 +57,6 @@
                 #end if
             </div>
         </div>
-        #if $cfg.enableModalFlagDeletes and $user.id == $flag.userID
-            <div id="flagDeleteModal_$flag.id" class="modal hide fade" tabindex="-1" role="dialog" aria-labeledby="flagDeleteModal_$flag.id" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
-                    <h3 class="text-error"><i class="icon-trash"></i> Delete `$flag.title`?</h3>
-                </div>
-                <div class="modal-body">
-                <p class="text-error">You're about to delete your flag `$flag.title`</p>
-                <p class="text-error">Are you sure you want to do this? The flag will be gone forever if you delete it</p>
-                </div>
-                <div class="modal-footer">
-                    <form action="/flags/$flag.id/delete" method="POST">
-                        <div class="btn-group">
-                            <a class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                            <button class="btn btn-danger" type="submit"><i class="icon-trash"></i> Delete</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        #end if
         <hr>
         <!-- End of flag overview template -->
     #end for
