@@ -16,7 +16,7 @@ import models.user.userModel as um
 
 buckets = {"enableDynamicLabels": {"value": True, "name": "New label input for flags", "description": "Enables a new, more interactive way to add and remove labels from a flag while editing, or making a new flag."},
         "enableRequests": {"value": False, "name": "Request and invite managment", "description": "Enables pages for requesting an invite while the site is in a closed beta or alpha, and adds an admin tab for managing the requests."},
-        "enableModalFlagDeletes": {"value": False, "name": "Single page flag delete", "description": "Enabled a modal for the deleting process of a flag, instead of directing the user to another page."}}
+        "enableModalFlagDeletes": {"value": True, "name": "Single page flag delete", "description": "Enabled a modal for the deleting process of a flag, instead of directing the user to another page."}}
 
 def setup():
     if not um.findUserByUsername("Admin") and not um.findUserByUsername("Josh"):

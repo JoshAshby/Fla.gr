@@ -14,34 +14,35 @@ joshuaashby@joshashby.com
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-from views.auth.authRegisterTmpl import authRegisterTmpl
+from views.requests.requestsRequestTmpl import requestsRequestsTmpl
 
 import models.request.requestModel as rm
 
 
 @route("/request")
-class authRegister(baseHTMLObject):
+class requestsRequests(baseHTMLObject):
     __name__ = "request an invite"
     def GET(self):
         """
         """
         if self.env["cfg"].enableRequests:
-            view = authRegisterTmpl(searchList=[self.tmplSearchList])
+            view = requestsRequestsTmpl(searchList=[self.tmplSearchList])
             return view
+        else:
+            self.head = ("404 NOT FOUND", [])
 
     def POST(self):
         """
         """
         if self.snv["cfg"].enableRequests:
-            email = self.env["members"]["email"]
-
-            newRequest = rm.requestORM(email)
-            newRequest.save()
+            email = self.env["members"]["email"] if self.env["members"].has_key("email") else ""
 
             if email:
+                newRequest = rm.requestORM(email)
+                newRequest.save()
                 self.head = ("303 SEE OTHER",
                     [("location", "/request/thanks")])
             else:
-                view = authRegisterTmpl(searchList=[self.tmplSearchList])
+                view = requestsRequestsTmpl(searchList=[self.tmplSearchList])
                 view.emailError = True
                 return view

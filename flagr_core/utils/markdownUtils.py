@@ -8,7 +8,7 @@ For more information, see: https://github.com/JoshAshby/
 http://xkcd.com/353/
 
 Josh Ashby
-2012
+2013
 http://joshashby.com
 joshuaashby@joshashby.com
 """
@@ -16,7 +16,7 @@ import bleach as bl
 import markdown as md
 
 cleanTags = bl.ALLOWED_TAGS
-cleanTags.extend(['p', 'img', 'small', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+cleanTags.extend(['p', 'img', 'small', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','br'])
 cleanAttr = bl.ALLOWED_ATTRIBUTES
 cleanAttr["img"] = ["src", "width", "height"]
 cleanAttr["i"] = ["class"]

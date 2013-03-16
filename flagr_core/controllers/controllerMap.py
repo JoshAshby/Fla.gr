@@ -20,7 +20,12 @@ from controllers.admin.dev.adminDevViewBucketsController import * #/admin/dev/bu
 #Next, /auth/ controllers
 from controllers.auth.authLoginController import * #/auth/login
 from controllers.auth.authLogoutController import * #/auth/logout
-from controllers.auth.authRegisterController import * #/auth/register
+#from controllers.auth.authRegisterController import * #/auth/register
+
+#Next, /request/ controllers
+from controllers.requests.requestsRegisterController import *
+from controllers.requests.requestsRequestController import *
+from controllers.requests.requestsThanksController import *
 
 #Next, /flags/ controllers
 from controllers.flags.flagDelController  import * #/flag/(.*)/delete

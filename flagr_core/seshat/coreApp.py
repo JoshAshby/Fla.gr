@@ -108,13 +108,32 @@ def app(env, start_response):
 
         replyData = reply.get()
         header = replyData[1]
+        status = replyData[0]
+
+        #Hack to see if this works...
+        if status == "404 NOT FOUND":
+            newHTTPObject = errorController.error404(env, members, sessionID)
+            if c.debug: log404(env)
+
+            if env["REQUEST_METHOD"] == "GET":
+                    newHTTPObject.session.history = env["REQUEST_URI"] if env.has_key("REQUEST_URL") else env["PATH_INFO"]
+
+            data, reply = queue.Queue(), queue.Queue()
+            dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+            dataThread.join()
+
+            content = data.get()
+
+            replyData = reply.get()
+            header = replyData[1]
+            status = replyData[0]
+
         if content:
             for morsal in sessionCookie:
                 cookieHeader = ("Set-Cookie", ("%s=%s")%(morsal, sessionCookie[morsal]))
                 header.append(cookieHeader)
             header.append(("Content-Length", str(len(content))))
 
-        status = replyData[0]
         start_response(status, header)
 
         del(newHTTPObject)

@@ -6,7 +6,7 @@
     <form class="form form-horizontal" method="POST" action="/request">
         <div class="control-group #if $getVar('emailError', False)#error#end if#">
             <input type="email" placeholder="email..." name="email" class="span6" required>
-            <span class="help-block">#if $getVar('emailError', False)#Uh oh, you need to enter an email! #end if#We promise to not give your email out, or to send you spam mail.</span>
+            <span class="help-block">#if $getVar('emailError', False)#Uh oh, you need to enter a valid email! #end if#We promise to not give your email out, or to send you spam mail.</span>
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary"><i class="icon-comment"></i> Request invite...</button>
