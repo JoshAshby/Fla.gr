@@ -14,18 +14,25 @@ from controllers.admin.users.adminDelUserController  import * #/admin/users/(.*)
 from controllers.admin.users.adminEditUserController  import * #/admin/users/(.*)/edit
 from controllers.admin.users.adminNewUserController  import * #/admin/users/new
 from controllers.admin.users.adminViewUsersController  import * #/admin/users
-# -> /admin/dev
+# -> /admin/dev/
 from controllers.admin.dev.adminDevViewBucketsController import * #/admin/dev/buckets
+#from controllers.admin.dev.adminDevEditBucketsController import * #/admin/dev/buckets/(.*)/edit
+# -> /admin/templates/
+#from controllers.admin.templates.adminViewTemplatesController import * #/admin/templates
+#from controllers.admin.templates.adminInfoTemplatesController import * #/admin/templates/(.*)
+#from controllers.admin.templates.adminEditTemplatesController import * #/admin/templates/(.*)/edit
+# -> /admin/requests/
+#from controllers.admin.requests.adminViewRequests import * #/admin/requests
+#from controllers.admin.requests.adminInfoRequests import * #/admin/requests/(.*)
 
 #Next, /auth/ controllers
 from controllers.auth.authLoginController import * #/auth/login
 from controllers.auth.authLogoutController import * #/auth/logout
-#from controllers.auth.authRegisterController import * #/auth/register
 
 #Next, /request/ controllers
-from controllers.requests.requestsRegisterController import *
-from controllers.requests.requestsRequestController import *
-from controllers.requests.requestsThanksController import *
+#from controllers.requests.requestsRegisterController import *
+#from controllers.requests.requestsRequestController import *
+#from controllers.requests.requestsThanksController import *
 
 #Next, /flags/ controllers
 from controllers.flags.flagDelController  import * #/flag/(.*)/delete
