@@ -30,8 +30,8 @@ class adminViewTemplates(baseHTMLObject):
         """
         view = adminViewTemplatesTmpl(searchList=[self.tmplSearchList])
 
-        flags = list(tm.templateORM.view(db.couchServer, 'typeViews/template'))
+        templates = tm.formatTmpls(list(tm.templateORM.view(db.couchServer, 'typeViews/template')))
 
-        view.flags = flags
+        view.templates = templates
 
         return view

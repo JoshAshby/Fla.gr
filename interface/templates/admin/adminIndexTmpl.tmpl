@@ -8,10 +8,9 @@
 <ul class="thumbnails">
     <li class="span3">
         <div class="thumbnail">
-            <i class="icon-flag icon-4x icon-border"></i>
             <div class="caption">
-                <h3>Manage Flags</h3>
-                <p>Here you can manage the various flags of the system. You'll be able to see all the flags, their owners, and even edit them if you need to remove content for any reason. Hopefully soon you'll be able to see which flags have been reported, and a better breakdown of the information.<br>
+                <h3><i class="icon-flag"></i> Flags</h3>
+                <p>View flags, who they belong to and edit them if need be.<br>
                 <br>
                 <a href="/admin/flags" class="btn btn-primary"><i class="icon-flag"></i> Flags</a>
                 </p>
@@ -20,40 +19,20 @@
     </li>
     <li class="span4">
         <div class="thumbnail">
-            <i class="icon-group icon-4x icon-border"></i>
             <div class="caption">
-                <h3>Manage Users</h3>
+                <h3><i class="icon-group"></i> Users</h3>
                 <p>Make life or death decisions on fla.gr, managing users or making a new one. Here you can edit a users whole account, and enable it or disable it, along with deleting it if need be. You can also make new users with the push of a button and some keystrokes.<br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
                 <a href="/admin/users" class="btn btn-primary"><i class="icon-group"></i> Users</a>
                 </p>
             </div>
         </div>
     </li>
-    #if $cfg.enableRequests
-        <li class="span3">
-            <div class="thumbnail">
-                <i class="icon-comment icon-4x icon-border"></i>
-                <div class="caption">
-                    <h3>Manage Requests</h3>
-                    <p>Thats right, the site is in a closed alpha or beta state and the only way to get an account is to recieve an invite. In this area you can manage the various invites that have come in, and grant them or delete them.<br>
-                    <a href="/admin/requests" class="btn btn-primary"><i class="icon-comment"></i> Requests</a>
-                    </p>
-                </div>
-            </div>
-        </li>
-    #end if
     #if $user.level >= 100
         <li class="span3">
             <div class="thumbnail">
-                <i class="icon-lemon icon-4x icon-border"></i>
                 <div class="caption">
-                    <h3>Manage Buckets</h3>
-                    <p>This link will give you lemons. No, really, it will. Because you are uber awesome you can enable and disable (possibly) experimental features across the whole site, and manage who those features are available to. But be careful, a fire extinguisher is recommended.<br>
+                    <h3><i class="icon-lemon"></i> Buckets</h3>
+                    <p>This link will give you lemons. No, really, it will. Enable and disable experimental features across the whole site, and manage who those features are available to. But be careful, a fire extinguisher is recommended.<br>
                     <a href="/admin/dev/buckets" class="btn btn-primary"><i class="icon-lemon"></i> Give me Lemons!</a>
                     </p>
                 </div>
@@ -61,4 +40,14 @@
         </li>
     #end if
 </ul>
+<div class="row">
+    <div class="span10">
+        #if $cfg.enableRequests
+            <h3><a href="/admin/requests">Requests</a></h3>
+            <p class="offset1">Manage the invite requests for the site</p>
+        #end if
+        <h3><a href="/admin/templates">Templates</a></h3>
+        <p class="offset1">Manage the various templates which are used for everything from email to statis pages</p>
+    </div>
+</div>
 #end def

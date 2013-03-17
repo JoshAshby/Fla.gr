@@ -1,0 +1,68 @@
+#extends views.admin.adminSkeleton
+
+#def leftExtra
+<div class="tabbable tabs-left">
+    <ul class="nav nav-tabs" id="tmplInfoTabs">
+        <li class="active"><a href="#info"><i class="icon-info-sign"></i> Info</a></li>
+        <li><a href="#preview"><i class="icon-eye-open"></i> Preview</a></li>
+        <li><a href="#edit"><i class="icon-edit"></i> Edit</a></li>
+        <a href="#" id="tmplDeleteButton" data-id="$tmpl.id" data-title="$tmpl.name" style="margin-top:10px; margin-left:10px" class="btn btn-inverse"><i class="icon-trash"></i> Delete</a>
+    </ul>
+</div>
+#end def
+
+#def body
+<div id="modal"></div>
+<ul class="breadcrumb">
+    You are here:<span class="divider"></span>
+    <li><a href="/admin">Admin Panel</a> <span class="divider">/</span></li>
+    <li><a href="/admin/templates">Templates</a> <span class="divider">/</span></li>
+    <li class="active">View template info</li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="info">
+        <h3><small><b class="muted">Template:</b></small> $tmpl.name</h3>
+        <p><b class="muted">Type:</b> $tmpl.type</p>
+        <p><b class="muted">Description:</b> $tmpl.description</p>
+
+
+    </div>
+    <div class="tab-pane" id="preview">
+        <small>Please note, all variables wrapped in {{  }} will be replaced as a result of the templates making use of the <a href="http://mustache.github.com/mustache.5.html">mustache</a> templating system.</small>
+            <hr>
+<!--        <iframe class="span8" style="padding:0px;margin:0px;border:0px"> -->
+            $tmpl.formatedTemplate
+<!--        </iframe> -->
+    </div>
+    <div class="tab-pane" id="edit">
+        <div class="row">
+            <div class="span6 offset1">
+                <form class="form form-horizontal" method="POST" action="/admin/templates/$tmpl.id/edit">
+                    <div class="control-group #if $getVar('nameError', False)#error#end if#">
+                        <input type="text" name="name" class="span6" placeholder="template name..." value="$getVar('tmpl.name', '')">
+                        #if $getVar('nameError', False)
+                            <span class="help-block">You need to either pick a new name, or enter one plain out!</span>
+                        #end if
+                    </div>
+                    <div class="control-group">
+                        <input type="text" name="description" class="span6" placeholder="template description" value="$getVar('tmpl.description', '')">
+                    </div>
+                    <div class="control-group">
+                        <textarea placeholder="template..." name="template" class="span6" style="height: 225px;">$getVar('tmpl.template', '')</textarea>
+                        <span class="help-block"><small>Text can be formated with <a href="http://daringfireball.net/projects/markdown/syntax">Daring Fireball's Markdown</a>. Variables can be input using the <a href="http://mustache.github.com/mustache.5.html">mustache</a> templating system.</small></span>
+                    </div>
+                    <div class="control-group">
+                        <select name="type">
+                            <option value="email">email template</option>
+                        </select>
+                    </div>
+                    <div class="well text-center">
+                        <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> Update template</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+#end def

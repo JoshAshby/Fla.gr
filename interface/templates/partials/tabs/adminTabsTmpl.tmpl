@@ -20,8 +20,19 @@
             #if $user.level <= 100
                 <li #if $page=="dev buckets"#class="active"#end if#><a href="/admin/dev/buckets"><i class="icon-lemon"></i></a></li>
             #end if
+            <li class="dropdown #if $page in ('admin templates')#active#end if#">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li #if $page=="admin templates"#class="active"#end if#>
+                        <a href="/admin/templates"><i class="icon-magic"></i> Templates</a>
+                    </li>
+                </ul>
+            </li>
             #if $page=="admin users"
                 <a style="margin-top: 5px" href="/admin/users/new" class="pull-right btn btn-primary"><i class="icon-user"></i> New User</a>
+            #end if
+            #if $page=="admin templates"
+                <a style="margin-top: 5px" href="/admin/templates/new" class="pull-right btn btn-primary"><i class="icon-magic"></i> New Template</a>
             #end if
         </ul>
     </div>

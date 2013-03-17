@@ -18,9 +18,11 @@ from controllers.admin.users.adminViewUsersController  import * #/admin/users
 from controllers.admin.dev.adminDevViewBucketsController import * #/admin/dev/buckets
 #from controllers.admin.dev.adminDevEditBucketsController import * #/admin/dev/buckets/(.*)/edit
 # -> /admin/templates/
-#from controllers.admin.templates.adminViewTemplatesController import * #/admin/templates
-#from controllers.admin.templates.adminInfoTemplatesController import * #/admin/templates/(.*)
-#from controllers.admin.templates.adminEditTemplatesController import * #/admin/templates/(.*)/edit
+from controllers.admin.templates.adminViewTemplatesController import * #/admin/templates
+from controllers.admin.templates.adminEditTemplatesController import * #/admin/templates/(.*)/edit
+from controllers.admin.templates.adminDelTemplatesController import * #/admin/templates/(.*)/delete
+from controllers.admin.templates.adminNewTemplatesController import * #/admin/templates/new
+from controllers.admin.templates.adminInfoTemplatesController import * #/admin/templates/(.*)
 # -> /admin/requests/
 #from controllers.admin.requests.adminViewRequests import * #/admin/requests
 #from controllers.admin.requests.adminInfoRequests import * #/admin/requests/(.*)

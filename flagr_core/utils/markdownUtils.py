@@ -27,6 +27,9 @@ def markClean(markdown):
 
     return cleanedMark
 
+def mark(markdown):
+    return md.markdown(markdown)
+
 
 def cleanInput(preClean):
     return bl.clean(preClean, tags=cleanTags, attributes=cleanAttr)
