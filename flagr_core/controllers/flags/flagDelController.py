@@ -19,7 +19,7 @@ from views.flags.flagDelTmpl import flagDelTmpl
 import config.dbBase as db
 import models.flag.flagModel as fm
 
-import utils.searchUtils as su
+import utils.search.searchUtils as su
 
 
 @route("/flags/(.*)/delete")

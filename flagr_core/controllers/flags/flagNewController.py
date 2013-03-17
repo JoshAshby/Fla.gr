@@ -20,7 +20,7 @@ import models.flag.flagModel as fm
 import json
 import utils.markdownUtils as mdu
 
-import utils.searchUtils as su
+import utils.search.searchUtils as su
 
 
 @route("/flags/new")

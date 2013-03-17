@@ -11,12 +11,10 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config.config as c
-
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-import search.flag.flagSearch as fs
+import utils.search.flag.flagSearch as fs
 
 from views.searchTmpl import searchTmpl
 

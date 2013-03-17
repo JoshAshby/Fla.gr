@@ -17,7 +17,7 @@ from whoosh.filedb.filestore import FileStorage
 from whoosh.qparser import MultifieldParser
 
 import logging
-logger = logging.getLogger(c.logName+".search.flagSearch")
+logger = logging.getLogger(c.logName+".searchUtils.flagSearch")
 
 import models.flag.flagModel as fm
 import config.dbBase as db

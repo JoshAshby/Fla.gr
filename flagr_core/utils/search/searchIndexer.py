@@ -1,4 +1,16 @@
 #!/usr/bin/env python
+"""
+fla.gr daemon piece for indexing things when certian messages come through zmq
+
+For more information, see: https://github.com/JoshAshby/
+
+http://xkcd.com/353/
+
+Josh Ashby
+2013
+http://joshashby.com
+joshuaashby@joshashby.com
+"""
 from gevent import monkey; monkey.patch_all()
 import gevent
 
@@ -20,7 +32,7 @@ import config.dbBase as db
 import config.config as c
 
 import logging
-logger = logging.getLogger(c.logName+"Search")
+logger = logging.getLogger(c.logName+"search.indexer")
 
 
 flagSchema = Schema(title=TEXT,

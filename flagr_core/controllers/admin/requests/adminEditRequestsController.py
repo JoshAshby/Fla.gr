@@ -18,7 +18,7 @@ from utils.baseHTMLObject import baseHTMLObject
 import config.dbBase as db
 import models.request.requestModel as rm
 import models.request.requestSettingModel as rsm
-import utils.emailUtils as eu
+import utils.email.emailUtils as eu
 
 
 @route("/admin/requests/(.*)/edit")
