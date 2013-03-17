@@ -14,7 +14,7 @@ joshuaashby@joshashby.com
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-from views.requests.requestsRequestTmpl import requestsRequestsTmpl
+from views.requests.requestsRequestTmpl import requestsRequestTmpl
 
 import models.request.requestModel as rm
 
@@ -26,7 +26,7 @@ class requestsRequests(baseHTMLObject):
         """
         """
         if self.env["cfg"].enableRequests:
-            view = requestsRequestsTmpl(searchList=[self.tmplSearchList])
+            view = requestsRequestTmpl(searchList=[self.tmplSearchList])
             return view
         else:
             self.head = ("404 NOT FOUND", [])
@@ -34,15 +34,18 @@ class requestsRequests(baseHTMLObject):
     def POST(self):
         """
         """
-        if self.snv["cfg"].enableRequests:
+        if self.env["cfg"].enableRequests:
             email = self.env["members"]["email"] if self.env["members"].has_key("email") else ""
 
             if email:
-                newRequest = rm.requestORM(email)
+                newRequest = rm.requestORM(email=email)
                 newRequest.save()
                 self.head = ("303 SEE OTHER",
                     [("location", "/request/thanks")])
+                self.session.pushAlert("Thanks, %s for registering. We hope to get you an invite soon!"%email, "", "success")
             else:
-                view = requestsRequestsTmpl(searchList=[self.tmplSearchList])
+                view = requestsRequestTmpl(searchList=[self.tmplSearchList])
                 view.emailError = True
                 return view
+        else:
+            self.head = ("404 NOT FOUND", [])

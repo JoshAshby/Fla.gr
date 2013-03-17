@@ -14,18 +14,20 @@
             <li #if $page=="admin panel"#class="active"#end if#><a href="/admin"><i class="icon-wrench"></i></a></li>
             <li #if $page=="admin flags"#class="active"#end if#><a href="/admin/flags"><i class="icon-flag"></i></a></li>
             <li #if $page=="admin users"#class="active"#end if#><a href="/admin/users"><i class="icon-group"></i></a></li>
-            #if $cfg.enableRequests
-                <li #if $page=="admin requests"#class="active"#end if#><a href="/admin/requests"><i class="icon-comment"></i></a></li>
-            #end if
             #if $user.level <= 100
                 <li #if $page=="dev buckets"#class="active"#end if#><a href="/admin/dev/buckets"><i class="icon-lemon"></i></a></li>
             #end if
-            <li class="dropdown #if $page in ('admin templates')#active#end if#">
+            <li class="dropdown #if $page in ('admin templates', 'admin requests')#active#end if#">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-chevron-down"></i></a>
                 <ul class="dropdown-menu">
                     <li #if $page=="admin templates"#class="active"#end if#>
                         <a href="/admin/templates"><i class="icon-magic"></i> Templates</a>
                     </li>
+                    #if $cfg.enableRequests
+                        <li #if $page=="admin requests"#class="active"#end if#>
+                            <a href="/admin/requests"><i class="icon-comment"></i> Requests</a>
+                        </li>
+                    #end if
                 </ul>
             </li>
             #if $page=="admin users"

@@ -24,8 +24,8 @@ from controllers.admin.templates.adminDelTemplatesController import * #/admin/te
 from controllers.admin.templates.adminNewTemplatesController import * #/admin/templates/new
 from controllers.admin.templates.adminInfoTemplatesController import * #/admin/templates/(.*)
 # -> /admin/requests/
-#from controllers.admin.requests.adminViewRequests import * #/admin/requests
-#from controllers.admin.requests.adminInfoRequests import * #/admin/requests/(.*)
+from controllers.admin.requests.adminViewRequestsController import * #/admin/requests
+#from controllers.admin.requests.adminInfoRequestsController import * #/admin/requests/(.*)
 
 #Next, /auth/ controllers
 from controllers.auth.authLoginController import * #/auth/login
@@ -33,8 +33,8 @@ from controllers.auth.authLogoutController import * #/auth/logout
 
 #Next, /request/ controllers
 #from controllers.requests.requestsRegisterController import *
-#from controllers.requests.requestsRequestController import *
-#from controllers.requests.requestsThanksController import *
+from controllers.requests.requestsRequestController import *
+from controllers.requests.requestsThanksController import *
 
 #Next, /flags/ controllers
 from controllers.flags.flagDelController  import * #/flag/(.*)/delete

@@ -14,6 +14,10 @@ joshuaashby@joshashby.com
 import config.dbBase as db
 import models.user.userModel as um
 
+import string
+import random
+
+
 buckets = {"enableDynamicLabels": {"value": True, "name": "New label input for flags", "description": "Enables a new, more interactive way to add and remove labels from a flag while editing, or making a new flag."},
         "enableRequests": {"value": False, "name": "Request and invite managment", "description": "Enables pages for requesting an invite while the site is in a closed beta or alpha, and adds an admin tab for managing the requests."},
         "enableModalFlagDeletes": {"value": True, "name": "Single page flag delete", "description": "Enabled a modal for the deleting process of a flag, instead of directing the user to another page."}}
@@ -57,6 +61,12 @@ def setup():
                 db.redisBucketServer.set("bucket:%s:description"%key, buckets[key]["description"])
     else:
         print "No new buckets to add, skipping step..."
+
+    if buckets["enableRequests"]["value"]:
+        print "Now generating request secret key..."
+
+        secret = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(25))
+        db.redisBucketServer.set("requestSecret", secret)
 
     print "All done!"
 

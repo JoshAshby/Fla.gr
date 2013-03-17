@@ -33,10 +33,10 @@ def formatTmpls(tmplsList):
 
 def formatTmpl(tmpl):
     """
-    Same as above, however takes a single `templateORM` and formates the datetime
+    Same as above, however takes a single `templateORM` and formats the datetime
     markdown.
 
-    :param flag: The `templateORM` object of the tmpl to format
+    :param tmpl: The `templateORM` object of the tmpl to format
     :return:
     """
     tmpl.formatedTemplate = mdu.mark(tmpl.template)
@@ -50,7 +50,7 @@ class templateORM(Document):
     template = TextField()
     created = DateTimeField(default=datetime.now)
     docType = TextField(default="tmpl")
-    type = TextField(default="tmpl")
+    type = TextField()
     userID = TextField()
     formatedDate = ""
 
