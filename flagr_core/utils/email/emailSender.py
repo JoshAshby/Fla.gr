@@ -36,11 +36,17 @@ import json
 import logging
 logger = logging.getLogger(c.logName+"email.sender")
 
-s = None
 
 class emailer(object):
     def __init__(self):
-        self.error = False
+        """
+        Sets up an emailer which can funtion as both a util and a stand alone system
+
+        After initializing, run emailer.getMessages() to start it as a stand alone
+        system which will listen on zmq for sendEmail:jsonData.
+
+        To use as a util, call sendMessage or sendMessages with the proper data
+        """
         if c.siteConfig.has_key("emailServerNotLocalhost"):
             logger.debug("Email server not localhost, attempting to login")
             self.s = smtplib.SMTP(c.siteConfig["emailServerHost"], int(c.siteConfig["emailServerPort"]))
@@ -50,14 +56,12 @@ class emailer(object):
             try:
                 self.s.login(c.siteConfig["emailServerLoginEmail"], c.siteConfig["emailServerLoginPassword"])
             except Exception as exc:
-                self.error = True
                 logger.critical("Could not login to email server!")
                 logger.debug(exc)
         else:
             try:
                 self.s = smtplib.SMTP('localhost')
             except Exception as exc:
-                self.error = True
                 logger.critical("Could not connect to localhost email server!")
                 logger.debug(exc)
         logger.debug("Connected to email server...")
@@ -74,35 +78,14 @@ class emailer(object):
         :param tmplData: The data which should be placed into the template with mustache
         :param whoTo: The email address of the person who this email should go to
         :param subject: The subject of the email
-        :return:
         """
-        error = False
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = subject
-        msg['To'] = whoTo
-        msg['From'] = "fla.gr"
-
         tmplObj = tm.templateORM.load(db.couchServer, tmplid)
         tmpl = tmplObj.template
 
-        tmplMarked = mdu.mark(tmpl)
+        msg = self.makeMessage(subject, whoTo, tmpl, tmplData)
 
-        compiledTmpl = pystache.render(tmplMarked, tmplData)
-
-        tmplText = pystache.render(tmpl, tmplData)
-
-        part1 = MIMEText(tmplText, 'plain')
-        part2 = MIMEText(compiledTmpl, 'html')
-
-        msg.attach(part1)
-        msg.attach(part2)
-
-        if not error:
-            logger.debug("Sending message...")
-            self.s.sendmail("fla.gr", [whoTo], msg.as_string())
-            return True
-        else:
-            raise Exception("Could not send email, see logs for detail.")
+        logger.debug("Sending message...")
+        self.s.sendmail("fla.gr", [whoTo], msg.as_string())
 
 
     def sendMessages(self, tmplid, tmplData, whoTo, subject):
@@ -120,36 +103,56 @@ class emailer(object):
         :param whoTo: The email address of the person who this email should go to
             should be a list
         :param subject: The subject of the email
-        :return:
         """
-        error = False
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = subject
-        msg['To'] = whoTo
-        msg['From'] = "fla.gr"
-
         tmplObj = tm.templateORM.load(db.couchServer, tmplid)
         tmpl = tmplObj.template
 
-        tmplMarked = mdu.mark(tmpl)
-
         for person in whoTo:
-            compiledTmpl = pystache.render(tmplMarked, tmplData[person])
+            msg = self.makeMessage(subject, person, tmpl, tmplData[person])
 
-            tmplText = pystache.render(tmpl, tmplData[person])
+            logger.debug("Sending message...")
+            self.s.sendmail("fla.gr", [person], msg.as_string())
 
-            part1 = MIMEText(tmplText, 'plain')
-            part2 = MIMEText(compiledTmpl, 'html')
 
-            msg.attach(part1)
-            msg.attach(part2)
+    def compileTmpl(self, tmpl, tmplData):
+        """
+        Takes in the given template, and filles it out with mustache from `tmplData`
+        Then compiles it into HTML with markdown.
 
-            if not error:
-                logger.debug("Sending message...")
-                self.s.sendmail("fla.gr", [person], msg.as_string())
-                return True
-            else:
-                raise Exception("Could not send email, see logs for detail.")
+        :param tmpl: The mustache and markdown template to fill out and render
+        :param tmplData: The dict of values to render the template with, for mustache
+        :return: `part1, part2` are `MIMEText` objects with encodings of plain and HTML
+            for use in `MIMEMultipart` messages.
+        """
+        compiledTmpl = pystache.render(tmpl, tmplData)
+        tmplMarked = mdu.mark(compiledTmpl)
+
+        part1 = MIMEText(compiledTmpl, 'plain')
+        part2 = MIMEText(tmplMarked, 'html')
+
+        return part1, part2
+
+
+    def makeMessage(self, subject, person, tmpl, tmplData):
+        """
+        Returns a full email with both plain text and HTML parts
+
+        :param subject: Subject for the message
+        :param person: The email address of the person to address the message to
+        :param tmpl: The mustache and markdown template to render and compile for the message
+        :param tmplData: The mustache template data to be used to fill out the message
+        :return: A full mutlipart email with plain text and HTML parts ready to be sent
+        """
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = "fla.gr"
+        msg['To'] = person
+        part1, part2 = self.compileTmpl(tmpl, tmplData)
+
+        msg.attach(part1)
+        msg.attach(part2)
+
+        return msg
 
 
     def getMessages(self):
