@@ -17,6 +17,8 @@ table according to what you dictate as the URL
 regex below
 """
 import re
+import os
+import json
 
 appName = "fla.gr"
 baseFolder = '/home/josh/repos/flagr/flagr_core'
@@ -65,3 +67,8 @@ Don't change these following settings unless you know what you're doing!!!
 """
 urls = []
 authRegex = re.compile("([^_\W]*)")
+
+siteConfig = {}
+if os.path.exists(baseFolder+'/siteConfig.json'):
+    siteConfigFile = open(baseFolder+"/siteConfig.json")
+    siteConfig = json.loads(siteConfigFile.read())

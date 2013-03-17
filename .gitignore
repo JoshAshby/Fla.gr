@@ -26,6 +26,7 @@ flagr_core/logs/
 flagr_core/pid/
 flagr_core/views/
 flagr_core/.coverage
+siteConfig.json
 
 # Compiled source #
 ###################

@@ -19,7 +19,7 @@ import models.template.templateModel as tm
 
 
 @route("/admin/templates/(.*)/delete")
-class adminEditTemplates(baseHTMLObject):
+class adminDelTemplates(baseHTMLObject):
     __name__ = "admin templates"
     __level__ = 50
     __login__ = True

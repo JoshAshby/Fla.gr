@@ -56,8 +56,6 @@ class adminEditTemplates(baseHTMLObject):
 
             return view
 
-        tmpl = tm.templateORM.load(db.couchServer,tmplid)
-
         tmpl.name = name
         tmpl.created = datetime.now()
 

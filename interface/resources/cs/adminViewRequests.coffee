@@ -32,7 +32,7 @@ $ ->
                 <form action="/admin/requests/{{id}}/edit" method="POST">
                     <div class="btn-group">
                         <a class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                        <button class="btn btn-success" type="submit" id="grantButton" data-loading-text="Grant..."><i class="icon-ok"></i> Grant</button>
+                        <button class="btn btn-success" type="submit" id="grantButton" data-loading-text="Granting..."><i class="icon-ok"></i> Grant</button>
                     </div>
                     <input type="hidden" value="grant" name="grant">
                 </form>
