@@ -28,12 +28,15 @@ class adminViewRequests(baseHTMLObject):
     def GET(self):
         """
         """
-        view = adminViewRequestsTmpl(searchList=[self.tmplSearchList])
+        if self.env["cfg"].enableRequests:
+            view = adminViewRequestsTmpl(searchList=[self.tmplSearchList])
 
-        requests = rm.formatRequests(list(rm.requestORM.view(db.couchServer, 'typeViews/request')))
+            requests = rm.formatRequests(list(rm.requestORM.view(db.couchServer, 'typeViews/request')))
 
-        view.scripts = ["handlebars_1.0.min", "adminViewRequests"]
+            view.scripts = ["handlebars_1.0.min", "adminViewRequests"]
 
-        view.requests = requests
+            view.requests = requests
 
-        return view
+            return view
+        else:
+            self.head = ("404 NOT FOUND", [])

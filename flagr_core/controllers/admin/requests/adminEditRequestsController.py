@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
-fla.gr controller for deleting a request
+fla.gr controller for editing a request
+Currently this only will grant a request
 
 For more information, see: https://github.com/JoshAshby/
 
@@ -34,7 +35,7 @@ class adminEditRequests(baseHTMLObject):
             tmplid = rsm.tmplid()
 
             try:
-                eu.sendMessage(tmplid, {"email": req.email}, req.email, "fla.gr Invite")
+                eu.sendMessage(tmplid, {"email": req.email, "registerID": ""}, req.email, "fla.gr Invite")
                 self.session.pushAlert("You grants the request for `%s`! A special email is on the way to them, as a result of your kind actions"%req.email, ":)", "success")
             except Exception as exc:
                 self.session.pushAlert("OH NO! The grant message didn't send. Heres the error: %s"%exc, "FAILURE!" "error")

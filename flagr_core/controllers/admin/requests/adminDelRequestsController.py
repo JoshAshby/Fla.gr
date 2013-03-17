@@ -26,7 +26,7 @@ class adminDelRequests(baseHTMLObject):
     def POST(self):
         reqid = self.env["members"][0]
 
-        req = rm.requestsORM.load(db.couchServer, reqid)
+        req = rm.requestORM.load(db.couchServer, reqid)
         db.couchServer.delete(req)
 
         self.head = ("303 SEE OTHER", [("location", "/admin/requests")])
