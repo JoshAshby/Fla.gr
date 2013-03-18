@@ -2,34 +2,16 @@
 (function() {
 
   $(function() {
-    var deleteModalTmpl, deleteModalTmplPre, grantModalTmpl, grantModalTmplPre;
-    deleteModalTmplPre = "<div id=\"requestDeleteModal\" class=\"modal hide fade\" tabindex=\"-1\" role=\"dialog\" aria-labeledby=\"tmplDeleteModal\" aria-hidden=\"true\">\n    <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\"><i class=\"icon-remove\"></i></button>\n        <h3 class=\"text-error\"><i class=\"icon-trash\"></i> Delete request by `{{email}}`?</h3>\n    </div>\n    <div class=\"modal-body\">\n        <p class=\"text-error\">You're about to delete this invite request?</p>\n        <p class=\"text-error\">Are you sure you want to do this? Do you really want to crush their soul? Are you really that horrible? Maybe I should take away your lemons...</p>\n    </div>\n    <div class=\"modal-footer\">\n        <form action=\"/admin/requests/{{id}}/delete\" method=\"POST\">\n            <div class=\"btn-group\">\n                <a class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">Close</a>\n                <button class=\"btn btn-danger\" type=\"submit\" id=\"deleteButton\" data-loading-text=\"Deleting...\"><i class=\"icon-trash\"></i> Delete</button>\n            </div>\n        </form>\n    </div>\n</div>";
-    grantModalTmplPre = "<div id=\"requestGrantModal\" class=\"modal hide fade\" tabindex=\"-1\" role=\"dialog\" aria-labeledby=\"tmplDeleteModal\" aria-hidden=\"true\">\n    <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\"><i class=\"icon-remove\"></i></button>\n        <h3 class=\"text-success\"><i class=\"icon-trash\"></i> Grant request by `{{email}}`?</h3>\n    </div>\n    <div class=\"modal-body\">\n        <p class=\"text-success\">Yay! You're granting someones invite request and letting them have a stab at fla.gr and using it! Good for you, you deserve more lemons.</p>\n    </div>\n    <div class=\"modal-footer\">\n        <form action=\"/admin/requests/{{id}}/edit\" method=\"POST\">\n            <div class=\"btn-group\">\n                <a class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">Close</a>\n                <button class=\"btn btn-success\" type=\"submit\" id=\"grantButton\" data-loading-text=\"Granting...\"><i class=\"icon-ok\"></i> Grant</button>\n            </div>\n            <input type=\"hidden\" value=\"grant\" name=\"grant\">\n        </form>\n    </div>\n</div>";
-    deleteModalTmpl = Handlebars.compile(deleteModalTmplPre);
-    grantModalTmpl = Handlebars.compile(grantModalTmplPre);
-    /*
-    Theres probably a much much better and DRY way to do this, but heres a quick
-    hack instead...
-    */
-
-    /*
-    When the user presses the delete button, generate the modal, throw it into
-    the page and hope for the best.
-    */
-
-    $(".requestDeleteButton").click(function() {
-      var email, id;
-      email = $(this).data("email");
-      id = $(this).data("id");
-      $("#modal").html(deleteModalTmpl({
-        "email": email,
-        "id": id
-      }));
-      $("#requestDeleteModal").modal();
-      $("#requestDeleteModal").modal('show');
-      $("#requestDeleteModal").on('shown', function() {
-        $("#deleteButton").button();
-        return $("#deleteButton").click(function() {
+    var makeModal, modalTmpl, modalTmplPre;
+    modalTmplPre = "<div id=\"requestModal\" class=\"modal hide fade\" tabindex=\"-1\" role=\"dialog\" aria-labeledby=\"requestModal\" aria-hidden=\"true\">\n    <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\"><i class=\"icon-remove\"></i></button>\n        <h3 class=\"text-{{textColor}}\"><i class=\"icon-{{icon}}\"></i> {{modalTitle}}?</h3>\n    </div>\n    <div class=\"modal-body\">\n    <p class=\"text-{{textColor}}\">{{{text}}}</p>\n    </div>\n    <div class=\"modal-footer\">\n        <div class=\"btn-group\">\n            <a class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">Close</a>\n            <button class=\"btn btn-{{btnColor}}\" type=\"submit\" id=\"modalButton\" data-loading-text=\"{{btnLoadingText}}\"><i class=\"icon-{{icon}}\"></i> {{btnText}}</button>\n        </div>\n    </div>\n</div>";
+    modalTmpl = Handlebars.compile(modalTmplPre);
+    makeModal = function(data) {
+      $("#modal").html(modalTmpl(data));
+      $("#requestModal").modal();
+      $("#requestModal").modal('show');
+      $("#requestModal").on('shown', function() {
+        $("#modalButton").button();
+        return $("#modalButton").click(function() {
           return $(this).button('loading');
         });
       });
@@ -39,8 +21,35 @@
       to /admin/templates if I'm correct...
       */
 
-      return $('#requestDeleteModal').on('hidden', function() {
+      return $('#requestModal').on('hidden', function() {
         return $("modal").html("");
+      });
+    };
+    /*
+    When the user presses the delete button, generate the modal, throw it into
+    the page and hope for the best.
+    */
+
+    $(".requestDeleteButton").click(function() {
+      var email, id, jsonVal, modalData, text;
+      email = $(this).data("email");
+      id = $(this).data("id");
+      text = "You're about to delete a persons one chance at getting into the fla.gr system! Just kidding, go a head and delete them, but don't expect anymore lemons after this!";
+      modalData = {
+        "btnText": "Delete",
+        "modalTitle": "Delete request by `" + email + "`?",
+        "btnColor": "danger",
+        "textColor": "error",
+        "text": text,
+        "icon": "trash",
+        "btnLoadingText": "Deleting..."
+      };
+      jsonVal = $.toJSON([id]);
+      $("#editFormInput").val(jsonVal);
+      $("#editForm").attr('action', '/admin/requests/delete');
+      makeModal(modalData);
+      return $("#modalButton").click(function() {
+        return $("#editForm").submit();
       });
     });
     /*
@@ -48,30 +57,106 @@
     the page and hope for the best. Just like deletes
     */
 
-    return $(".requestGrantButton").click(function() {
-      var email, id;
+    $(".requestGrantButton").click(function() {
+      var email, id, jsonVal, modalData, text;
       email = $(this).data("email");
       id = $(this).data("id");
-      $("#modal").html(grantModalTmpl({
-        "email": email,
-        "id": id
-      }));
-      $("#requestGrantModal").modal();
-      $("#requestGrantModal").modal('show');
-      $("#requestGrantModal").on('shown', function() {
-        $("#grantButton").button();
-        return $("#grantButton").click(function() {
-          return $(this).button('loading');
-        });
+      text = "Congrats! You're granting one persons dream of getting to use fla.gr while it's still closed! Good for you, you deserve more lemons!";
+      modalData = {
+        "btnText": "Grant",
+        "modalTitle": "Grant request by `" + email + "`?",
+        "btnColor": "success",
+        "textColor": "success",
+        "text": text,
+        "icon": "ok",
+        "btnLoadingText": "Granting..."
+      };
+      jsonVal = $.toJSON([id]);
+      $("#editFormInput").val(jsonVal);
+      $("#editForm").attr('action', '/admin/requests/grant');
+      makeModal(modalData);
+      return $("#modalButton").click(function() {
+        return $("#editForm").submit();
       });
-      /*
-      Clear the HTML we threw into the page after the modal is gone,
-      not sure if this is needed since the page probably will redirect
-      to /admin/templates if I'm correct...
-      */
-
-      return $('#requestGrantModal').on('hidden', function() {
-        return $("modal").html("");
+    });
+    $("#bulkCheckButton").click(function() {
+      if ($("#bulkCheckButton").hasClass('active')) {
+        return $(".bulkCheckbox").prop('checked', false);
+      } else {
+        return $(".bulkCheckbox").prop('checked', true);
+      }
+    });
+    $("#deleteButton").click(function() {
+      var box, jsonVal, modalData, text, values, _i, _len, _ref;
+      values = [];
+      _ref = $(".bulkCheckbox:checked");
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        box = _ref[_i];
+        values.push($(box).val());
+      }
+      jsonVal = $.toJSON(values);
+      $("#editFormInput").val(jsonVal);
+      $("#editForm").attr('action', '/admin/requests/delete');
+      text = "You're about to delete all of these requests! Are you sure you want to take this oppertunity away from all of these poor souls?";
+      modalData = {
+        "btnText": "Delete",
+        "modalTitle": "Delete all of these?",
+        "btnColor": "danger",
+        "textColor": "error",
+        "text": text,
+        "icon": "trash",
+        "btnLoadingText": "Deleting..."
+      };
+      makeModal(modalData);
+      return $("#modalButton").click(function() {
+        return $("#editForm").submit();
+      });
+    });
+    $("#grantButton").click(function() {
+      var box, jsonVal, modalData, text, values, _i, _len, _ref;
+      values = [];
+      _ref = $(".bulkCheckbox:checked");
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        box = _ref[_i];
+        values.push($(box).val());
+      }
+      jsonVal = $.toJSON(values);
+      $("#editFormInput").val(jsonVal);
+      $("#editForm").attr('action', '/admin/requests/grant');
+      text = "You're about to grant all of these requests, which will send each and every person a specialized email for each one will be sent and they will all have an oppertunity to register for a closed trial account. Continue?";
+      modalData = {
+        "btnText": "Grant",
+        "modalTitle": "Grant all of these?",
+        "btnColor": "success",
+        "textColor": "success",
+        "text": text,
+        "icon": "ok",
+        "btnLoadingText": "Granting..."
+      };
+      makeModal(modalData);
+      return $("#modalButton").click(function() {
+        return $("#editForm").submit();
+      });
+    });
+    return $("#newRequestButton").click(function() {
+      var modalData, text;
+      text = "So you want to make a new request? Great! Please note that this person won't be notified until you grant the request however.<br><input id=\"emailInput\" type=\"email\" placeholder=\"email...\">";
+      modalData = {
+        "btnText": "Create",
+        "modalTitle": "Creating a new request...",
+        "btnColor": "info",
+        "textColor": "info",
+        "text": text,
+        "icon": "ok",
+        "btnLoadingText": "Creating..."
+      };
+      $("#editForm").attr('action', '/admin/requests/new');
+      makeModal(modalData);
+      return $("#modalButton").click(function() {
+        var email;
+        email = $("#emailInput").val();
+        $("#editFormInput").val(email);
+        return $("#editForm").submit();
       });
     });
   });

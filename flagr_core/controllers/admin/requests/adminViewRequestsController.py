@@ -33,7 +33,7 @@ class adminViewRequests(baseHTMLObject):
 
             requests = rm.formatRequests(list(rm.requestORM.view(db.couchServer, 'typeViews/request')))
 
-            view.scripts = ["handlebars_1.0.min", "adminViewRequests"]
+            view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "adminViewRequests"]
 
             view.requests = requests
 

@@ -47,6 +47,9 @@ class emailer(object):
 
         To use as a util, call sendMessage or sendMessages with the proper data
         """
+        self.setup()
+
+    def setup(self):
         if c.siteConfig.has_key("emailServerNotLocalhost"):
             logger.debug("Email server not localhost, attempting to login")
             self.s = smtplib.SMTP(c.siteConfig["emailServerHost"], int(c.siteConfig["emailServerPort"]))
@@ -85,7 +88,12 @@ class emailer(object):
         msg = self.makeMessage(subject, whoTo, tmpl, tmplData)
 
         logger.debug("Sending message...")
-        self.s.sendmail("fla.gr", [whoTo], msg.as_string())
+        if c.siteConfig["emailServerSendEmail"]:
+            try:
+                self.s.sendmail("fla.gr", [whoTo], msg.as_string())
+            except:
+                self.s.connect()
+                self.s.sendmail("fla.gr", [whoTo], msg.as_string())
 
 
     def sendMessages(self, tmplid, tmplData, whoTo, subject):
@@ -111,7 +119,13 @@ class emailer(object):
             msg = self.makeMessage(subject, person, tmpl, tmplData[person])
 
             logger.debug("Sending message...")
-            self.s.sendmail("fla.gr", [person], msg.as_string())
+            if c.siteConfig["emailServerSendEmail"]:
+                try:
+                    self.s.sendmail("fla.gr", [person], msg.as_string())
+                except:
+                    self.s.connect()
+                    self.s.sendmail("fla.gr", [person], msg.as_string())
+
 
 
     def compileTmpl(self, tmpl, tmplData):

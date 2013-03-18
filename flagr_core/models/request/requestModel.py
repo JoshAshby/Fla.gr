@@ -48,3 +48,15 @@ class requestORM(Document):
 
     def save(self):
         self.store(db.couchServer)
+
+    @classmethod
+    def findByEmail(cls, email):
+        request = cls.view(db.couchServer, 'typeViews/requestByEmail', key=email).rows[0]
+        print type(request)
+        return request
+
+    @classmethod
+    def findByID(cls, ID):
+        request = cls.view(db.couchServer, 'typeViews/request', key=ID).rows[0]
+        print type(request)
+        return request

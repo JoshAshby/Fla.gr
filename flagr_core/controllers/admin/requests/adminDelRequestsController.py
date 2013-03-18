@@ -16,19 +16,21 @@ from utils.baseHTMLObject import baseHTMLObject
 
 import config.dbBase as db
 import models.request.requestModel as rm
+import json
 
 
-@route("/admin/requests/(.*)/delete")
+@route("/admin/requests/delete")
 class adminDelRequests(baseHTMLObject):
     __name__ = "admin requests"
     __level__ = 50
     __login__ = True
     def POST(self):
-        reqid = self.env["members"][0]
+        ids = json.loads(self.env["members"]["array"]) if self.env["members"].has_key("array") else []
 
-        req = rm.requestORM.load(db.couchServer, reqid)
-        db.couchServer.delete(req)
+        for ID in ids:
+            req = rm.requestORM.findByID(ID)
+            db.couchServer.delete(req)
 
         self.head = ("303 SEE OTHER", [("location", "/admin/requests")])
-        self.session.pushAlert("You deleted the request for `%s`!"%req.email, ":(", "warning")
+        self.session.pushAlert("You deleted those requests...", ":(", "warning")
 
