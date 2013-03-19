@@ -85,6 +85,10 @@ class userORM(Document):
     formatedAbout = ""
 
     @classmethod
+    def getByID(cls, ID):
+        return cls.load(db.couchServer, ID)
+
+    @classmethod
     def new(cls, username, password):
         """
         Make a new user, checking for username conflicts. If no conflicts are

@@ -18,6 +18,7 @@ from views.admin.requests.adminViewRequestsTmpl import adminViewRequestsTmpl
 
 import config.dbBase as db
 import models.request.requestModel as rm
+import models.template.templateModel as tm
 
 
 @route("/admin/requests")
@@ -36,6 +37,13 @@ class adminViewRequests(baseHTMLObject):
             view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "adminViewRequests"]
 
             view.requests = requests
+
+            tmpls = list(tm.templateORM.view(db.couchServer, 'typeViews/template'))
+            for tmpl in tmpls:
+                if tmpl.type != "email":
+                    tmpls.pop(tmpls.index(tmpl))
+
+            view.tmpls = tmpls
 
             return view
         else:

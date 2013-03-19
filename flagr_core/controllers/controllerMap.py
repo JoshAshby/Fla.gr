@@ -26,7 +26,7 @@ from controllers.admin.templates.adminInfoTemplatesController import * #/admin/t
 # -> /admin/requests/
 from controllers.admin.requests.adminViewRequestsController import * #/admin/requests
 #from controllers.admin.requests.adminRequestsSettingsController import * #/admin/requests/settings
-from controllers.admin.requests.adminEditRequestsController import * #/admin/requests/(.*)edit
+from controllers.admin.requests.adminGrantRequestsController import * #/admin/requests/(.*)edit
 from controllers.admin.requests.adminDelRequestsController import * #/admin/requests/(.*)/delete
 
 #Next, /auth/ controllers

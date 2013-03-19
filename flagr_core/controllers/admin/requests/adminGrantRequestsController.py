@@ -16,9 +16,9 @@ from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
 import models.request.requestModel as rm
-import models.request.requestSettingModel as rsm
 import utils.email.emailUtils as eu
 import json
+import models.bucket.bucketModel as bm
 
 
 @route("/admin/requests/grant")
@@ -29,7 +29,8 @@ class adminEditRequests(baseHTMLObject):
     def POST(self):
         ids = json.loads(self.env["members"]["array"]) if self.env["members"].has_key("array") else []
 
-        tmplID = rsm.tmplid()
+        bucketSettings = bm.adminBucketDict()
+        tmplID = bucketSettings["enableRequests"]["settings"]["tmplid"]
 
         tmplData = {}
         emails = []

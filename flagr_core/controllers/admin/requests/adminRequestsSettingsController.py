@@ -24,7 +24,7 @@ class adminRequestsSettings(baseHTMLObject):
     __name__ = "admin requests"
     __level__ = 50
     __login__ = True
-    def GET(self):
+    def POST(self):
         """
         """
         view = adminRequestsSettingsTmpl(searchList=[self.tmplSearchList])

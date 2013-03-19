@@ -15,6 +15,7 @@ joshuaashby@joshashby.com
 """
 import models.user.userModel as userModel
 import config.dbBase as db
+import utils.dbUtils as dbu
 
 
 def adminBucketDict():
@@ -32,31 +33,31 @@ def adminBucketDict():
     buckets = [ key.strip(":value") for key in db.redisBucketServer.keys("bucket:*:value") ]
 
     for bucket in buckets:
-        returnBuckets[bucket.strip("bucket").strip(":")] = {"value": toBoolean(db.redisBucketServer.get(bucket+":value")),
+        returnBuckets[bucket.strip("bucket").strip(":")] = {"value": dbu.toBoolean(db.redisBucketServer.get(bucket+":value")),
                 "name": db.redisBucketServer.get(bucket+":name"),
                 "description": db.redisBucketServer.get(bucket+":description")}
+        #Finally attach a list of userORM objects for the users who have access to this bucket
+        if db.redisBucketServer.exists("%s:users"%bucket):
+            users = db.redisBucketServer.smembers("%s:users")
+            userList = []
+            for user in users:
+                userList.append(userModel.getByID(user))
+            returnBuckets[bucket.strip("bucket").strip(":")]["users"] = userList
 
     return returnBuckets
 
 
-def adminBucketToggle(bucketID):
-    current = toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
-    return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
 
-def toBoolean(str):
-    if str[0] == 'T':
-        return True
-    else:
-        return False
+def adminBucketToggle(bucketID):
+    current = dbu.toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
+    return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
 
 
 class cfgBuckets(object):
     def __init__(self):
-        keys = { key.split(":")[1]:toBoolean(db.redisBucketServer.get(key)) for key in db.redisBucketServer.keys("bucket:*:value") }
-#        keys = { key.strip("bucket value").strip(":"):toBoolean(db.redisBucketServer.get(key)) for key in db.redisBucketServer.keys("bucket:*:value") }
+        keys = { key.split(":")[1]:dbu.toBoolean(db.redisBucketServer.get(key)) for key in db.redisBucketServer.keys("bucket:*:value") }
         for key in keys:
             setattr(self, key, keys[key])
-#            setattr(self, key+"Users", userKeys[key])
 
     def __getattr__(self, item):
         return object.__getattribute__(self, item)
