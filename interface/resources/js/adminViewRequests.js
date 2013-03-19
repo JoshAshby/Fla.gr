@@ -138,7 +138,7 @@
         return $("#editForm").submit();
       });
     });
-    return $("#newRequestButton").click(function() {
+    $("#newRequestButton").click(function() {
       var modalData, text;
       text = "So you want to make a new request? Great! Please note that this person won't be notified until you grant the request however.<br><input id=\"emailInput\" type=\"email\" placeholder=\"email...\">";
       modalData = {
@@ -158,6 +158,14 @@
         $("#editFormInput").val(email);
         return $("#editForm").submit();
       });
+    });
+    /*
+    Activate the tabs
+    */
+
+    return $('#sidebarTabs a').click(function(e) {
+      e.preventDefault();
+      return $(this).tab('show');
     });
   });
 

@@ -2,12 +2,69 @@
 (function() {
 
   $(function() {
-    return $("#bulkCheckButton").click(function() {
+    var makeModal, modalTmpl, modalTmplPre;
+    modalTmplPre = "<div id=\"requestModal\" class=\"modal hide fade\" tabindex=\"-1\" role=\"dialog\" aria-labeledby=\"requestModal\" aria-hidden=\"true\">\n    <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\"><i class=\"icon-remove\"></i></button>\n        <h3 class=\"text-{{textColor}}\"><i class=\"icon-{{icon}}\"></i> {{modalTitle}}?</h3>\n    </div>\n    <div class=\"modal-body\">\n    <p class=\"text-{{textColor}}\">{{{text}}}</p>\n    </div>\n    <div class=\"modal-footer\">\n        <div class=\"btn-group\">\n            <a class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">Close</a>\n            <button class=\"btn btn-{{btnColor}}\" type=\"submit\" id=\"modalButton\" data-loading-text=\"{{btnLoadingText}}\"><i class=\"icon-{{icon}}\"></i> {{btnText}}</button>\n        </div>\n    </div>\n</div>";
+    modalTmpl = Handlebars.compile(modalTmplPre);
+    makeModal = function(data) {
+      $("#modal").html(modalTmpl(data));
+      $("#requestModal").modal();
+      $("#requestModal").modal('show');
+      $("#requestModal").on('shown', function() {
+        $("#modalButton").button();
+        return $("#modalButton").click(function() {
+          return $(this).button('loading');
+        });
+      });
+      /*
+      Clear the HTML we threw into the page after the modal is gone,
+      not sure if this is needed since the page probably will redirect
+      to /admin/templates if I'm correct...
+      */
+
+      return $('#requestModal').on('hidden', function() {
+        return $("modal").html("");
+      });
+    };
+    $("#deleteButton").click(function() {
+      var box, jsonVal, modalData, text, values, _i, _len, _ref;
+      values = [];
+      _ref = $(".bulkCheckbox:checked");
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        box = _ref[_i];
+        values.push($(box).val());
+      }
+      jsonVal = $.toJSON(values);
+      $("#editFormInput").val(jsonVal);
+      $("#editForm").attr('action', '/admin/templates/delete');
+      text = "You're about to delete all of these templates! Are you sure you want to take the chance of setting fire to all of fla.gr by deleting possibly used templates?";
+      modalData = {
+        "btnText": "Delete",
+        "modalTitle": "Delete all of these?",
+        "btnColor": "danger",
+        "textColor": "error",
+        "text": text,
+        "icon": "trash",
+        "btnLoadingText": "Deleting..."
+      };
+      makeModal(modalData);
+      return $("#modalButton").click(function() {
+        return $("#editForm").submit();
+      });
+    });
+    $("#bulkCheckButton").click(function() {
       if ($("#bulkCheckButton").hasClass('active')) {
         return $(".bulkCheckbox").prop('checked', false);
       } else {
         return $(".bulkCheckbox").prop('checked', true);
       }
+    });
+    /*
+    Activate the tabs
+    */
+
+    return $('#sidebarTabs a').click(function(e) {
+      e.preventDefault();
+      return $(this).tab('show');
     });
   });
 

@@ -159,3 +159,11 @@ $ ->
             email = $("#emailInput").val()
             $("#editFormInput").val email
             $("#editForm").submit()
+
+
+    ###
+    Activate the tabs
+    ###
+    $('#sidebarTabs a').click (e) ->
+        e.preventDefault()
+        $(this).tab 'show'

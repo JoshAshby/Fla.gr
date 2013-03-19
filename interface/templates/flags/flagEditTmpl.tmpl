@@ -20,12 +20,12 @@
         <div class="control-group">
         #if $getVar('cfg.enableDynamicLabels', False)
             <div class="well">
-                <b class="muted">Labels: </b> <span id="dynamicLabels"></span>
+                <b class="muted">Labels: </b> <span id="dynamicList"></span>
             </div>
-            <input type="text" id="labelInput" class="span5" placeholder="labels...">
-            <a id="addLabels" class="btn btn-info"><i class="icon-plus"></i></a>
+            <input type="text" id="addInputField" class="span5" placeholder="labels...">
+            <a id="addButton" class="btn btn-info"><i class="icon-plus"></i></a>
             <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be stripped.</span>
-            <input type="hidden" name="labels" id="labels" value='$getVar('labels', '')'>
+            <input type="hidden" name="labels" id="addInputHidden" value='$getVar('labels', '')'>
         #else
             <input type="text" name="labels" class="span6" placeholder="labels..." value='$getVar('labels', '')'>
             <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be striped. (Hint, tags will be removed if you click on them.)</span>

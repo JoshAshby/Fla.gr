@@ -33,7 +33,7 @@ class flagNew(baseHTMLObject):
         view = flagNewTmpl(searchList=[self.tmplSearchList])
 
         if self.env["cfg"].enableDynamicLabels:
-            view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "dynamicLabels"]
+            view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "dynamicInput"]
 
         return view
 

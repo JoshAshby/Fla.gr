@@ -18,6 +18,7 @@ from views.admin.templates.adminInfoTemplatesTmpl import adminInfoTemplatesTmpl
 
 import config.dbBase as db
 import models.template.templateModel as tm
+import models.setting.settingModel as sm
 
 
 @route("/admin/templates/(.*)")
@@ -33,6 +34,13 @@ class adminInfoTemplates(baseHTMLObject):
 
         template = tm.formatTmpl(tm.templateORM.load(db.couchServer,tmplid))
         view.scripts = ["handlebars_1.0.min", "adminInfoTemplates"]
+
+        try:
+            currentTypes = sm.getSetting("templates", "types")
+        except:
+            currentTypes = {"Set template types in settings"}
+
+        view.templateTypes = currentTypes
 
         view.tmpl = template
 

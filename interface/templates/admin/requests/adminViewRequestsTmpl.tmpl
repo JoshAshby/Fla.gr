@@ -2,7 +2,7 @@
 
 #def leftExtra
 <div class="tabbable tabs-left">
-    <ul class="nav nav-tabs" id="tmplInfoTabs">
+    <ul class="nav nav-tabs" id="sidebarTabs">
         <li class="active"><a href="#all"><i class="icon-info-sign"></i> All</a></li>
         <li><a href="#settings"><i class="icon-cog"></i> Settings</a></li>
         <li class="spacer"></li>
@@ -59,7 +59,7 @@
                 <div class="controls">
                     <select name="tmplid">
                         #for $tmpl in $tmpls
-                            <option value="$tmpl.id">$tmpl.name</option>
+                            <option value="$tmpl.id" #if $tmpl.current#selected#end if#>$tmpl.name</option>
                         #end for
                     </select>
                 </div>

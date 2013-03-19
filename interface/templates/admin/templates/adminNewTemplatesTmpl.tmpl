@@ -19,7 +19,9 @@
             </div>
             <div class="control-group">
                 <select name="type">
-                    <option value="email">email template</option>
+                    #for $type in $templateTypes
+                        <option value="$type">$type</option>
+                    #end for
                 </select>
             </div>
             <div class="well text-center">

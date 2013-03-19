@@ -18,6 +18,8 @@ from views.admin.templates.adminViewTemplatesTmpl import adminViewTemplatesTmpl
 
 import config.dbBase as db
 import models.template.templateModel as tm
+import models.setting.settingModel as sm
+import json
 
 
 @route("/admin/templates")
@@ -31,8 +33,13 @@ class adminViewTemplates(baseHTMLObject):
         view = adminViewTemplatesTmpl(searchList=[self.tmplSearchList])
 
         templates = tm.formatTmpls(list(tm.templateORM.view(db.couchServer, 'typeViews/template')))
-        view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "adminViewTemplates"]
+        view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "adminViewTemplates", "dynamicInput"]
 
         view.templates = templates
+
+        try:
+            view.templateTypes = json.dumps(list(sm.getSetting("templates", "types")))
+        except:
+            view.templateTypes = json.dumps([])
 
         return view

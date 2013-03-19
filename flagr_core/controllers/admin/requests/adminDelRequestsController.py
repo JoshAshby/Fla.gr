@@ -25,12 +25,14 @@ class adminDelRequests(baseHTMLObject):
     __level__ = 50
     __login__ = True
     def POST(self):
-        ids = json.loads(self.env["members"]["array"]) if self.env["members"].has_key("array") else []
+        if self.env["cfg"].enableRequests:
+            ids = json.loads(self.env["members"]["array"]) if self.env["members"].has_key("array") else []
 
-        for ID in ids:
-            req = rm.requestORM.findByID(ID)
-            db.couchServer.delete(req)
+            for ID in ids:
+                req = rm.requestORM.findByID(ID)
+                db.couchServer.delete(req)
 
-        self.head = ("303 SEE OTHER", [("location", "/admin/requests")])
-        self.session.pushAlert("You deleted those requests...", ":(", "warning")
-
+            self.head = ("303 SEE OTHER", [("location", "/admin/requests")])
+            self.session.pushAlert("You deleted those requests...", ":(", "warning")
+        else:
+            self.head = ("404 NOT FOUND", [])

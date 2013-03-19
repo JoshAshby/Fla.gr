@@ -54,7 +54,9 @@
                     </div>
                     <div class="control-group">
                         <select name="type">
-                            <option value="email">email template</option>
+                            #for $type in $templateTypes
+                                <option value="$type" #if $type == $tmpl.type#selected#end if#>$type</option>
+                            #end for
                         </select>
                     </div>
                     <div class="well text-center">

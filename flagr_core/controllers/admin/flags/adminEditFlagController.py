@@ -42,7 +42,7 @@ class adminEditFlag(baseHTMLObject):
         view.vis = flag.visibility
 
         if self.env["cfg"].enableDynamicLabels:
-            view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "dynamicLabels"]
+            view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "dynamicInput"]
             view.labels = json.dumps(flag.labels)
         else:
             view.labels = flag.labels.join(", ")

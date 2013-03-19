@@ -21,11 +21,13 @@ from controllers.admin.dev.adminDevViewBucketsController import * #/admin/dev/bu
 from controllers.admin.templates.adminViewTemplatesController import * #/admin/templates
 from controllers.admin.templates.adminEditTemplatesController import * #/admin/templates/(.*)/edit
 from controllers.admin.templates.adminDelTemplatesController import * #/admin/templates/(.*)/delete
+from controllers.admin.templates.adminBulkDelTemplatesController import * #/admin/templates/delete
+from controllers.admin.templates.adminTemplatesSettingsController import * #/admin/templates/settings
 from controllers.admin.templates.adminNewTemplatesController import * #/admin/templates/new
 from controllers.admin.templates.adminInfoTemplatesController import * #/admin/templates/(.*)
 # -> /admin/requests/
 from controllers.admin.requests.adminViewRequestsController import * #/admin/requests
-#from controllers.admin.requests.adminRequestsSettingsController import * #/admin/requests/settings
+from controllers.admin.requests.adminRequestsSettingsController import * #/admin/requests/settings
 from controllers.admin.requests.adminGrantRequestsController import * #/admin/requests/(.*)edit
 from controllers.admin.requests.adminDelRequestsController import * #/admin/requests/(.*)/delete
 

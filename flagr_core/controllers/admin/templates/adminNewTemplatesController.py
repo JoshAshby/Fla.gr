@@ -17,6 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.admin.templates.adminNewTemplatesTmpl import adminNewTemplatesTmpl
 
 import models.template.templateModel as tm
+import models.setting.settingModel as sm
 
 
 @route("/admin/templates/new")
@@ -28,12 +29,21 @@ class adminNewTemplates(baseHTMLObject):
         """
         """
         view = adminNewTemplatesTmpl(searchList=[self.tmplSearchList])
+
+        try:
+            currentTypes = sm.getSetting("templates", "types")
+        except:
+            currentTypes = {"Set template types in settings"}
+
+        view.templateTypes = currentTypes
+
         return view
 
     def POST(self):
         name = self.env["members"]["name"] if self.env["members"].has_key("name") else ""
         description = self.env["members"]["description"] if self.env["members"].has_key("description") else ""
         template = self.env["members"]["template"] if self.env["members"].has_key("template") else ""
+        tmplType = self.env["members"]["type"] if self.env["members"].has_key("type") else ""
 
         if not name:
             view = adminNewTemplatesTmpl(searchList=[self.tmplSearchList])
@@ -42,9 +52,16 @@ class adminNewTemplates(baseHTMLObject):
             view.description = description
             view.template = template
 
+            try:
+                currentTypes = sm.getSetting("templates", "types")
+            except:
+                currentTypes = {"Set template types in settings"}
+
+            view.templateTypes = currentTypes
+
             return view
 
-        tmpl = tm.templateORM(name=name, description=description, template=template)
+        tmpl = tm.templateORM(name=name, description=description, template=template, type=tmplType)
         tmpl.save()
 
         self.head = ("303 SEE OTHER", [("location", "/admin/templates/%s"%tmpl.id)])

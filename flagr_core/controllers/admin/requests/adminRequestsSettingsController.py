@@ -14,9 +14,7 @@ joshuaashby@joshashby.com
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-from views.admin.requests.adminRequestsSettingsTmpl import adminRequestsSettingsTmpl
-
-import models.request.requestSettingModel as rsm
+import models.setting.settingModel as sm
 
 
 @route("/admin/requests/settings")
@@ -27,10 +25,10 @@ class adminRequestsSettings(baseHTMLObject):
     def POST(self):
         """
         """
-        view = adminRequestsSettingsTmpl(searchList=[self.tmplSearchList])
+        if self.env["cfg"].enableRequests:
+            tmplid = self.env["members"]["tmplid"] if self.env["members"].has_key("tmplid") else ""
+            if tmplid:
+                sm.setSetting("enableRequests", "tmplid", tmplid)
+                self.session.pushAlert("We've updated the template you're wanting to use to send invites out...", "Got that done...", "success")
 
-        tmpl = rsm.tmpls()
-
-        view.tmpl = tmpl
-
-        return view
+            self.head = ("303 SEE OTHER", [("Location", "/admin/requests")])

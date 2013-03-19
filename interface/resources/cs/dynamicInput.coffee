@@ -6,18 +6,18 @@ $ ->
     The hidden label may have labels preloaded, so we need to make sure
     those labels get into the array and the div list
     ###
-    base = $("#labels").val()
+    base = $("#addInputHidden").val()
     if base isnt ""
         labels = $.secureEvalJSON base
         for label in labels
-            $("#dynamicLabels").append labelsCompiledTemplate {"label": label}
+            $("#dynamicList").append labelsCompiledTemplate {"label": label}
 
     ###
     Refresh the labels array and adding anything in the
     input box to the span
     ###
     refreshLabels = ->
-        input = $("#labelInput").val()
+        input = $("#addInputField").val()
         if input isnt ""
             ###
             #So long as the input field ins't empty, strip all spaces from the
@@ -36,11 +36,11 @@ $ ->
             for label of reduceSet
                 labels_input_reduced.push label
             labels = labels_input_reduced
-            $("#dynamicLabels").html ""
+            $("#dynamicList").html ""
             for label in labels
-                $("#dynamicLabels").append labelsCompiledTemplate {"label": label}
-            $("#labels").val $.toJSON labels
-            $("#labelInput").val ""
+                $("#dynamicList").append labelsCompiledTemplate {"label": label}
+            $("#addInputHidden").val $.toJSON labels
+            $("#addInputField").val ""
 
 
     ###
@@ -48,14 +48,14 @@ $ ->
     div list, the array and the hidden value, before finally
     clearing the field
     ###
-    $("#addLabels").click ->
+    $("#addButton").click ->
         refreshLabels()
 
     ###
     Prevent the form from submitting if the enter key is pressed
     Instead, add the tags that are in the input
     ###
-    $("#labelInput").keypress (event) =>
+    $("#addInputField").keypress (event) =>
         if event.which is 13
             event.preventDefault()
             refreshLabels()
@@ -65,7 +65,7 @@ $ ->
     When a click happens then remove that element
     from both the DOM and the array of labels and the hidden input
     ###
-    $(document).on "click", "#dynamicLabels>span.label", ->
+    $(document).on "click", "#dynamicList>span.label", ->
         labels.splice labels.indexOf($(this).text()), 1
-        $("#labels").val $.toJSON labels
+        $("#addInputHidden").val $.toJSON labels
         $(this).remove()

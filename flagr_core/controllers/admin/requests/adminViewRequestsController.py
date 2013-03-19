@@ -19,6 +19,7 @@ from views.admin.requests.adminViewRequestsTmpl import adminViewRequestsTmpl
 import config.dbBase as db
 import models.request.requestModel as rm
 import models.template.templateModel as tm
+import models.setting.settingModel as sm
 
 
 @route("/admin/requests")
@@ -38,10 +39,19 @@ class adminViewRequests(baseHTMLObject):
 
             view.requests = requests
 
+            try:
+                currentTmpl = sm.getSetting("enableRequests", "tmplid")
+            except:
+                currentTmpl = ""
+
             tmpls = list(tm.templateORM.view(db.couchServer, 'typeViews/template'))
             for tmpl in tmpls:
                 if tmpl.type != "email":
                     tmpls.pop(tmpls.index(tmpl))
+                else:
+                    tmpl.current = False
+                    if tmpl.id == currentTmpl:
+                        tmpl.current = True
 
             view.tmpls = tmpls
 
