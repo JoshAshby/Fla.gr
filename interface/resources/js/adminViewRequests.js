@@ -2,52 +2,19 @@
 (function() {
 
   $(function() {
-    var makeModal, modalTmpl, modalTmplPre;
-    modalTmplPre = "<div id=\"requestModal\" class=\"modal hide fade\" tabindex=\"-1\" role=\"dialog\" aria-labeledby=\"requestModal\" aria-hidden=\"true\">\n    <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\"><i class=\"icon-remove\"></i></button>\n        <h3 class=\"text-{{textColor}}\"><i class=\"icon-{{icon}}\"></i> {{modalTitle}}?</h3>\n    </div>\n    <div class=\"modal-body\">\n    <p class=\"text-{{textColor}}\">{{{text}}}</p>\n    </div>\n    <div class=\"modal-footer\">\n        <div class=\"btn-group\">\n            <a class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">Close</a>\n            <button class=\"btn btn-{{btnColor}}\" type=\"submit\" id=\"modalButton\" data-loading-text=\"{{btnLoadingText}}\"><i class=\"icon-{{icon}}\"></i> {{btnText}}</button>\n        </div>\n    </div>\n</div>";
-    modalTmpl = Handlebars.compile(modalTmplPre);
-    makeModal = function(data) {
-      $("#modal").html(modalTmpl(data));
-      $("#requestModal").modal();
-      $("#requestModal").modal('show');
-      $("#requestModal").on('shown', function() {
-        $("#modalButton").button();
-        return $("#modalButton").click(function() {
-          return $(this).button('loading');
-        });
-      });
-      /*
-      Clear the HTML we threw into the page after the modal is gone,
-      not sure if this is needed since the page probably will redirect
-      to /admin/templates if I'm correct...
-      */
-
-      return $('#requestModal').on('hidden', function() {
-        return $("modal").html("");
-      });
-    };
     /*
     When the user presses the delete button, generate the modal, throw it into
     the page and hope for the best.
     */
-
     $(".requestDeleteButton").click(function() {
-      var email, id, jsonVal, modalData, text;
+      var email, id, text, title;
       email = $(this).data("email");
       id = $(this).data("id");
       text = "You're about to delete a persons one chance at getting into the fla.gr system! Just kidding, go a head and delete them, but don't expect anymore lemons after this!";
-      modalData = {
-        "btnText": "Delete",
-        "modalTitle": "Delete request by `" + email + "`?",
-        "btnColor": "danger",
-        "textColor": "error",
-        "text": text,
-        "icon": "trash",
-        "btnLoadingText": "Deleting..."
-      };
-      jsonVal = $.toJSON([id]);
-      $("#editFormInput").val(jsonVal);
-      $("#editForm").attr('action', '/admin/requests/delete');
-      makeModal(modalData);
+      title = "Delete request by `" + email + "`?";
+      console.log(title);
+      modalDelete(title, text);
+      editForm('/admin/requests/delete', [id]);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
       });
@@ -58,23 +25,13 @@
     */
 
     $(".requestGrantButton").click(function() {
-      var email, id, jsonVal, modalData, text;
+      var email, id, text, title;
       email = $(this).data("email");
       id = $(this).data("id");
       text = "Congrats! You're granting one persons dream of getting to use fla.gr while it's still closed! Good for you, you deserve more lemons!";
-      modalData = {
-        "btnText": "Grant",
-        "modalTitle": "Grant request by `" + email + "`?",
-        "btnColor": "success",
-        "textColor": "success",
-        "text": text,
-        "icon": "ok",
-        "btnLoadingText": "Granting..."
-      };
-      jsonVal = $.toJSON([id]);
-      $("#editFormInput").val(jsonVal);
-      $("#editForm").attr('action', '/admin/requests/grant');
-      makeModal(modalData);
+      title = "Grant request by `" + email + "`?";
+      modalGrant(title, text);
+      editForm('/admin/requests/grant', [id]);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
       });
@@ -87,85 +44,49 @@
       }
     });
     $("#deleteButton").click(function() {
-      var box, jsonVal, modalData, text, values, _i, _len, _ref;
+      var box, text, title, values, _i, _len, _ref;
       values = [];
       _ref = $(".bulkCheckbox:checked");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         box = _ref[_i];
         values.push($(box).val());
       }
-      jsonVal = $.toJSON(values);
-      $("#editFormInput").val(jsonVal);
-      $("#editForm").attr('action', '/admin/requests/delete');
       text = "You're about to delete all of these requests! Are you sure you want to take this oppertunity away from all of these poor souls?";
-      modalData = {
-        "btnText": "Delete",
-        "modalTitle": "Delete all of these?",
-        "btnColor": "danger",
-        "textColor": "error",
-        "text": text,
-        "icon": "trash",
-        "btnLoadingText": "Deleting..."
-      };
-      makeModal(modalData);
+      title = "Delete all of these?";
+      modalDelete(title, text);
+      editForm('/admin/requests/delete', values);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
       });
     });
     $("#grantButton").click(function() {
-      var box, jsonVal, modalData, text, values, _i, _len, _ref;
+      var box, text, title, values, _i, _len, _ref;
       values = [];
       _ref = $(".bulkCheckbox:checked");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         box = _ref[_i];
         values.push($(box).val());
       }
-      jsonVal = $.toJSON(values);
-      $("#editFormInput").val(jsonVal);
-      $("#editForm").attr('action', '/admin/requests/grant');
       text = "You're about to grant all of these requests, which will send each and every person a specialized email for each one will be sent and they will all have an oppertunity to register for a closed trial account. Continue?";
-      modalData = {
-        "btnText": "Grant",
-        "modalTitle": "Grant all of these?",
-        "btnColor": "success",
-        "textColor": "success",
-        "text": text,
-        "icon": "ok",
-        "btnLoadingText": "Granting..."
-      };
-      makeModal(modalData);
+      title = "Grant all of these?";
+      modalGrant(title, text);
+      editForm('/admin/requests/grant', values);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
       });
     });
-    $("#newRequestButton").click(function() {
-      var modalData, text;
+    return $("#newRequestButton").click(function() {
+      var text, title;
       text = "So you want to make a new request? Great! Please note that this person won't be notified until you grant the request however.<br><input id=\"emailInput\" type=\"email\" placeholder=\"email...\">";
-      modalData = {
-        "btnText": "Create",
-        "modalTitle": "Creating a new request...",
-        "btnColor": "info",
-        "textColor": "info",
-        "text": text,
-        "icon": "ok",
-        "btnLoadingText": "Creating..."
-      };
-      $("#editForm").attr('action', '/admin/requests/new');
-      makeModal(modalData);
+      title = "Creating a new request...";
+      modalNew(title, text);
+      editForm('/admin/requests/new', []);
       return $("#modalButton").click(function() {
         var email;
         email = $("#emailInput").val();
         $("#editFormInput").val(email);
         return $("#editForm").submit();
       });
-    });
-    /*
-    Activate the tabs
-    */
-
-    return $('#sidebarTabs a').click(function(e) {
-      e.preventDefault();
-      return $(this).tab('show');
     });
   });
 

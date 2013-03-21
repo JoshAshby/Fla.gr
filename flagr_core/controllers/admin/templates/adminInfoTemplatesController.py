@@ -33,7 +33,10 @@ class adminInfoTemplates(baseHTMLObject):
         view = adminInfoTemplatesTmpl(searchList=[self.tmplSearchList])
 
         template = tm.formatTmpl(tm.templateORM.load(db.couchServer,tmplid))
-        view.scripts = ["handlebars_1.0.min", "adminInfoTemplates"]
+        view.scripts = ["handlebars_1.0.min",
+                "adminModal",
+                "sidebarTabs",
+                "adminInfoTemplates"]
 
         try:
             currentTypes = sm.getSetting("templates", "types")

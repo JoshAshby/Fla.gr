@@ -2,46 +2,20 @@
 (function() {
 
   $(function() {
-    var modalTmpl, modalTmplPre;
-    modalTmplPre = "<div id=\"tmplDeleteModal\" class=\"modal hide fade\" tabindex=\"-1\" role=\"dialog\" aria-labeledby=\"tmplDeleteModal\" aria-hidden=\"true\">\n    <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\"><i class=\"icon-remove\"></i></button>\n        <h3 class=\"text-error\"><i class=\"icon-trash\"></i> Delete `{{title}}`?</h3>\n    </div>\n    <div class=\"modal-body\">\n        <p class=\"text-error\">You're about to delete the template `{{title}}`</p>\n        <p class=\"text-error\">Are you sure you want to do this? The template will be gone forever if you delete it, and anything which uses it will break. You could be responsible for a fire if you do this.</p>\n    </div>\n    <div class=\"modal-footer\">\n        <form action=\"/admin/templates/{{id}}/delete\" method=\"POST\">\n            <div class=\"btn-group\">\n                <a class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">Close</a>\n                <button class=\"btn btn-danger\" type=\"submit\" id=\"deleteButton\" data-loading-text=\"Deleting...\"><i class=\"icon-trash\"></i> Delete</button>\n            </div>\n        </form>\n    </div>\n</div>";
-    modalTmpl = Handlebars.compile(modalTmplPre);
-    /*
-    Activate the tabs
-    */
-
-    $('#tmplInfoTabs a').click(function(e) {
-      e.preventDefault();
-      return $(this).tab('show');
-    });
     /*
     When the user presses the delete button, generate the modal, throw it into
     the page and hope for the best.
     */
-
     return $("#tmplDeleteButton").click(function() {
-      var id, title;
-      title = $(this).data("title");
+      var id, text, title, tmplTitle;
+      tmplTitle = $(this).data("title");
       id = $(this).data("id");
-      $("#modal").html(modalTmpl({
-        "title": title,
-        "id": id
-      }));
-      $("#tmplDeleteModal").modal();
-      $("#tmplDeleteModal").modal('show');
-      $("#tmplDeleteModal").on('shown', function() {
-        $("#deleteButton").button();
-        return $("#deleteButton").click(function() {
-          return $(this).button('loading');
-        });
-      });
-      /*
-      Clear the HTML we threw into the page after the modal is gone,
-      not sure if this is needed since the page probably will redirect
-      to /admin/templates if I'm correct...
-      */
-
-      return $('#tmplDeleteModal').on('hidden', function() {
-        return $("modal").html("");
+      text = "Are you sure you want to delete this template? It could be used by other systems within fla.gr and cause things to break...";
+      title = "Delete `" + tmplTitle + "`?";
+      modalDelete(title, text);
+      editForm("/admin/templates/" + id + "/delete", []);
+      return $("#modalButton").click(function() {
+        return $("#editForm").submit();
       });
     });
   });
