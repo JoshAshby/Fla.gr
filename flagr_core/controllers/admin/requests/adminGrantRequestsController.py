@@ -42,8 +42,8 @@ class adminEditRequests(baseHTMLObject):
 
             for ID in ids:
                 req = rm.requestORM.findByID(ID)
-                #generate register key here...
-                tmplData[req.email] = {"email": req.email, "registerID": ""}
+                regToken = req.token if req.token else req.generateToken()
+                tmplData[req.email] = {"email": req.email, "registerToken": regToken}
                 emails.append(req.email)
 
             try:

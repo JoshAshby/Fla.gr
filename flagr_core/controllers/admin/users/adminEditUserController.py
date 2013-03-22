@@ -42,7 +42,7 @@ class adminEditUser(baseHTMLObject):
         password = self.env["members"]["password"] if self.env["members"].has_key("password") else None
         passwordTwice = self.env["members"]["passwordTwice"] if self.env["members"].has_key("passwordTwice") else None
         about = self.env["members"]["about"] or ""
-        level = self.env["members"]["level"] or 1
+        level = self.env["members"]["level"] if self.env["members"].has_key("level") else 1
         email = self.env["members"]["email"] or ""
         emailVis = True if self.env["members"].has_key("emailVis") else False
         disable = True if self.env["members"].has_key("disable") else False

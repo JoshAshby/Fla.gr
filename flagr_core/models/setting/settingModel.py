@@ -65,7 +65,7 @@ def getSetting(featureName, settingName):
     if db.redisBucketServer.exists(settingKey):
         keyType = db.redisBucketServer.type(settingKey)
 
-        if keyType == "str":
+        if keyType == "string":
             return db.redisBucketServer.get(settingKey)
         elif keyType == "set":
             return db.redisBucketServer.smembers(settingKey)

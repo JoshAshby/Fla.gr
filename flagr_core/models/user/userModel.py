@@ -2,7 +2,7 @@
 """
 fla.gr user model
 
-given a userID or a username or a email, return the users couchdb ORM
+Given a userID or a username or a email, return the users couchdb ORM
 
 http://xkcd.com/353/
 
@@ -123,7 +123,7 @@ class userORM(Document):
     @classmethod
     def login(cls, user, password, cookieID):
         """
-        Atempt to find and then log in a user, if their passwords match
+        Attempt to find and then log in a user, if their passwords match
 
         :param user: The userID or username of the user to log in
         :param password: The plain text password which the user supplies, to be checked against the found password
@@ -138,13 +138,27 @@ class userORM(Document):
                     user.sessionID = cookieID
                     user.loggedIn = True
                     user.alerts = db.redisSessionServer.hget(cookieID, "alerts")
-                    user.store(db.couchServer)
+                    user.save()
                     return user
                 else:
                     raise use.passwordError("Your password appears to be wrong.")
             else:
                 raise use.banError("Your user is currently disabled. Please contact an admin for additional information.")
         raise use.usernameError("We can't find your user, are you sure you have the correct information?")
+
+    def loginThis(self, cookieID):
+        """
+        Kind of like above, however this one logs in a user, for 
+        example that just registered. No password checking or usernames
+        to find, just pass the cookieID and they're set.
+
+        :param cookieID: The sessions cookie ID for the person to login
+        """
+        db.redisSessionServer.hset(cookieID, "userID", self.id)
+        self.sessionID = cookieID
+        self.loggedIn = True
+        self.alerts = db.redisSessionServer.hget(cookieID, "alerts")
+        self.save()
 
     def logout(self):
         """

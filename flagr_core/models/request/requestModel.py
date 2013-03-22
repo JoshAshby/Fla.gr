@@ -14,6 +14,8 @@ from datetime import datetime
 
 import config.dbBase as db
 
+import utils.signerUtils as su
+
 
 def formatRequests(requestsList):
     """
@@ -33,7 +35,7 @@ def formatRequest(request):
     """
     Same as above, however takes a single `requestORM` and formates the datetime
 
-    :param requestg: The `requestORM` object of the tmpl to format
+    :param request: The `requestORM` object of the tmpl to format
     :return:
     """
     request.formatedDate = datetime.strftime(request.created, "%a %b %d, %Y @ %H:%I%p")
@@ -42,12 +44,22 @@ def formatRequest(request):
 
 class requestORM(Document):
     email = TextField()
-    name = TextField()
+    token = TextField()
     created = DateTimeField(default=datetime.now)
+    granted = DateTimeField()
     docType = TextField(default="request")
 
     def save(self):
         self.store(db.couchServer)
+
+    def generateToken(self):
+        """
+        
+        """
+        self.token = su.requestToken(self.email)
+        self.granted = datetime.now()
+        self.save()
+        return self.token
 
     @classmethod
     def findByEmail(cls, email):
@@ -58,3 +70,10 @@ class requestORM(Document):
     def findByID(cls, ID):
         request = cls.load(db.couchServer, ID)
         return request
+
+    @classmethod
+    def format(cls, ID):
+        request = cls.load(db.couchServer, ID)
+        request.formatedDate = datetime.strftime(request.created, "%a %b %d, %Y @ %H:%I%p")
+        return request
+

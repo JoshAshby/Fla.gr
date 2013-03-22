@@ -36,7 +36,7 @@ from controllers.auth.authLoginController import * #/auth/login
 from controllers.auth.authLogoutController import * #/auth/logout
 
 #Next, /request/ controllers
-#from controllers.requests.requestsRegisterController import *
+from controllers.requests.requestsRegisterController import *
 from controllers.requests.requestsRequestController import *
 from controllers.requests.requestsThanksController import *
 
