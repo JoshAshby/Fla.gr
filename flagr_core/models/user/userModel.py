@@ -81,7 +81,7 @@ class userORM(Document):
     joined = DateTimeField(default=datetime.now)
     sessionID = TextField()
     docType = TextField(default="user")
-    alerts = ""
+    alerts = []
     formatedAbout = ""
 
     @classmethod

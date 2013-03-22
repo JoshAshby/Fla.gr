@@ -58,6 +58,7 @@ class dummySession(object):
         self.alerts = []
         self.id = 0
         self.level = 0
+        self.alerts = []
 
     def clearAlerts(self):
         for alert in self.alerts:
