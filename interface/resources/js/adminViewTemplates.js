@@ -3,7 +3,7 @@
 
   $(function() {
     return $("#deleteButton").click(function() {
-      var box, text, values, _i, _len, _ref;
+      var box, mod, text, values, _i, _len, _ref;
       values = [];
       _ref = $(".bulkCheckbox:checked");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -11,7 +11,8 @@
         values.push($(box).val());
       }
       text = "You're about to delete all of these templates! Are you sure you want to take the chance of setting fire to all of fla.gr by deleting possibly used templates?";
-      modalDelete("Delete all of these?", text);
+      mod = new deleteModal("Delete all of these?", text);
+      mod.make();
       editForm('/admin/templates/delete', values);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();

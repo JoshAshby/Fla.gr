@@ -7,13 +7,14 @@
     the page and hope for the best.
     */
     $(".requestDeleteButton").click(function() {
-      var email, id, text, title;
+      var email, id, mod, text, title;
       email = $(this).data("email");
       id = $(this).data("id");
       text = "You're about to delete a persons one chance at getting into the fla.gr system! Just kidding, go a head and delete them, but don't expect anymore lemons after this!";
       title = "Delete request by `" + email + "`?";
       console.log(title);
-      modalDelete(title, text);
+      mod = new deleteModal(title, text);
+      mod.make();
       editForm('/admin/requests/delete', [id]);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
@@ -25,12 +26,13 @@
     */
 
     $(".requestGrantButton").click(function() {
-      var email, id, text, title;
+      var email, id, mod, text, title;
       email = $(this).data("email");
       id = $(this).data("id");
       text = "Congrats! You're granting one persons dream of getting to use fla.gr while it's still closed! Good for you, you deserve more lemons!";
       title = "Grant request by `" + email + "`?";
-      modalGrant(title, text);
+      mod = new grantModal(title, text);
+      mod.make();
       editForm('/admin/requests/grant', [id]);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
@@ -44,7 +46,7 @@
       }
     });
     $("#deleteButton").click(function() {
-      var box, text, title, values, _i, _len, _ref;
+      var box, mod, text, title, values, _i, _len, _ref;
       values = [];
       _ref = $(".bulkCheckbox:checked");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -53,14 +55,15 @@
       }
       text = "You're about to delete all of these requests! Are you sure you want to take this oppertunity away from all of these poor souls?";
       title = "Delete all of these?";
-      modalDelete(title, text);
+      mod = new deleteModal(title, text);
+      mod.make();
       editForm('/admin/requests/delete', values);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
       });
     });
     $("#grantButton").click(function() {
-      var box, text, title, values, _i, _len, _ref;
+      var box, mod, text, title, values, _i, _len, _ref;
       values = [];
       _ref = $(".bulkCheckbox:checked");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -69,17 +72,19 @@
       }
       text = "You're about to grant all of these requests, which will send each and every person a specialized email for each one will be sent and they will all have an oppertunity to register for a closed trial account. Continue?";
       title = "Grant all of these?";
-      modalGrant(title, text);
+      mod = new grantModal(title, text);
+      mod.make();
       editForm('/admin/requests/grant', values);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
       });
     });
     return $("#newRequestButton").click(function() {
-      var text, title;
+      var mod, text, title;
       text = "So you want to make a new request? Great! Please note that this person won't be notified until you grant the request however.<br><input id=\"emailInput\" type=\"email\" placeholder=\"email...\">";
       title = "Creating a new request...";
-      modalNew(title, text);
+      mod = new createModal(title, text);
+      mod.make();
       editForm('/admin/requests/new', []);
       return $("#modalButton").click(function() {
         var email;

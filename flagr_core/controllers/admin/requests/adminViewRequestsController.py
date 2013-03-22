@@ -40,6 +40,7 @@ class adminViewRequests(baseHTMLObject):
                     "sidebarTabs",
                     "adminModal",
                     "bulkCheck",
+                    "editForm",
                     "adminViewRequests"]
 
             view.requests = requests

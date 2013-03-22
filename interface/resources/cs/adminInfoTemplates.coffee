@@ -9,7 +9,8 @@ $ ->
         text = "Are you sure you want to delete this template? It could be used by other systems within fla.gr and cause things to break..."
         title = "Delete `#{ tmplTitle  }`?"
 
-        modalDelete title, text
+        mod = new deleteModal title, text
+        mod.make()
         editForm "/admin/templates/#{ id  }/delete", []
 
         $("#modalButton").click ->

@@ -22,38 +22,38 @@ from utils.simpleDaemon import Daemon
 
 
 def setupLog(daemon):
+    """
+    Sets up the main logger for the daemon
+    """
+    import logging
+    level = logging.WARNING
+    if c.debug:
+        level = logging.DEBUG
+
+    formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
+    %(message)s""")
+
+    logger = logging.getLogger(c.logName+daemon)
+    logger.setLevel(level)
+
+    fh = logging.FileHandler(c.logFolder+c.logName+daemon+".log")
+    fh.setLevel(level)
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+
+    if c.debug and "noDaemon" in sys.argv:
         """
-        Sets up the main logger for the daemon
+        Make sure we're not in daemon mode if we're logging to console too
         """
-        import logging
-        level = logging.WARNING
-        if c.debug:
-            level = logging.DEBUG
+        try:
+            ch = logging.StreamHandler()
+            ch.setLevel(level)
+            ch.setFormatter(formatter)
+            logger.addHandler(ch)
+        except:
+            pass
 
-        formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
-        %(message)s""")
-
-        logger = logging.getLogger(c.logName+daemon)
-        logger.setLevel(level)
-
-        fh = logging.FileHandler(c.logFolder+c.logName+daemon+".log")
-        fh.setLevel(level)
-        fh.setFormatter(formatter)
-        logger.addHandler(fh)
-
-        if c.debug and "noDaemon" in sys.argv:
-                """
-                Make sure we're not in daemon mode if we're logging to console too
-                """
-                try:
-                        ch = logging.StreamHandler()
-                        ch.setLevel(level)
-                        ch.setFormatter(formatter)
-                        logger.addHandler(ch)
-                except:
-                        pass
-
-        return logger
+    return logger
 
 
 class searchIndex(Daemon):

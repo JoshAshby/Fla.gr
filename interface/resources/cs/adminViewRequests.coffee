@@ -11,7 +11,8 @@ $ ->
 
         console.log title
 
-        modalDelete title, text
+        mod = new deleteModal title, text
+        mod.make()
         editForm '/admin/requests/delete', [id]
 
         $("#modalButton").click ->
@@ -28,7 +29,8 @@ $ ->
         text = "Congrats! You're granting one persons dream of getting to use fla.gr while it's still closed! Good for you, you deserve more lemons!"
         title = "Grant request by `#{ email }`?"
 
-        modalGrant title, text
+        mod = new grantModal title, text
+        mod.make()
         editForm '/admin/requests/grant', [id]
 
         $("#modalButton").click ->
@@ -50,7 +52,8 @@ $ ->
         text = "You're about to delete all of these requests! Are you sure you want to take this oppertunity away from all of these poor souls?"
         title = "Delete all of these?"
 
-        modalDelete title, text
+        mod = new deleteModal title, text
+        mod.make()
         editForm '/admin/requests/delete', values
 
         $("#modalButton").click ->
@@ -65,7 +68,8 @@ $ ->
         text = "You're about to grant all of these requests, which will send each and every person a specialized email for each one will be sent and they will all have an oppertunity to register for a closed trial account. Continue?"
         title = "Grant all of these?"
 
-        modalGrant title, text
+        mod = new grantModal title, text
+        mod.make()
         editForm '/admin/requests/grant', values
 
         $("#modalButton").click ->
@@ -76,7 +80,8 @@ $ ->
         text = """So you want to make a new request? Great! Please note that this person won't be notified until you grant the request however.<br><input id="emailInput" type="email" placeholder="email...">"""
         title = "Creating a new request..."
 
-        modalNew title, text
+        mod = new createModal title, text
+        mod.make()
         editForm '/admin/requests/new', []
 
         $("#modalButton").click ->

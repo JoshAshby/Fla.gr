@@ -16,79 +16,88 @@ modalTmplPre = """
     </div>
 """
 
-
 modalTmpl = Handlebars.compile modalTmplPre
 
 
-makeModal = (data) ->
-    $("#modal").html modalTmpl data
-    $("#requestModal").modal()
-    $("#requestModal").modal 'show'
+class modalBase
+    ###
+    Base modal object class
 
-    $("#requestModal").on 'shown', ->
-        $("#modalButton").button()
+    Takes a title and a modal body text
 
-        $("#modalButton").click ->
-            $(this).button 'loading'
+    methods:
+        make(data)
+            places the modal into the div #modal
+            data is an object with keys
+                "btnText": ""
+                "btnColor": ""
+                "textColor": ""
+                "icon": ""
+                "btnLoadingText": ""
 
     ###
-    Clear the HTML we threw into the page after the modal is gone,
-    not sure if this is needed since the page probably will redirect
-    ###
-    $('#requestModal').on 'hidden', ->
-        $("modal").html ""
+    constructor: (@title, @text) ->
 
-@modalDelete = (title, text) ->
-    modalData =
-        "btnText": "Delete"
-        "ModalTitle": title
-        "btnColor": "danger"
-        "textColor": "error"
-        "text": text
-        "icon": "trash"
-        "btnLoadingText": "Deleting..."
-    makeModal modalData
+    make: (data) ->
+        data["text"] = @text
+        data["modalTitle"] = @title
+        $("#modal").html modalTmpl data
+        $("#requestModal").modal()
+        $("#requestModal").modal 'show'
 
+        $("#requestModal").on 'shown', ->
+            $("#modalButton").button()
 
-@modalEdit = (title, text) ->
-    modalData =
-        "btnText": "Edit"
-        "modalTitle": title
-        "btnColor": "primary"
-        "textColor": ""
-        "text": text
-        "icon": "edit"
-        "btnLoadingText": "Updating..."
-    makeModal modalData
+            $("#modalButton").click ->
+                $(this).button 'loading'
+
+        ###
+        Clear the HTML we threw into the page after the modal is gone,
+        not sure if this is needed since the page probably will redirect
+        ###
+        $('#requestModal').on 'hidden', ->
+            $("modal").html ""
 
 
-@modalGrant = (title, text) ->
-    modalData =
-        "btnText": "Grant"
-        "modalTitle": title
-        "btnColor": "success"
-        "textColor": "success"
-        "text": text
-        "icon": "ok"
-        "btnLoadingText": "Granting..."
-    makeModal modalData
+class @deleteModal extends modalBase
+    make: ->
+        modalData =
+            "btnText": "Delete"
+            "btnColor": "danger"
+            "textColor": "error"
+            "icon": "trash"
+            "btnLoadingText": "Deleting..."
+        super modalData
 
 
-@modalNew = (title, text) ->
-    modalData =
-        "btnText": "Create"
-        "modalTitle": title
-        "btnColor": "info"
-        "textColor": "info"
-        "text": text
-        "icon": "ok"
-        "btnLoadingText": "Creating..."
-    makeModal modalData
+class @editModal extends modalBase
+    make: ->
+        modalData =
+            "btnText": "Edit"
+            "btnColor": "primary"
+            "textColor": ""
+            "icon": "edit"
+            "btnLoadingText": "Updating..."
+        super modalData
 
 
-@editForm = (action, value) ->
-    jsonVal = $.toJSON value
-    $("#editFormInput").val jsonVal
-    $("#editForm").attr 'action', action
+class @grantModal extends modalBase
+    make: ->
+        modalData =
+            "btnText": "Grant"
+            "btnColor": "success"
+            "textColor": "success"
+            "icon": "ok"
+            "btnLoadingText": "Granting..."
+        super modalData
 
 
+class @createModal extends modalBase
+    make: ->
+        modalData =
+            "btnText": "Create"
+            "btnColor": "info"
+            "textColor": "info"
+            "icon": "ok"
+            "btnLoadingText": "Creating..."
+        super modalData

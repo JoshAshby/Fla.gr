@@ -38,6 +38,7 @@ class adminViewTemplates(baseHTMLObject):
                 "sidebarTabs",
                 "bulkCheck",
                 "adminModal",
+                "editForm",
                 "adminViewTemplates",
                 "dynamicInput"]
 

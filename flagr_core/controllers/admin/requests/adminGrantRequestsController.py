@@ -34,7 +34,7 @@ class adminEditRequests(baseHTMLObject):
                 tmplID = sm.getSetting("enableRequests", "tmplid")
             except:
                 self.head = ("303 SEE OTHER", [("Location", "/admin/requests")])
-                self.session.pushMessage("I can't find which template you want to use for sending out invites! Please click on the settings tab for this page and select which template to use.", "Oh no!", "error")
+                self.session.pushAlert("I can't find which template you want to use for sending out invites! Please click on the settings tab for this page and select which template to use.", "Oh no!", "error")
                 return
 
             tmplData = {}

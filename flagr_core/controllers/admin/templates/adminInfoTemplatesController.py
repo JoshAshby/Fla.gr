@@ -36,6 +36,7 @@ class adminInfoTemplates(baseHTMLObject):
         view.scripts = ["handlebars_1.0.min",
                 "adminModal",
                 "sidebarTabs",
+                "editForm",
                 "adminInfoTemplates"]
 
         try:

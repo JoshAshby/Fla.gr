@@ -7,12 +7,13 @@
     the page and hope for the best.
     */
     return $("#tmplDeleteButton").click(function() {
-      var id, text, title, tmplTitle;
+      var id, mod, text, title, tmplTitle;
       tmplTitle = $(this).data("title");
       id = $(this).data("id");
       text = "Are you sure you want to delete this template? It could be used by other systems within fla.gr and cause things to break...";
       title = "Delete `" + tmplTitle + "`?";
-      modalDelete(title, text);
+      mod = new deleteModal(title, text);
+      mod.make();
       editForm("/admin/templates/" + id + "/delete", []);
       return $("#modalButton").click(function() {
         return $("#editForm").submit();
