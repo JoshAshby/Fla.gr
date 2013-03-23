@@ -27,14 +27,7 @@ def setSetting(featureName, settingName, value):
     if db.redisBucketServer.exists(settingKey):
         settingType = db.redisBucketServer.type(settingKey)
 
-        if type(value) == str:
-            if settingType and settingType == "str":
-                db.redisBucketServer.set(settingKey, value)
-            elif not settingType:
-                db.redisBucketServer.set(settingKey, value)
-            else:
-                raise Exception("Value and key are of different types")
-        elif type(value) == set:
+        if type(value) == set:
             if settingType and settingType == "set":
                 currentMembers = db.redisBucketServer.smembers(settingKey)
                 for member in currentMembers.difference(value):
@@ -46,15 +39,16 @@ def setSetting(featureName, settingName, value):
                 for member in value:
                     db.redisBucketServer.sadd(settingKey, member)
             else:
-                raise Exception("Value and key are of different types")
+                raise Exception("Value and key are of different types: %s %s"%(type(value), settingType))
+        else:
+            db.redisBucketServer.set(settingKey, value)
+
     else:
         if type(value) == set:
             for item in value:
                 db.redisBucketServer.sadd(settingKey, item)
-        elif type(value) == str:
-            db.redisBucketServer.set(settingKey, value)
         else:
-            raise Exception("Unknown setting data type")
+            db.redisBucketServer.set(settingKey, value)
 
 
 def getSetting(featureName, settingName):

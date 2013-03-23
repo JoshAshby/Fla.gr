@@ -1,0 +1,41 @@
+{
+    "settings": {
+        "emailServer": {
+            "sendEmail": true,
+            "notLocalhost": false,
+            "host": "smtp.example.com",
+            "port": 587,
+            "loginEmail": "example",
+            "loginPassword": "example"
+        },
+        "enableRequests": {
+            "tmplid": "",
+            "requestSecret": "generateRandom"
+        },
+        "templates": {
+            "types": ["email"]
+        }
+    },
+    "initial": {
+        "flags": [],
+        "users": [{"username": "admin", "password": "test"}]
+    },
+    //Recommended to not edit these, unless you really know what you're doing.
+    "buckets": {
+        "enableDynamicLabels": {
+            "value": true,
+            "name": "New label input for flags",
+            "description": "Enables a new, more interactive way to add and remove labels from a flag while editing, or making a new flag."
+        },
+        "enableRequests": {
+            "value": false, 
+            "name": "Request and invite managment", 
+            "description": "Enables pages for requesting an invite while the site is in a closed beta or alpha, and adds an admin tab for managing the requests."
+        },
+        "enableModalFlagDeletes": {
+            "value": true, 
+            "name": "Single page flag delete", 
+            "description": "Enabled a modal for the deleting process of a flag, instead of directing the user to another page."
+        }
+    }
+}

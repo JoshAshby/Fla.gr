@@ -54,12 +54,14 @@ class emailer(object):
     def setup(self):
         if sm.getSetting("emailServer", "notLocalhost"):
             logger.debug("Email server not localhost, attempting to login")
-            self.s = smtplib.SMTP(sm.getSetting("emailServer", "host"), int(sm.getSetting("emailServer", "port")))
+            self.s = smtplib.SMTP(sm.getSetting("emailServer", "host"),
+                    int(sm.getSetting("emailServer", "port")))
             self.s.ehlo()
             self.s.starttls()
             self.s.ehlo()
             try:
-                self.s.login(sm.getSetting"emailServer", "loginEmail"), sm.getSetting("emailServer", "loginPassword"))
+                self.s.login(sm.getSetting("emailServer", "loginEmail"),
+                        sm.getSetting("emailServer", "loginPassword"))
             except Exception as exc:
                 logger.critical("Could not login to email server!")
                 logger.debug(exc)
@@ -181,10 +183,12 @@ class emailer(object):
 
             if type(data["whoTo"]) != list:
                 logger.debug("Sending single message...")
-                self.sendMessage(data["tmplID"], data["tmplData"], data["whoTo"], data["subject"])
+                self.sendMessage(data["tmplID"], data["tmplData"],
+                        data["whoTo"], data["subject"])
             else:
                 logger.debug("Sending same tmpl to multiple people...")
-                self.sendMessages(data["tmplID"], data["tmplData"], data["whoTo"], data["subject"])
+                self.sendMessages(data["tmplID"], data["tmplData"],
+                        data["whoTo"], data["subject"])
 
 
 def start():
@@ -199,7 +203,9 @@ def start():
         gevent.shutdown
     except KeyboardInterrupt:
         sender.s.quit()
+        logger.debug("emailSender shutting down from keyboard interrupt...")
         gevent.shutdown
     else:
         sender.s.quit()
+        logger.debug("emailSender shutting down...")
         gevent.shutdown
