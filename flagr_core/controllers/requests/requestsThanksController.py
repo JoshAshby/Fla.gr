@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
 fla.gr controller for displaying a thank you page after requesting an invite
 

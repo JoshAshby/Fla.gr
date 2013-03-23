@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
 fla.gr controller for requesting an invite
 
@@ -36,17 +36,27 @@ class requestsRequests(baseHTMLObject):
         """
         """
         if self.env["cfg"].enableRequests:
-            email = self.env["members"]["email"] if self.env["members"].has_key("email") else ""
+            email = self.env["members"]["email"] \
+                    if self.env["members"].has_key("email") else ""
+
             found = um.findByEmail(email)
+
             if email and not found:
                 newRequest = rm.requestORM(email=email)
                 newRequest.save()
                 self.head = ("303 SEE OTHER",
                     [("location", "/request/thanks")])
-                self.session.pushAlert("Thanks, %s for registering. We hope to get you an invite soon!"%email, "", "success")
+                self.session.pushAlert("Thanks, %s for registering. \
+                        We hope to get you an invite soon!"%email,
+                        "", "success")
             else:
                 if found:
-                    self.session.pushAlert("There is already someone in our system with that email! If this is a mistake and you have not requested an invite or registered before, please send us an email at: flagr@joshashby.com", "Wha'oh", "error")
+                    self.session.pushAlert("There is already someone in our \
+                            system with that email! If this is a mistake and \
+                            you have not requested an invite or registered \
+                            before, please send us an email \
+                            at: flagr@joshashby.com", "Wha'oh", "error")
+
                 view = requestsRequestTmpl(searchList=[self.tmplSearchList])
                 view.emailError = True
                 return view
