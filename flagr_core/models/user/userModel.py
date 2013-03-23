@@ -66,6 +66,30 @@ def findUserByUsername(username):
         user.formatedAbout = mdu.markClean(user.about)
         return user
 
+def findUserByEmail(email):
+    """
+    Searches couchdb for documents that have the requested username
+
+    :param username: The username to search for
+    :return: The `userORM` instance if a user is found,
+        `None` if no user is found
+    """
+    users = userORM.view(db.couchServer, 'typeViews/user')
+    if not users:
+        return None
+    foundUser = []
+    for user in users:
+        if user.email == email:
+            foundUser.append(user)
+    if not foundUser:
+        return None
+    if len(foundUser)>1:
+        raise Exception("Multiple Users")
+    else:
+        user = foundUser[0]
+        user.formatedAbout = mdu.markClean(user.about)
+        return user
+
 
 class userORM(Document):
     username = TextField()
@@ -148,9 +172,11 @@ class userORM(Document):
 
     def loginThis(self, cookieID):
         """
-        Kind of like above, however this one logs in a user, for 
-        example that just registered. No password checking or usernames
-        to find, just pass the cookieID and they're set.
+        Kind of like above, however this one logs in a user.
+        No password checking or usernames to find, just pass
+        the cookieID and they're set.
+        For example: when finishing registering, the user can be logged in
+        without having to go through the log in process...
 
         :param cookieID: The sessions cookie ID for the person to login
         """

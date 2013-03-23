@@ -17,6 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.requests.requestsRequestTmpl import requestsRequestTmpl
 
 import models.request.requestModel as rm
+import models.user.userModel as um
 
 
 @route("/request")
@@ -36,14 +37,16 @@ class requestsRequests(baseHTMLObject):
         """
         if self.env["cfg"].enableRequests:
             email = self.env["members"]["email"] if self.env["members"].has_key("email") else ""
-
-            if email:
+            found = um.findByEmail(email)
+            if email and not found:
                 newRequest = rm.requestORM(email=email)
                 newRequest.save()
                 self.head = ("303 SEE OTHER",
                     [("location", "/request/thanks")])
                 self.session.pushAlert("Thanks, %s for registering. We hope to get you an invite soon!"%email, "", "success")
             else:
+                if found:
+                    self.session.pushAlert("There is already someone in our system with that email! If this is a mistake and you have not requested an invite or registered before, please send us an email at: flagr@joshashby.com", "Wha'oh", "error")
                 view = requestsRequestTmpl(searchList=[self.tmplSearchList])
                 view.emailError = True
                 return view
