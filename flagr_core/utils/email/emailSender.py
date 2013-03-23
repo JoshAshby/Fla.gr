@@ -36,6 +36,8 @@ import json
 import logging
 logger = logging.getLogger(c.logName+"email.sender")
 
+import models.setting.settingModel as sm
+
 
 class emailer(object):
     def __init__(self):
@@ -50,14 +52,14 @@ class emailer(object):
         self.setup()
 
     def setup(self):
-        if c.siteConfig.has_key("emailServerNotLocalhost"):
+        if sm.getSetting("emailServer", "notLocalhost"):
             logger.debug("Email server not localhost, attempting to login")
-            self.s = smtplib.SMTP(c.siteConfig["emailServerHost"], int(c.siteConfig["emailServerPort"]))
+            self.s = smtplib.SMTP(sm.getSetting("emailServer", "host"), int(sm.getSetting("emailServer", "port")))
             self.s.ehlo()
             self.s.starttls()
             self.s.ehlo()
             try:
-                self.s.login(c.siteConfig["emailServerLoginEmail"], c.siteConfig["emailServerLoginPassword"])
+                self.s.login(sm.getSetting"emailServer", "loginEmail"), sm.getSetting("emailServer", "loginPassword"))
             except Exception as exc:
                 logger.critical("Could not login to email server!")
                 logger.debug(exc)
@@ -88,7 +90,7 @@ class emailer(object):
         msg = self.makeMessage(subject, whoTo, tmpl, tmplData)
 
         logger.debug("Sending message...")
-        if c.siteConfig["emailServerSendEmail"]:
+        if sm.getSetting("emailServer", "sendEmail"):
             try:
                 self.s.sendmail("fla.gr", [whoTo], msg.as_string())
             except:
@@ -119,7 +121,7 @@ class emailer(object):
             msg = self.makeMessage(subject, person, tmpl, tmplData[person])
 
             logger.debug("Sending message...")
-            if c.siteConfig["emailServerSendEmail"]:
+            if sm.getSetting("emailServer", "sendEmail"):
                 try:
                     self.s.sendmail("fla.gr", [person], msg.as_string())
                 except:

@@ -13,14 +13,20 @@ joshuaashby@joshashby.com
 """
 import config.dbBase as db
 import models.user.userModel as um
+import models.setting.settingModel as sm
 
 import string
 import random
 
 
-buckets = {"enableDynamicLabels": {"value": True, "name": "New label input for flags", "description": "Enables a new, more interactive way to add and remove labels from a flag while editing, or making a new flag."},
-        "enableRequests": {"value": False, "name": "Request and invite managment", "description": "Enables pages for requesting an invite while the site is in a closed beta or alpha, and adds an admin tab for managing the requests."},
-        "enableModalFlagDeletes": {"value": True, "name": "Single page flag delete", "description": "Enabled a modal for the deleting process of a flag, instead of directing the user to another page."}}
+siteConfig = {}
+if os.path.exists(baseFolder+'/siteConfig.json'):
+    siteConfigFile = open(baseFolder+"/siteConfig.json")
+    siteConfig = json.loads(siteConfigFile.read())
+
+    buckets = siteConfig["buckets"]
+else:
+    raise Exception("No siteConfig.json found, stopping first time process...")
 
 def setup():
     if not um.findUserByUsername("Admin") and not um.findUserByUsername("Josh"):
@@ -62,11 +68,15 @@ def setup():
     else:
         print "No new buckets to add, skipping step..."
 
-    if buckets["enableRequests"]["value"]:
+    try:
+        sm.getSetting("enableRequests", "requestSecret")
+        print "Secret for requests already made, skipping..."
+
+    except:
         print "Now generating request secret key..."
 
         secret = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(25))
-        db.redisBucketServer.set("requestSecret", secret)
+        sm.setSetting("enableRequests", "requestSecret", secret)
 
     print "All done!"
 
