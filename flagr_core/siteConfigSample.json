@@ -36,6 +36,11 @@
             "value": true, 
             "name": "Single page flag delete", 
             "description": "Enabled a modal for the deleting process of a flag, instead of directing the user to another page."
+        },
+        "enableRegistration": {
+            "value": false,
+            "name": "Enable registration for everyone",
+            "description": "Enables the registration page for the site, useful only if enableRequests is turned off (value set to false)."
         }
     }
 }
