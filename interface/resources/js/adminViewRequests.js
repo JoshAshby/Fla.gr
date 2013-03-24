@@ -38,13 +38,6 @@
         return $("#editForm").submit();
       });
     });
-    $("#bulkCheckButton").click(function() {
-      if ($("#bulkCheckButton").hasClass('active')) {
-        return $(".bulkCheckbox").prop('checked', false);
-      } else {
-        return $(".bulkCheckbox").prop('checked', true);
-      }
-    });
     $("#deleteButton").click(function() {
       var box, mod, text, title, values, _i, _len, _ref;
       values = [];
@@ -62,7 +55,7 @@
         return $("#editForm").submit();
       });
     });
-    $("#grantButton").click(function() {
+    return $("#grantButton").click(function() {
       var box, mod, text, title, values, _i, _len, _ref;
       values = [];
       _ref = $(".bulkCheckbox:checked");
@@ -76,20 +69,6 @@
       mod.make();
       editForm('/admin/requests/grant', values);
       return $("#modalButton").click(function() {
-        return $("#editForm").submit();
-      });
-    });
-    return $("#newRequestButton").click(function() {
-      var mod, text, title;
-      text = "So you want to make a new request? Great! Please note that this person won't be notified until you grant the request however.<br><input id=\"emailInput\" type=\"email\" placeholder=\"email...\">";
-      title = "Creating a new request...";
-      mod = new createModal(title, text);
-      mod.make();
-      editForm('/admin/requests/new', []);
-      return $("#modalButton").click(function() {
-        var email;
-        email = $("#emailInput").val();
-        $("#editFormInput").val(email);
         return $("#editForm").submit();
       });
     });

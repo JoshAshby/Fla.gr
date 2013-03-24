@@ -37,13 +37,6 @@ $ ->
             $("#editForm").submit()
 
 
-    $("#bulkCheckButton").click ->
-        if $("#bulkCheckButton").hasClass 'active'
-            $(".bulkCheckbox").prop 'checked', false
-        else
-            $(".bulkCheckbox").prop 'checked', true
-
-
     $("#deleteButton").click ->
         values = []
         for box in $(".bulkCheckbox:checked")
@@ -73,18 +66,4 @@ $ ->
         editForm '/admin/requests/grant', values
 
         $("#modalButton").click ->
-            $("#editForm").submit()
-
-
-    $("#newRequestButton").click ->
-        text = """So you want to make a new request? Great! Please note that this person won't be notified until you grant the request however.<br><input id="emailInput" type="email" placeholder="email...">"""
-        title = "Creating a new request..."
-
-        mod = new createModal title, text
-        mod.make()
-        editForm '/admin/requests/new', []
-
-        $("#modalButton").click ->
-            email = $("#emailInput").val()
-            $("#editFormInput").val email
             $("#editForm").submit()

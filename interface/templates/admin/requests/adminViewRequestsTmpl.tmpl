@@ -29,21 +29,29 @@
                 <tr>
                     <th><button type="button" id="bulkCheckButton"class="btn btn-mini" data-toggle="button"><i class="icon-check-empty"></i></button></th>
                     <th>Email</th>
-                    <th>Date Requested</th>
+                    <th>Requested</th>
+                    <th>Granted</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
             #for $request in $requests
                 <tr>
-                    <td>  <input type="checkbox" value="$request.id" class="bulkCheckbox"></td>
+                    <td><input type="checkbox" value="$request.id" class="bulkCheckbox"></td>
         <!--            <td><a href="/admin/requests/$request.id">$request.email[:50]</a></td> -->
                     <td>$request.email</td>
-                    <td>$request.formatedDate</td>
+                    <td>$request.formatedCreated</td>
+                    <td>
+                        #if $request.granted
+                            <span class="label lable-success">$request.formatedGranted</span>
+                        #else
+                            <span class="label label-inverse">New</span>
+                        #end if
+                    </td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-primary requestGrantButton" data-id="$request.id" data-email="$request.email"><i class="icon-ok"></i> Grant</button>
-                            <button class="btn btn-inverse requestDeleteButton" data-id="$request.id" data-email="$request.email"><i class="icon-trash"></i></button>
+                            <button class="btn btn-primary btn-small requestGrantButton" data-id="$request.id" data-email="$request.email"><i class="icon-ok"></i> Grant</button>
+                            <button class="btn btn-inverse btn-small requestDeleteButton" data-id="$request.id" data-email="$request.email"><i class="icon-trash"></i></button>
                         </div>
                     </td>
                 </tr>
