@@ -1,10 +1,9 @@
 #extends views.regularSkeleton
 
 #def body
-    <h2>You got an invite!</h1>
-    <p>Hey there hot shots! You finally got an invite! Before you can go galivanting around we need you to finish registering, okay?</p>
-    <form class="form form-horizontal" method="POST" action="/request/register/$token">
-        <div class="control-group #if $getVar('emailMatchError', False) or $getVar('emailError', False)#error#end if#">
+    <h2>Register for an account</h2>
+    <form class="form form-horizontal" method="POST" action="/auth/register">
+        <div class="control-group #if $getVar('emailError', False)#error#end if#">
             <input type="email" placeholder="email..." name="email" class="span6" value="$getVar("email", "")" required>
             <span class="help-block">We need to verify your email with the one you gave us in the request. Please use the same email here as you did to request an invite.</span>
         </div>

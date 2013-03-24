@@ -105,7 +105,7 @@ def bucketSetup():
     if currentBucketKeys != bucketKeys:
         for key in bucketKeys:
             if key not in currentBucketKeys:
-                print "\t\tAdding bucket `%s` to buckets..."%key
+                print "\tAdding bucket `%s` to buckets..."%key
                 db.redisBucketServer.set("bucket:%s:value"%key, buckets[key]["value"])
                 db.redisBucketServer.set("bucket:%s:name"%key, buckets[key]["name"])
                 db.redisBucketServer.set("bucket:%s:description"%key, buckets[key]["description"])

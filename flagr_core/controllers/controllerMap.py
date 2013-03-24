@@ -16,7 +16,6 @@ from controllers.admin.users.adminNewUserController  import * #/admin/users/new
 from controllers.admin.users.adminViewUsersController  import * #/admin/users
 # -> /admin/dev/
 from controllers.admin.dev.adminDevViewBucketsController import * #/admin/dev/buckets
-#from controllers.admin.dev.adminDevEditBucketsController import * #/admin/dev/buckets/(.*)/edit
 # -> /admin/templates/
 from controllers.admin.templates.adminViewTemplatesController import * #/admin/templates
 from controllers.admin.templates.adminEditTemplatesController import * #/admin/templates/(.*)/edit
@@ -34,6 +33,7 @@ from controllers.admin.requests.adminDelRequestsController import * #/admin/requ
 #Next, /auth/ controllers
 from controllers.auth.authLoginController import * #/auth/login
 from controllers.auth.authLogoutController import * #/auth/logout
+from controllers.auth.authRegisterController import * #/auth/register
 
 #Next, /request/ controllers
 from controllers.requests.requestsRegisterController import *
