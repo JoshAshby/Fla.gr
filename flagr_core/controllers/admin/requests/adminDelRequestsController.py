@@ -30,7 +30,7 @@ class adminDelRequests(baseHTMLObject):
 
             for ID in ids:
                 req = rm.requestORM.find(ID)
-                db.couchServer.delete(req)
+                req.delete()
 
             self.head = ("303 SEE OTHER", [("location", "/admin/requests")])
             self.session.pushAlert("You deleted those requests...", ":(", "warning")

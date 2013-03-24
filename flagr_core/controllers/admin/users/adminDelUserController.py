@@ -59,7 +59,7 @@ class adminDelUser(baseHTMLObject):
             return
 
         user = userORM.load(db.couchServer, userid)
-        db.couchServer.delete(user)
+        user.delete()
 
         self.session.pushAlert("User `%s` deleted" % user.username,
                 "Bye!", "success")

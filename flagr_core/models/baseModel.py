@@ -15,6 +15,12 @@ import config.dbBase as db
 
 
 class baseCouchModel(object):
+    """
+    Extension of the couchdb-python Document class to provide a
+    bit more of an object interface with the documents, since some
+    things such as saving and deleteing the documents doesn't feel
+    very object based to me.
+    """
     def __init__(self, **kwargs):
         pass
 
@@ -23,6 +29,12 @@ class baseCouchModel(object):
         Simply a shortcut for saving the document to couch
         """
         self.store(db.couchServer)
+
+    def delete(self):
+        """
+        Deletes the current instance
+        """
+        db.couchServer.delete(self)
 
     @classmethod
     def getByID(cls, ID):

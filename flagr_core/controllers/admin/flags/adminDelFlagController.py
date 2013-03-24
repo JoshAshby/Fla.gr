@@ -41,6 +41,7 @@ class adminDelFlag(baseHTMLObject):
         flagid = self.env["members"][0]
 
         flag = flagORM.load(db.couchServer, flagid)
+        flag.delete
         db.couchServer.delete(flag)
 
         self.session.pushAlert("Flag `%s` deleted" % flag.title, "Bye!", "warning")

@@ -60,7 +60,7 @@ class flagDel(baseHTMLObject):
 
             return
 
-        db.couchServer.delete(flag)
+        flag.delete()
 
         su.updateSearch()
 

@@ -27,7 +27,7 @@ class adminDelTemplates(baseHTMLObject):
         tmplid = self.env["members"][0]
 
         tmpl = tm.templateORM.load(db.couchServer, tmplid)
-        db.couchServer.delete(tmpl)
+        tmpl.delete()
 
         self.head = ("303 SEE OTHER", [("location", "/admin/templates")])
         self.session.pushAlert("We've deleted this template `%s`!"%tmpl.name, "Bye!", "warning")

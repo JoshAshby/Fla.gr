@@ -29,7 +29,7 @@ class adminBulkDelTemplates(baseHTMLObject):
 
         for ID in tmplids:
             tmpl = tm.templateORM.load(db.couchServer, ID)
-            db.couchServer.delete(tmpl)
+            tmpl.delete()
 
         self.head = ("303 SEE OTHER", [("location", "/admin/templates")])
         self.session.pushAlert("You've deleted all of those templates. Hope they weren't being used anywhere!", "Bye!", "success")
