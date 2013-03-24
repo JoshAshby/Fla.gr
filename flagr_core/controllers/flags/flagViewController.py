@@ -44,7 +44,8 @@ class flagView(baseHTMLObject):
         view.flagAuthor = user
 
         if self.env["cfg"].enableModalFlagDeletes:
-            view.scripts = ["handlebars_1.0.min", "deleteFlagModal"]
+            view.scripts = ["handlebars_1.0.min",
+                    "deleteFlagModal.flagr"]
 
         return view
 

@@ -35,12 +35,12 @@ class adminViewTemplates(baseHTMLObject):
         templates = tm.formatTmpls(list(tm.templateORM.view(db.couchServer, 'typeViews/template')))
         view.scripts = ["handlebars_1.0.min",
                 "jquery.json-2.4.min",
-                "sidebarTabs",
-                "bulkCheck",
-                "adminModal",
-                "editForm",
-                "adminViewTemplates",
-                "dynamicInput"]
+                "sidebarTabs.flagr",
+                "bulkCheck.flagr",
+                "adminModal.flagr",
+                "editForm.flagr",
+                "adminViewTemplates.flagr",
+                "dynamicInput.flagr"]
 
         view.templates = templates
 

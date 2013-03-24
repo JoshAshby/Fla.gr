@@ -28,6 +28,7 @@ flagr_core/views/
 flagr_core/.coverage
 siteConfig.json
 .pylintrc
+*.flagr.js
 
 # Compiled source #
 ###################

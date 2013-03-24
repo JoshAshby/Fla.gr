@@ -43,7 +43,8 @@ class userFlags(baseHTMLObject):
                     flags.pop(flags.index(flag))
 
         if self.env["cfg"].enableModalFlagDeletes:
-            view.scripts = ["handlebars_1.0.min", "deleteFlagModal"]
+            view.scripts = ["handlebars_1.0.min",
+                    "deleteFlagModal.flagr"]
 
         view.flags = p.pagination(flags, 10, int(page))
         view.flagAuthor = user

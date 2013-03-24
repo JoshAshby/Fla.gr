@@ -37,11 +37,11 @@ class adminViewRequests(baseHTMLObject):
 
             view.scripts = ["handlebars_1.0.min",
                     "jquery.json-2.4.min",
-                    "sidebarTabs",
-                    "adminModal",
-                    "bulkCheck",
-                    "editForm",
-                    "adminViewRequests"]
+                    "sidebarTabs.flagr",
+                    "adminModal.flagr",
+                    "bulkCheck.flagr",
+                    "editForm.flagr",
+                    "adminViewRequests.flagr"]
 
             view.requests = requests
 

@@ -50,7 +50,9 @@ class flagEdit(baseHTMLObject):
         view.vis = flag.visibility
 
         if self.env["cfg"].enableDynamicLabels:
-            view.scripts = ["handlebars_1.0.min", "jquery.json-2.4.min", "dynamicInput"]
+            view.scripts = ["handlebars_1.0.min",
+                    "jquery.json-2.4.min",
+                    "dynamicInput.flagr"]
             view.labels = json.dumps(flag.labels)
         else:
             view.labels = ", ".join(flag.labels).strip(", ")

@@ -30,7 +30,8 @@ class adminDevViewBuckets(baseHTMLObject):
         """
         view = adminDevViewBucketsTmpl(searchList=[self.tmplSearchList])
 
-        view.scripts = ["jquery.json-2.4.min", "devBucketsButtons"]
+        view.scripts = ["jquery.json-2.4.min",
+                "devBucketsButtons.flagr"]
         view.buckets = bm.adminBucketDict()
 
         return view
