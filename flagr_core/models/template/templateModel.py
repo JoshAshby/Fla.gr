@@ -9,10 +9,10 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, ListField
+from couchdb.mapping import Document, TextField, DateTimeField
 from datetime import datetime
 
-import config.dbBase as db
+from models.baseModel import baseCouchModel
 import utils.markdownUtils as mdu
 
 
@@ -44,7 +44,7 @@ def formatTmpl(tmpl):
     return tmpl
 
 
-class templateORM(Document):
+class templateORM(Document, baseCouchModel):
     name = TextField()
     description = TextField()
     template = TextField()
@@ -53,6 +53,3 @@ class templateORM(Document):
     type = TextField()
     userID = TextField()
     formatedDate = ""
-
-    def save(self):
-        self.store(db.couchServer)

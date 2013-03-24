@@ -13,6 +13,7 @@ from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, Li
 from datetime import datetime
 
 import config.dbBase as db
+from models.baseModel import baseCouchModel
 import utils.markdownUtils as mdu
 
 
@@ -67,7 +68,7 @@ def formatFlag(flag):
     return flag
 
 
-class flagORM(Document):
+class flagORM(Document, baseCouchModel):
     userID = TextField()
     title = TextField()
     description = TextField()
@@ -79,6 +80,3 @@ class flagORM(Document):
     formatedDescription = ""
     formatedDate = ""
     author = ""
-
-    def save(self):
-        self.store(db.couchServer)
