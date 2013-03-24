@@ -26,4 +26,7 @@ class baseHTMLObject(baseHTTPObject):
 
         self.head = ("200 OK", [("Content-Type", "text/html")])
         self.env["cfg"] = bm.cfgBuckets()
-        self.tmplSearchList = {"user": self.session, "page": (self.__name__), "cfg": self.env["cfg"], "flagrCoreScripts": ["main"]}
+        self.tmplSearchList = {"user": self.session,
+                "page": (self.__name__),
+                "cfg": self.env["cfg"],
+                "flagrCoreScripts": ["main.flagr"]}
