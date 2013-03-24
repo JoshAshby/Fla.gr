@@ -26,7 +26,7 @@ class userProfile(baseHTMLObject):
         """
         userID = self.env["members"][0]
 
-        user = um.findUserByID(userID) or um.findUserByUsername(userID)
+        user = um.userORM.find(userID)
         view = userProfileTmpl(searchList=[self.tmplSearchList])
 
         view.userProfile = user

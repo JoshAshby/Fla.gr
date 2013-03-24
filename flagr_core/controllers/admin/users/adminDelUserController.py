@@ -31,7 +31,8 @@ class adminDelUser(baseHTMLObject):
         userid = self.env["members"][0]
 
         if userid == self.session.id:
-            self.session.pushAlert("You can't delete yourself!", "Can't do that!", "error")
+            self.session.pushAlert("You can't delete yourself!",
+                    "Can't do that!", "error")
 
             self.head = ("303 SEE OTHER",
                 [("location", "/admin/users")])
@@ -49,7 +50,8 @@ class adminDelUser(baseHTMLObject):
         userid = self.env["members"][0]
 
         if userid == self.session.id:
-            self.session.pushAlert("You can't delete yourself!", "Can't do that!", "error")
+            self.session.pushAlert("You can't delete yourself!",
+                    "Can't do that!", "error")
 
             self.head = ("303 SEE OTHER",
                 [("location", "/admin/users")])
@@ -59,7 +61,8 @@ class adminDelUser(baseHTMLObject):
         user = userORM.load(db.couchServer, userid)
         db.couchServer.delete(user)
 
-        self.session.pushAlert("User `%s` deleted" % user.username, "Bye!", "warning")
+        self.session.pushAlert("User `%s` deleted" % user.username,
+                "Bye!", "success")
 
         self.head = ("303 SEE OTHER",
             [("location", "/admin/users")])

@@ -33,7 +33,7 @@ class adminViewRequests(baseHTMLObject):
         if self.env["cfg"].enableRequests:
             view = adminViewRequestsTmpl(searchList=[self.tmplSearchList])
 
-            requests = rm.formatRequests(list(rm.requestORM.view(db.couchServer, 'typeViews/request')))
+            requests = rm.formatRequests(rm.requestORM.all())
 
             view.scripts = ["handlebars_1.0.min",
                     "jquery.json-2.4.min",

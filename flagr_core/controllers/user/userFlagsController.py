@@ -32,7 +32,7 @@ class userFlags(baseHTMLObject):
         page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
 
         view = userFlagsTmpl(searchList=[self.tmplSearchList])
-        user = um.findUserByID(user) or um.findUserByUsername(user)
+        user = um.userORM.find(user)
 
         flags = fm.listFlagsByUserID(user.id)
         if flags:

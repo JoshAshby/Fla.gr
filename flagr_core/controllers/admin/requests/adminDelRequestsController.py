@@ -29,7 +29,7 @@ class adminDelRequests(baseHTMLObject):
             ids = json.loads(self.env["members"]["array"]) if self.env["members"].has_key("array") else []
 
             for ID in ids:
-                req = rm.requestORM.findByID(ID)
+                req = rm.requestORM.find(ID)
                 db.couchServer.delete(req)
 
             self.head = ("303 SEE OTHER", [("location", "/admin/requests")])

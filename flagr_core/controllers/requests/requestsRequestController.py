@@ -39,10 +39,10 @@ class requestsRequests(baseHTMLObject):
             email = self.env["members"]["email"] \
                     if self.env["members"].has_key("email") else ""
 
-            found = um.findByEmail(email)
+            found = um.userORM.find(email) or rm.requestORM.find(email)
 
             if email and not found:
-                newRequest = rm.requestORM(email=email)
+                newRequest = rm.requestORM.new(email)
                 newRequest.save()
                 self.head = ("303 SEE OTHER",
                     [("location", "/request/thanks")])

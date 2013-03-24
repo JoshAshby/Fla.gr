@@ -38,11 +38,15 @@ class adminNewUser(baseHTMLObject):
 
         level = self.env["members"]["level"] or ""
         email = self.env["members"]["email"] or ""
-        emailVis = True if self.env["members"].has_key("emailVis") else False
-        disable = True if self.env["members"].has_key("disable") else False
+
+        emailVis = True \
+                if self.env["members"].has_key("emailVis") else False
+        disable = True \
+                if self.env["members"].has_key("disable") else False
 
 
-        if password == passwordTwice:
+        if password == passwordTwice \
+                and password != "":
             try:
                 newUser = userORM.new(name, password)
 
@@ -52,7 +56,8 @@ class adminNewUser(baseHTMLObject):
                 newUser.disable = disable
                 newUser.save()
 
-                self.session.pushAlert("New user with username `%s` created" % name, "Yay", "success")
+                self.session.pushAlert("New user with username `%s` \
+                        created" % name, "Yay", "success")
 
                 self.head = ("303 SEE OTHER",
                     [("location", str("/admin/users/%s/edit"%newUser.id))])
@@ -60,7 +65,8 @@ class adminNewUser(baseHTMLObject):
                 view = adminNewUserTmpl(searchList=[self.tmplSearchList])
                 view.usernameError = True
 
-                self.session.pushAlert("You're going to have to pick a new username, `%s` is taken." % name, "", "error")
+                self.session.pushAlert("You're going to have to pick a new \
+                        username, `%s` is taken." % name, "", "error")
 
                 return view
 
@@ -68,6 +74,7 @@ class adminNewUser(baseHTMLObject):
             view = adminNewUserTmpl(searchList=[self.tmplSearchList])
             view.passwordError = True
 
-            self.session.pushAlert("Those passwords don't match, please try again.", "", "error")
+            self.session.pushAlert("Those passwords don't match, please \
+                    try again.", "", "error")
 
             return view

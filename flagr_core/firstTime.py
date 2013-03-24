@@ -43,7 +43,7 @@ def initialSetup():
     print "Setting up inital user and flags..."
     if initial.has_key("users"):
         for user in initial["users"]:
-            if not um.findUserByUsername(user["username"]):
+            if not um.userORM.find(user["username"]):
                 newUser = um.userORM.new(user["username"], user["password"])
                 print "\tAdding new user `%s`"%user["username"]
                 print "\t\tpassword `%s`"%user["password"]

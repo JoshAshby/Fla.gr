@@ -28,7 +28,7 @@ class userLabels(baseHTMLObject):
         """
         user = self.env["members"][0]
         view = userLabelTmpl(searchList=[self.tmplSearchList])
-        user = um.findUserByID(user) or um.findUserByUsername(user)
+        user = um.userORM.find(user)
 
         flags = fm.listFlagsByUserID(user.id)
         if flags:

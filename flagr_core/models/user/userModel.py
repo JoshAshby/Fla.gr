@@ -11,87 +11,28 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, IntegerField
+
+from couchdb.mapping import Document, TextField, DateTimeField, \
+        BooleanField, IntegerField
+import bcrypt
+import json
 from datetime import datetime
 
 import config.dbBase as db
 import utils.alerts as ua
 import utils.sessionExceptions as use
 import utils.markdownUtils as mdu
+from models.modelExceptions.userModelExceptions import \
+       multipleUsersError, passwordError, userError
+from models.baseModel import baseCouchModel
 
-import bcrypt
-import json
 
-
-def findUserByID(userID):
+class userORM(Document, baseCouchModel):
     """
-    Searches couchdb for the requested user, by the userID and returns
-    a userORM object if a user is found
-
-    :param userID: The userID to search for
-    :return: The `userORM` instance if a user is found,
-        `None` if no user is found
+    Base ORM for users in fla.gr, this one currently uses couchdb to store
+    the data.
+    TODO: Flesh this doc out a lot more
     """
-    users = userORM.view(db.couchServer, 'typeViews/user', key=userID)
-    if not users.rows:
-        return None
-    elif len(users)>1:
-        raise Exception("Multiple Users")
-    else:
-        user = users.rows[0]
-        user.formatedAbout = mdu.markClean(user.about)
-        return user
-
-def findUserByUsername(username):
-    """
-    Searches couchdb for documents that have the requested username
-
-    :param username: The username to search for
-    :return: The `userORM` instance if a user is found,
-        `None` if no user is found
-    """
-    users = userORM.view(db.couchServer, 'typeViews/user')
-    if not users:
-        return None
-    foundUser = []
-    for user in users:
-        if user.username == username:
-            foundUser.append(user)
-    if not foundUser:
-        return None
-    if len(foundUser)>1:
-        raise Exception("Multiple Users")
-    else:
-        user = foundUser[0]
-        user.formatedAbout = mdu.markClean(user.about)
-        return user
-
-def findUserByEmail(email):
-    """
-    Searches couchdb for documents that have the requested username
-
-    :param username: The username to search for
-    :return: The `userORM` instance if a user is found,
-        `None` if no user is found
-    """
-    users = userORM.view(db.couchServer, 'typeViews/user')
-    if not users:
-        return None
-    foundUser = []
-    for user in users:
-        if user.email == email:
-            foundUser.append(user)
-    if not foundUser:
-        return None
-    if len(foundUser)>1:
-        raise Exception("Multiple Users")
-    else:
-        user = foundUser[0]
-        user.formatedAbout = mdu.markClean(user.about)
-        return user
-
-
-class userORM(Document):
     username = TextField()
     email = TextField()
     about = TextField(default="")
@@ -108,9 +49,6 @@ class userORM(Document):
     alerts = []
     formatedAbout = ""
 
-    @classmethod
-    def getByID(cls, ID):
-        return cls.load(db.couchServer, ID)
 
     @classmethod
     def new(cls, username, password):
@@ -122,27 +60,24 @@ class userORM(Document):
         :param password: The plain text password that should be used for the password.
         :return: `userORM` if the username is available,
         """
-        if not findUserByUsername(username):
+        if password == "":
+            raise passwordError("Password can not be null")
+        elif not cls.find(username):
             passwd = bcrypt.hashpw(password, bcrypt.gensalt())
             user = cls(username=username, password=passwd)
             return user
         else:
-            raise Exception("That username is taken, please choose again.")
+            raise userError("That username is taken, please choose again.", username)
 
-    def clearAlerts(self):
-        for alert in self.alerts:
-            if alert["expire"] == "next":
-                self.alerts.pop(self.alerts.index(alert))
+    def setPassword(self, password):
+        """
+        Sets the users password to `password`
 
-    def pushAlert(self, message, quip="", alertType="info", expire="next"):
-        self.alerts.append({"expire": expire, "alert": ua.alert(message, quip, alertType)})
-
-    def getAlerts(self):
-        alerts = ""
-        for alert in self.alerts:
-            alerts += alert["alert"]
-
-        return alerts
+        :param password: plain text password to hash
+        :return: `True`
+        """
+        self.password = bcrypt.hashpw(password, bcrypt.gensalt())
+        self.store(db.couchServer)
 
     @classmethod
     def login(cls, user, password, cookieID):
@@ -153,7 +88,7 @@ class userORM(Document):
         :param password: The plain text password which the user supplies, to be checked against the found password
         :return: The `userORM` instance if a user if found and the passwords match
         """
-        foundUser = findUserByID(user) or findUserByUsername(user)
+        foundUser = cls.find(user)
         if foundUser:
             if not foundUser.disable:
                 if foundUser.password == bcrypt.hashpw(password, foundUser.password):
@@ -198,21 +133,77 @@ class userORM(Document):
         db.redisSessionServer.hdel(self.sessionID, "userID")
         return True
 
+    def clearAlerts(self):
+        for alert in self.alerts:
+            if alert["expire"] == "next":
+                self.alerts.pop(self.alerts.index(alert))
+
+    def pushAlert(self, message, quip="", alertType="info", expire="next"):
+        self.alerts.append({"expire": expire, "alert": ua.alert(message, quip, alertType)})
+
+    def getAlerts(self):
+        alerts = ""
+        for alert in self.alerts:
+            alerts += alert["alert"]
+
+        return alerts
+
     def saveAlerts(self):
         db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
         return True
 
+    #Hashing out a new idea, don't know if I'll go with this...
+    #@property
+    #def _alerts(self):
+    #    return self.alerts
+
+    #@_alerts.setter
+    #def _alerts(self, value):
+    #    self.alerts.append(value)
+
+    #@_alerts.deleter
+    #def _alerts(self):
+    #    self.alerts = []
+
+    @classmethod
+    def find(cls, value):
+        """
+        Searches couchdb for documents that have the requested username
+
+        :param value: The value to search for in the ORM
+        :return: Either a `cls` instance or a list of `cls` instances
+            if a result or multiple have been found.
+            `None` if no user is found
+        """
+        return cls.findWithView('typeViews/user', value)
+
+
+    @staticmethod
+    def _search(items, value):
+        """
+        Searches the list `items` for the given value
+
+        :param items: A list of ORM objects to search
+        :param value: The value to search for, in this case
+            value can be a username or an email, or an id
+        """
+        foundUser = []
+        for user in items:
+            if user.email == value or user.username == value or user.id == value:
+                foundUser.append(user)
+        if not foundUser:
+            return None
+        if len(foundUser)>1:
+            raise multipleUsersError("Multiple Users", value)
+        else:
+            user = foundUser[0]
+            user.formatedAbout = mdu.markClean(user.about)
+            return user
+
     def save(self):
         self.store(db.couchServer)
         db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
-        return True
 
-    def setPassword(self, password):
-        """
-        Sets the users password to `password`
-
-        :param password: plain text password to hash
-        :return: `True`
-        """
-        self.password = bcrypt.hashpw(password, bcrypt.gensalt())
-        self.store(db.couchServer)
+    @classmethod
+    def all(cls):
+        return cls.getAll('typeViews/user')

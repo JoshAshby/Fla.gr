@@ -12,7 +12,7 @@ joshuaashby@joshashby.com
 from couchdb.mapping import Document, TextField, DateTimeField
 from datetime import datetime
 
-import config.dbBase as db
+from models.baseModel import baseCouchModel
 
 import utils.signerUtils as su
 
@@ -38,42 +38,64 @@ def formatRequest(request):
     :param request: The `requestORM` object of the tmpl to format
     :return:
     """
-    request.formatedDate = datetime.strftime(request.created, "%a %b %d, %Y @ %H:%I%p")
+    if request.granted:
+        request.formatedGranted = datetime.strftime(request.granted, "%b %d, %Y")
+    request.formatedCreated = datetime.strftime(request.created, "%b %d, %Y")
     return request
 
 
-class requestORM(Document):
+class requestORM(Document, baseCouchModel):
     email = TextField()
-    token = TextField()
-    created = DateTimeField(default=datetime.now)
+    created = DateTimeField()
     granted = DateTimeField()
     docType = TextField(default="request")
 
-    def save(self):
-        self.store(db.couchServer)
+    @classmethod
+    def new(cls, email):
+        return cls(email=email, created=datetime.now())
 
     def generateToken(self):
         """
         
         """
-        self.token = su.requestToken(self.email)
+        token = su.requestToken(self.email)
         self.granted = datetime.now()
         self.save()
-        return self.token
+        return token
 
     @classmethod
-    def findByEmail(cls, email):
-        request = cls.view(db.couchServer, 'typeViews/requestByEmail', key=email).rows[0]
-        return request
+    def all(cls):
+        return cls.getAll('typeViews/request')
 
     @classmethod
-    def findByID(cls, ID):
-        request = cls.load(db.couchServer, ID)
-        return request
+    def find(cls, value):
+        """
+        Searches couchdb for documents that have the requested email or
 
-    @classmethod
-    def format(cls, ID):
-        request = cls.load(db.couchServer, ID)
-        request.formatedDate = datetime.strftime(request.created, "%a %b %d, %Y @ %H:%I%p")
-        return request
+        :param value: The value to search for in the ORM
+        :return: Either a `cls` instance or a list of `cls` instances
+            if a result or multiple have been found.
+            `None` if no user is found
+        """
+        return cls.findWithView('typeViews/request', value)
+
+
+    @staticmethod
+    def _search(items, value):
+        """
+        Searches the list `items` for the given value
+
+        :param items: A list of ORM objects to search
+        :param value: The value to search for, in this case
+            value can be an email, or an id
+        """
+        foundUser = []
+        for user in items:
+            if user.email == value or user.id == value:
+                foundUser.append(user)
+        if not foundUser:
+            return None
+        else:
+            user = foundUser[0]
+            return user
 
