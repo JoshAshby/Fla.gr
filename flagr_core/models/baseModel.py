@@ -24,6 +24,13 @@ class baseCouchModel(object):
     def __init__(self, **kwargs):
         pass
 
+    @classmethod
+    def new(cls, **kwargs):
+        """
+        
+        """
+        return cls(**kwargs)
+
     def save(self):
         """
         Simply a shortcut for saving the document to couch
@@ -70,6 +77,18 @@ class baseCouchModel(object):
             return cls._search(items, value)
 
     @classmethod
+    def find(cls, value):
+        """
+        Searches couchdb for documents that have the requested username
+
+        :param value: The value to search for in the ORM
+        :return: Either a `cls` instance or a list of `cls` instances
+            if a result or multiple have been found.
+            `None` if no user is found
+        """
+        return cls.findWithView(cls._view, value)
+
+    @classmethod
     def getAll(cls, view, key=None):
         """
         Returns either all of the documents under view, or all of the documents
@@ -83,3 +102,7 @@ class baseCouchModel(object):
         if key:
             return cls.view(db.couchServer, view, key=key)
         return cls.view(db.couchServer, view)
+
+    @classmethod
+    def all(cls):
+        return cls.getAll(cls._view)
