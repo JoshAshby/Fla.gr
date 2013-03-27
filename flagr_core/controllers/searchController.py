@@ -17,10 +17,9 @@ from utils.baseHTMLObject import baseHTMLObject
 import utils.search.flag.flagSearch as fs
 
 from views.searchTmpl import searchTmpl
+from views.partials.flags.flagsListTmpl import flagsListTmpl
 
 import utils.pagination as p
-import config.dbBase as db
-from models.user.userModel import userORM
 
 
 @route("/search")
@@ -30,16 +29,23 @@ class searchController(baseHTMLObject):
         page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
         value = self.env["members"]["s"] if self.env["members"].has_key("s") else ""
 
-        flagResults = fs.flagSearch(value)
+        flags = fs.flagSearch(value)
 
         view = searchTmpl(searchList=[self.tmplSearchList])
 
-        for flag in flagResults:
-            flag.author = userORM.load(db.couchServer, flag.userID)
+        if self.env["cfg"].enableModalFlagDeletes:
+            view.scripts = ["handlebars_1.0.min",
+                    "jquery.json-2.4.min",
+                    "adminModal.flagr",
+                    "editForm.flagr",
+                    "deleteFlagModal.flagr"]
 
-        flagResults = p.pagination(flagResults, 10, int(page))
+        flags = p.pagination(flags, 10, int(page))
 
-        view.flagResults = flagResults
+        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
+        flagsTmpl.flags = flags
+
+        view.flags = str(flagsTmpl)
         view.query = value
 
         return view
