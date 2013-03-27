@@ -32,7 +32,8 @@ class flagView(baseHTMLObject):
 
         flag = fm.flagORM.getByID(flagid)
         if not flag.visibility and flag.userID != self.session.id:
-            self.session.pushAlert("This is a private flag! Sorry but we can't let you see it.", "Hold it.", "error")
+            self.session.pushAlert("This is a private flag! Sorry but we \
+                    can't let you see it.", "Hold it.", "error")
             self.head = ("303 SEE OTHER", [("location", "/flags")])
             return
 
