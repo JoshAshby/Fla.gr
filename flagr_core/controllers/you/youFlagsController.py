@@ -15,6 +15,7 @@ from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youFlagsTmpl import youFlagsTmpl
+from views.partials.flags.flagsListTmpl import flagsListTmpl
 
 import models.flag.flagModel as fm
 
@@ -28,8 +29,11 @@ class youFlags(baseHTMLObject):
     def GET(self):
         """
         """
-        page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
-        viewType = self.env["members"]["v"] if self.env["members"].has_key("v") else ""
+        page = self.env["members"]["p"] \
+                if self.env["members"].has_key("p") else 1
+
+        viewType = self.env["members"]["v"] \
+                if self.env["members"].has_key("v") else ""
 
         view = youFlagsTmpl(searchList=[self.tmplSearchList])
 
@@ -50,8 +54,16 @@ class youFlags(baseHTMLObject):
 
         if self.env["cfg"].enableModalFlagDeletes:
             view.scripts = ["handlebars_1.0.min",
+                    "jquery.json-2.4.min",
+                    "adminModal.flagr",
+                    "editForm.flagr",
                     "deleteFlagModal.flagr"]
 
-        view.flags = p.pagination(flags, 10, int(page))
+        flags = p.pagination(flags, 10, int(page))
+
+        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
+        flagsTmpl.flags = flags
+
+        view.flags = str(flagsTmpl)
 
         return view

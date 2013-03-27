@@ -1,14 +1,12 @@
-#@staticmethod
-#def flagsList($flags, $user, $pageURL, $cfg, $flagAuthor="")
-<div id="modal"></div>
-    #for $flag in $flags.getItems
-        <!-- Start of flag overview template -->
+#for $flag in $flags.items
+    <!-- Start of flag overview template -->
+    <article class="flag">
         <div class="row">
             <div class="span6">
                 <h2>
                     <a href="/flags/$flag.id" class="flagLink"><i class="icon-flag"></i> $flag.title</a>
                     <small>
-                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/user/$flagAuthor.username">$flagAuthor.username</a>#end if#</b>
+                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/user/$flag.author.username">$flag.author.username</a>#end if#</b>
                     </small>
                 </h2>
             </div>
@@ -26,7 +24,7 @@
                      <div class="btn-group pull-right">
                         <a href="/flags/$flag.id/edit" class="btn btn-info"><i class="icon-edit"></i></a>
                         #if $cfg.enableModalFlagDeletes
-                            <a href="#" class="btn btn-danger flagDeleteButton" data-title="$flag.title" data-id="$flag.id"><i class="icon-trash"></i></a>
+                            <a href="#" class="btn btn-danger deleteButton" data-title="$flag.title" data-id="$flag.id"><i class="icon-trash"></i></a>
                         #else
                             <a href="/flags/$flag.id/delete" class="btn btn-danger"><i class="icon-trash"></i></a>
                         #end if
@@ -37,7 +35,11 @@
         </div>
         <div class="row">
             <div class="span6">
-            $flag.formatedDescription[:160]
+            #if len($flags.items) == 1
+                $flag.formatedDescription
+            #else
+                $flag.formatedDescription[:160]
+            #end if
             </div>
         </div>
         <div class="row">
@@ -58,23 +60,28 @@
             </div>
         </div>
         <hr>
-        <!-- End of flag overview template -->
-    #end for
+    </article>
+    <!-- End of flag overview template -->
+#end for
+
+#if $flags.hasNext
+    <!-- Begin pagination -->
     <div class="pagination pagination-centered">
         <ul>
             #if $flags.hasPrev
-                <li><a href="$pageURL?p=${flags.currentPage-1}">&laquo;</a></li>
+                <li><a href="?p=${flags.currentPage-1}">&laquo;</a></li>
             #else
                 <li class="disabled"><span>&laquo;</span></li>
             #end if
             #for $item in $flags.listPages()
-                <li #if $item == $flags.currentPage#class="active"#end if#><a href="$pageURL?p=$item">$item</a></li>
+                <li #if $item == $flags.currentPage#class="active"#end if#><a href="?p=$item">$item</a></li>
             #end for
             #if $flags.hasNext
-                <li><a href="$pageURL?p=${flags.currentPage+1}">&raquo;</a></li>
+                <li><a href="?p=${flags.currentPage+1}">&raquo;</a></li>
             #else
                 <li class="disabled"><span>&raquo;</span></li>
             #end if
         </ul>
     </div>
-#end def
+    <!-- End Pagination -->
+#end if

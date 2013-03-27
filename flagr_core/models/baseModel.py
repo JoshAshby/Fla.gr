@@ -66,10 +66,10 @@ class baseCouchModel(object):
         """
         items = cls.getAll(view, key=value)
         if items:
-            if len(items.rows) == 1:
-                return items.rows[0]
+            if len(items) == 1:
+                return items[0]
             else:
-                return items.rows
+                return items
         else:
             items = cls.getAll(view)
             if not items:
@@ -100,8 +100,8 @@ class baseCouchModel(object):
         :return: A list of ORM instances which fall within the given `view`
         """
         if key:
-            return cls.view(db.couchServer, view, key=key)
-        return cls.view(db.couchServer, view)
+            return list(cls.view(db.couchServer, view, key=key))
+        return list(cls.view(db.couchServer, view))
 
     @classmethod
     def all(cls):
