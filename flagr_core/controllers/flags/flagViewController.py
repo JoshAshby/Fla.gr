@@ -15,11 +15,10 @@ from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagViewTmpl import flagViewTmpl
+from views.partials.flags.flagsListTmpl import flagsListTmpl
 
 import models.flag.flagModel as fm
-import models.user.userModel as um
-import config.dbBase as db
-
+import utils.pagination as p
 
 @route("/flags/(.*)")
 class flagView(baseHTMLObject):
@@ -28,7 +27,10 @@ class flagView(baseHTMLObject):
         """
         """
         flagid = self.env["members"][0]
-        flag = fm.flagORM.load(db.couchServer, flagid)
+        page = self.env["members"]["p"] \
+                if self.env["members"].has_key("p") else 1
+
+        flag = fm.flagORM.getByID(flagid)
         if not flag.visibility and flag.userID != self.session.id:
             self.session.pushAlert("This is a private flag! Sorry but we can't let you see it.", "Hold it.", "error")
             self.head = ("303 SEE OTHER", [("location", "/flags")])
@@ -40,12 +42,20 @@ class flagView(baseHTMLObject):
 
         view.flag = flag
 
-        user = um.userORM.load(db.couchServer, flag.userID)
-        view.flagAuthor = user
-
         if self.env["cfg"].enableModalFlagDeletes:
             view.scripts = ["handlebars_1.0.min",
+                    "jquery.json-2.4.min",
+                    "adminModal.flagr",
+                    "editForm.flagr",
                     "deleteFlagModal.flagr"]
+
+        flag = fm.formatFlag(flag)
+        flag = p.pagination([flag], 10, int(page))
+
+        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
+        flagsTmpl.flags = flag
+
+        view.flags = str(flagsTmpl)
 
         return view
 
