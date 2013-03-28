@@ -1,5 +1,4 @@
 #extends regularSkeleton
-#from views.partials.flags.publicFlagsListTmpl import publicFlagsListTmpl as publicFlagsList
 
 #def headLines
     <!-- Start search overview template -->
@@ -16,16 +15,16 @@
     </div>
     <!-- End search overview template -->
 #end def
-#def body
-#if $flagResults.items
-    $publicFlagsList.publicFlagsList($flagResults, $user, "/search")
-#else
-    <div class="row">
-        <div class="span6">
-            <h1>Oh no!</h1>
-            <p>We don't have any flags that match your search query!</p>
-        </div>
-    </div>
-#end if
 
+#def body
+    #if $flagResults
+        $flagResults
+    #else
+        <div class="row">
+            <div class="span6">
+                <h1>Oh no!</h1>
+                <p>We don't have any flags that match your search query!</p>
+            </div>
+        </div>
+    #end if
 #end def
