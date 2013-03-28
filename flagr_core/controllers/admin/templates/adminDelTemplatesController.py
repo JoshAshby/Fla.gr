@@ -14,7 +14,6 @@ joshuaashby@joshashby.com
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-import config.dbBase as db
 import models.template.templateModel as tm
 
 
@@ -26,7 +25,7 @@ class adminDelTemplates(baseHTMLObject):
     def POST(self):
         tmplid = self.env["members"][0]
 
-        tmpl = tm.templateORM.load(db.couchServer, tmplid)
+        tmpl = tm.templateORM.getByID(tmplid)
         tmpl.delete()
 
         self.head = ("303 SEE OTHER", [("location", "/admin/templates")])

@@ -19,7 +19,6 @@ import pystache
 
 import utils.markdownUtils as mdu
 import models.template.templateModel as tm
-import config.dbBase as db
 import config.config as c
 
 from gevent import monkey; monkey.patch_all()
@@ -86,7 +85,7 @@ class emailer(object):
         :param whoTo: The email address of the person who this email should go to
         :param subject: The subject of the email
         """
-        tmplObj = tm.templateORM.load(db.couchServer, tmplid)
+        tmplObj = tm.templateORM.getByID(tmplid)
         tmpl = tmplObj.template
 
         msg = self.makeMessage(subject, whoTo, tmpl, tmplData)
@@ -116,7 +115,7 @@ class emailer(object):
             should be a list
         :param subject: The subject of the email
         """
-        tmplObj = tm.templateORM.load(db.couchServer, tmplid)
+        tmplObj = tm.templateORM.getByID(tmplid)
         tmpl = tmplObj.template
 
         for person in whoTo:

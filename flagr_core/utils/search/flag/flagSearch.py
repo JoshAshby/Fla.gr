@@ -20,7 +20,6 @@ import logging
 logger = logging.getLogger(c.logName+".searchUtils.flagSearch")
 
 import models.flag.flagModel as fm
-import config.dbBase as db
 
 flagSearchIndex = "/.flagSearchIndex"
 
@@ -40,7 +39,7 @@ def flagSearch(queryString):
         results = searcher.search(query)
 
         for result in results:
-            flags.append(fm.flagORM.load(db.couchServer, result["id"]))
+            flags.append(fm.flagORM.getByID(result["id"]))
 
     flags = fm.formatFlags(flags, False)
 

@@ -16,7 +16,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.templates.adminInfoTemplatesTmpl import adminInfoTemplatesTmpl
 
-import config.dbBase as db
 import models.template.templateModel as tm
 import models.setting.settingModel as sm
 
@@ -32,7 +31,7 @@ class adminInfoTemplates(baseHTMLObject):
         tmplid = self.env["members"][0]
         view = adminInfoTemplatesTmpl(searchList=[self.tmplSearchList])
 
-        template = tm.formatTmpl(tm.templateORM.load(db.couchServer,tmplid))
+        template = tm.formatTmpl(tm.templateORM.getByID(tmplid))
         view.scripts = ["handlebars_1.0.min",
                 "adminModal.flagr",
                 "sidebarTabs.flagr",

@@ -16,8 +16,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youSettingsTmpl import youSettingsTmpl
 
-import config.dbBase as db
-
 import bcrypt
 
 
@@ -43,7 +41,7 @@ class youSettings(baseHTMLObject):
         self.session.about = about
         self.session.email = email
         self.session.emailVisibility = emailVis
-        self.session.store(db.couchServer)
+        self.session.save()
 
         if password and passwordTwice and passwordCurrent:
             if bcrypt.hashpw(passwordCurrent, self.session.password) == self.session.password:

@@ -14,8 +14,8 @@ joshuaashby@joshashby.com
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-import config.dbBase as db
 import models.template.templateModel as tm
+
 import json
 
 
@@ -28,7 +28,7 @@ class adminBulkDelTemplates(baseHTMLObject):
         tmplids = json.loads(self.env["members"]["array"]) if self.env["members"].has_key("array") else []
 
         for ID in tmplids:
-            tmpl = tm.templateORM.load(db.couchServer, ID)
+            tmpl = tm.templateORM.getByID(ID)
             tmpl.delete()
 
         self.head = ("303 SEE OTHER", [("location", "/admin/templates")])
