@@ -10,6 +10,9 @@ Josh Ashby
 2013
 http://joshashby.com
 joshuaashby@joshashby.com
+
+>>> import models.user.userModel as um
+>>> import bcrypt
 """
 
 from couchdb.mapping import Document, TextField, DateTimeField, \
@@ -57,9 +60,17 @@ class userORM(Document, baseCouchModel):
         Make a new user, checking for username conflicts. If no conflicts are
         found the password is encrypted with bcrypt and the resulting `userORM` returned.
 
+        >>> password = "test"
+        >>> username = "Test"
+        >>> newUser = um.userORM.new(username, password)
+        >>> newUser # doctest: +ELLIPSIS
+        <userORM ...>
+        >>> assert newUser.password == bcrypt.hashpw(password, newUser.password)
+        >>> assert newUser.username == username
+
         :param username: The username that should be used for the new user
         :param password: The plain text password that should be used for the password.
-        :return: `userORM` if the username is available,
+        :return: `userORM` if the username is available
         """
         if password == "":
             raise passwordError("Password can not be null")
