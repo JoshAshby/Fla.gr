@@ -2,14 +2,6 @@
 """
 fla.gr base model with a few classmethods and such to help
     keep a general interface across all models
-
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 import config.dbBase as db
 
@@ -50,7 +42,9 @@ class baseCouchModel(object):
         this and it'll return that document
 
         :param ID: The document id of the document you want to retrieve
+        :type ID: Str
         :return: An instance of `cls` which has the matching document id
+        :rtype: cls instance
         """
         return cls.load(db.couchServer, ID)
 
@@ -60,9 +54,11 @@ class baseCouchModel(object):
         Searches couchdb for documents that have the requested username
 
         :param value: The value to search for in the ORM
+        :type value: Str
         :return: Either a `cls` instance or a list of `cls` instances
             if a result or multiple have been found.
             `None` if no user is found
+        :rtype: cls instance
         """
         items = cls.getAll(view, key=value)
         if items:
@@ -82,9 +78,11 @@ class baseCouchModel(object):
         Searches couchdb for documents that have the requested username
 
         :param value: The value to search for in the ORM
+        :type value: Str
         :return: Either a `cls` instance or a list of `cls` instances
             if a result or multiple have been found.
             `None` if no user is found
+        :rtype: cls instance
         """
         return cls.findWithView(cls._view, value)
 
@@ -93,11 +91,15 @@ class baseCouchModel(object):
         """
         Returns either all of the documents under view, or all of the documents
         which match the key
+
         :param view: The name of the view to use, currently this is the name of the
             couchdb view, however it can be extended into other areas later on if I
             ever change the underlying database.
+        :type view: Str
         :param key: Optional view key to use
+        :type key: Str
         :return: A list of ORM instances which fall within the given `view`
+        :rtype: List 
         """
         if key:
             return list(cls.view(db.couchServer, view, key=key))
@@ -105,4 +107,12 @@ class baseCouchModel(object):
 
     @classmethod
     def all(cls):
+        """
+        Returns a list of all the documents which are with in cls._view
+        This is mainly a wrappper function, using the classes _view so you
+        don't have to remember which view your working with.
+
+        :return: List of all documents within cls._view
+        :rtype: List
+        """
         return cls.getAll(cls._view)

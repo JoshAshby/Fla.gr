@@ -1,8 +1,9 @@
 {
     "name": "fla.gr",
-    "version": "2.0.0alpha",
+    "version": "1.0.0alpha",
     "dependencies" : {
         "coffee-script": "1.5.0",
-        "recess": "1.1.6"
+        "recess": "1.1.6",
+        "coffeedoc": "0.1.9"
     }
 }

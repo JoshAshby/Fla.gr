@@ -5,6 +5,7 @@ FONTAWESOME_LESS = ./interface/resources/less/fontawesome/font-awesome.less
 CUSTOM_LESS = ./interface/resources/less/custom_styles.less
 COFFEE_DIR = ./interface/resources/cs/
 CHECK=✔
+DOCS_DIR = ./docs/
 
 flagr: bootstrap less coffee templates
 	@echo "You should link interface/resources to your servers /static/"
@@ -42,10 +43,16 @@ templates:
 	cheetah compile -R --idir interface/templates/ --odir flagr_core/views/
 	@echo "Done ${CHECK}"
 
+htmldocs:
+	@echo "Compiling docs as HTML into docs/build/html"
+	$(MAKE) -C ${DOCS_DIR} html
+	@echo "Done ${CHECK}"
+
 clean:
 	@echo "Cleaning up a few directories I made..."
 	rm -rf interface/resources/css/bootstrap
 	rm -rf interface/resources/css/fontawesome
 	rm -rf flagr_core/views
+	rm -rf docs/build
 	@echo "Done ${CHECK}"
 

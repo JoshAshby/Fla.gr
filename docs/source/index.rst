@@ -19,8 +19,18 @@ other languages too.
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 2 
 
+   config
+   firstTime
+   app
+   serviceDaemonsApp
+   seshat
+   models
+   utils
+   controllers
+   tests
+   coffee
 
 
 Indices and tables

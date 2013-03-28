@@ -1,3 +1,7 @@
+###
+Provides a basic interface for making a general modal dynamically, using Handlebars.js
+and jQuery.
+###
 modalTmplPre = """
     <div id="requestModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labeledby="requestModal" aria-hidden="true">
         <div class="modal-header">
@@ -37,8 +41,26 @@ class modalBase
 
     ###
     constructor: (@title, @text) ->
+        ###
+        :param title: The title for the modal
+        :param text: The text which will be included in the modals body
+        ###
 
     make: (data) ->
+        ###
+        Please note all `*Color` properties should not include the prefix  
+            eg: For a red button do `danger` and not `btn-danger`  
+  
+        If your @text which you passed in into the constructor has {{}} such as defined by
+        the mustache templating language, you can also pass those properties with `data`  
+  
+        :param data: An object containing the pieces
+            * btnText - The text which should be included on the action button of the modal
+            * btnColor - The bootstrap button color name to use for the action button
+            * textColor - The bootstrap text color name to use of the modal's text
+            * icon - The fontawesome icon name, without the `icon-` prefix
+            * btnLoadingText - The text to display once the action button has been clicked
+        ###
         data["text"] = @text
         data["modalTitle"] = @title
         $("#modal").html modalTmpl data
@@ -51,10 +73,8 @@ class modalBase
             $("#modalButton").click ->
                 $(this).button 'loading'
 
-        ###
-        Clear the HTML we threw into the page after the modal is gone,
-        not sure if this is needed since the page probably will redirect
-        ###
+        #In case they close it without taking action, remove the HTML from the
+        #div.
         $('#requestModal').on 'hidden', ->
             $("modal").html ""
 

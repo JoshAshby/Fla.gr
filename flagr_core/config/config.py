@@ -1,25 +1,20 @@
 #!/usr/bin/env python
 """
 Seshat config for fla.gr
-Config settings
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
-"""
-"""
-First we need to import pythons regex module.
-This is used by Seshat to build the routing
-table according to what you dictate as the URL
-regex below
+This file contains all the basic pieces that fla.gr and seshat
+use to determine where to put things, and how to act.
 """
 import re
 
 appName = "fla.gr"
+"""
+App name gets used in the logs
+"""
+
 baseFolder = '/home/josh/repos/flagr/flagr_core'
+"""
+where is all of the python part of fla.gr located?
+"""
 
 logName = appName.replace(".", "")
 logFolder = baseFolder+"/logs/"
@@ -27,41 +22,40 @@ pidFolder = baseFolder+"/pid/"
 stdout = baseFolder+'/logs/out'
 stderr = baseFolder+'/logs/error'
 
+fcgiBase = ""
 """
 We need to make
 sure that the routing is taken care of properly. I'll describe
 this setting later when I have more time.
 """
-fcgiBase = ""
 
-"""
-Next up, which address and port do we want the server to bind to
-this is the same for fastcgi or standalone gevent.
-"""
 address = "127.0.0.1"
 port = 8000
+"""
+Which address and port do we want the server to bind to
+this is the same for fastcgi or standalone gevent.
+"""
 
-"""
-Next, do you want this framework to do some extra debugging?
-"""
 debug = True
-#use a dummy session?
-dummySession = False
+"""
+Do you want this framework to do some extra debugging?
+"""
 
+dummySession = False
+"""
+Do we want to run a dummy session? This is like `debug` and helpful for testing
+"""
+
+baseURL = "http://localhost"
 """
 Finally we need to define the base url for various
 things such as static assets and what not.
 """
-baseURL = "http://localhost"
 
-securityLevels = ["normal", "admin"]
-
-
-"""
 #########################STOP EDITING#####################################
-***WARNING***
-Don't change these following settings unless you know what you're doing!!!
+#***WARNING***
+#Don't change these following settings unless you know what you're doing!!!
 ##########################################################################
-"""
+securityLevels = ["normal", "admin"]
 urls = []
 authRegex = re.compile("([^_\W]*)")

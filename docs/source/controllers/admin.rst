@@ -13,9 +13,9 @@ Subpackages
 
 .. toctree::
 
-    controllers.admin.dev
-    controllers.admin.flags
-    controllers.admin.requests
-    controllers.admin.templates
-    controllers.admin.users
+    admin/dev
+    admin/flags
+    admin/requests
+    admin/templates
+    admin/users
 

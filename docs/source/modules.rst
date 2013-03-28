@@ -13,4 +13,4 @@ flagr_core
    seshat
    tests
    utils
-   views
+   coffee

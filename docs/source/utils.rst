@@ -78,6 +78,6 @@ Subpackages
 
 .. toctree::
 
-    utils.email
-    utils.search
+    utils/email
+    utils/search
 

@@ -1,18 +1,12 @@
 #!/usr/bin/env python
 """
-fla.gr user model
-
-Given a userID or a username or a email, return the users couchdb ORM
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
+fla.gr user model. Provides an ORM style interface for working with users
+which are stored in CouchDB documents.
 
 >>> import models.user.userModel as um
 >>> import bcrypt
+>>> password = "test"
+>>> username = "Test"
 """
 
 from couchdb.mapping import Document, TextField, DateTimeField, \
@@ -33,10 +27,10 @@ from models.baseModel import baseCouchModel
 
 
 class userORM(Document, baseCouchModel):
+    #TODO: Flesh this doc out a lot more
     """
     Base ORM for users in fla.gr, this one currently uses couchdb to store
     the data.
-    TODO: Flesh this doc out a lot more
     """
     username = TextField()
     email = TextField()
@@ -60,8 +54,6 @@ class userORM(Document, baseCouchModel):
         Make a new user, checking for username conflicts. If no conflicts are
         found the password is encrypted with bcrypt and the resulting `userORM` returned.
 
-        >>> password = "test"
-        >>> username = "Test"
         >>> newUser = um.userORM.new(username, password)
         >>> newUser # doctest: +ELLIPSIS
         <userORM ...>
@@ -69,8 +61,11 @@ class userORM(Document, baseCouchModel):
         >>> assert newUser.username == username
 
         :param username: The username that should be used for the new user
+        :type username: Str
         :param password: The plain text password that should be used for the password.
+        :type password: Str
         :return: `userORM` if the username is available
+        :rtype: userORM
         """
         if password == "":
             raise passwordError("Password can not be null")
@@ -86,7 +81,11 @@ class userORM(Document, baseCouchModel):
         """
         Sets the users password to `password`
 
-        :param password: plain text password to hash
+        >>> newUser.setPassword("thisIsAnotherPassword")
+        >>> assert newUser.password == bcrypt.hashpw("thisIsAnotherPassword", newUser.password)
+
+        :param password: Plain text password to hash
+        :type password: Str
         """
         self.password = bcrypt.hashpw(password, bcrypt.gensalt())
         self.store(db.couchServer)
@@ -97,11 +96,15 @@ class userORM(Document, baseCouchModel):
         Attempt to find and then log in a user, if their passwords match
 
         :param user: The userID or username of the user to log in
+        :type user: Str
         :param password: The plain text password which the user supplies, \
                 to be checked against the found password
+        :type password: Str
         :return: The `userORM` instance if a user if found and the passwords \
                 match. Raises an exception if the password, or username are
                 wrong, or if the user has been disabled.
+        :rtype: userORM
+        :raises: passwordError, BanError, usernameError
         """
         foundUser = cls.find(user)
         if foundUser:
@@ -135,6 +138,7 @@ class userORM(Document, baseCouchModel):
         without having to go through the log in process...
 
         :param cookieID: The sessions cookie ID for the person to login
+        :type cookieID: Str
         """
         db.redisSessionServer.hset(cookieID, "userID", self.id)
         self.sessionID = cookieID
@@ -146,6 +150,8 @@ class userORM(Document, baseCouchModel):
         """
         Sets the users loggedIn to False then removes the link between their
         session and their `userORM`
+
+        :return: True
         """
         self.loggedIn = False
         self.store(db.couchServer)
@@ -167,10 +173,14 @@ class userORM(Document, baseCouchModel):
         All params are of type str
 
         :param message: The text to be placed into the main body of the alert
+        :type message: Str
         :param quip: Similar to a title, however just a quick attention getter
+        :type quip: Str
         :param alertType: Can be any of `success` `error` `info` `warning`
+        :type alertType: Str
         :param expire: Currently this isn't used, however it can be set to
             anything other than next to have the alert stay permanently
+        :type expire: Str
         """
         self.alerts.append({"expire": expire,
             "alert": ua.alert(message, quip, alertType)})
@@ -180,6 +190,7 @@ class userORM(Document, baseCouchModel):
         Returns a str on compiled alerts, for direct placement in a template
 
         :return: Str of alerts
+        :rtype: Str
         """
         alerts = ""
         for alert in self.alerts:
@@ -200,8 +211,10 @@ class userORM(Document, baseCouchModel):
         Searches the list `items` for the given value
 
         :param items: A list of ORM objects to search
+        :type items: List
         :param value: The value to search for, in this case
             value can be a username or an email, or an id
+        :type value: Str
         """
         foundUser = []
         for user in items:
@@ -221,7 +234,6 @@ class userORM(Document, baseCouchModel):
         Override of the baseCouchModel method: save
         Saves the user object, along with saving the alerts to redis
         """
-        #self.store(db.couchServer)
         super(baseCouchModel, self).save()
         db.redisSessionServer.hset(self.sessionID, "alerts",
                 json.dumps(self.alerts))

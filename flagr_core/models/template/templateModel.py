@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 """
 fla.gr template model for email and pages templates
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from couchdb.mapping import Document, TextField, DateTimeField
 from datetime import datetime
@@ -22,7 +15,9 @@ def formatTmpls(tmplsList):
     for templates.
 
     :params tmplList: A list object of `templateORMs` to format
+    :typetmplList: List
     :return: A list of formated `templateORM` objects
+    :rtype: List
     """
     tmpls = []
     for tmpl in tmplsList:
@@ -37,7 +32,8 @@ def formatTmpl(tmpl):
     markdown.
 
     :param tmpl: The `templateORM` object of the tmpl to format
-    :return:
+    :return: the tmpl with the template and date formated
+    :rtype: templateORM
     """
     tmpl.formatedTemplate = mdu.mark(tmpl.template)
     tmpl.formatedDate = datetime.strftime(tmpl.created, "%a %b %d, %Y @ %H:%I%p")
@@ -45,6 +41,7 @@ def formatTmpl(tmpl):
 
 
 class templateORM(Document, baseCouchModel):
+    _view = "viewTypes/template"
     name = TextField()
     description = TextField()
     template = TextField()

@@ -22,5 +22,5 @@ Subpackages
 
 .. toctree::
 
-    utils.search.flag
+    search/flag
 

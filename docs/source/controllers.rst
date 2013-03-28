@@ -41,12 +41,12 @@ Subpackages
 
 .. toctree::
 
-    controllers.admin
-    controllers.auth
-    controllers.flags
-    controllers.labels
-    controllers.public
-    controllers.requests
-    controllers.user
-    controllers.you
+    controllers/admin
+    controllers/auth
+    controllers/flags
+    controllers/labels
+    controllers/public
+    controllers/requests
+    controllers/user
+    controllers/you
 
