@@ -1,0 +1,13 @@
+partials Package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    views.partials.alerts
+    views.partials.flags
+    views.partials.rightExtras
+    views.partials.tabs
+

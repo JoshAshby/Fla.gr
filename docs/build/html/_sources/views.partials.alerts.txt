@@ -1,0 +1,11 @@
+alerts Package
+==============
+
+:mod:`alertsTmpl` Module
+------------------------
+
+.. automodule:: views.partials.alerts.alertsTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

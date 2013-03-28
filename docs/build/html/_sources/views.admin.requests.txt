@@ -1,0 +1,11 @@
+requests Package
+================
+
+:mod:`adminViewRequestsTmpl` Module
+-----------------------------------
+
+.. automodule:: views.admin.requests.adminViewRequestsTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

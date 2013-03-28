@@ -1,0 +1,27 @@
+flags Package
+=============
+
+:mod:`adminDelFlagTmpl` Module
+------------------------------
+
+.. automodule:: views.admin.flags.adminDelFlagTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`adminEditFlagTmpl` Module
+-------------------------------
+
+.. automodule:: views.admin.flags.adminEditFlagTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`adminViewFlagsTmpl` Module
+--------------------------------
+
+.. automodule:: views.admin.flags.adminViewFlagsTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

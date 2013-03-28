@@ -1,0 +1,11 @@
+flags Package
+=============
+
+:mod:`flagsListTmpl` Module
+---------------------------
+
+.. automodule:: views.partials.flags.flagsListTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

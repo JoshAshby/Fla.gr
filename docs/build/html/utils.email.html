@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>email Package &mdash; fla.gr 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="fla.gr 1.0a documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">fla.gr 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="email-package">
+<h1>email Package<a class="headerlink" href="#email-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-utils.email.emailSender">
+<span id="emailsender-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">emailSender</span></tt> Module<a class="headerlink" href="#module-utils.email.emailSender" title="Permalink to this headline">¶</a></h2>
+<p>Base util for sending emails from within fla.gr</p>
+<p>For more information, see: <a class="reference external" href="https://github.com/JoshAshby/">https://github.com/JoshAshby/</a></p>
+<p><a class="reference external" href="http://xkcd.com/353/">http://xkcd.com/353/</a></p>
+<p>Josh Ashby
+2013
+<a class="reference external" href="http://joshashby.com">http://joshashby.com</a>
+<a class="reference external" href="mailto:joshuaashby&#37;&#52;&#48;joshashby&#46;com">joshuaashby<span>&#64;</span>joshashby<span>&#46;</span>com</a></p>
+<dl class="class">
+<dt id="utils.email.emailSender.emailer">
+<em class="property">class </em><tt class="descclassname">utils.email.emailSender.</tt><tt class="descname">emailer</tt><a class="headerlink" href="#utils.email.emailSender.emailer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="utils.email.emailSender.emailer.compileTmpl">
+<tt class="descname">compileTmpl</tt><big>(</big><em>tmpl</em>, <em>tmplData</em><big>)</big><a class="headerlink" href="#utils.email.emailSender.emailer.compileTmpl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in the given template, and filles it out with mustache from <cite>tmplData</cite>
+Then compiles it into HTML with markdown.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tmpl</strong> &#8211; The mustache and markdown template to fill out and render</li>
+<li><strong>tmplData</strong> &#8211; The dict of values to render the template with, for mustache</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><cite>part1, part2</cite> are <cite>MIMEText</cite> objects with encodings of plain and HTML
+for use in <cite>MIMEMultipart</cite> messages.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.email.emailSender.emailer.getMessages">
+<tt class="descname">getMessages</tt><big>(</big><big>)</big><a class="headerlink" href="#utils.email.emailSender.emailer.getMessages" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="utils.email.emailSender.emailer.makeMessage">
+<tt class="descname">makeMessage</tt><big>(</big><em>subject</em>, <em>person</em>, <em>tmpl</em>, <em>tmplData</em><big>)</big><a class="headerlink" href="#utils.email.emailSender.emailer.makeMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a full email with both plain text and HTML parts</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subject</strong> &#8211; Subject for the message</li>
+<li><strong>person</strong> &#8211; The email address of the person to address the message to</li>
+<li><strong>tmpl</strong> &#8211; The mustache and markdown template to render and compile for the message</li>
+<li><strong>tmplData</strong> &#8211; The mustache template data to be used to fill out the message</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A full mutlipart email with plain text and HTML parts ready to be sent</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.email.emailSender.emailer.sendMessage">
+<tt class="descname">sendMessage</tt><big>(</big><em>tmplid</em>, <em>tmplData</em>, <em>whoTo</em>, <em>subject</em><big>)</big><a class="headerlink" href="#utils.email.emailSender.emailer.sendMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the given template id in the database, renders it into HTML
+via markdown, then runs mustache to fill in template data. Finally,
+the rendered and compiled template is put into an email package
+and sent via email to the person given by <cite>whoTo</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tmplid</strong> &#8211; The document id of the template for which to use for the email</li>
+<li><strong>tmplData</strong> &#8211; The data which should be placed into the template with mustache</li>
+<li><strong>whoTo</strong> &#8211; The email address of the person who this email should go to</li>
+<li><strong>subject</strong> &#8211; The subject of the email</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.email.emailSender.emailer.sendMessages">
+<tt class="descname">sendMessages</tt><big>(</big><em>tmplid</em>, <em>tmplData</em>, <em>whoTo</em>, <em>subject</em><big>)</big><a class="headerlink" href="#utils.email.emailSender.emailer.sendMessages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as above however sends the message to multiple people
+Finds the given template id in the database, renders it into HTML
+via markdown, then runs mustache to fill in template data. Finally,
+the rendered and compiled template is put into an email package
+and sent via email to the person given by <cite>whoTo</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tmplid</strong> &#8211; The document id of the template for which to use for the email</li>
+<li><strong>tmplData</strong> &#8211; The data which should be placed into the template with mustache
+Should be in a dict whos keys are the emails in <cite>whoTo</cite> and the values are the
+data</li>
+<li><strong>whoTo</strong> &#8211; The email address of the person who this email should go to
+should be a list</li>
+<li><strong>subject</strong> &#8211; The subject of the email</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.email.emailSender.emailer.setup">
+<tt class="descname">setup</tt><big>(</big><big>)</big><a class="headerlink" href="#utils.email.emailSender.emailer.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.email.emailSender.start">
+<tt class="descclassname">utils.email.emailSender.</tt><tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#utils.email.emailSender.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-utils.email.emailUtils">
+<span id="emailutils-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">emailUtils</span></tt> Module<a class="headerlink" href="#module-utils.email.emailUtils" title="Permalink to this headline">¶</a></h2>
+<p>fla.gr aid for talking with the email daemon</p>
+<p>For more information, see: <a class="reference external" href="https://github.com/JoshAshby/">https://github.com/JoshAshby/</a></p>
+<p><a class="reference external" href="http://xkcd.com/353/">http://xkcd.com/353/</a></p>
+<p>Josh Ashby
+2013
+<a class="reference external" href="http://joshashby.com">http://joshashby.com</a>
+<a class="reference external" href="mailto:joshuaashby&#37;&#52;&#48;joshashby&#46;com">joshuaashby<span>&#64;</span>joshashby<span>&#46;</span>com</a></p>
+<dl class="function">
+<dt id="utils.email.emailUtils.sendMessage">
+<tt class="descclassname">utils.email.emailUtils.</tt><tt class="descname">sendMessage</tt><big>(</big><em>tmplID</em>, <em>tmplData</em>, <em>whoTo</em>, <em>subject</em><big>)</big><a class="headerlink" href="#utils.email.emailUtils.sendMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the given template id in the database, renders it into HTML
+via markdown, then runs mustache to fill in template data. Finally,
+the rendered and compiled template is put into an email package
+and sent via email to the person given by <cite>whoTo</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tmplID</strong> &#8211; The document id of the template for which to use for the email</li>
+<li><strong>tmplData</strong> &#8211; The data which should be placed into the template with mustache</li>
+<li><strong>whoTo</strong> &#8211; The email address of the person who this email should go to</li>
+<li><strong>subject</strong> &#8211; The subject of the email</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">email Package</a><ul>
+<li><a class="reference internal" href="#module-utils.email.emailSender"><tt class="docutils literal"><span class="pre">emailSender</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-utils.email.emailUtils"><tt class="docutils literal"><span class="pre">emailUtils</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/utils.email.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">fla.gr 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, JoshAshby.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

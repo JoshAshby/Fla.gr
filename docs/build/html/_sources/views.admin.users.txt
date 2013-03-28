@@ -1,0 +1,35 @@
+users Package
+=============
+
+:mod:`adminDelUserTmpl` Module
+------------------------------
+
+.. automodule:: views.admin.users.adminDelUserTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`adminEditUserTmpl` Module
+-------------------------------
+
+.. automodule:: views.admin.users.adminEditUserTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`adminNewUserTmpl` Module
+------------------------------
+
+.. automodule:: views.admin.users.adminNewUserTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`adminViewUsersTmpl` Module
+--------------------------------
+
+.. automodule:: views.admin.users.adminViewUsersTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

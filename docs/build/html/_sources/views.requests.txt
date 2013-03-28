@@ -1,0 +1,27 @@
+requests Package
+================
+
+:mod:`requestsRegisterTmpl` Module
+----------------------------------
+
+.. automodule:: views.requests.requestsRegisterTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`requestsRequestTmpl` Module
+---------------------------------
+
+.. automodule:: views.requests.requestsRequestTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`requestsThanksTmpl` Module
+--------------------------------
+
+.. automodule:: views.requests.requestsThanksTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

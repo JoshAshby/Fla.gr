@@ -1,0 +1,27 @@
+user Package
+============
+
+:mod:`userFlagsTmpl` Module
+---------------------------
+
+.. automodule:: views.user.userFlagsTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`userLabelTmpl` Module
+---------------------------
+
+.. automodule:: views.user.userLabelTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`userProfileTmpl` Module
+-----------------------------
+
+.. automodule:: views.user.userProfileTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

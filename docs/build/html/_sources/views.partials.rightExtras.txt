@@ -1,0 +1,11 @@
+rightExtras Package
+===================
+
+:mod:`flagsRightExtraTmpl` Module
+---------------------------------
+
+.. automodule:: views.partials.rightExtras.flagsRightExtraTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

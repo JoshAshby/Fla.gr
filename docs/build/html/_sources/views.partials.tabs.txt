@@ -1,0 +1,27 @@
+tabs Package
+============
+
+:mod:`adminTabsTmpl` Module
+---------------------------
+
+.. automodule:: views.partials.tabs.adminTabsTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`dashboardTabsTmpl` Module
+-------------------------------
+
+.. automodule:: views.partials.tabs.dashboardTabsTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`userTabsTmpl` Module
+--------------------------
+
+.. automodule:: views.partials.tabs.userTabsTmpl
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

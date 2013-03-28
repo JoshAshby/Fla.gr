@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>controllers Package &mdash; fla.gr 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="fla.gr 1.0a documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">fla.gr 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="controllers-package">
+<h1>controllers Package<a class="headerlink" href="#controllers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-controllers.controllerMap">
+<span id="controllermap-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">controllerMap</span></tt> Module<a class="headerlink" href="#module-controllers.controllerMap" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-controllers.errorController">
+<span id="errorcontroller-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">errorController</span></tt> Module<a class="headerlink" href="#module-controllers.errorController" title="Permalink to this headline">¶</a></h2>
+<p>main fla.gr error pages</p>
+<p>For more information, see: <a class="reference external" href="https://github.com/JoshAshby/">https://github.com/JoshAshby/</a></p>
+<p><a class="reference external" href="http://xkcd.com/353/">http://xkcd.com/353/</a></p>
+<p>Josh Ashby
+2013
+<a class="reference external" href="http://joshashby.com">http://joshashby.com</a>
+<a class="reference external" href="mailto:joshuaashby&#37;&#52;&#48;joshashby&#46;com">joshuaashby<span>&#64;</span>joshashby<span>&#46;</span>com</a></p>
+<dl class="class">
+<dt id="controllers.errorController.error404">
+<em class="property">class </em><tt class="descclassname">controllers.errorController.</tt><tt class="descname">error404</tt><big>(</big><em>env</em>, <em>members</em>, <em>sessionID</em><big>)</big><a class="headerlink" href="#controllers.errorController.error404" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="utils.html#utils.baseHTMLObject.baseHTMLObject" title="utils.baseHTMLObject.baseHTMLObject"><tt class="xref py py-class docutils literal"><span class="pre">utils.baseHTMLObject.baseHTMLObject</span></tt></a></p>
+<p>Returns base 404 error page.</p>
+<dl class="method">
+<dt id="controllers.errorController.error404.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="headerlink" href="#controllers.errorController.error404.GET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-controllers.indexController">
+<span id="indexcontroller-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">indexController</span></tt> Module<a class="headerlink" href="#module-controllers.indexController" title="Permalink to this headline">¶</a></h2>
+<p>main fla.gr index</p>
+<p>For more information, see: <a class="reference external" href="https://github.com/JoshAshby/">https://github.com/JoshAshby/</a></p>
+<p><a class="reference external" href="http://xkcd.com/353/">http://xkcd.com/353/</a></p>
+<p>Josh Ashby
+2013
+<a class="reference external" href="http://joshashby.com">http://joshashby.com</a>
+<a class="reference external" href="mailto:joshuaashby&#37;&#52;&#48;joshashby&#46;com">joshuaashby<span>&#64;</span>joshashby<span>&#46;</span>com</a></p>
+<dl class="class">
+<dt id="controllers.indexController.index">
+<em class="property">class </em><tt class="descclassname">controllers.indexController.</tt><tt class="descname">index</tt><big>(</big><em>env</em>, <em>members</em>, <em>sessionID</em><big>)</big><a class="headerlink" href="#controllers.indexController.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="utils.html#utils.baseHTMLObject.baseHTMLObject" title="utils.baseHTMLObject.baseHTMLObject"><tt class="xref py py-class docutils literal"><span class="pre">utils.baseHTMLObject.baseHTMLObject</span></tt></a></p>
+<p>Returns base index page.</p>
+<dl class="method">
+<dt id="controllers.indexController.index.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="headerlink" href="#controllers.indexController.index.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nothing much, just get the cheetah template for index and return it
+so Seshat can get cheetah to render it and then return it to the browser</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-controllers.maintenanceController">
+<span id="maintenancecontroller-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">maintenanceController</span></tt> Module<a class="headerlink" href="#module-controllers.maintenanceController" title="Permalink to this headline">¶</a></h2>
+<p>fla.gr maintenance controller
+Catches all URLS</p>
+<p><a class="reference external" href="http://xkcd.com/353/">http://xkcd.com/353/</a></p>
+<p>Josh Ashby
+2013
+<a class="reference external" href="http://joshashby.com">http://joshashby.com</a>
+<a class="reference external" href="mailto:joshuaashby&#37;&#52;&#48;joshashby&#46;com">joshuaashby<span>&#64;</span>joshashby<span>&#46;</span>com</a></p>
+<dl class="class">
+<dt id="controllers.maintenanceController.maintenance">
+<em class="property">class </em><tt class="descclassname">controllers.maintenanceController.</tt><tt class="descname">maintenance</tt><big>(</big><em>env</em>, <em>members</em>, <em>sessionID</em><big>)</big><a class="headerlink" href="#controllers.maintenanceController.maintenance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="utils.html#utils.baseHTMLObject.baseHTMLObject" title="utils.baseHTMLObject.baseHTMLObject"><tt class="xref py py-class docutils literal"><span class="pre">utils.baseHTMLObject.baseHTMLObject</span></tt></a></p>
+<p>Returns base maintenance page</p>
+<dl class="method">
+<dt id="controllers.maintenanceController.maintenance.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="headerlink" href="#controllers.maintenanceController.maintenance.GET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-controllers.searchController">
+<span id="searchcontroller-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">searchController</span></tt> Module<a class="headerlink" href="#module-controllers.searchController" title="Permalink to this headline">¶</a></h2>
+<p>Controller for searching through items in fla.gr</p>
+<p>For more information, see: <a class="reference external" href="https://github.com/JoshAshby/">https://github.com/JoshAshby/</a></p>
+<p><a class="reference external" href="http://xkcd.com/353/">http://xkcd.com/353/</a></p>
+<p>Josh Ashby
+2013
+<a class="reference external" href="http://joshashby.com">http://joshashby.com</a>
+<a class="reference external" href="mailto:joshuaashby&#37;&#52;&#48;joshashby&#46;com">joshuaashby<span>&#64;</span>joshashby<span>&#46;</span>com</a></p>
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="controllers.admin.html">admin Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controllers.admin.html#module-controllers.admin.adminController"><tt class="docutils literal"><span class="pre">adminController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.admin.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="controllers.admin.dev.html">dev Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.dev.html#module-controllers.admin.dev.adminDevViewBucketsController"><tt class="docutils literal"><span class="pre">adminDevViewBucketsController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="controllers.admin.flags.html">flags Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.flags.html#module-controllers.admin.flags.adminDelFlagController"><tt class="docutils literal"><span class="pre">adminDelFlagController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.flags.html#module-controllers.admin.flags.adminEditFlagController"><tt class="docutils literal"><span class="pre">adminEditFlagController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.flags.html#module-controllers.admin.flags.adminViewFlagsController"><tt class="docutils literal"><span class="pre">adminViewFlagsController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="controllers.admin.requests.html">requests Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.requests.html#module-controllers.admin.requests.adminDelRequestsController"><tt class="docutils literal"><span class="pre">adminDelRequestsController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.requests.html#module-controllers.admin.requests.adminGrantRequestsController"><tt class="docutils literal"><span class="pre">adminGrantRequestsController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.requests.html#module-controllers.admin.requests.adminRequestsSettingsController"><tt class="docutils literal"><span class="pre">adminRequestsSettingsController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.requests.html#module-controllers.admin.requests.adminViewRequestsController"><tt class="docutils literal"><span class="pre">adminViewRequestsController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="controllers.admin.templates.html">templates Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.templates.html#module-controllers.admin.templates.adminBulkDelTemplatesController"><tt class="docutils literal"><span class="pre">adminBulkDelTemplatesController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.templates.html#module-controllers.admin.templates.adminDelTemplatesController"><tt class="docutils literal"><span class="pre">adminDelTemplatesController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.templates.html#module-controllers.admin.templates.adminEditTemplatesController"><tt class="docutils literal"><span class="pre">adminEditTemplatesController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.templates.html#module-controllers.admin.templates.adminInfoTemplatesController"><tt class="docutils literal"><span class="pre">adminInfoTemplatesController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.templates.html#module-controllers.admin.templates.adminNewTemplatesController"><tt class="docutils literal"><span class="pre">adminNewTemplatesController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.templates.html#module-controllers.admin.templates.adminTemplatesSettingsController"><tt class="docutils literal"><span class="pre">adminTemplatesSettingsController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.templates.html#module-controllers.admin.templates.adminViewTemplatesController"><tt class="docutils literal"><span class="pre">adminViewTemplatesController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="controllers.admin.users.html">users Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.users.html#module-controllers.admin.users.adminDelUserController"><tt class="docutils literal"><span class="pre">adminDelUserController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.users.html#module-controllers.admin.users.adminEditUserController"><tt class="docutils literal"><span class="pre">adminEditUserController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.users.html#module-controllers.admin.users.adminNewUserController"><tt class="docutils literal"><span class="pre">adminNewUserController</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controllers.admin.users.html#module-controllers.admin.users.adminViewUsersController"><tt class="docutils literal"><span class="pre">adminViewUsersController</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.auth.html">auth Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controllers.auth.html#module-controllers.auth.authLoginController"><tt class="docutils literal"><span class="pre">authLoginController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.auth.html#module-controllers.auth.authLogoutController"><tt class="docutils literal"><span class="pre">authLogoutController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.auth.html#module-controllers.auth.authRegisterController"><tt class="docutils literal"><span class="pre">authRegisterController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.flags.html">flags Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controllers.flags.html#module-controllers.flags.flagDelController"><tt class="docutils literal"><span class="pre">flagDelController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.flags.html#module-controllers.flags.flagEditController"><tt class="docutils literal"><span class="pre">flagEditController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.flags.html#module-controllers.flags.flagNewController"><tt class="docutils literal"><span class="pre">flagNewController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.flags.html#module-controllers.flags.flagViewController"><tt class="docutils literal"><span class="pre">flagViewController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.labels.html">labels Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controllers.labels.html#module-controllers.labels.labelsViewController"><tt class="docutils literal"><span class="pre">labelsViewController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.public.html">public Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controllers.public.html#module-controllers.public.publicFlagsController"><tt class="docutils literal"><span class="pre">publicFlagsController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.public.html#module-controllers.public.publicLabelsController"><tt class="docutils literal"><span class="pre">publicLabelsController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.requests.html">requests Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controllers.requests.html#module-controllers.requests.requestsRegisterController"><tt class="docutils literal"><span class="pre">requestsRegisterController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.requests.html#module-controllers.requests.requestsRequestController"><tt class="docutils literal"><span class="pre">requestsRequestController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.requests.html#module-controllers.requests.requestsThanksController"><tt class="docutils literal"><span class="pre">requestsThanksController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.user.html">user Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controllers.user.html#module-controllers.user.userFlagsController"><tt class="docutils literal"><span class="pre">userFlagsController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.user.html#module-controllers.user.userLabelsController"><tt class="docutils literal"><span class="pre">userLabelsController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.user.html#module-controllers.user.userProfileController"><tt class="docutils literal"><span class="pre">userProfileController</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.you.html">you Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="controllers.you.html#module-controllers.you.youDashboardController"><tt class="docutils literal"><span class="pre">youDashboardController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.you.html#module-controllers.you.youFlagsController"><tt class="docutils literal"><span class="pre">youFlagsController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.you.html#module-controllers.you.youLabelsController"><tt class="docutils literal"><span class="pre">youLabelsController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.you.html#module-controllers.you.youProfileController"><tt class="docutils literal"><span class="pre">youProfileController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.you.html#module-controllers.you.youSearchController"><tt class="docutils literal"><span class="pre">youSearchController</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controllers.you.html#module-controllers.you.youSettingsController"><tt class="docutils literal"><span class="pre">youSettingsController</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">controllers Package</a><ul>
+<li><a class="reference internal" href="#module-controllers.controllerMap"><tt class="docutils literal"><span class="pre">controllerMap</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-controllers.errorController"><tt class="docutils literal"><span class="pre">errorController</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-controllers.indexController"><tt class="docutils literal"><span class="pre">indexController</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-controllers.maintenanceController"><tt class="docutils literal"><span class="pre">maintenanceController</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-controllers.searchController"><tt class="docutils literal"><span class="pre">searchController</span></tt> Module</a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/controllers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">fla.gr 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, JoshAshby.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
