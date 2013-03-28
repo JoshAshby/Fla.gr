@@ -4,14 +4,8 @@ Seshat
 Web App/API framework built on top of gevent
 baseObject to build pages off of
 
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2012
-http://joshashby.com
-joshuaashby@joshashby.com
+This is an extension of baseHTTPObject designed for fla.gr to be able to easily
+return HTML pages
 """
 from seshat.baseObject import baseHTTPObject
 

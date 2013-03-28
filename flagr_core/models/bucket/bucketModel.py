@@ -3,15 +3,8 @@
 fla.gr bucket model
 
 Basically what we have is a key value store in redis
-of all the session ID's (store and retrieved via the cookie
-from Seshat)
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
+of all the buckets, and we just pull in all that info as
+a dict in python, for processing.
 """
 import models.user.userModel as userModel
 import config.dbBase as db

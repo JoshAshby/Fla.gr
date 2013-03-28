@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 """
 Various helpers for querying the flag search index
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 import config.config as c
 

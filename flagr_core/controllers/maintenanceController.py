@@ -1,14 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
 fla.gr maintenance controller
 Catches all URLS
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from seshat.route import route
 

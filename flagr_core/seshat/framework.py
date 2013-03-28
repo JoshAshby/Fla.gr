@@ -3,15 +3,6 @@
 Seshat
 Web App/API framework built on top of gevent
 Main framework app
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2012
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from gevent import monkey; monkey.patch_all()
 

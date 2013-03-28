@@ -65,13 +65,6 @@ utils Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`simpleDaemon` Module
---------------------------
-
-.. automodule:: utils.simpleDaemon
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 Subpackages
 -----------

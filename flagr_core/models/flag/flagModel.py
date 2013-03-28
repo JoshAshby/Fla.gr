@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 """
 fla.gr flag model
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, ListField
 from datetime import datetime

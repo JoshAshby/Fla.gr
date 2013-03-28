@@ -4,15 +4,6 @@ Test case for making sure that seshat is routing properly
 and is capable of handling GET,POST,PUT and DELETE methods.
 This indicates a very big problem, if one of these tests fails
 because that indicates that the core of Seshat is broken
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from webtest import TestApp
 from webtest.app import AppError

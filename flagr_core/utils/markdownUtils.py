@@ -2,15 +2,6 @@
 """
 utils for handling unsafe markdown
 renders and cleans
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 import bleach as bl
 import markdown as md

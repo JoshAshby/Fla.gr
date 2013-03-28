@@ -1,15 +1,8 @@
 #!/usr/bin/env python
 """
-fla.gr request model for managing site wide settings
-    This is more just so each module in the admin panel
-    can have a standard way of setting and retrieving settings
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
+fla.gr request model for managing site wide settings.
+This is more just so each module in the admin panel
+can have a standard way of setting and retrieving settings
 """
 import config.dbBase as db
 

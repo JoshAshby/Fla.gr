@@ -3,15 +3,6 @@
 Test case for making sure that seshat is still working and responding
 with a 404 for not found pages. If this fails then all hell is probably
 about to, or has, broken loose.
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from webtest import TestApp
 from webtest.app import AppError

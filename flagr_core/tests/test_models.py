@@ -2,15 +2,6 @@
 """
 Test case for making sure that the various models are
 working correctly.
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 import nose.tools as nst
 

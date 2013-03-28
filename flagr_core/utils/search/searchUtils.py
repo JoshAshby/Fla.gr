@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 """
 fla.gr aid for talking with the search daemon
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 import config.config as c
 import config.zmqBase as zmqc

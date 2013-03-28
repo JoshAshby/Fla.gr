@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 """
 fla.gr user model exceptions
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 
 class userModelError(Exception):

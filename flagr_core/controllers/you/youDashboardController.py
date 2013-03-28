@@ -1,14 +1,7 @@
 #!/usr/bin/env python
 """
 fla.gr main you dashboard controller
-Does nothing right now
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
+Does nothing right now besides presenting a quick flag box, and to act as a landing page
 """
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject

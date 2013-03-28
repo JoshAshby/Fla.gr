@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 """
 fla.gr controller for making new users
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject

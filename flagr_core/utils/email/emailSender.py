@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 """
 Base util for sending emails from within fla.gr
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 import smtplib
 from email.mime.text import MIMEText

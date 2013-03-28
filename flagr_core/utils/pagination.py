@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 """
 utils for making a pagination unit
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 
 class pagination(object):

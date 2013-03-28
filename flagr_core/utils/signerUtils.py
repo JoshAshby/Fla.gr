@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 """
 fla.gr request model for invite requests
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from itsdangerous import URLSafeTimedSerializer, BadSignature
 import models.setting.settingModel as sm

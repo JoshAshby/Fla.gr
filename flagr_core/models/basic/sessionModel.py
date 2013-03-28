@@ -5,13 +5,6 @@ fla.gr session model
 Basically what we have is a key value store in redis
 of all the session ID's (store and retrieved via the cookie
 from Seshat)
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 import models.user.userModel as userModel
 import config.config as c

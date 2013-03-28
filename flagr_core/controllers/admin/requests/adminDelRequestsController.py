@@ -1,20 +1,10 @@
 #!/usr/bin/env python
 """
 fla.gr controller for deleting a request
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-import config.dbBase as db
 import models.request.requestModel as rm
 import json
 

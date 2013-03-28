@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 """
 fla.gr controller for viewing a given users public labels
-
-For more information, see: https://github.com/JoshAshby/
-
-http://xkcd.com/353/
-
-Josh Ashby
-2013
-http://joshashby.com
-joshuaashby@joshashby.com
 """
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
@@ -19,6 +10,7 @@ from views.user.userLabelTmpl import userLabelTmpl
 import models.flag.flagModel as fm
 import models.user.userModel as um
 import utils.labelUtils as lu
+
 
 @route("/user/(.*)/labels")
 class userLabels(baseHTMLObject):
