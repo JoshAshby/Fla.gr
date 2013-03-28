@@ -7,7 +7,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.public.publicLabelsTmpl import publicLabelsTmpl
 
-import config.dbBase as db
 import models.flag.flagModel as fm
 import utils.labelUtils as lu
 
@@ -21,7 +20,7 @@ class publicLabels(baseHTMLObject):
         """
         view = publicLabelsTmpl(searchList=[self.tmplSearchList])
 
-        flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
+        flags = fm.flagORM.all()
 
         labels = lu.listLabels(flags, False)
 

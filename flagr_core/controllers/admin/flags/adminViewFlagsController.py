@@ -7,7 +7,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminViewFlagsTmpl import adminViewFlagsTmpl
 
-import config.dbBase as db
 from models.user.userModel import userORM
 import models.flag.flagModel as fm
 
@@ -22,11 +21,11 @@ class adminViewFlags(baseHTMLObject):
         """
         view = adminViewFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
+        flags = fm.flagORM.all()
         flags = fm.formatFlags(flags, True)
 
         for flag in flags:
-            flag.author = userORM.load(db.couchServer, flag.userID)
+            flag.author = userORM.getByID(flag.userID)
 
         view.flags = flags
 

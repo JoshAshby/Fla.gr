@@ -7,10 +7,10 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.templates.adminEditTemplatesTmpl import adminEditTemplatesTmpl
 
-import config.dbBase as db
 import models.template.templateModel as tm
-from datetime import datetime
 import models.setting.settingModel as sm
+
+from datetime import datetime
 
 
 @route("/admin/templates/(.*)/edit")
@@ -24,7 +24,7 @@ class adminEditTemplates(baseHTMLObject):
         tmplid = self.env["members"][0]
         view = adminEditTemplatesTmpl(searchList=[self.tmplSearchList])
 
-        template = tm.templateORM.load(db.couchServer,tmplid)
+        template = tm.templateORM.getByID(tmplid)
 
         try:
             currentTypes = sm.getSetting("templates", "types")
@@ -45,7 +45,7 @@ class adminEditTemplates(baseHTMLObject):
         tmplid = self.env["members"][0]
 
 
-        tmpl = tm.templateORM.load(db.couchServer,tmplid)
+        tmpl = tm.templateORM.getByID(tmplid)
         tmpl.description = description
         tmpl.template = template
         tmpl.type = tmplType

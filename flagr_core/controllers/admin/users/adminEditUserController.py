@@ -7,7 +7,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.users.adminEditUserTmpl import adminEditUserTmpl
 
-import config.dbBase as db
 from models.user.userModel import userORM
 
 
@@ -21,7 +20,7 @@ class adminEditUser(baseHTMLObject):
         """
         userid = self.env["members"][0]
 
-        user = userORM.load(db.couchServer, userid)
+        user = userORM.getByID(userid)
         view = adminEditUserTmpl(searchList=[self.tmplSearchList])
 
         view.editUser = user
@@ -38,7 +37,7 @@ class adminEditUser(baseHTMLObject):
         emailVis = True if self.env["members"].has_key("emailVis") else False
         disable = True if self.env["members"].has_key("disable") else False
 
-        user = userORM.load(db.couchServer, userid)
+        user = userORM.getByID(userid)
         user.about = about
         #Not allowed to edit your own level,
         #or disable to avoid down leveling or locking out on accident
@@ -47,7 +46,7 @@ class adminEditUser(baseHTMLObject):
             user.disable = disable
         user.email = email
         user.emailVisibility = emailVis
-        user.store(db.couchServer)
+        user.save()
 
         if password and passwordTwice:
             if password == passwordTwice:

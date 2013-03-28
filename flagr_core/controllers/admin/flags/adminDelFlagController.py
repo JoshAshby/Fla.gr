@@ -7,7 +7,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminDelFlagTmpl import adminDelFlagTmpl
 
-import config.dbBase as db
 from models.flag.flagModel import flagORM
 
 
@@ -21,7 +20,7 @@ class adminDelFlag(baseHTMLObject):
         """
         flagid = self.env["members"][0]
 
-        flag = flagORM.load(db.couchServer, flagid)
+        flag = flagORM.getByID(flagid)
         view = adminDelFlagTmpl(searchList=[self.tmplSearchList])
 
         view.flag = flag
@@ -31,9 +30,8 @@ class adminDelFlag(baseHTMLObject):
     def POST(self):
         flagid = self.env["members"][0]
 
-        flag = flagORM.load(db.couchServer, flagid)
-        flag.delete
-        db.couchServer.delete(flag)
+        flag = flagORM.getByID(flagid)
+        flag.delete()
 
         self.session.pushAlert("Flag `%s` deleted" % flag.title, "Bye!", "warning")
 

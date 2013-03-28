@@ -18,7 +18,6 @@ from whoosh.fields import *
 import os
 
 import models.flag.flagModel as fm
-import config.dbBase as db
 
 import config.config as c
 
@@ -49,7 +48,7 @@ def buildIndexes():
 
     writer = ix.writer()
 
-    flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
+    flags = fm.flagORM.all()
     flags = fm.formatFlags(flags, True)
 
     for flag in flags:

@@ -7,7 +7,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.users.adminViewUsersTmpl import adminViewUsersTmpl
 
-import config.dbBase as db
 from models.user.userModel import userORM
 
 
@@ -21,7 +20,7 @@ class adminViewUsers(baseHTMLObject):
         """
         view = adminViewUsersTmpl(searchList=[self.tmplSearchList])
 
-        users = userORM.view(db.couchServer, 'typeViews/user')
+        users = userORM.all()
         #Don't let you see people higher than you,
         #just out of safety for them...
         for user in users.rows:
