@@ -13,6 +13,9 @@ import models.bucket.bucketModel as bm
 
 class baseHTMLObject(baseHTTPObject):
     def finishInit(self):
+        """
+        Sets up some fla.gr specific HTML page items within each page object
+        """
         try:
             self.__name__ = self.__name__
         except:

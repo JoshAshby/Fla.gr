@@ -18,6 +18,14 @@ storage = FileStorage(c.baseFolder+flagSearchIndex)
 
 
 def flagSearch(queryString):
+    """
+    Searchs through the index for the given `queryString`
+
+    :param queryString: The given query to search the index with
+    :type queryString: Str
+    :return: List of all found flags which have matches for QueryString
+    :rtype: List
+    """
     flags = []
     ix = storage.open_index()
 

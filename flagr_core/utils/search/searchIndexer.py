@@ -43,6 +43,9 @@ storage = FileStorage(c.baseFolder+flagSearchIndex)
 
 
 def buildIndexes():
+    """
+    Creates a new index of all documents
+    """
     logger.debug("Making new index of flags...")
     ix = storage.create_index(flagSchema)
 
@@ -67,6 +70,9 @@ def buildIndexes():
 
 
 def updateFlags():
+    """
+    Updates the flag search index which was created with `buildIndexes`
+    """
     logger.debug("Rebuilding index of flags...")
     ix = storage.open_index()
 
@@ -101,6 +107,10 @@ def updateFlags():
 
 
 def updateIndex():
+    """
+    Watches zmq for a flagIndexUpdate signal then updates the index once the
+    number of signals reaches 5
+    """
     count = 0
     while True:
         reply = zmqSock.recv()
@@ -120,6 +130,9 @@ def updateIndex():
 
 
 def start():
+    """
+    Starts the zmq monitor and handles the shutdown of the daemon
+    """
     logger.debug("Starting up...")
     ser = gevent.spawn(updateIndex)
     try:

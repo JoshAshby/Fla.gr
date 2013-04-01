@@ -33,6 +33,9 @@ else:
     raise Exception("No siteConfig.json found, stopping first time process...")
 
 def setup():
+    """
+    Wrapper function for calling the needed setup tasks.
+    """
     print "Setting up fla.gr from siteConfig.json..."
     initialSetup()
     bucketSetup()
@@ -40,6 +43,10 @@ def setup():
     print "Done"
 
 def initialSetup():
+    """
+    Sets up the initial user and flags in the system, as defined by the
+    users and flags keys in the siteConfig.json
+    """
     print "Setting up inital user and flags..."
     if initial.has_key("users"):
         for user in initial["users"]:
@@ -61,6 +68,9 @@ def initialSetup():
         pass
 
 def settingSetup():
+    """
+    Handles setting up the system settings from the siteConfig.json
+    """
     print "Setting up settings..."
     for key in settings:
         settingsBits = settings[key]
@@ -81,6 +91,9 @@ def settingSetup():
                 print "\tSet key `%s:%s` to `%s`"%(key, bit, setting)
 
 def bucketSetup():
+    """
+    Sets up the buckets in redis with the name, description, and initial value.
+    """
     print "Now setting up redis buckets..."
 
     keys = db.redisBucketServer.keys("bucket:*")
