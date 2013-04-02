@@ -27,7 +27,6 @@ from models.baseModel import baseCouchModel
 
 
 class userORM(Document, baseCouchModel):
-    #TODO: Flesh this doc out a lot more
     """
     Base ORM for users in fla.gr, this one currently uses couchdb to store
     the data.
