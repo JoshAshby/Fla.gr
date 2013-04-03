@@ -19,30 +19,6 @@ import models.bucket.bucketModel as bm
 import models.basic.sessionModel as session
 
 
-class dummyRedisServer(object):
-    """
-    Dummy redis server object which tries to emulate the redis wrapper
-    as best as possible, allowing for the seperation of tests, for both couch
-    and redis.
-    """
-    def __init__(self, *args, **kwargs):
-        self._items = []
-        pass
-
-    def hset(self, key, value):
-        self._items[key] = value
-
-    def hget(self, key):
-        return self._items[key]
-
-
-def setUp_redisDummy():
-    """
-    Sets up the models to use a dummy redis server
-    """
-    db.redisSessionServer = dummyRedisServer()
-    db.redisBucketServer = dummyRedisServer()
-
 def test_userModel(self):
     """
     Unittest for userModels. Creates a new user then saves and makes sure user
@@ -55,9 +31,9 @@ def test_userModel(self):
   
 User profile about.
     """
+    testCookieID = "0000"
 
     newUser = um.userORM.new(username, password)
-
     assert newUser.username == username
     assert newUser.password == bcrypt.hashpw(password, newUser.password)
 
@@ -72,10 +48,33 @@ User profile about.
     newUser_find.save()
 
     newUser = um.userORM.getByID(newUser_find.id)
-
     assert newUser == newUser_find
 
     newUser.setPassword("test")
     assert newUser.password == bcrypt.hashpw("test", newUser.password)
+
+    newUser.loginThis(testCookieID)
+    assert newUser.loggedIn
+    assert newUser.sessionID == testCookieID
+
+    newUser.logout()
+    assert newUser.loggedIn == False
+
+    assert newUser.getAlerts() == ""
+    newUser.pushAlert("test", "test", "error", "next")
+
+    assert newUser.getAlerts()
+
+    newUser.clearAlerts()
+    assert newUser.getAlerts() == ""
+
+    newUser.pushAlert("test", "test", "error", "later")
+    assert newUser.getAlerts()
+
+    newUser.clearAlerts()
+    assert newUser.getAlerts()
+
+    newUser.alerts = []
+    newUser.saveAlerts()
 
     newUser.delete()
