@@ -40,11 +40,11 @@ def formatTmpl(tmpl):
     :return:
     """
     tmpl.formatedTemplate = mdu.mark(tmpl.template)
-    tmpl.formatedDate = datetime.strftime(tmpl.created, "%a %b %d, %Y @ %H:%I%p")
+#    tmpl.formatedDate = datetime.strftime(tmpl.created, "%a %b %d, %Y @ %H:%I%p")
     return tmpl
 
 
-class templateORM(Document, baseCouchModel):
+class templateORM(baseCouchModel):
     name = TextField()
     description = TextField()
     template = TextField()

@@ -41,9 +41,9 @@ def session(cookieID):
         #We also try to get the alerts however this might not work because
         #there might now be any json to pull in (eg: empty hash value in redis)
         try:
-            user.alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
+            user._alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
         except:
-            user.alerts = []
+            pass
 
         return user
 
@@ -78,22 +78,15 @@ class dummySession(object):
         self.history = ""
         self.redirect = ""
         self.sessionID = cookieID
-        self.alerts = []
         self.id = 0
         self.level = 0
-        self.alerts = []
+        self._alerts = []
 
-    def clearAlerts(self):
-        """
-        Clears the alerts for the current session. Only if the alert is set
-        to expire next however, will it be cleared, allowing for persistent
-        alerts.
-        """
-        for alert in self.alerts:
-            if alert["expire"] == "next":
-                self.alerts.pop(self.alerts.index(alert))
+    def store(self, dbDummy):
+        db.redisSessionServer.hset(self.sessionID, "alerts",
+                json.dumps(self._alerts))
 
-    def pushAlert(self, message, quip="", alertType="info", expire="next"):
+    def pushAlert(self, *args, **kwargs):
         """
         Creates an alert message to be displayed or relayed to the user,
         This is a higher level one for use in HTML templates.
@@ -105,40 +98,45 @@ class dummySession(object):
         :param expire: Currently this isn't used, however it can be set to
             anything other than next to have the alert stay permanently
         """
-        self.alerts.append({"expire": expire,
-            "alert": ua.alert(message, quip, alertType)})
+        self.alerts = self.HTMLAlert(*args, **kwargs);
 
-    def getAlerts(self):
+    def saveAlerts(self):
+        db.redisSessionServer.hset(self.sessionID, "alerts",
+                json.dumps(self._alerts))
+
+    @property
+    def alerts(self):
         """
         Returns a str on compiled alerts, for direct placement in a template
 
         :return: Str of alerts
         """
-        alerts = ""
-        for alert in self.alerts:
-            alerts += alert["alert"]
 
-        return alerts
+        _alerts = ""
+        for alert in self._alerts:
+            _alerts += alert["alert"]
 
-    def store(self, dbDummy):
+        return _alerts
+
+    @alerts.setter
+    def alerts(self, value):
+        self._alerts.append(value)
+
+    @alerts.deleter
+    def alerts(self):
         """
-        Dummy interface to make this behave like a couchdb-python document,
-        so common interfaces can be "used"
-
-        Not sure if this is used anywhere so I may end up removing it in a
-        refactor sometime soon.
-        """
-        db.redisSessionServer.hset(self.sessionID,
-                "alerts", json.dumps(self.alerts))
-
-    def saveAlerts(self):
-        """
-        Saves the current users alerts and places them into redis
+        Clears the alerts for the current session. Only if the alert is set
+        to expire next however, will it be cleared, allowing for persistent
+        alerts.
         """
 
-        db.redisSessionServer.hset(self.sessionID,
-                "alerts", json.dumps(self.alerts))
-        return True
+        for alert in self._alerts:
+            if alert["expire"] == "next":
+                self._alerts.pop(self._alerts.index(alert))
+
+    @staticmethod
+    def HTMLAlert(message, quip="", alertType="info", expire="next"):
+        return {"expire": expire, "alert": ua.alert(message, quip, alertType)}
 
     def save(self):
         """
@@ -146,7 +144,7 @@ class dummySession(object):
         the next page load from the session.
         """
         db.redisSessionServer.hset(self.sessionID, "alerts",
-                json.dumps(self.alerts))
+                json.dumps(self._alerts))
 
     def logout(self):
         """

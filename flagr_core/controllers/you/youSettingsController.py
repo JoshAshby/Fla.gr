@@ -52,18 +52,18 @@ class youSettings(baseHTMLObject):
                     view = youSettingsTmpl(searchList=[self.tmplSearchList])
                     view.passwordMatchError = True
 
-                    self.session.pushAlert("Those passwords don't match, please try again.", "", "error")
+                    self.session.alerts = self.session.HTMLAlert("Those passwords don't match, please try again.", "", "error")
 
                     return view
             else:
                 view = youSettingsTmpl(searchList=[self.tmplSearchList])
                 view.passwordError = True
 
-                self.session.pushAlert("We're sorry but your current password appeard to be entered wrong. Please try again.", "", "error")
+                self.session.alerts = self.session.HTMLAlert("We're sorry but your current password appeard to be entered wrong. Please try again.", "", "error")
 
                 return view
 
-        self.session.pushAlert("Settings updated", "Yay", "success")
+        self.session.alerts = self.session.HTMLAlert("Settings updated", "Yay", "success")
 
         self.head = ("303 SEE OTHER",
             [("location", "/your/dashboard")])
