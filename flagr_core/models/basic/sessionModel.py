@@ -83,7 +83,8 @@ class dummySession(object):
         self._alerts = []
 
     def store(self, dbDummy):
-        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self._alerts))
+        db.redisSessionServer.hset(self.sessionID, "alerts",
+                json.dumps(self._alerts))
 
     def pushAlert(self, *args, **kwargs):
         """
@@ -100,7 +101,8 @@ class dummySession(object):
         self.alerts = self.HTMLAlert(*args, **kwargs);
 
     def saveAlerts(self):
-        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self._alerts))
+        db.redisSessionServer.hset(self.sessionID, "alerts",
+                json.dumps(self._alerts))
 
     @property
     def alerts(self):

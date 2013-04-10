@@ -205,7 +205,9 @@ class userORM(Document, baseCouchModel):
         """
         foundUser = []
         for user in items:
-            if user.email == value or user.username == value or user.id == value:
+            if user.email == value \
+                    or user.username == value \
+                    or user.id == value:
                 foundUser.append(user)
         if not foundUser:
             return None
@@ -221,6 +223,6 @@ class userORM(Document, baseCouchModel):
         Override of the baseCouchModel method: save
         Saves the user object, along with saving the alerts to redis
         """
-        super(baseCouchModel, self).save()
+        self.store(db.couchServer)
         db.redisSessionServer.hset(self.sessionID, "alerts",
                 json.dumps(self._alerts))
