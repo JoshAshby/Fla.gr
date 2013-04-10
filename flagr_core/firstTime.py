@@ -44,7 +44,7 @@ def initialSetup():
     if initial.has_key("users"):
         for user in initial["users"]:
             if not um.userORM.find(user["username"]):
-                newUser = um.userORM.new(user["username"], user["password"])
+                newUser = um.userORM(user["username"], user["password"])
                 print "\tAdding new user `%s`"%user["username"]
                 print "\t\tpassword `%s`"%user["password"]
                 if user.has_key("level"):

@@ -42,7 +42,7 @@ class requestsRequests(baseHTMLObject):
             found = um.userORM.find(email) or rm.requestORM.find(email)
 
             if email and not found:
-                newRequest = rm.requestORM.new(email)
+                newRequest = rm.requestORM(email)
                 newRequest.save()
                 self.head = ("303 SEE OTHER",
                     [("location", "/request/thanks")])

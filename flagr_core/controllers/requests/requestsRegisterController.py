@@ -68,7 +68,7 @@ class requestsRegister(baseHTMLObject):
                 #We can go ahead and make a new user and while we're at it
                 #lets log them in also. When this happends we delete the request
                 #also so its not just sitting around in our system
-                newUser = um.userORM.new(username, passwordOnce)
+                newUser = um.userORM(username, passwordOnce)
                 newUser.loginThis(self.env["cookie"])
                 newUser.save()
                 req = rm.requestORM.find(email)
