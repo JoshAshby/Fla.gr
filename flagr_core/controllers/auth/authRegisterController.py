@@ -52,7 +52,7 @@ class authRegister(baseHTMLObject):
                 We can go ahead and make a new user and while we're at it
                 lets log them in also.
                 """
-                newUser = um.userORM.new(username, passwordOnce)
+                newUser = um.userORM(username, passwordOnce)
                 newUser.loginThis(self.env["cookie"])
                 newUser.save()
                 self.session.pushAlert("You can now log in with the \

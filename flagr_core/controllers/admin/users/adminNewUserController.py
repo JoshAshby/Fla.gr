@@ -39,7 +39,7 @@ class adminNewUser(baseHTMLObject):
         if password == passwordTwice \
                 and password != "":
             try:
-                newUser = userORM.new(name, password)
+                newUser = userORM(name, password)
 
                 newUser.level = level
                 newUser.email = email
