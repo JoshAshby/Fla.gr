@@ -132,14 +132,8 @@ class userORM(Document, baseCouchModel):
         db.redisSessionServer.hdel(self.sessionID, "userID")
         return True
 
-    def clearAlerts(self):
-        del self.alerts
-
     def pushAlert(self, *args, **kwargs):
         self.alerts = self.HTMLAlert(*args, **kwargs);
-
-    def getAlerts(self):
-        return self.alerts
 
     def saveAlerts(self):
         db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self._alerts))

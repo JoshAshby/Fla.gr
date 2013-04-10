@@ -55,35 +55,45 @@ class dummySession(object):
         self.history = ""
         self.redirect = ""
         self.sessionID = cookieID
-        self.alerts = []
         self.id = 0
         self.level = 0
-        self.alerts = []
+        self._alerts = []
 
-    def clearAlerts(self):
-        for alert in self.alerts:
-            if alert["expire"] == "next":
-                self.alerts.pop(self.alerts.index(alert))
-
-    def pushAlert(self, message, quip="", alertType="info", expire="next"):
-        self.alerts.append({"expire": expire, "alert": ua.alert(message, quip, alertType)})
-
-    def getAlerts(self):
-        alerts = ""
-        for alert in self.alerts:
-            alerts += alert["alert"]
-
-        return alerts
 
     def store(self, dbDummy):
-        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self._alerts))
+
+    def pushAlert(self, *args, **kwargs):
+        self.alerts = self.HTMLAlert(*args, **kwargs);
 
     def saveAlerts(self):
-        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self._alerts))
         return True
 
+    @property
+    def alerts(self):
+        _alerts = ""
+        for alert in self._alerts:
+            _alerts += alert["alert"]
+
+        return _alerts
+
+    @alerts.setter
+    def alerts(self, value):
+        self._alerts.append(value)
+
+    @alerts.deleter
+    def alerts(self):
+        for alert in self._alerts:
+            if alert["expire"] == "next":
+                self._alerts.pop(self._alerts.index(alert))
+
+    @staticmethod
+    def HTMLAlert(message, quip="", alertType="info", expire="next"):
+        return {"expire": expire, "alert": ua.alert(message, quip, alertType)}
+
     def save(self):
-        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self._alerts))
 
     def logout(self):
         return False
