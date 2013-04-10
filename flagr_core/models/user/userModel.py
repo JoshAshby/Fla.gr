@@ -46,9 +46,8 @@ class userORM(Document, baseCouchModel):
     joined = DateTimeField(default=datetime.now)
     sessionID = TextField()
     docType = TextField(default="user")
-    alerts = []
+    _alerts = []
     formatedAbout = ""
-
 
     @classmethod
     def new(cls, username, password):
@@ -96,7 +95,7 @@ class userORM(Document, baseCouchModel):
                     user = cls.load(db.couchServer, foundUser.id)
                     user.sessionID = cookieID
                     user.loggedIn = True
-                    user.alerts = db.redisSessionServer.hget(cookieID, "alerts")
+                    user._alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
                     user.save()
                     return user
                 else:
@@ -118,7 +117,7 @@ class userORM(Document, baseCouchModel):
         db.redisSessionServer.hset(cookieID, "userID", self.id)
         self.sessionID = cookieID
         self.loggedIn = True
-        self.alerts = db.redisSessionServer.hget(cookieID, "alerts")
+        self._alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
         self.save()
 
     def logout(self):
@@ -134,36 +133,39 @@ class userORM(Document, baseCouchModel):
         return True
 
     def clearAlerts(self):
-        for alert in self.alerts:
-            if alert["expire"] == "next":
-                self.alerts.pop(self.alerts.index(alert))
+        del self.alerts
 
-    def pushAlert(self, message, quip="", alertType="info", expire="next"):
-        self.alerts.append({"expire": expire, "alert": ua.alert(message, quip, alertType)})
+    def pushAlert(self, *args, **kwargs):
+        self.alerts = self.HTMLAlert(*args, **kwargs);
 
     def getAlerts(self):
-        alerts = ""
-        for alert in self.alerts:
-            alerts += alert["alert"]
-
-        return alerts
+        return self.alerts
 
     def saveAlerts(self):
-        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self._alerts))
         return True
 
-    #Hashing out a new idea, don't know if I'll go with this...
-    #@property
-    #def _alerts(self):
-    #    return self.alerts
+    @property
+    def alerts(self):
+        _alerts = ""
+        for alert in self._alerts:
+            _alerts += alert["alert"]
 
-    #@_alerts.setter
-    #def _alerts(self, value):
-    #    self.alerts.append(value)
+        return _alerts
 
-    #@_alerts.deleter
-    #def _alerts(self):
-    #    self.alerts = []
+    @alerts.setter
+    def alerts(self, value):
+        self._alerts.append(value)
+
+    @alerts.deleter
+    def alerts(self):
+        for alert in self._alerts:
+            if alert["expire"] == "next":
+                self._alerts.pop(self._alerts.index(alert))
+
+    @staticmethod
+    def HTMLAlert(message, quip="", alertType="info", expire="next"):
+        return {"expire": expire, "alert": ua.alert(message, quip, alertType)}
 
     @classmethod
     def find(cls, value):
@@ -202,7 +204,7 @@ class userORM(Document, baseCouchModel):
 
     def save(self):
         self.store(db.couchServer)
-        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self.alerts))
+        db.redisSessionServer.hset(self.sessionID, "alerts", json.dumps(self._alerts))
 
     @classmethod
     def all(cls):

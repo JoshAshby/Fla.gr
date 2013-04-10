@@ -36,9 +36,9 @@ def session(cookieID):
             user = dummySession(cookieID)
 
         try:
-            user.alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
+            user._alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
         except:
-            user.alerts = []
+            pass
 
         return user
 
