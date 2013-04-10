@@ -15,9 +15,8 @@ from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.public.publicFlagsTmpl import publicFlagsTmpl
+from views.partials.flags.flagsListTmpl import flagsListTmpl
 
-import config.dbBase as db
-from models.user.userModel import userORM
 import models.flag.flagModel as fm
 
 import utils.pagination as p
@@ -30,19 +29,26 @@ class publicFlags(baseHTMLObject):
     def GET(self):
         """
         """
-        page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
+        page = self.env["members"]["p"] \
+                if self.env["members"].has_key("p") else 1
+
         view = publicFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
+        flags = fm.flagORM.all()
         flags = fm.formatFlags(flags, False)
-
-        for flag in flags:
-            flag.author = userORM.load(db.couchServer, flag.userID)
 
         if self.env["cfg"].enableModalFlagDeletes:
             view.scripts = ["handlebars_1.0.min",
+                    "jquery.json-2.4.min",
+                    "adminModal.flagr",
+                    "editForm.flagr",
                     "deleteFlagModal.flagr"]
 
-        view.flags = p.pagination(flags, 10, int(page))
+        flags = p.pagination(flags, 10, int(page))
+
+        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
+        flagsTmpl.flags = flags
+
+        view.flags = str(flagsTmpl)
 
         return view

@@ -15,6 +15,22 @@ import config.dbBase as db
 
 
 class baseCouchModel(object):
+    """
+    Extension of the couchdb-python Document class to provide a
+    bit more of an object interface with the documents, since some
+    things such as saving and deleteing the documents doesn't feel
+    very object based to me.
+    """
+    def __init__(self, **kwargs):
+        pass
+
+    @classmethod
+    def new(cls, **kwargs):
+        """
+        
+        """
+        return cls(**kwargs)
+
     def save(self):
         """
         Simply a shortcut for saving the document to couch
@@ -50,15 +66,27 @@ class baseCouchModel(object):
         """
         items = cls.getAll(view, key=value)
         if items:
-            if len(items.rows) == 1:
-                return items.rows[0]
+            if len(items) == 1:
+                return items[0]
             else:
-                return items.rows
+                return items
         else:
             items = cls.getAll(view)
             if not items:
                 return None
             return cls._search(items, value)
+
+    @classmethod
+    def find(cls, value):
+        """
+        Searches couchdb for documents that have the requested username
+
+        :param value: The value to search for in the ORM
+        :return: Either a `cls` instance or a list of `cls` instances
+            if a result or multiple have been found.
+            `None` if no user is found
+        """
+        return cls.findWithView(cls._view, value)
 
     @classmethod
     def getAll(cls, view, key=None):
@@ -72,5 +100,9 @@ class baseCouchModel(object):
         :return: A list of ORM instances which fall within the given `view`
         """
         if key:
-            return cls.view(db.couchServer, view, key=key)
-        return cls.view(db.couchServer, view)
+            return list(cls.view(db.couchServer, view, key=key))
+        return list(cls.view(db.couchServer, view))
+
+    @classmethod
+    def all(cls):
+        return cls.getAll(cls._view)

@@ -14,8 +14,8 @@ joshuaashby@joshashby.com
 from seshat.route import route
 from utils.baseHTMLObject import baseHTMLObject
 
-import config.dbBase as db
 import models.request.requestModel as rm
+
 import json
 
 

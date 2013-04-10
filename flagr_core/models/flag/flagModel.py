@@ -14,6 +14,7 @@ from datetime import datetime
 
 import config.dbBase as db
 from models.baseModel import baseCouchModel
+import models.user.userModel as um
 import utils.markdownUtils as mdu
 
 
@@ -65,10 +66,12 @@ def formatFlag(flag):
     """
     flag.formatedDescription = mdu.markClean(flag.description)
     flag.formatedDate = datetime.strftime(flag.created, "%a %b %d, %Y @ %H:%I%p")
+    flag.author = um.userORM.find(flag.userID)
     return flag
 
 
 class flagORM(Document, baseCouchModel):
+    _view = "typeViews/flag"
     userID = TextField()
     title = TextField()
     description = TextField()

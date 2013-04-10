@@ -16,8 +16,8 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminEditFlagTmpl import adminEditFlagTmpl
 
-import config.dbBase as db
 from models.flag.flagModel import flagORM
+
 import json
 
 
@@ -31,7 +31,7 @@ class adminEditFlag(baseHTMLObject):
         """
         flagid = self.env["members"][0]
 
-        flag = flagORM.load(db.couchServer, flagid)
+        flag = flagORM.getByID(flagid)
         view = adminEditFlagTmpl(searchList=[self.tmplSearchList])
 
         view.id = flagid
@@ -77,7 +77,7 @@ class adminEditFlag(baseHTMLObject):
         except:
             labels = list(set(labels.strip(" ").split(",")))
 
-        flag = flagORM.load(db.couchServer, flagid)
+        flag = flagORM.getByID(flagid)
         flag.title = title
         flag.description = description
         flag.labels = labels

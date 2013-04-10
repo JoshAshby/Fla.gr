@@ -9,8 +9,6 @@ $ ->
         text = "You're about to delete a persons one chance at getting into the fla.gr system! Just kidding, go a head and delete them, but don't expect anymore lemons after this!"
         title = "Delete request by `#{ email }`?"
 
-        console.log title
-
         mod = new deleteModal title, text
         mod.make()
         editForm '/admin/requests/delete', [id]

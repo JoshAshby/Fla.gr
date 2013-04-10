@@ -2,13 +2,14 @@
 #from views.partials.tabs.userTabsTmpl import userTabsTmpl as userTabs
 
 #def topExtra
-$userTabs.tabs($page, $flagAuthor)
+    $userTabs.tabs($page, $flagAuthor)
 #end def
+
 #def body
-#if $labels
-    #for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for#
-#else
-    <h2>Oh no!</h2>
-    <p>We couldn't find any labels for $flagAuthor.username!<p>
-#end if
+    #if $labels
+        #for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for#
+    #else
+        <h2>Oh no!</h2>
+        <p>We couldn't find any labels for $flagAuthor.username!<p>
+    #end if
 #end def

@@ -16,7 +16,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagDelTmpl import flagDelTmpl
 
-import config.dbBase as db
 import models.flag.flagModel as fm
 
 import utils.search.searchUtils as su
@@ -31,7 +30,7 @@ class flagDel(baseHTMLObject):
         """
         flagid = self.env["members"][0]
 
-        flag = fm.flagORM.load(db.couchServer, flagid)
+        flag = fm.flagORM.getByID(flagid)
 
         if flag.userID != self.session.id:
             self.session.pushAlert("You can't delete a flag you don't own!", "Can't do that!", "error")
@@ -50,7 +49,7 @@ class flagDel(baseHTMLObject):
     def POST(self):
         flagid = self.env["members"][0]
 
-        flag = fm.flagORM.load(db.couchServer, flagid)
+        flag = fm.flagORM.getByID(flagid)
 
         if flag.userID != self.session.id:
             self.session.pushAlert("You can't delete a flag you don't own!", "Can't do that!", "error")

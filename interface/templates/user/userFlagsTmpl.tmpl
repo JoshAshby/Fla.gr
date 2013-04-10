@@ -1,19 +1,19 @@
 #extends views.regularSkeleton
-#from views.partials.flags.flagsListTmpl import flagsListTmpl as flagsList
 #from views.partials.tabs.userTabsTmpl import userTabsTmpl as userTabs
 
 #def topExtra
-$userTabs.tabs($page, $flagAuthor)
+    $userTabs.tabs($page, $author)
 #end def
+
 #def body
-#if $flags.items
-    $flagsList.flagsList($flags, $user, "/user/%s/flags"%$user.username, $cfg, $flagAuthor)
-#else
-    <div class="row">
-        <div class="span6">
-            <h1>Oh no!</h1>
-            <p>$flagAuthor.username doesn't seem to have any public flags right now. Check back later and maybe they'll have something!</p>
+    #if $flags
+        $flags
+    #else
+        <div class="row">
+            <div class="span6">
+                <h1>Oh no!</h1>
+                <p>$author.username doesn't seem to have any public flags right now. Check back later and maybe they'll have something!</p>
+            </div>
         </div>
-    </div>
-#end if
+    #end if
 #end def

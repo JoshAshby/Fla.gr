@@ -16,7 +16,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.users.adminDelUserTmpl import adminDelUserTmpl
 
-import config.dbBase as db
 from models.user.userModel import userORM
 
 
@@ -39,7 +38,7 @@ class adminDelUser(baseHTMLObject):
 
             return
 
-        user = userORM.load(db.couchServer, userid)
+        user = userORM.getByID(userid)
         view = adminDelUserTmpl(searchList=[self.tmplSearchList])
 
         view.editUser = user
@@ -58,7 +57,7 @@ class adminDelUser(baseHTMLObject):
 
             return
 
-        user = userORM.load(db.couchServer, userid)
+        user = userORM.getByID(userid)
         user.delete()
 
         self.session.pushAlert("User `%s` deleted" % user.username,

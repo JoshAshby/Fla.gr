@@ -17,10 +17,10 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.flags.flagEditTmpl import flagEditTmpl
 
 import models.flag.flagModel as fm
-from datetime import datetime
-import config.dbBase as db
-import json
 import utils.markdownUtils as mdu
+
+from datetime import datetime
+import json
 
 import utils.search.searchUtils as su
 
@@ -33,7 +33,7 @@ class flagEdit(baseHTMLObject):
         """
         """
         flagid = self.env["members"][0]
-        flag = fm.flagORM.load(db.couchServer, flagid)
+        flag = fm.flagORM.getByID(flagid)
 
         if flag.userID != self.session.id:
             self.head = ("303 SEE OTHER", [("Location", "/flags/%s"%flagid)])
@@ -67,7 +67,7 @@ class flagEdit(baseHTMLObject):
         url = self.env["members"]["url"] or ""
         visibility = True if self.env["members"].has_key("vis") and self.env["members"]["vis"] == "on" else False
 
-        flag = fm.flagORM.load(db.couchServer, flagid)
+        flag = fm.flagORM.getByID(flagid)
 
         if flag.userID != self.session.id:
             self.head = ("303 SEE OTHER", [("Location", "/flags/%s"%flagid)])

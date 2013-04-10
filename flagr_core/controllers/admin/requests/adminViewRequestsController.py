@@ -16,7 +16,6 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.requests.adminViewRequestsTmpl import adminViewRequestsTmpl
 
-import config.dbBase as db
 import models.request.requestModel as rm
 import models.template.templateModel as tm
 import models.setting.settingModel as sm
@@ -50,7 +49,7 @@ class adminViewRequests(baseHTMLObject):
             except:
                 currentTmpl = ""
 
-            tmpls = list(tm.templateORM.view(db.couchServer, 'typeViews/template'))
+            tmpls = tm.templateORM.all()
             for tmpl in tmpls:
                 if tmpl.type != "email":
                     tmpls.pop(tmpls.index(tmpl))

@@ -46,39 +46,23 @@ def formatRequest(request):
 
 class requestORM(Document, baseCouchModel):
     email = TextField()
-    created = DateTimeField()
+    created = DateTimeField(datetime.now())
     granted = DateTimeField()
     docType = TextField(default="request")
-
-    @classmethod
-    def new(cls, email):
-        return cls(email=email, created=datetime.now())
+    _view = 'typeViews/request'
 
     def generateToken(self):
         """
-        
+        Generates an invite token to be sent to and used for registering,
+        along with saves the time the request was granted.
+
+        :return: The invite token which is a URL save, serialized version of
+            their email signed with a secret and a salt.
         """
         token = su.requestToken(self.email)
         self.granted = datetime.now()
         self.save()
         return token
-
-    @classmethod
-    def all(cls):
-        return cls.getAll('typeViews/request')
-
-    @classmethod
-    def find(cls, value):
-        """
-        Searches couchdb for documents that have the requested email or
-
-        :param value: The value to search for in the ORM
-        :return: Either a `cls` instance or a list of `cls` instances
-            if a result or multiple have been found.
-            `None` if no user is found
-        """
-        return cls.findWithView('typeViews/request', value)
-
 
     @staticmethod
     def _search(items, value):
@@ -88,14 +72,17 @@ class requestORM(Document, baseCouchModel):
         :param items: A list of ORM objects to search
         :param value: The value to search for, in this case
             value can be an email, or an id
+
+        :return: Either None if no request was found, or the `requestORM`
+            instance of the request
         """
-        foundUser = []
-        for user in items:
-            if user.email == value or user.id == value:
-                foundUser.append(user)
-        if not foundUser:
+        foundrequest = []
+        for request in items:
+            if request.email == value or request.id == value:
+                foundrequest.append(request)
+        if not foundrequest:
             return None
         else:
-            user = foundUser[0]
-            return user
+            request = foundrequest[0]
+            return request
 
