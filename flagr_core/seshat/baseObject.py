@@ -61,7 +61,7 @@ class baseHTTPObject(object):
                         content = str(content)
 
                 if self.head[0] != "303 SEE OTHER":
-                    self.session.clearAlerts()
+                    del self.session.alerts
                 self.session.saveAlerts()
 
                 data.put(content)

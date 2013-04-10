@@ -44,7 +44,8 @@ class userORM(Document, baseCouchModel):
     joined = DateTimeField(default=datetime.now)
     sessionID = TextField()
     docType = TextField(default="user")
-    alerts = []
+    _alerts = []
+    formatedAbout = ""
     _view = 'typeViews/user'
 
     @classmethod
@@ -115,8 +116,8 @@ class userORM(Document, baseCouchModel):
                     user = cls.load(db.couchServer, foundUser.id)
                     user.sessionID = cookieID
                     user.loggedIn = True
-                    user.alerts = db.redisSessionServer.hget(cookieID,
-                            "alerts")
+                    user._alerts = json.loads(db.redisSessionServer.hget(cookieID,
+                            "alerts"))
                     user.save()
                     return user
                 else:
@@ -142,7 +143,7 @@ class userORM(Document, baseCouchModel):
         db.redisSessionServer.hset(cookieID, "userID", self.id)
         self.sessionID = cookieID
         self.loggedIn = True
-        self.alerts = db.redisSessionServer.hget(cookieID, "alerts")
+        self._alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
         self.save()
 
     def logout(self):
@@ -157,15 +158,7 @@ class userORM(Document, baseCouchModel):
         db.redisSessionServer.hdel(self.sessionID, "userID")
         return True
 
-    def clearAlerts(self):
-        """
-        Clears the current users expired alerts.
-        """
-        for alert in self.alerts:
-            if alert["expire"] == "next":
-                self.alerts.pop(self.alerts.index(alert))
-
-    def pushAlert(self, message, quip="", alertType="info", expire="next"):
+    def pushAlert(self, *args, **kwargs):
         """
         Creates an alert message to be displayed or relayed to the user,
         This is a higher level one for use in HTML templates.
@@ -181,28 +174,46 @@ class userORM(Document, baseCouchModel):
             anything other than next to have the alert stay permanently
         :type expire: Str
         """
-        self.alerts.append({"expire": expire,
-            "alert": ua.alert(message, quip, alertType)})
-
-    def getAlerts(self):
-        """
-        Returns a str on compiled alerts, for direct placement in a template
-
-        :return: Str of alerts
-        :rtype: Str
-        """
-        alerts = ""
-        for alert in self.alerts:
-            alerts += alert["alert"]
-
-        return alerts
+        self.alerts = self.HTMLAlert(*args, **kwargs);
 
     def saveAlerts(self):
         """
         Saves the current users alerts and places them into redis
         """
         db.redisSessionServer.hset(self.sessionID, "alerts",
-                json.dumps(self.alerts))
+                json.dumps(self._alerts))
+        return True
+
+    @property
+    def alerts(self):
+        """
+        Returns a str on compiled alerts, for direct placement in a template
+
+        :return: Str of alerts
+        :rtype: Str
+        """
+        _alerts = ""
+        for alert in self._alerts:
+            _alerts += alert["alert"]
+
+        return _alerts
+
+    @alerts.setter
+    def alerts(self, value):
+        self._alerts.append(value)
+
+    @alerts.deleter
+    def alerts(self):
+        """
+        Clears the current users expired alerts.
+        """
+        for alert in self._alerts:
+            if alert["expire"] == "next":
+                self._alerts.pop(self._alerts.index(alert))
+
+    @staticmethod
+    def HTMLAlert(message, quip="", alertType="info", expire="next"):
+        return {"expire": expire, "alert": ua.alert(message, quip, alertType)}
 
     @staticmethod
     def _search(items, value):
@@ -217,7 +228,9 @@ class userORM(Document, baseCouchModel):
         """
         foundUser = []
         for user in items:
-            if user.email == value or user.username == value or user.id == value:
+            if user.email == value \
+                    or user.username == value \
+                    or user.id == value:
                 foundUser.append(user)
         if not foundUser:
             return None
@@ -233,6 +246,6 @@ class userORM(Document, baseCouchModel):
         Override of the baseCouchModel method: save
         Saves the user object, along with saving the alerts to redis
         """
-        super(baseCouchModel, self).save()
+        self.store(db.couchServer)
         db.redisSessionServer.hset(self.sessionID, "alerts",
-                json.dumps(self.alerts))
+                json.dumps(self._alerts))
