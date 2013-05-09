@@ -30,10 +30,10 @@ def test_userModel(self):
     about = """#This is a test  
   
 User profile about.
-    """
+"""
     testCookieID = "0000"
 
-    newUser = um.userORM.new(username, password)
+    newUser = um.userORM(username, password)
     assert newUser.username == username
     assert newUser.password == bcrypt.hashpw(password, newUser.password)
 

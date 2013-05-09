@@ -54,7 +54,7 @@ class userORM(Document, baseCouchModel):
         Make a new user, checking for username conflicts. If no conflicts are
         found the password is encrypted with bcrypt and the resulting `userORM` returned.
 
-        >>> newUser = um.userORM.new(username, password)
+        >>> newUser = um.userORM(username, password)
         >>> newUser # doctest: +ELLIPSIS
         <userORM ...>
         >>> assert newUser.password == bcrypt.hashpw(password, newUser.password)
@@ -200,6 +200,11 @@ class userORM(Document, baseCouchModel):
 
     @alerts.setter
     def alerts(self, value):
+        """
+        Inserts `value` into the alerts for this user, however this does
+        no checking to make sure `value` is a dict like so:
+          {"expires":"next", "alert": "alert"}
+        """
         self._alerts.append(value)
 
     @alerts.deleter
