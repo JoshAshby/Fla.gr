@@ -44,9 +44,11 @@ class youFlags(baseHTMLObject):
                 view.section = "public"
             elif viewType == "private":
                 flags = fm.formatFlags(flags, True)
+                tmpFlags = []
                 for flag in flags:
-                    if flag.visibility:
-                        flags.pop(flags.index(flag))
+                    if not flag.visibility:
+                        tmpFlags.append(flag)
+                flags = tmpFlags
                 view.section = "private"
             else:
                 flags = fm.formatFlags(flags, True)
