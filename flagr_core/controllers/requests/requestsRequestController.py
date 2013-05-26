@@ -22,7 +22,7 @@ import models.user.userModel as um
 
 @route("/request")
 class requestsRequests(baseHTMLObject):
-    __name__ = "request an invite"
+    _title = "request an invite"
     def GET(self):
         """
         """

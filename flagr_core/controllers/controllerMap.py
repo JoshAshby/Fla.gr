@@ -15,7 +15,7 @@ from controllers.admin.users.adminEditUserController  import * #/admin/users/(.*
 from controllers.admin.users.adminNewUserController  import * #/admin/users/new
 from controllers.admin.users.adminViewUsersController  import * #/admin/users
 # -> /admin/dev/
-from controllers.admin.dev.adminDevViewBucketsController import * #/admin/dev/buckets
+from controllers.admin.dev.buckets.adminDevBucketsViewController import * #/admin/dev/buckets
 # -> /admin/templates/
 from controllers.admin.templates.adminViewTemplatesController import * #/admin/templates
 from controllers.admin.templates.adminEditTemplatesController import * #/admin/templates/(.*)/edit
@@ -65,3 +65,5 @@ from controllers.you.youFlagsController  import * #/your/flags
 from controllers.you.youLabelsController  import * #/your/labels
 from controllers.you.youProfileController  import * #/your/profile
 from controllers.you.youSettingsController  import * #/your/settings
+
+from controllers.test.testController import *

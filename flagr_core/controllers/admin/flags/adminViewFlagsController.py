@@ -22,7 +22,7 @@ import models.flag.flagModel as fm
 
 @route("/admin/flags")
 class adminViewFlags(baseHTMLObject):
-    __name__ = "admin flags"
+    _title = "admin flags"
     __level__ = 50
     __login__ = True
     def GET(self):

@@ -22,7 +22,7 @@ import utils.labelUtils as lu
 
 @route("/your/labels")
 class youLabels(baseHTMLObject):
-    __name__ = "labels"
+    _title = "labels"
     __login__ = True
     def GET(self):
         """

@@ -23,7 +23,7 @@ import json
 
 @route("/admin/flags/(.*)/edit")
 class adminEditFlag(baseHTMLObject):
-    __name__ = "admin flags"
+    _title = "admin flags"
     __level__ = 50
     __login__ = True
     def GET(self):

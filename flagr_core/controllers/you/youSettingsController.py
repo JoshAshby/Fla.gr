@@ -21,7 +21,7 @@ import bcrypt
 
 @route("/your/settings")
 class youSettings(baseHTMLObject):
-    __name__ = "settings"
+    _title = "settings"
     __login__ = True
     def GET(self):
         """

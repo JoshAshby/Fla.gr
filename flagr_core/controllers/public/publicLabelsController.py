@@ -23,7 +23,7 @@ import utils.labelUtils as lu
 @route("/labels")
 @route("/public/labels")
 class publicLabels(baseHTMLObject):
-    __name__ = "public labels"
+    _title = "public labels"
     def GET(self):
         """
         """

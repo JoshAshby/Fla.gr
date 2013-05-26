@@ -20,7 +20,7 @@ import models.user.userModel as um
 
 @route("/auth/register")
 class authRegister(baseHTMLObject):
-    __name__ = "register"
+    _title = "register"
     def GET(self):
         """
         """

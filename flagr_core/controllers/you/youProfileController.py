@@ -19,7 +19,7 @@ from views.you.youProfileTmpl import youProfileTmpl
 
 @route("/your/profile")
 class youProfile(baseHTMLObject):
-    __name__ = "profile"
+    _title = "profile"
     __login__ = True
     def GET(self):
         """

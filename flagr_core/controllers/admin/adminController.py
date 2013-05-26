@@ -22,7 +22,7 @@ class adminIndex(baseHTMLObject):
     """
     Returns base index page.
     """
-    __name__ = "admin panel"
+    _title = "admin panel"
     __level__ = 50
     __login__ = True
     def GET(self):

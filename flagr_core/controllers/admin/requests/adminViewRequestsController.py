@@ -23,7 +23,7 @@ import models.setting.settingModel as sm
 
 @route("/admin/requests")
 class adminViewRequests(baseHTMLObject):
-    __name__ = "admin requests"
+    _title = "admin requests"
     __level__ = 50
     __login__ = True
     def GET(self):

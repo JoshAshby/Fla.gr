@@ -20,7 +20,7 @@ class error404(baseHTMLObject):
     """
     Returns base 404 error page.
     """
-    __name__ = "404 Not Found"
+    _title = "404 Not Found"
     def GET(self):
         """
         """

@@ -19,7 +19,7 @@ from views.requests.requestsThanksTmpl import requestsThanksTmpl
 
 @route("/request/thanks")
 class requestThanks(baseHTMLObject):
-    __name__ = "thanks!"
+    _title = "thanks!"
     def GET(self):
         """
         """

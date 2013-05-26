@@ -21,7 +21,7 @@ import json
 
 @route("/admin/requests/delete")
 class adminDelRequests(baseHTMLObject):
-    __name__ = "admin requests"
+    _title = "admin requests"
     __level__ = 50
     __login__ = True
     def POST(self):

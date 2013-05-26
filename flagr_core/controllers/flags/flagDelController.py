@@ -23,7 +23,7 @@ import utils.search.searchUtils as su
 
 @route("/flags/(.*)/delete")
 class flagDel(baseHTMLObject):
-    __name__ = "delete flag"
+    _title = "delete flag"
     __login__ = True
     def GET(self):
         """

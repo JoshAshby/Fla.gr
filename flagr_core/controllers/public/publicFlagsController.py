@@ -25,7 +25,7 @@ import utils.pagination as p
 @route("/flags")
 @route("/public/flags")
 class publicFlags(baseHTMLObject):
-    __name__ = "public flags"
+    _title = "public flags"
     def GET(self):
         """
         """

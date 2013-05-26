@@ -25,7 +25,7 @@ import utils.search.searchUtils as su
 
 @route("/flags/new")
 class flagNew(baseHTMLObject):
-    __name__ = "new flag"
+    _title = "new flag"
     __login__ = True
     def GET(self):
         """

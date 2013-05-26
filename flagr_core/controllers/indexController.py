@@ -22,7 +22,7 @@ class index(baseHTMLObject):
     """
     Returns base index page.
     """
-    __name__ = "home"
+    _title = "home"
     def GET(self):
         """
         Nothing much, just get the cheetah template for index and return it

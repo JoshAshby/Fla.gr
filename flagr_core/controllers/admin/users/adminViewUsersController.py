@@ -21,7 +21,7 @@ from models.user.userModel import userORM
 
 @route("/admin/users")
 class adminViewUsers(baseHTMLObject):
-    __name__ = "admin users"
+    _title = "admin users"
     __level__ = 50
     __login__ = True
     def GET(self):

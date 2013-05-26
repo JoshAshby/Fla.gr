@@ -22,7 +22,7 @@ import utils.pagination as p
 
 @route("/flags/(.*)")
 class flagView(baseHTMLObject):
-    __name__ = "view flag"
+    _title = "view flag"
     def GET(self):
         """
         """

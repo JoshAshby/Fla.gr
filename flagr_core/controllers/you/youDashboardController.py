@@ -21,7 +21,7 @@ from views.you.youDashboardTmpl import youDashboardTmpl
 class youDashboard(baseHTMLObject):
     """
     """
-    __name__="dashboard"
+    _title ="dashboard"
     __login__ = True
     def GET(self):
         """

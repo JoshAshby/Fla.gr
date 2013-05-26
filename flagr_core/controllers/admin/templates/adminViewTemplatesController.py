@@ -23,7 +23,7 @@ import json
 
 @route("/admin/templates")
 class adminViewTemplates(baseHTMLObject):
-    __name__ = "admin templates"
+    _title = "admin templates"
     __level__ = 50
     __login__ = True
     def GET(self):

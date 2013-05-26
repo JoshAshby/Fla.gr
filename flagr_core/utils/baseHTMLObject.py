@@ -20,13 +20,13 @@ import models.bucket.bucketModel as bm
 class baseHTMLObject(baseHTTPObject):
     def finishInit(self):
         try:
-            self.__name__ = self.__name__
+            self._title = self._title
         except:
-            self.__name__ = "untitledFlagrPage"
+            self._title = "untitledFlagrPage"
 
         self.head = ("200 OK", [("Content-Type", "text/html")])
         self.env["cfg"] = bm.cfgBuckets()
         self.tmplSearchList = {"user": self.session,
-                "page": (self.__name__),
+                "page": (self._title),
                 "cfg": self.env["cfg"],
                 "flagrCoreScripts": ["main.flagr"]}

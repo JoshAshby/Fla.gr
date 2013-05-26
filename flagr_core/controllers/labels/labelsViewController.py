@@ -25,7 +25,7 @@ import utils.pagination as p
 
 @route("/labels/(.*)")
 class labelsView(baseHTMLObject):
-    __name__ = "labels"
+    _title = "labels"
     __login__ = True
     def GET(self):
         """

@@ -22,7 +22,7 @@ import utils.signerUtils as su
 
 @route("/request/register/(.*)")
 class requestsRegister(baseHTMLObject):
-    __name__ = "register"
+    _title = "register"
     def GET(self):
         """
         """
