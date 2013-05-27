@@ -11,13 +11,13 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.requests.requestsThanksTmpl import requestsThanksTmpl
 
 
-@route("/request/thanks")
+@autoRoute()
 class requestThanks(baseHTMLObject):
     _title = "thanks!"
     def GET(self):

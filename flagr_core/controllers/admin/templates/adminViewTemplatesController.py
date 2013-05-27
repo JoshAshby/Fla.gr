@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.templates.adminViewTemplatesTmpl import adminViewTemplatesTmpl
@@ -21,8 +21,8 @@ import models.setting.settingModel as sm
 import json
 
 
-@route("/admin/templates")
-class adminViewTemplates(baseHTMLObject):
+@autoRoute()
+class adminTemplatesIndex(baseHTMLObject):
     _title = "admin templates"
     __level__ = 50
     __login__ = True

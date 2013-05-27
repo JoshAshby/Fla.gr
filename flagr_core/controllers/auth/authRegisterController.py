@@ -11,14 +11,14 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.auth.authRegisterTmpl import authRegisterTmpl
 import models.user.userModel as um
 
 
-@route("/auth/register")
+@autoRoute()
 class authRegister(baseHTMLObject):
     _title = "register"
     def GET(self):

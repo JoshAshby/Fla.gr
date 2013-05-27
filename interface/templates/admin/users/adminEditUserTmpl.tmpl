@@ -12,7 +12,7 @@
 <div class="row">
     <div class="offset2 span6">
         <h2>Editing user: $editUser.username #if $user.id == $editUser.id#<small>(This is you)</small>#end if#</h2>
-        <form class="form form-horizontal" method="POST" action="/admin/users/$editUser.id/edit">
+        <form class="form form-horizontal" method="POST" action="/admin/users/edit/$editUser.id">
             <legend>Profile Stuff...</legend>
             <div class="control-group">
                 <textarea placeholder="about them..." name="about" class="span6" style="height: 225px;">$editUser.about</textarea>
@@ -64,7 +64,7 @@
                 <input type="password" placeholder="renter new password" name="passwordTwice" class="span6">
             </div>
             <div class="well text-center">
-                <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> Update user</button>#if $editUser.id != $user.id# <b>Or...</b> <a href="/admin/users/$editUser.id/delete" class="btn-inverse btn"><i class="icon-remove"></i> Delete user</a>#end if#
+                <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> Update user</button>#if $editUser.id != $user.id# <b>Or...</b> <a href="/admin/users/delete/$editUser.id" class="btn-inverse btn"><i class="icon-remove"></i> Delete user</a>#end if#
             </div>
         </form>
     </div>

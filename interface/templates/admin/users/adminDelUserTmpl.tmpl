@@ -15,8 +15,8 @@
         <h2 class="text-center">Deleting user: $editUser.username</h2>
         <p class="text-error">This action is not reversable. Deleting this user will delete them for good. If you simply wish to disable their account please do so instead.</p>
         <div class="text-center">
-            <form action="/admin/users/$editUser.id/delete" method="POST">
-            <button type="submit" class="btn btn-inverse"><i class="icon-remove"></i> Delete user</button> <b>Or...</b> <a href="/admin/users/$editUser.id/edit" class="btn btn-info"><i class="icon-reply"></i> Cancel</a>
+            <form action="/admin/users/delete/$editUser.id" method="POST">
+            <button type="submit" class="btn btn-inverse"><i class="icon-remove"></i> Delete user</button> <b>Or...</b> <a href="/admin/users/edit/$editUser.id" class="btn btn-info"><i class="icon-reply"></i> Cancel</a>
             </form>
         </div>
     </div>

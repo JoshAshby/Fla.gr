@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute, route
 from utils.baseHTMLObject import baseHTMLObject
 
 import utils.search.flag.flagSearch as fs
@@ -22,6 +22,7 @@ import utils.pagination as p
 
 
 @route("/your/search")
+@autoRoute()
 class youSearchController(baseHTMLObject):
     _title = "your search"
     def GET(self):

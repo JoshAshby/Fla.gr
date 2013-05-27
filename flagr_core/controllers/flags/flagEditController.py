@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route, autoRoute
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagEditTmpl import flagEditTmpl
@@ -25,7 +25,6 @@ import json
 import utils.search.searchUtils as su
 
 
-@route("/flags/(.*)/edit")
 @autoRoute()
 class flagsEdit(baseHTMLObject):
     _title = "edit flag"

@@ -4,11 +4,11 @@
     <div class="row">
         <div class="span5">
             <h3><i class="icon-tags"></i> Label <small>
-            #for $lab in $baseLabel.split('/')
-                #if $baseLabel.split('/').index($lab) == (len($baseLabel.split('/'))-1)
+            #for $lab in $baseLabel
+                #if $baseLabel.index($lab) == (len($baseLabel)-1)
                     $lab
                 #else
-                    <a href="/labels/#echo "/".join($baseLabel.split("/")[:$baseLabel.split("/").index($lab)+1]) #">$lab</a> <span class="divider">/</span>
+                    <a href="/labels/view/#echo "/".join($baseLabel[:$baseLabel.index($lab)+1]) #">$lab</a> <span class="divider">/</span>
                 #end if
             #end for
             </small></h3>
@@ -19,7 +19,7 @@
 #def body
     #if $labels
         <span>Stacked labels:
-        #for $label in $labels# <a href="/labels/$label"><span class="label label-info">$label</span></a> #end for# </span>
+        #for $label in $labels# <a href="/labels/view/$label"><span class="label label-info">$label</span></a> #end for# </span>
         <hr>
     #end if
     #if $flags

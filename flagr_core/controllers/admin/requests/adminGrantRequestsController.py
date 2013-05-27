@@ -12,7 +12,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 import models.request.requestModel as rm
@@ -21,8 +21,8 @@ import json
 import models.setting.settingModel as sm
 
 
-@route("/admin/requests/grant")
-class adminEditRequests(baseHTMLObject):
+@autoRoute()
+class adminRequestsGrant(baseHTMLObject):
     _title = "admin requests"
     __level__ = 50
     __login__ = True

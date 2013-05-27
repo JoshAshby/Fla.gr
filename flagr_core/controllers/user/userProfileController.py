@@ -11,14 +11,15 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.user.userProfileTmpl import userProfileTmpl
 
 import models.user.userModel as um
 
-@route("/user/(.*)")
+
+@autoRoute()
 class userProfile(baseHTMLObject):
     _title = "profile"
     def GET(self):

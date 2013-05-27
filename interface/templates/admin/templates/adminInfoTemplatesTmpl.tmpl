@@ -38,7 +38,7 @@
     <div class="tab-pane" id="edit">
         <div class="row">
             <div class="span6 offset1">
-                <form class="form form-horizontal" method="POST" action="/admin/templates/$tmpl.id/edit">
+                <form class="form form-horizontal" method="POST" action="/admin/templates/edit/$tmpl.id">
                     <div class="control-group #if $getVar('nameError', False)#error#end if#">
                         <input type="text" name="name" class="span6" placeholder="template name..." value="$getVar('tmpl.name', '')">
                         #if $getVar('nameError', False)

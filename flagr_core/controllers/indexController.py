@@ -11,13 +11,14 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute, route
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.indexTmpl import indexTmpl
 
 
 @route("/")
+@autoRoute()
 class index(baseHTMLObject):
     """
     Returns base index page.

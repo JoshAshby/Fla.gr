@@ -19,8 +19,8 @@
     <tbody>
     #for $userItem in $users
         <tr>
-            <td><a href="/admin/users/$userItem.id/edit">$userItem.username #if $user.id == $userItem.id#(You)#end if#</a></td>
-            <td><a href="/admin/users/$userItem.id/edit">$userItem.email</a></td>
+            <td><a href="/admin/users/edit/$userItem.id">$userItem.username #if $user.id == $userItem.id#(You)#end if#</a></td>
+            <td><a href="/admin/users/edit/$userItem.id">$userItem.email</a></td>
             <td>$userItem.joined</td>
             <td>
                 #if $userItem.level < 50

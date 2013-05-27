@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.requests.requestsRequestTmpl import requestsRequestTmpl
@@ -20,8 +20,8 @@ import models.request.requestModel as rm
 import models.user.userModel as um
 
 
-@route("/request")
-class requestsRequests(baseHTMLObject):
+@autoRoute()
+class requestIndex(baseHTMLObject):
     _title = "request an invite"
     def GET(self):
         """

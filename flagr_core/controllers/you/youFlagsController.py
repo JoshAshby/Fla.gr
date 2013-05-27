@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute, route
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youFlagsTmpl import youFlagsTmpl
@@ -23,6 +23,7 @@ import utils.pagination as p
 
 
 @route("/your/flags")
+@autoRoute()
 class youFlags(baseHTMLObject):
     _title = "flags"
     __login__ = True

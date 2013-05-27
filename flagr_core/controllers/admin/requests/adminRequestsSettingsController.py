@@ -11,13 +11,13 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 import models.setting.settingModel as sm
 
 
-@route("/admin/requests/settings")
+@autoRoute()
 class adminRequestsSettings(baseHTMLObject):
     _title = "admin requests"
     __level__ = 50

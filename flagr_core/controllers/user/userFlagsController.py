@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.user.userFlagsTmpl import userFlagsTmpl
@@ -23,7 +23,7 @@ import models.user.userModel as um
 import utils.pagination as p
 
 
-@route("/user/(.*)/flags")
+@autoRoute()
 class userFlags(baseHTMLObject):
     _title = "flags"
     def GET(self):

@@ -65,5 +65,3 @@ from controllers.you.youFlagsController  import * #/your/flags
 from controllers.you.youLabelsController  import * #/your/labels
 from controllers.you.youProfileController  import * #/your/profile
 from controllers.you.youSettingsController  import * #/your/settings
-
-from controllers.test.testController import *

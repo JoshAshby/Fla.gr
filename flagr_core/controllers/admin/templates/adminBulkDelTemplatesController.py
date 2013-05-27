@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 import models.template.templateModel as tm
@@ -19,8 +19,8 @@ import models.template.templateModel as tm
 import json
 
 
-@route("/admin/templates/delete")
-class adminBulkDelTemplates(baseHTMLObject):
+@autoRoute()
+class adminTemplatesDelete(baseHTMLObject):
     _title = "admin templates"
     __level__ = 50
     __login__ = True

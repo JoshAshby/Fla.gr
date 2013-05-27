@@ -10,15 +10,14 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youDashboardTmpl import youDashboardTmpl
 
 
-@route("/you")
-@route("/your/dashboard")
-class youDashboard(baseHTMLObject):
+@autoRoute()
+class youIndex(baseHTMLObject):
     """
     """
     _title ="dashboard"

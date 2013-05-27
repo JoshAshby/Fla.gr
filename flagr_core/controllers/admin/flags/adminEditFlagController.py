@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route, autoRoute
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminEditFlagTmpl import adminEditFlagTmpl
@@ -21,7 +21,6 @@ from models.flag.flagModel import flagORM
 import json
 
 
-@route("/admin/flags/(.*)/edit")
 @autoRoute()
 class adminFlagsEdit(baseHTMLObject):
     _title = "admin flags"

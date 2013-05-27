@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.public.publicLabelsTmpl import publicLabelsTmpl
@@ -20,9 +20,8 @@ import models.flag.flagModel as fm
 import utils.labelUtils as lu
 
 
-@route("/labels")
-@route("/public/labels")
-class publicLabels(baseHTMLObject):
+@autoRoute()
+class labelsIndex(baseHTMLObject):
     _title = "public labels"
     def GET(self):
         """
