@@ -14,6 +14,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import models.basic.sessionModel as sm
+import traceback
 
 class baseHTTPObject(object):
         __level__ = 0
@@ -66,8 +67,12 @@ class baseHTTPObject(object):
                         error = True
 
                 if not error:
+                    try:
                         content = getattr(self, self.env["method"])() or ""
                         content = str(content)
+                    except:
+                        content = traceback.format_exc()
+                        error = True
 
                 if self.head[0] != "303 SEE OTHER":
                     del self.session.alerts
@@ -78,6 +83,9 @@ class baseHTTPObject(object):
 
                 reply.put(self.head)
                 reply.put(StopIteration)
+
+                if error:
+                    raise Exception("Controller failed to finish...")
 
         def _404(self):
             self.head = ("404 NOT FOUND", [])

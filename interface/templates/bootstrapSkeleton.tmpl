@@ -18,7 +18,9 @@
             }
         </style>
         <link rel="stylesheet" href="$resources/css/bootstrap/bootstrap-responsive.min.css">
-        <link rel="stylesheet" href="$resources/css/fontawesome/fontawesome.min.css">
+        <!--<link rel="stylesheet" href="$resources/css/fontawesome/fontawesome.min.css">-->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+
         <link rel="stylesheet" href="$resources/css/custom_styles.css">
         <!--[if IE 7]>
         <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css">
@@ -72,7 +74,7 @@
                             <!-- Right hand drop down -->
                             <ul class="nav pull-right">
                                 #if $user.loggedIn
-                                    <li #if $page in ('labels', 'settings', 'flags', 'dashboard') and $page not in ('public labels')#class="active"#end if#><a href="/your/dashboard"><i class="icon-dashboard"></i></a></li>
+                                    <li #if $page in ('labels', 'settings', 'flags', 'dashboard') and $page not in ('public labels')#class="active"#end if#><a href="/you"><i class="icon-dashboard"></i></a></li>
                                 #end if
                                 <li class="dropdown">
                                     #if not $user.loggedIn and $page!='login'
@@ -88,6 +90,9 @@
                                             #if $cfg.enableRequests
                                                 <li class="nav-header">Or...</li>
                                                 <li><a href="/request">Request an invite</a></li>
+                                            #else if $cfg.enableRegistration
+                                                <li class="nav-header">Or...</li>
+                                                <li><a href="/auth/register">Register an account!</a></li>
                                             #end if
                                         </ul>
                                     #else if $user.loggedIn
@@ -99,7 +104,7 @@
                                                 <li><a href="/admin"><i class="icon-wrench"></i> Admin Panel</a></li>
                                             #end if
                                             <li class="nav-header">Or...</li>
-                                            <li><a href="/your/settings"><i class="icon-cogs"></i> Account Settings</a></li>
+                                            <li><a href="/you/settings"><i class="icon-cogs"></i> Account Settings</a></li>
                                             <li><a href="/auth/logout"><i class="icon-signout"></i> Log out</a></li>
                                         </ul>
                                     #end if

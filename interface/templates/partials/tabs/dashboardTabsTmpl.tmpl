@@ -8,23 +8,23 @@
     <div class="span5 tabs-below">
         <ul class="nav nav-tabs">
             <li #if $page=="dashboard"#class="active"#end if#>
-                <a href="/your/dashboard"><i class="icon-dashboard"></i></a>
+                <a href="/you"><i class="icon-dashboard"></i></a>
             </li>
             <li #if $page=="flags"#class="active"#end if#>
-                <a href="/your/flags"><i class="icon-flag"></i></a>
+                <a href="/you/flags"><i class="icon-flag"></i></a>
             </li>
             <li #if $page=="settings"#class="active"#end if#>
-                <a href="/your/settings"><i class="icon-cogs"></i></a>
+                <a href="/you/settings"><i class="icon-cogs"></i></a>
             </li>
 
             <li class="dropdown #if $page in ('labels', 'profile')#active#end if#">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-chevron-down"></i></a>
                 <ul class="dropdown-menu">
                     <li #if $page=="labels"#class="active"#end if#>
-                        <a href="/your/labels"><i class="icon-tags"></i> Labels</a>
+                        <a href="/you/labels"><i class="icon-tags"></i> Labels</a>
                     </li>
                     <li #if $page=="profile"#class="active"#end if#>
-                        <a href="/your/profile"><i class="icon-user"></i> Profile</a>
+                        <a href="/you/profile"><i class="icon-user"></i> Profile</a>
                     </li>
                 </ul>
             </li>

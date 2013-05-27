@@ -26,6 +26,7 @@ import random
 import Cookie
 import re
 import urllib
+import traceback
 
 import controllers.errorController as errorController
 
@@ -111,10 +112,18 @@ def app(env, start_response):
         data, reply = queue.Queue(), queue.Queue()
         dataThread = gevent.spawn(newHTTPObject.build, data, reply)
         dataThread.join()
+        try:
+            dataThread.get()
+        except:
+            members["error"] = data.get() + traceback.format_exc()
+            data = queue.Queue()
+            newHTTPObject = errorController.error500(env, members, sessionID)
+            dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+            dataThread.join()
 
         content = data.get()
-
         replyData = reply.get()
+
         header = replyData[1]
         status = replyData[0]
 
