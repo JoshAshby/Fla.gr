@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import autoRoute, route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 import utils.search.flag.flagSearch as fs
@@ -22,7 +22,6 @@ from views.partials.flags.flagsListTmpl import flagsListTmpl
 import utils.pagination as p
 
 
-@route("/search")
 @autoRoute()
 class search(baseHTMLObject):
     _title = "search"

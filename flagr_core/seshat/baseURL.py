@@ -48,8 +48,11 @@ class autoURL(object):
                 space += base.lower()
             self.url += base + "/"
 
-        splitName = pageObject.__name__.split(space)
-        name = splitName[len(splitName)-1].lower()
+        try:
+            splitName = pageObject.__name__.split(space)
+            name = splitName[len(splitName)-1].lower()
+        except:
+            name = pageObject.__name__
 
         if name == "index":
             self.url = self.url.rstrip("/")
@@ -60,4 +63,10 @@ class autoURL(object):
 
         self.regex = re.compile(self.preRegex)
         self.pageObject = pageObject
-        self.name = pageObject.__name__ or "unnamedFalgrPage"
+        try:
+            self.title = pageObject._title
+        except:
+            self.title = "unnamedFalgrPage"
+
+    def __repr__(self):
+        return self.title

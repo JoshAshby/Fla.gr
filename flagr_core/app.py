@@ -81,6 +81,7 @@ if __name__ == "__main__":
                 import controllers.maintenanceController
             else:
                 import controllers.controllerMap
+            print c.urls
             fw.serveForever()
 
         elif 'start' in sys.argv:

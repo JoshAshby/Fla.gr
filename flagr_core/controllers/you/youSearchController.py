@@ -23,7 +23,7 @@ import utils.pagination as p
 
 @route("/your/search")
 @autoRoute()
-class youSearchController(baseHTMLObject):
+class youSearch(baseHTMLObject):
     _title = "your search"
     def GET(self):
         page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1

@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.users.adminNewUserTmpl import adminNewUserTmpl
@@ -19,8 +19,8 @@ from views.admin.users.adminNewUserTmpl import adminNewUserTmpl
 from models.user.userModel import userORM
 
 
-@route("/admin/users/new")
-class adminNewUser(baseHTMLObject):
+@autoRoute()
+class adminNewUsers(baseHTMLObject):
     _title = "admin users"
     __level__ = 50
     __login__ = True
