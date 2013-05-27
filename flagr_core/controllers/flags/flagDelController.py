@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import route, autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagDelTmpl import flagDelTmpl
@@ -22,7 +22,8 @@ import utils.search.searchUtils as su
 
 
 @route("/flags/(.*)/delete")
-class flagDel(baseHTMLObject):
+@autoRoute()
+class flagsDelete(baseHTMLObject):
     _title = "delete flag"
     __login__ = True
     def GET(self):
