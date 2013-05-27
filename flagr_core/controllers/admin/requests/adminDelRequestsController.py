@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 import models.request.requestModel as rm
@@ -19,9 +19,9 @@ import models.request.requestModel as rm
 import json
 
 
-@route("/admin/requests/delete")
-class adminDelRequests(baseHTMLObject):
-    __name__ = "admin requests"
+@autoRoute()
+class adminRequestsDelete(baseHTMLObject):
+    _title = "admin requests"
     __level__ = 50
     __login__ = True
     def POST(self):

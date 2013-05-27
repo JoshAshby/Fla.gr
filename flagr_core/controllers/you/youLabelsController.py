@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute, route
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youLabelsTmpl import youLabelsTmpl
@@ -21,8 +21,9 @@ import utils.labelUtils as lu
 
 
 @route("/your/labels")
+@autoRoute()
 class youLabels(baseHTMLObject):
-    __name__ = "labels"
+    _title = "labels"
     __login__ = True
     def GET(self):
         """

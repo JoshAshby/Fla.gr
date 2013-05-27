@@ -11,18 +11,18 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.adminIndexTmpl import adminIndexTmpl
 
 
-@route("/admin")
+@autoRoute()
 class adminIndex(baseHTMLObject):
     """
     Returns base index page.
     """
-    __name__ = "admin panel"
+    _title = "admin panel"
     __level__ = 50
     __login__ = True
     def GET(self):

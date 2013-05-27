@@ -11,11 +11,11 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 
-@route("/auth/logout")
+@autoRoute()
 class authLogout(baseHTMLObject):
     def GET(self):
         """

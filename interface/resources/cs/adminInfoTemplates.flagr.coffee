@@ -11,7 +11,7 @@ $ ->
 
         mod = new deleteModal title, text
         mod.make()
-        editForm "/admin/templates/#{ id  }/delete", []
+        editForm "/admin/templates/delete/#{ id  }", []
 
         $("#modalButton").click ->
             $("#editForm").submit()

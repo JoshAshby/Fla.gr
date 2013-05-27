@@ -11,15 +11,16 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute, route
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youProfileTmpl import youProfileTmpl
 
 
 @route("/your/profile")
+@autoRoute()
 class youProfile(baseHTMLObject):
-    __name__ = "profile"
+    _title = "profile"
     __login__ = True
     def GET(self):
         """

@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 import utils.search.flag.flagSearch as fs
@@ -22,9 +22,9 @@ from views.partials.flags.flagsListTmpl import flagsListTmpl
 import utils.pagination as p
 
 
-@route("/search")
-class searchController(baseHTMLObject):
-    __name__ = "search"
+@autoRoute()
+class search(baseHTMLObject):
+    _title = "search"
     def GET(self):
         page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
         value = self.env["members"]["s"] if self.env["members"].has_key("s") else ""

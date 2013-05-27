@@ -79,6 +79,9 @@ class baseHTTPObject(object):
                 reply.put(self.head)
                 reply.put(StopIteration)
 
+        def _404(self):
+            self.head = ("404 NOT FOUND", [])
+
         def HEAD(self):
                 return self.GET()
 

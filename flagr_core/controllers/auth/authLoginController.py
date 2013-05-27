@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.auth.authLoginTmpl import authLoginTmpl
@@ -20,19 +20,19 @@ import models.user.userModel as um
 import utils.sessionExceptions as use
 
 
-@route("/auth/login")
+@autoRoute()
 class authLogin(baseHTMLObject):
     """
 
     """
-    __name__ = "login"
+    _title = "login"
     def GET(self):
         """
         Display the login page or redirect to their dashboard if they are already logged in
         """
         if self.session.loggedIn:
             self.head = ("303 SEE OTHER",
-                [("location", "/your/dashboard")])
+                [("location", "/you")])
             self.session.pushAlert("It looks like you're already signed in!", "Hey there!", "info")
 
         else:
@@ -49,7 +49,7 @@ class authLogin(baseHTMLObject):
 
         try:
             um.userORM.login(name, passwd, self.env["cookie"])
-            self.head = ("303 SEE OTHER", [("location", "/your/dashboard")])
+            self.head = ("303 SEE OTHER", [("location", "/you")])
             self.session.pushAlert("Welcome back, %s!" % name, "Ohia!", "success")
 
         except Exception as exc:

@@ -4,9 +4,9 @@
         <div class="row">
             <div class="span6">
                 <h2>
-                    <a href="/flags/$flag.id" class="flagLink"><i class="icon-flag"></i> $flag.title</a>
+                    <a href="/flags/view/$flag.id" class="flagLink"><i class="icon-flag"></i> $flag.title</a>
                     <small>
-                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/user/$flag.author.username">$flag.author.username</a>#end if#</b>
+                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/user/view/$flag.author.username">$flag.author.username</a>#end if#</b>
                     </small>
                 </h2>
             </div>
@@ -22,11 +22,11 @@
                 #end if
                 #if  $flag.userID == $user.id
                      <div class="btn-group pull-right">
-                        <a href="/flags/$flag.id/edit" class="btn btn-info"><i class="icon-edit"></i></a>
+                        <a href="/flags/edit/$flag.id" class="btn btn-info"><i class="icon-edit"></i></a>
                         #if $cfg.enableModalFlagDeletes
                             <a href="#" class="btn btn-danger deleteButton" data-title="$flag.title" data-id="$flag.id"><i class="icon-trash"></i></a>
                         #else
-                            <a href="/flags/$flag.id/delete" class="btn btn-danger"><i class="icon-trash"></i></a>
+                            <a href="/flags/delete/$flag.id" class="btn btn-danger"><i class="icon-trash"></i></a>
                         #end if
                     </div>
                 #end if
@@ -47,7 +47,7 @@
                 #if $flag.labels and $flag.labels != [""]
                     <b class="muted"><i class="icon-tags"></i> Labels: </b>
                     #for $label in $flag.labels
-                        <a href="/labels/$label"><span class="label label-info">$label</span></a>
+                        <a href="/labels/view/$label"><span class="label label-info">$label</span></a>
                     #end for
                 #end if
             </div>

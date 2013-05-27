@@ -11,16 +11,16 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.auth.authRegisterTmpl import authRegisterTmpl
 import models.user.userModel as um
 
 
-@route("/auth/register")
+@autoRoute()
 class authRegister(baseHTMLObject):
-    __name__ = "register"
+    _title = "register"
     def GET(self):
         """
         """
@@ -34,7 +34,7 @@ class authRegister(baseHTMLObject):
                         however you can request an invite on this page",
                         "Oh no!", "error")
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()
 
     def POST(self):
         """
@@ -104,4 +104,4 @@ class authRegister(baseHTMLObject):
             return view
 
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

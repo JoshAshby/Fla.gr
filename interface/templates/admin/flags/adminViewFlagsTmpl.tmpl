@@ -19,8 +19,8 @@
     <tbody>
     #for $flag in $flags
         <tr>
-            <td><a href="/admin/flags/$flag.id/edit">$flag.title</a></td>
-            <td><a href="/admin/users/$flag.userID/edit">$flag.author.username</a></td>
+            <td><a href="/admin/flags/edit/$flag.id">$flag.title</a></td>
+            <td><a href="/admin/users/edit/$flag.userID">$flag.author.username</a></td>
             <td>$flag.formatedDate</td>
             <td>
                 #if $flag.visibility

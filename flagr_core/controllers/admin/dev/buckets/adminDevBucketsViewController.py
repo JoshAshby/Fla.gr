@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.dev.adminDevViewBucketsTmpl import adminDevViewBucketsTmpl
@@ -20,9 +20,9 @@ import models.bucket.bucketModel as bm
 import json
 
 
-@route("/admin/dev/buckets")
-class adminDevViewBuckets(baseHTMLObject):
-    __name__ = "dev buckets"
+@autoRoute()
+class adminDevBucketsIndex(baseHTMLObject):
+    _title = "dev buckets"
     __level__ = 100
     __login__ = True
     def GET(self):

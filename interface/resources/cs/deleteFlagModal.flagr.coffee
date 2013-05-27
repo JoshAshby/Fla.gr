@@ -13,7 +13,7 @@ $ ->
 
         mod = new deleteModal "Delete `#{ title }?`", text
         mod.make()
-        editForm "/flags/#{ id }/delete", [id]
+        editForm "/flags/delete/#{ id }", [id]
 
         $("#modalButton").click ->
             $("#editForm").submit()

@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.labels.labelsViewTmpl import labelsViewTmpl
@@ -23,9 +23,9 @@ import re
 import utils.pagination as p
 
 
-@route("/labels/(.*)")
+@autoRoute()
 class labelsView(baseHTMLObject):
-    __name__ = "labels"
+    _title = "labels"
     __login__ = True
     def GET(self):
         """
@@ -33,6 +33,9 @@ class labelsView(baseHTMLObject):
         page = self.env["members"]["p"] \
                 if self.env["members"].has_key("p") else 1
         baseLabel = self.env["members"][0]
+
+        if type(baseLabel) == list:
+            baseLabel = "/".join(baseLabel)
 
         view = labelsViewTmpl(searchList=[self.tmplSearchList])
 

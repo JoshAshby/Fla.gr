@@ -11,15 +11,15 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.requests.requestsThanksTmpl import requestsThanksTmpl
 
 
-@route("/request/thanks")
+@autoRoute()
 class requestThanks(baseHTMLObject):
-    __name__ = "thanks!"
+    _title = "thanks!"
     def GET(self):
         """
         """
@@ -27,4 +27,4 @@ class requestThanks(baseHTMLObject):
             view = requestsThanksTmpl(searchList=[self.tmplSearchList])
             return view
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

@@ -24,9 +24,22 @@ def route(routeURL, urls=c.urls):
         def wrapper(HTTPObject):
                 urlObject = bu.url(routeURL, HTTPObject)
                 urls.append(urlObject)
-                HTTPObject.__url__ = routeURL
+                HTTPObject.__url__ = urlObject.url
                 if c.debug: logger.debug("""Made route table entry for:
         Object: %(objectName)s
-        Pattern %(regex)s""" % {"regex": routeURL, "objectName": HTTPObject.__module__ + "." + HTTPObject.__name__})
+        Pattern %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
                 return HTTPObject
         return wrapper
+
+
+def autoRoute(urls=c.urls):
+    def wrapper(HTTPObject):
+        urlObject = bu.autoURL(HTTPObject)
+
+        urls.append(urlObject)
+        HTTPObject.__url__ = urlObject.url
+        if c.debug: logger.debug("""Auto generated route table entry for:
+        Object: %(objectName)s
+        Pattern %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
+        return HTTPObject
+    return wrapper

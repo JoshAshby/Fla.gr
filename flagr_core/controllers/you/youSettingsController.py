@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute, route
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youSettingsTmpl import youSettingsTmpl
@@ -20,8 +20,9 @@ import bcrypt
 
 
 @route("/your/settings")
+@autoRoute()
 class youSettings(baseHTMLObject):
-    __name__ = "settings"
+    _title = "settings"
     __login__ = True
     def GET(self):
         """

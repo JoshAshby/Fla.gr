@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminViewFlagsTmpl import adminViewFlagsTmpl
@@ -20,9 +20,9 @@ from models.user.userModel import userORM
 import models.flag.flagModel as fm
 
 
-@route("/admin/flags")
-class adminViewFlags(baseHTMLObject):
-    __name__ = "admin flags"
+@autoRoute()
+class adminFlagsIndex(baseHTMLObject):
+    _title = "admin flags"
     __level__ = 50
     __login__ = True
     def GET(self):

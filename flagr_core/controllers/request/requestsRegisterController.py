@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.requests.requestsRegisterTmpl import requestsRegisterTmpl
@@ -20,9 +20,9 @@ import models.request.requestModel as rm
 import utils.signerUtils as su
 
 
-@route("/request/register/(.*)")
-class requestsRegister(baseHTMLObject):
-    __name__ = "register"
+@autoRoute()
+class requestRegister(baseHTMLObject):
+    _title = "register"
     def GET(self):
         """
         """
@@ -39,7 +39,7 @@ class requestsRegister(baseHTMLObject):
                 self.session.pushAlert("We couldn't find that invite in our \
                         system, are you sure it's correct?", "Oh no!", "error")
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()
 
     def POST(self):
         """
@@ -111,4 +111,4 @@ class requestsRegister(baseHTMLObject):
             return view
 
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

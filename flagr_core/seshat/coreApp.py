@@ -69,13 +69,17 @@ def app(env, start_response):
             except:
                 matched = url.regex.match(env["PATH_INFO"])
             if matched:
-                newHTTPObject = url.pageObject(env, members, sessionID)
-                if c.debug:
-                        logURL(env, url)
-
                 matchedItems = matched.groups()
                 for item in range(len(matchedItems)):
+                    try:
+                        bits = matchedItems[item].strip("/")
+                        if len(bits.split("/")) > 1:
+                            members.update({item: bits.split("/")})
+                        else:
+                            members.update({item: bits})
+                    except:
                         members.update({item: matchedItems[item]})
+
 
                 for item in env['QUERY_STRING'].split("&"):
                         if item:
@@ -90,6 +94,10 @@ def app(env, start_response):
                                 for part in parts:
                                         query = part.split("=")
                                         members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+
+                newHTTPObject = url.pageObject(env, members, sessionID)
+                if c.debug:
+                        logURL(env, url)
                 break
 
         if not newHTTPObject:

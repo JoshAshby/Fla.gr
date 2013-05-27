@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagEditTmpl import flagEditTmpl
@@ -25,9 +25,9 @@ import json
 import utils.search.searchUtils as su
 
 
-@route("/flags/(.*)/edit")
-class flagEdit(baseHTMLObject):
-    __name__ = "edit flag"
+@autoRoute()
+class flagsEdit(baseHTMLObject):
+    _title = "edit flag"
     __login__ = True
     def GET(self):
         """

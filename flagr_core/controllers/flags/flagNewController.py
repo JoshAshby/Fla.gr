@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagNewTmpl import flagNewTmpl
@@ -23,9 +23,9 @@ import utils.markdownUtils as mdu
 import utils.search.searchUtils as su
 
 
-@route("/flags/new")
-class flagNew(baseHTMLObject):
-    __name__ = "new flag"
+@autoRoute()
+class flagsNew(baseHTMLObject):
+    _title = "new flag"
     __login__ = True
     def GET(self):
         """

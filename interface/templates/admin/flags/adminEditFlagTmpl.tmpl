@@ -12,7 +12,7 @@
 <div class="row">
     <div class="offset2 span6">
         <h2>Editing flag  <small>$title</small></h2>
-        <form class="form form-horizontal" method="POST" action="/admin/flags/$id/edit">
+        <form class="form form-horizontal" method="POST" action="/admin/flags/edit/$id">
             <div class="control-group #if $getVar('titleError', False)#error#end if#">
                 <input type="text" name="title" class="span6" placeholder="title..." value="$getVar('title', '')">
                 #if $getVar('titleError', False)
@@ -48,7 +48,7 @@
                 <span class="help-block">If checked then this flag will be visible to anyone. You can change this at anytime.</span>
             </div>
             <div class="well text-center">
-                <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> Update flag</button> <b>Or...</b> <a href="/admin/flags/$id/delete" class="btn-inverse btn"><i class="icon-remove"></i> Delete flag</a>
+                <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> Update flag</button> <b>Or...</b> <a href="/admin/flags/delete/$id" class="btn-inverse btn"><i class="icon-remove"></i> Delete flag</a>
             </div>
         </form>
     </div>

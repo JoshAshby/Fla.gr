@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.public.publicFlagsTmpl import publicFlagsTmpl
@@ -22,10 +22,9 @@ import models.flag.flagModel as fm
 import utils.pagination as p
 
 
-@route("/flags")
-@route("/public/flags")
-class publicFlags(baseHTMLObject):
-    __name__ = "public flags"
+@autoRoute()
+class flagsIndex(baseHTMLObject):
+    _title = "public flags"
     def GET(self):
         """
         """

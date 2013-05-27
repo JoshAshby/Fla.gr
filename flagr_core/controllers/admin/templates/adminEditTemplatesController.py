@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.templates.adminEditTemplatesTmpl import adminEditTemplatesTmpl
@@ -22,9 +22,9 @@ import models.setting.settingModel as sm
 from datetime import datetime
 
 
-@route("/admin/templates/(.*)/edit")
-class adminEditTemplates(baseHTMLObject):
-    __name__ = "admin templates"
+@autoRoute()
+class adminTemplatesEdit(baseHTMLObject):
+    _title = "admin templates"
     __level__ = 50
     __login__ = True
     def GET(self):

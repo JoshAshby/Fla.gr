@@ -22,7 +22,7 @@ class maintenance(baseHTMLObject):
     """
     Returns base maintenance page
     """
-    __name__ = "maintenance"
+    _title = "maintenance"
     def GET(self):
         """
 

@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminDelFlagTmpl import adminDelFlagTmpl
@@ -19,9 +19,9 @@ from views.admin.flags.adminDelFlagTmpl import adminDelFlagTmpl
 from models.flag.flagModel import flagORM
 
 
-@route("/admin/flags/(.*)/delete")
-class adminDelFlag(baseHTMLObject):
-    __name__ = "admin flags"
+@autoRoute()
+class adminFlagsDelete(baseHTMLObject):
+    _title = "admin flags"
     __level__ = 50
     __login__ = True
     def GET(self):

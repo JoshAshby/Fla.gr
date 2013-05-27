@@ -11,18 +11,18 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.indexTmpl import indexTmpl
 
 
-@route("/")
+@autoRoute()
 class index(baseHTMLObject):
     """
     Returns base index page.
     """
-    __name__ = "home"
+    _title = "home"
     def GET(self):
         """
         Nothing much, just get the cheetah template for index and return it

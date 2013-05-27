@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.requests.requestsRequestTmpl import requestsRequestTmpl
@@ -20,9 +20,9 @@ import models.request.requestModel as rm
 import models.user.userModel as um
 
 
-@route("/request")
-class requestsRequests(baseHTMLObject):
-    __name__ = "request an invite"
+@autoRoute()
+class requestIndex(baseHTMLObject):
+    _title = "request an invite"
     def GET(self):
         """
         """
@@ -30,7 +30,7 @@ class requestsRequests(baseHTMLObject):
             view = requestsRequestTmpl(searchList=[self.tmplSearchList])
             return view
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()
 
     def POST(self):
         """
@@ -61,4 +61,4 @@ class requestsRequests(baseHTMLObject):
                 view.emailError = True
                 return view
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

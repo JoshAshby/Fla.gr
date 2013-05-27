@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.user.userLabelTmpl import userLabelTmpl
@@ -20,9 +20,10 @@ import models.flag.flagModel as fm
 import models.user.userModel as um
 import utils.labelUtils as lu
 
-@route("/user/(.*)/labels")
+
+@autoRoute()
 class userLabels(baseHTMLObject):
-    __name__ = "labels"
+    _title = "labels"
     def GET(self):
         """
         """
