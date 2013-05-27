@@ -20,7 +20,6 @@ import models.bucket.bucketModel as bm
 import json
 
 
-#@route("/admin/dev/buckets")
 @autoRoute()
 class adminDevBucketsIndex(baseHTMLObject):
     _title = "dev buckets"

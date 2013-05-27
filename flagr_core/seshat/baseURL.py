@@ -41,7 +41,6 @@ class autoURL(object):
 
         self.url = "/"
         space = ""
-        print bases
         for base in bases:
             if bases.index(base) > 0:
                 space += base.capitalize()
@@ -49,17 +48,15 @@ class autoURL(object):
                 space += base.lower()
             self.url += base + "/"
 
-        print space
-
         splitName = pageObject.__name__.split(space)
         name = splitName[len(splitName)-1].lower()
 
         if name == "index":
             self.url = self.url.rstrip("/")
-            self.preRegex = "^" + self.url + "(|/)$"
+            self.preRegex = "^" + self.url + "(?:|/)$"
         else:
             self.url += name
-            self.preRegex = "^" + self.url +"(|/(\w*)(/|))$"
+            self.preRegex = "^" + self.url +"(?:|/(.*))(?:|/)$"
 
         self.regex = re.compile(self.preRegex)
         self.pageObject = pageObject

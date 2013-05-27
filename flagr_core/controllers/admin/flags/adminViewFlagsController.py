@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.route import route
+from seshat.route import route, autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminViewFlagsTmpl import adminViewFlagsTmpl
@@ -21,7 +21,8 @@ import models.flag.flagModel as fm
 
 
 @route("/admin/flags")
-class adminViewFlags(baseHTMLObject):
+@autoRoute()
+class adminFlagsIndex(baseHTMLObject):
     _title = "admin flags"
     __level__ = 50
     __login__ = True
