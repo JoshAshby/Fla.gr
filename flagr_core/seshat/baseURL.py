@@ -29,7 +29,26 @@ class url(object):
 
 
 class autoURL(object):
+    """
+    Base container and for generating and storing the url, and regex
+    along with the object for the route table.
+    """
     def __init__(self, pageObject):
+        """
+        Attempts to generate the URL from the module name. This uses
+        the file hierarchy within the controllers file to represent the URL.
+        Controller files must contain the word `Controller` and the folder names
+        can not. The actual name of the class within each Controller must be
+        the camel case of the files, followed by the actual page name.  
+
+        eg:
+            controllers/admin/dev/buckets/bucketsController.py
+
+            contains a class adminDevBucketsIndex which will be routed to
+            `/admin/dev/buckets/`
+            and also a class adminDevBucketsSave which will be routed to
+            `/admin/dev/buckets/save/`
+        """
         fullModule = pageObject.__module__
         bits = fullModule.split(".")
         bases = []
@@ -69,4 +88,4 @@ class autoURL(object):
             self.title = "unnamedFalgrPage"
 
     def __repr__(self):
-        return self.title
+        return "< baseURL Object, title: " + self.title + " url: " + self.preRegex + " page object: " + self.pageObject.__name__ + " >"

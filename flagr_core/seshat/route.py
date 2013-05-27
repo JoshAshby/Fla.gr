@@ -38,7 +38,7 @@ def autoRoute(urls=c.urls):
 
         urls.append(urlObject)
         HTTPObject.__url__ = urlObject.url
-        if c.debug: logger.debug("""Made route table entry for:
+        if c.debug: logger.debug("""Auto generated route table entry for:
         Object: %(objectName)s
         Pattern %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
         return HTTPObject

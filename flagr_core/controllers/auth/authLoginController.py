@@ -32,7 +32,7 @@ class authLogin(baseHTMLObject):
         """
         if self.session.loggedIn:
             self.head = ("303 SEE OTHER",
-                [("location", "/your/dashboard")])
+                [("location", "/you")])
             self.session.pushAlert("It looks like you're already signed in!", "Hey there!", "info")
 
         else:
@@ -49,7 +49,7 @@ class authLogin(baseHTMLObject):
 
         try:
             um.userORM.login(name, passwd, self.env["cookie"])
-            self.head = ("303 SEE OTHER", [("location", "/your/dashboard")])
+            self.head = ("303 SEE OTHER", [("location", "/you")])
             self.session.pushAlert("Welcome back, %s!" % name, "Ohia!", "success")
 
         except Exception as exc:

@@ -27,4 +27,4 @@ class requestThanks(baseHTMLObject):
             view = requestsThanksTmpl(searchList=[self.tmplSearchList])
             return view
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

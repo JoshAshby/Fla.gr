@@ -71,11 +71,14 @@ def app(env, start_response):
             if matched:
                 matchedItems = matched.groups()
                 for item in range(len(matchedItems)):
-                    bits = matchedItems[item].strip("/")
-                    if len(bits.split("/")) > 1:
-                        members.update({item: bits.split("/")})
-                    else:
-                        members.update({item: bits})
+                    try:
+                        bits = matchedItems[item].strip("/")
+                        if len(bits.split("/")) > 1:
+                            members.update({item: bits.split("/")})
+                        else:
+                            members.update({item: bits})
+                    except:
+                        members.update({item: matchedItems[item]})
 
 
                 for item in env['QUERY_STRING'].split("&"):

@@ -63,9 +63,11 @@ class app(Daemon):
 
         if self.down:
             logger.warn("Entered Maintenance mode. All URLS routed to maintenanceController!")
-            import controllers.maintenanceController
+            __import__("controllers.maintenanceController", globals(), locals())
+            #import controllers.maintenanceController
         else:
-            import controllers.controllerMap
+            __import__("controllers.controllerMap", globals(), locals())
+            #import controllers.controllerMap
 
         fw.serveForever()
 
@@ -78,10 +80,11 @@ if __name__ == "__main__":
             logger = setupLog()
             import seshat.framework as fw
             if 'maintenance' in sys.argv:
-                import controllers.maintenanceController
+                __import__("controllers.maintenanceController", globals(), locals())
+                #import controllers.maintenanceController
             else:
-                import controllers.controllerMap
-            print c.urls
+                __import__("controllers.controllerMap", globals(), locals())
+                #import controllers.controllerMap
             fw.serveForever()
 
         elif 'start' in sys.argv:

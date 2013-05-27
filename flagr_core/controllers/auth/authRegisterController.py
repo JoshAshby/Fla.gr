@@ -34,7 +34,7 @@ class authRegister(baseHTMLObject):
                         however you can request an invite on this page",
                         "Oh no!", "error")
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()
 
     def POST(self):
         """
@@ -104,4 +104,4 @@ class authRegister(baseHTMLObject):
             return view
 
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

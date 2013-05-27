@@ -39,7 +39,7 @@ class requestRegister(baseHTMLObject):
                 self.session.pushAlert("We couldn't find that invite in our \
                         system, are you sure it's correct?", "Oh no!", "error")
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()
 
     def POST(self):
         """
@@ -111,4 +111,4 @@ class requestRegister(baseHTMLObject):
             return view
 
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

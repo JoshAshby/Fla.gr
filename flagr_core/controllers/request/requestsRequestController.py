@@ -30,7 +30,7 @@ class requestIndex(baseHTMLObject):
             view = requestsRequestTmpl(searchList=[self.tmplSearchList])
             return view
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()
 
     def POST(self):
         """
@@ -61,4 +61,4 @@ class requestIndex(baseHTMLObject):
                 view.emailError = True
                 return view
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()
