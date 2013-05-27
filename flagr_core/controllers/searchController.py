@@ -45,7 +45,7 @@ class search(baseHTMLObject):
         flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
         flagsTmpl.flags = flags
 
-        view.flags = str(flagsTmpl)
+        view.flagResults = str(flagsTmpl)
         view.query = value
 
         return view
