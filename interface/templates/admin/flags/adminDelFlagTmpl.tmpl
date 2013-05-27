@@ -15,8 +15,8 @@
         <h2 class="text-center">Deleting flag: $flag.title</h2>
         <p class="text-error">This action is not reversable. Deleting this flag will delete it from all of fla.gr forever.</p>
         <div class="text-center">
-            <form action="/admin/flags/$flag.id/delete" method="POST">
-            <button type="submit" class="btn btn-inverse"><i class="icon-remove"></i> Delete flag</button> <b>Or...</b> <a href="/admin/flags/$flag.id/edit" class="btn btn-info"><i class="icon-reply"></i> Cancel</a>
+            <form action="/admin/flags/delete/$flag.id" method="POST">
+            <button type="submit" class="btn btn-inverse"><i class="icon-remove"></i> Delete flag</button> <b>Or...</b> <a href="/admin/flags/edit/$flag.id" class="btn btn-info"><i class="icon-reply"></i> Cancel</a>
             </form>
         </div>
     </div>
