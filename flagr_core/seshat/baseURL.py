@@ -25,7 +25,8 @@ class url(object):
         self.url = urlStr
         self.regex = re.compile("^" + self.url +"(|.json|/)$")
         self.pageObject = pageObject
-        self.name = pageObject.__name__ or "unnamedFalgrPage"
+        self.title = pageObject._title or "unnamedFalgrPage"
+        self.auto = False
 
 
 class autoURL(object):
@@ -86,6 +87,8 @@ class autoURL(object):
             self.title = pageObject._title
         except:
             self.title = "unnamedFalgrPage"
+
+        self.auto = True
 
     def __repr__(self):
         return "< baseURL Object, title: " + self.title + " url: " + self.preRegex + " page object: " + self.pageObject.__name__ + " >"
