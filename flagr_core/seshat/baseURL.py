@@ -41,12 +41,15 @@ class autoURL(object):
 
         self.url = "/"
         space = ""
+        print bases
         for base in bases:
-            if bases.index(base) > 1:
-                space += base.Capitalize()
+            if bases.index(base) > 0:
+                space += base.capitalize()
             else:
-                space += base
+                space += base.lower()
             self.url += base + "/"
+
+        print space
 
         splitName = pageObject.__name__.split(space)
         name = splitName[len(splitName)-1].lower()
