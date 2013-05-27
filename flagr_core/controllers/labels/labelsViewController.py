@@ -34,6 +34,9 @@ class labelsView(baseHTMLObject):
                 if self.env["members"].has_key("p") else 1
         baseLabel = self.env["members"][0]
 
+        if type(baseLabel) == list:
+            baseLabel = "/".join(baseLabel)
+
         view = labelsViewTmpl(searchList=[self.tmplSearchList])
 
         labelRe = re.compile(baseLabel+'(.*)')
