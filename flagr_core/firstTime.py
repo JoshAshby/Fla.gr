@@ -60,6 +60,9 @@ def initialSetup():
     if initial.has_key("flags"):
         pass
 
+    if initial.has_ley("templates"):
+        pass
+
 def settingSetup():
     print "Setting up settings..."
     for key in settings:

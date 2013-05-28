@@ -18,7 +18,8 @@
     },
     "initial": {
         "flags": [],
-        "users": [{"username": "admin", "password": "test"}]
+        "users": [{"username": "admin", "password": "test"}],
+        "templates": []
     },
     //Recommended to not edit these, unless you really know what you're doing.
     "buckets": {
