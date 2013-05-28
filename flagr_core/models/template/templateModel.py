@@ -44,7 +44,7 @@ def formatTmpl(tmpl):
     return tmpl
 
 
-class templateORM(baseCouchModel):
+class templateORM(Document, baseCouchModel):
     name = TextField()
     description = TextField()
     template = TextField()
@@ -53,3 +53,4 @@ class templateORM(baseCouchModel):
     type = TextField()
     userID = TextField()
     formatedDate = ""
+    _view = "typeViews/template"

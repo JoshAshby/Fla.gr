@@ -78,6 +78,6 @@ class adminTemplatesEdit(baseHTMLObject):
 
         tmpl.save()
 
-        self.head = ("303 SEE OTHER", [("location", "/admin/templates/%s"%tmplid)])
+        self.head = ("303 SEE OTHER", [("location", "/admin/templates/view/%s"%tmplid)])
         self.session.pushAlert("We've updated this template!", "Congrats", "success")
 

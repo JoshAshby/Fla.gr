@@ -64,6 +64,6 @@ class adminTemplatesNew(baseHTMLObject):
         tmpl = tm.templateORM(name=name, description=description, template=template, type=tmplType)
         tmpl.save()
 
-        self.head = ("303 SEE OTHER", [("location", "/admin/templates/%s"%tmpl.id)])
+        self.head = ("303 SEE OTHER", [("location", "/admin/templates/view/%s"%tmpl.id)])
         self.session.pushAlert("We've created this template with the info you gave us!", "Congrats", "success")
 
