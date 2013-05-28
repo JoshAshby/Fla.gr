@@ -16,7 +16,7 @@ import bleach as bl
 import markdown as md
 
 cleanTags = bl.ALLOWED_TAGS
-cleanTags.extend(['p', 'img', 'small', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','br'])
+cleanTags.extend(['p', 'img', 'small', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','br', 'hr'])
 cleanAttr = bl.ALLOWED_ATTRIBUTES
 cleanAttr["img"] = ["src", "width", "height"]
 cleanAttr["i"] = ["class"]
