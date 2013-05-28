@@ -75,7 +75,7 @@ class requestRegister(baseHTMLObject):
                 req.delete()
                 self.session.pushAlert("You can now log in with the \
                         information you gave us!", "Congrats!", "success")
-                self.head = ("303 SEE OTHER", [("location", "/your/flags")])
+                self.head = ("303 SEE OTHER", [("location", "/you/flags")])
 
             else:
                 #If none, or one of those isn't true then we have a problem...

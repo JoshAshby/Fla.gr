@@ -60,7 +60,7 @@ class adminNewUsers(baseHTMLObject):
                         created" % name, "Yay", "success")
 
                 self.head = ("303 SEE OTHER",
-                    [("location", str("/admin/users/%s/edit"%newUser.id))])
+                    [("location", str("/admin/users/edit/%s"%newUser.id))])
             except:
                 view = adminNewUserTmpl(searchList=[self.tmplSearchList])
                 view.usernameError = True

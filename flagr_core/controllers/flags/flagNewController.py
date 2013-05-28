@@ -75,4 +75,4 @@ class flagsNew(baseHTMLObject):
         self.session.pushAlert("Hey look, you've made another flag!", "Horay!", "success")
 
         self.head = ("303 SEE OTHER",
-            [("location", str("/flags/%s"%newFlag.id))])
+            [("location", str("/flags/view/%s"%newFlag.id))])

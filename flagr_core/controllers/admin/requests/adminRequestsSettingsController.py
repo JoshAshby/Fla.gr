@@ -32,3 +32,5 @@ class adminRequestsSettings(baseHTMLObject):
                 self.session.pushAlert("We've updated the template you're wanting to use to send invites out...", "Got that done...", "success")
 
             self.head = ("303 SEE OTHER", [("Location", "/admin/requests")])
+        else:
+            self._404()

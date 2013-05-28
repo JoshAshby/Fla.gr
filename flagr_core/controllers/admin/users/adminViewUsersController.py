@@ -32,7 +32,7 @@ class adminUsersIndex(baseHTMLObject):
         users = userORM.all()
         #Don't let you see people higher than you,
         #just out of safety for them...
-        for user in users.rows:
+        for user in users:
             if user.level > self.session.level:
                 users.rows.pop(users.rows.index(user))
         view.users = users

@@ -36,7 +36,7 @@ class flagsEdit(baseHTMLObject):
         flag = fm.flagORM.getByID(flagid)
 
         if flag.userID != self.session.id:
-            self.head = ("303 SEE OTHER", [("Location", "/flags/%s"%flagid)])
+            self.head = ("303 SEE OTHER", [("Location", "/flags/view/%s"%flagid)])
             self.session.pushAlert("You can't edit someone else's flag! We're working on a cloning feature but until then, just hold tight or copy and paste the flag.", "Hold it!", "error")
 
             return
@@ -70,7 +70,7 @@ class flagsEdit(baseHTMLObject):
         flag = fm.flagORM.getByID(flagid)
 
         if flag.userID != self.session.id:
-            self.head = ("303 SEE OTHER", [("Location", "/flags/%s"%flagid)])
+            self.head = ("303 SEE OTHER", [("Location", "/flags/view/%s"%flagid)])
             self.session.pushAlert("You can't edit someone else's flag! We're working on a cloning feature but until then, just hold tight or copy and paste the flag.", "Hold it!", "error")
 
             return
@@ -112,4 +112,4 @@ class flagsEdit(baseHTMLObject):
         self.session.pushAlert("The flag `%s` has been updated"%flag.title, "Yay!", "success")
 
         self.head = ("303 SEE OTHER",
-            [("location", str("/flags/%s"%flag.id))])
+            [("location", str("/flags/view/%s"%flag.id))])

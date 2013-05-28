@@ -36,7 +36,7 @@ class flagsDelete(baseHTMLObject):
             self.session.pushAlert("You can't delete a flag you don't own!", "Can't do that!", "error")
 
             self.head = ("303 SEE OTHER",
-                [("location", "/your/flags")])
+                [("location", "/you/flags")])
 
             return
 
@@ -55,7 +55,7 @@ class flagsDelete(baseHTMLObject):
             self.session.pushAlert("You can't delete a flag you don't own!", "Can't do that!", "error")
 
             self.head = ("303 SEE OTHER",
-                [("location", "/your/flags")])
+                [("location", "/you/flags")])
 
             return
 
@@ -66,4 +66,4 @@ class flagsDelete(baseHTMLObject):
         self.session.pushAlert("Flag `%s` deleted" % flag.title, "Bye!", "warning")
 
         self.head = ("303 SEE OTHER",
-            [("location", "/your/flags")])
+            [("location", "/you/flags")])

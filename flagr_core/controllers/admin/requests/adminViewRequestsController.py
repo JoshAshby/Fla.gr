@@ -62,4 +62,4 @@ class adminRequestsIndex(baseHTMLObject):
 
             return view
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

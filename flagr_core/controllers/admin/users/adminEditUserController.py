@@ -20,7 +20,7 @@ from models.user.userModel import userORM
 
 
 @autoRoute()
-class adminEditUsers(baseHTMLObject):
+class adminUsersEdit(baseHTMLObject):
     _title = "admin users"
     __level__ = 50
     __login__ = True

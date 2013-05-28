@@ -46,7 +46,6 @@ class adminRequestsGrant(baseHTMLObject):
             emails = []
 
             for ID in ids:
-#                req = rm.requestORM.findByID(ID)
                 req = rm.requestORM.find(ID)
                 regToken = req.generateToken()
                 tmplData[req.email] = {"email": req.email,
@@ -65,4 +64,4 @@ class adminRequestsGrant(baseHTMLObject):
 
             self.head = ("303 SEE OTHER", [("location", "/admin/requests")])
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()

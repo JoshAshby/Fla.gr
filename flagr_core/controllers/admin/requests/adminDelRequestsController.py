@@ -35,4 +35,4 @@ class adminRequestsDelete(baseHTMLObject):
             self.head = ("303 SEE OTHER", [("location", "/admin/requests")])
             self.session.pushAlert("You deleted those requests...", ":(", "warning")
         else:
-            self.head = ("404 NOT FOUND", [])
+            self._404()
