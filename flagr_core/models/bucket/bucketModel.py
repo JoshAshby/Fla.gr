@@ -37,12 +37,17 @@ def adminBucketDict():
                 "name": db.redisBucketServer.get(bucket+":name"),
                 "description": db.redisBucketServer.get(bucket+":description")}
         #Finally attach a list of userORM objects for the users who have access to this bucket
-        if db.redisBucketServer.exists("%s:users"%bucket):
-            users = db.redisBucketServer.smembers("%s:users")
-            userList = []
-            for user in users:
-                userList.append(userModel.getByID(user))
-            returnBuckets[bucket.strip("bucket").strip(":")]["users"] = userList
+        for additional in ["users", "requires", "disables"]:
+            if db.redisBucketServer.exists("%s:%s"%(bucket, additional)):
+                if db.reditBucketServer.type("%s:%s"(bucket, additional)) == "set":
+                    bits = db.redisBucketServer.smembers("%s:%s"(bucket, additional))
+                    bitList = []
+                    for bit in bits:
+                        if additional == "users":
+                            bitList.append(userModel.getByID(bit))
+                        else:
+                            bitList.append(bit)
+                    returnBuckets[bucket.strip("bucket").strip(":")][additional] = bitList
 
     return returnBuckets
 
