@@ -110,39 +110,42 @@ class baseCouchModel(object):
 
 class redisKeysBase(object):
     def __init__(self, key, redis=db.redisBucketServer):
+        object.__setattr__(self, "_data", dict())
         self.redis = redis
-        self._data = {}
         self.key = key+":"
 
     def __getattr__(self, item):
-        if item in self._data:
-            return self._data[item]
+        if item in object.__getattribute__(self, "_data"):
+            return object.__getattribute__(self, "_data")[item]
         return object.__getattribute__(self, item)
 
     def __getitem__(self, item):
-        if item in self._data:
-            return self._data[item]
+        if item in object.__getattribute__(self, "_data"):
+            return object.__getattribute__(self, "_data")[item]
         return object.__getattribute__(self, item)
 
     def __setattr__(self, item, value):
-        if item in self._data and not hasattr(value, '__call__'):
-            self._data[item] = value
+        data = object.__getattribute__(self, "_data")
+        if item in data and not hasattr(value, '__call__'):
+            data[item] = value
             self.redis.set(self.key+item, value)
         if hasattr(value, '__call__') and item in self._data:
             raise Exception("Can't do that, same function name in the dataset.")
         return object.__setattr__(self, item, value)
 
     def __setitem__(self, item, value):
-        if item in self._data and not hasattr(value, '__call__'):
-            self._data[item] = value
+        data = object.__getattribute__(self, "_data")
+        if item in data and not hasattr(value, '__call__'):
+            data[item] = value
             self.redis.set(self.key+item, value)
         if hasattr(value, '__call__') and item in self._data:
             raise Exception("Can't do that, same function name in the dataset.")
         return object.__setattr__(self, item, value)
 
     def __delitem__(self, item):
-        if item in self._data:
-            del(self._data[item])
+        data = object.__getattribute__(self, "_data")
+        if item in data:
+            del(data[item])
             self.redis.delete(self.key+item)
         else:
             object.__delitem__(self, item)
@@ -155,26 +158,28 @@ class redisObject(object):
     It's probably not going to work, but heres hopping.
     """
     def __init__(self, key, redis=db.redisBucketServer, **kwargs):
-        self._keys = redisKeysBase(key)
+        object.__setattr__(self, "_keys", redisKeysBase(key))
         self.redis = redis
         if not kwargs:
             bits = self.redis.keys("%s:*"%(key))
-            for bit in bits:
-                objectPart = bit.strip(":"%(key))
-                objectType = self.redis.type(bit)
+            if bits:
+                for bit in bits:
+                    objectPart = bit.strip(":"%(key))
+                    objectType = self.redis.type(bit)
 
-                if objectType == "string":
-                    objectValue = self.redis.get(bit)
-                    try:
-                        objectValue = dbu.toBoolean(objectValue)
-                    except:
-                        pass
-                    self._keys[objectPart] = objectValue
-                elif objectType == "set":
-                    self._keys[objectPart] = redisSet(bit)
-                elif objectType == "list":
-                    self._keys[objectPart] = redisList(bit)
+                    if objectType == "string":
+                        objectValue = self.redis.get(bit)
+                        try:
+                            objectValue = dbu.toBoolean(objectValue)
+                        except:
+                            pass
+                        self._keys[objectPart] = objectValue
+                    elif objectType == "set":
+                        self._keys[objectPart] = redisSet(bit)
+                    elif objectType == "list":
+                        self._keys[objectPart] = redisList(bit)
         else:
+            raise Exception("here")
             self.updateData(**kwargs)
 
     def updateData(self, *args, **kwargs):
@@ -185,7 +190,7 @@ class redisObject(object):
                     self._keys[kw] = redisList(key, kwargs[kw])
                 elif type(kwargs[kw]) == str:
                     self._keys[kw] = kwargs[kw]
-        else:
+        elif args:
             if type(args[1]) == list:
                 key = self.key + args[0]
                 self._keys[args[0]] = redisList(key, args[1])
@@ -193,33 +198,37 @@ class redisObject(object):
                 self._keys[args[0]] = args[1]
 
     def __getattr__(self, item):
-        if item in self._keys:
-            return self._keys[item]
+        keys = object.__getattribute__(self, "_keys")
+        if item in keys:
+            return keys[item]
         return object.__getattribute__(self, item)
 
     def __getitem__(self, item):
-        if item in self._keys:
-            return self._keys[item]
+        keys = object.__getattribute__(self, "_keys")
+        if item in keys:
+            return keys[item]
         return object.__getattribute__(self, item)
 
     def __setattr__(self, item, value):
-        if item in self._keys and not hasattr(value, '__call__'):
-            self._keys[item] = value
-            return self._keys[item]
-        if hasattr(value, '__call__') and item in self._keys:
+        keys = object.__getattribute__(self, "_keys")
+        if item in keys and not hasattr(value, '__call__'):
+            return self.updateData(item, value)
+        if hasattr(value, '__call__') and item in keys:
             raise Exception("Can't do that, same function name in the dataset.")
         return object.__setattr__(self, item, value)
 
     def __setitem__(self, item, value):
-        if item in self._keys and not hasattr(value, '__call__'):
+        keys = object.__getattribute__(self, "_keys")
+        if item in keys and not hasattr(value, '__call__'):
             return self.updateData(item, value)
-        if hasattr(value, '__call__') and item in self._keys:
+        if hasattr(value, '__call__') and item in keys:
             raise Exception("Can't do that, same function name in the dataset.")
         return object.__setattr__(self, item, value)
 
     def __delitem__(self, item):
-        if item in self._keys:
-            del(self._keys[item])
+        keys = object.__getattribute__(self, "_keys")
+        if item in keys:
+            del(keys[item])
         else:
             object.__delitem__(self, item)
 
