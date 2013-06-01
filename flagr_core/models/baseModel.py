@@ -108,6 +108,45 @@ class baseCouchModel(object):
     def all(cls):
         return cls.getAll(cls._view)
 
+class redisKeysBase(object):
+    def __init__(self, key, redis=db.redisBucketServer):
+        self.redis = redis
+        self._data = {}
+        self.key = key+":"
+
+    def __getattr__(self, item):
+        if item in self._data:
+            return self._data[item]
+        return object.__getattribute__(self, item)
+
+    def __getitem__(self, item):
+        if item in self._data:
+            return self._data[item]
+        return object.__getattribute__(self, item)
+
+    def __setattr__(self, item, value):
+        if item in self._data and not hasattr(value, '__call__'):
+            self._data[item] = value
+            self.redis.set(self.key+item, value)
+        if hasattr(value, '__call__') and item in self._data:
+            raise Exception("Can't do that, same function name in the dataset.")
+        return object.__setattr__(self, item, value)
+
+    def __setitem__(self, item, value):
+        if item in self._data and not hasattr(value, '__call__'):
+            self._data[item] = value
+            self.redis.set(self.key+item, value)
+        if hasattr(value, '__call__') and item in self._data:
+            raise Exception("Can't do that, same function name in the dataset.")
+        return object.__setattr__(self, item, value)
+
+    def __delitem__(self, item):
+        if item in self._data:
+            del(self._data[item])
+            self.redis.delete(self.key+item)
+        else:
+            object.__delitem__(self, item)
+
 
 class redisObject(object):
     """
@@ -115,14 +154,13 @@ class redisObject(object):
     an ORM for redis...
     It's probably not going to work, but heres hopping.
     """
-    def __init__(self, what, itemID=None, redis=db.redisBucketServer):
-        self._keys = {}
+    def __init__(self, key, redis=db.redisBucketServer, **kwargs):
+        self._keys = redisKeysBase(key)
         self.redis = redis
-        if id:
-            self._id = itemID
-            bits = self.redis.keys("%s:%s:*"%(what, itemID))
+        if not kwargs:
+            bits = self.redis.keys("%s:*"%(key))
             for bit in bits:
-                objectPart = bit.strip("%s:%s:"%(what, itemID))
+                objectPart = bit.strip(":"%(key))
                 objectType = self.redis.type(bit)
 
                 if objectType == "string":
@@ -136,17 +174,23 @@ class redisObject(object):
                     self._keys[objectPart] = redisSet(bit)
                 elif objectType == "list":
                     self._keys[objectPart] = redisList(bit)
+        else:
+            self.updateData(**kwargs)
 
-    @classmethod
-    def new(cls, what, itemID, **kwargs):
-        newObject = cls(what, itemID)
-        for kwarg in kwargs:
-            newObject._keys[kwarg] = kwargs[kwarg]
-        return newObject
-
-    @classmethod
-    def getById(cls, what, itemID):
-        return cls(itemID)
+    def updateData(self, *args, **kwargs):
+        if kwargs:
+            for kw in kwargs:
+                if type(kwargs[kw]) == list:
+                    key = self.key + kw
+                    self._keys[kw] = redisList(key, kwargs[kw])
+                elif type(kwargs[kw]) == str:
+                    self._keys[kw] = kwargs[kw]
+        else:
+            if type(args[1]) == list:
+                key = self.key + args[0]
+                self._keys[args[0]] = redisList(key, args[1])
+            elif type(args[1]) == str:
+                self._keys[args[0]] = args[1]
 
     def __getattr__(self, item):
         if item in self._keys:
@@ -168,8 +212,7 @@ class redisObject(object):
 
     def __setitem__(self, item, value):
         if item in self._keys and not hasattr(value, '__call__'):
-            self._keys[item] = value
-            return self._keys[item]
+            return self.updateData(item, value)
         if hasattr(value, '__call__') and item in self._keys:
             raise Exception("Can't do that, same function name in the dataset.")
         return object.__setattr__(self, item, value)
@@ -186,9 +229,7 @@ class redisList(object):
     Attempts to emulate a python list, while storing the list
     in redis.
     """
-    def __init__(self, start=[], key=None, redis=db.redisBucketServer):
-        if not key:
-            raise Exception("Key can't be None")
+    def __init__(self, key, start=[], redis=db.redisBucketServer):
         self._list = start
         self.redis = redis
         self.key = key
@@ -261,11 +302,3 @@ class redisList(object):
 class redisSet(object):
     def __init__(self, start=set()):
         self._set = start
-
-class redisSortedSet(object):
-    def __init__(self):
-        """
-        We store the sorted list as a list of tuples where each
-        tuple is (value, score)
-        """
-        self._set = []
