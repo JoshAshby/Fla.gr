@@ -58,6 +58,86 @@ def adminBucketToggle(bucketID):
     return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
 
 
+class redisObject(object):
+    """
+    I said I never would, but this is another attempt at making
+    an ORM for redis...
+    It's probably not going to work, but heres hopping.
+    """
+    def __init__(self, what, itemID=None):
+        self._keys = {}
+        if id:
+            self._id = itemID
+            bits = db.redisBucketServer.keys("%s:%s:*"%(what, itemID))
+            for bit in bits:
+                objectPart = bit.strip("%s:%s:"%(what, itemID))
+                objectType = db.redisBucketServer.type(bit)
+
+                if objectType == "string":
+                    objectValue = db.redisServer.get(bit)
+                    try:
+                        objectValue = dbu.toBoolean(objectValue)
+                    except:
+                        pass
+                    self._keys[objectPart] = objectValue
+                elif objectType == "set":
+                    self._keys[objectPart] = redisSet(bit)
+                elif objectType == "list":
+                    self._keys[objectPart] = redisList(bit)
+
+    @classmethod
+    def new(cls, what, itemID, **kwargs):
+        newObject = cls(what, itemID)
+        for kwarg in kwargs:
+            newObject._keys[kwarg] = kwargs[kwarg]
+        return newObject
+
+    @classmethod
+    def getById(cls, what, itemID):
+        return cls(itemID)
+
+    def __getattr__(self, item):
+        if item in self._keys:
+            return self._keys[item]
+        return object.__getattribute__(self, item)
+
+    def __getitem__(self, item):
+        if item in self._keys:
+            return self._keys[item]
+        return object.__getattribute__(self, item)
+
+    def __setattr__(self, item, value):
+        if item in self._keys and not hasattr(value, '__call__'):
+            self._keys[item] = value
+            return self._keys[item]
+        return object.__setattr__(self, item, value)
+
+    def __setitem__(self, item, value):
+        if item in self._keys and not hasattr(value, '__call__'):
+            self._keys[item] = value
+            return self._keys[item]
+        return object.__setattr__(self, item, value)
+
+
+class redisList(object):
+    def __init__(self):
+        self._list = []
+
+
+class redisSet(object):
+    def __init__(self):
+        self._set = set()
+
+
+class redisSortedSet(object):
+    def __init__(self):
+        """
+        We store the sorted list as a dictonary in python,
+        where the key is the rank, and the value is the list item
+        """
+        self._list = {}
+
+
 class cfgBuckets(object):
     def __init__(self):
         keys = { key.split(":")[1]:dbu.toBoolean(db.redisBucketServer.get(key)) for key in db.redisBucketServer.keys("bucket:*:value") }
