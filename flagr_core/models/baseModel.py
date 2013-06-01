@@ -115,17 +115,18 @@ class redisObject(object):
     an ORM for redis...
     It's probably not going to work, but heres hopping.
     """
-    def __init__(self, what, itemID=None):
+    def __init__(self, what, itemID=None, redis=db.redisBucketServer):
         self._keys = {}
+        self.redis = redis
         if id:
             self._id = itemID
-            bits = db.redisBucketServer.keys("%s:%s:*"%(what, itemID))
+            bits = self.redis.keys("%s:%s:*"%(what, itemID))
             for bit in bits:
                 objectPart = bit.strip("%s:%s:"%(what, itemID))
-                objectType = db.redisBucketServer.type(bit)
+                objectType = self.redis.type(bit)
 
                 if objectType == "string":
-                    objectValue = db.redisServer.get(bit)
+                    objectValue = self.redis.get(bit)
                     try:
                         objectValue = dbu.toBoolean(objectValue)
                     except:
@@ -161,24 +162,105 @@ class redisObject(object):
         if item in self._keys and not hasattr(value, '__call__'):
             self._keys[item] = value
             return self._keys[item]
+        if hasattr(value, '__call__') and item in self._keys:
+            raise Exception("Can't do that, same function name in the dataset.")
         return object.__setattr__(self, item, value)
 
     def __setitem__(self, item, value):
         if item in self._keys and not hasattr(value, '__call__'):
             self._keys[item] = value
             return self._keys[item]
+        if hasattr(value, '__call__') and item in self._keys:
+            raise Exception("Can't do that, same function name in the dataset.")
         return object.__setattr__(self, item, value)
+
+    def __delitem__(self, item):
+        if item in self._keys:
+            del(self._keys[item])
+        else:
+            object.__delitem__(self, item)
 
 
 class redisList(object):
-    def __init__(self):
-        self._list = []
+    """
+    Attempts to emulate a python list, while storing the list
+    in redis.
+    """
+    def __init__(self, start=[], key=None, redis=db.redisBucketServer):
+        if not key:
+            raise Exception("Key can't be None")
+        self._list = start
+        self.redis = redis
+        self.key = key
+
+    def __repr__(self):
+        return repr(self._list)
+
+    def __str__(self):
+        return str(self._list)
+
+    def append(self, other):
+        self._list.append(other)
+        self.redis.rpush(self.key, other)
+        return self._list
+
+    def extend(self, other):
+        self._list.extend(other)
+        self.redis.rpush(self.key, *other)
+        return self._list
+
+    def insert(self, index, elem):
+        self._list.insert(index, elem)
+        self.redis.linsert(self.key, 'AFTER', index, elem)
+        return self._list
+
+    def remove(self, elem):
+        self._list.remove(elem)
+        self.redis.lrem(self.key, 1, elem)
+        return self._list
+
+    def pop(self):
+        value = self._list.pop()
+        self.redis.lpop(self.key)
+        return value
+
+    def index(self, elem):
+        return self._list.index(elem)
+
+    def count(self):
+        return self._list.count()
+
+    #def sort(self):
+        #return self._list.sort()
+
+    #def reverse(self):
+        #return self._list.reverse()
+
+    def __len__(self):
+        return len(self._list)
+
+    def __getitem__(self, index):
+        return self._list[index]
+
+    def __setitem__(self, index, value):
+        self._list[index] = value
+        self.redis.lset(self.key, index, value)
+
+    def __delitem__(self, index):
+        return self.remove(index)
+
+    def __iter__(self):
+        return self._list
+
+    def __contains__(self, item):
+        if item in self._list:
+            return True
+        return False
 
 
 class redisSet(object):
-    def __init__(self):
-        self._set = set()
-
+    def __init__(self, start=set()):
+        self._set = start
 
 class redisSortedSet(object):
     def __init__(self):
