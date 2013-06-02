@@ -28,7 +28,6 @@ class baseCouchModel(object):
     @classmethod
     def new(cls, **kwargs):
         """
-        
         """
         return cls(**kwargs)
 
@@ -111,11 +110,11 @@ class baseCouchModel(object):
 
 class redisKeysBase(object):
     """
-    Acts as the backing cantainer for redisObject which will update the
+    Acts as the backing container for redisObject which will update the
     redis keys as the containers values and keys change.
 
     This could probably be tied into redisObject but then the code would
-    get a little messy, I think so I'm keeping this seperate. 
+    get a little messy, I think so I'm keeping this separate. 
     """
     def __init__(self, key, redis=db.redisBucketServer):
         self._data = dict()
@@ -163,7 +162,7 @@ class redisKeysBase(object):
 class redisObject(object):
     """
     I said I never would, but this is another attempt at making
-    an ORM for redis...
+    an ORM for Redis...
 
     Emulates a python object and stores it in Redis real time.
     """
@@ -227,7 +226,7 @@ class redisObject(object):
 class redisList(object):
     """
     Attempts to emulate a python list, while storing the list
-    in redis.
+    in Redis.
 
     Missing the sort and reverse functions currently
     """
