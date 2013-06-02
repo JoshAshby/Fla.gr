@@ -225,10 +225,8 @@ class redisList(object):
         self._list = []
         self.redis = redis
         self.key = key
-        if self.key and not start:
-            self._list = self.redis.lrange(key, 0, -1)
-            self.listToInt()
-        else:
+        self.sync()
+        if start:
             self.extend(start)
 
     def __repr__(self):
@@ -239,6 +237,7 @@ class redisList(object):
 
     def sync(self):
         self._list = self.redis.lrange(self.key, 0, -1)
+        self.listToInt()
 
     def listToInt(self):
         for elem in range(len(self._list)):
