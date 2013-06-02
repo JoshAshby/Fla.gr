@@ -16,8 +16,8 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.templates.adminEditTemplatesTmpl import adminEditTemplatesTmpl
 
-import models.template.templateModel as tm
-import models.setting.settingModel as sm
+import models.couch.template.templateModel as tm
+import models.redis.setting.settingModel as sm
 
 from datetime import datetime
 

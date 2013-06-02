@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminEditFlagTmpl import adminEditFlagTmpl
 
-from models.flag.flagModel import flagORM
+from models.couch.flag.flagModel import flagORM
 
 import json
 

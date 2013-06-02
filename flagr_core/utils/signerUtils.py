@@ -10,7 +10,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from itsdangerous import URLSafeTimedSerializer, BadSignature
-import models.setting.settingModel as sm
+import models.redis.setting.settingModel as sm
 
 
 secret = sm.getSetting("enableRequests", "requestSecret")

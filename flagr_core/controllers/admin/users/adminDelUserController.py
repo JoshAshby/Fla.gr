@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.users.adminDelUserTmpl import adminDelUserTmpl
 
-from models.user.userModel import userORM
+from models.couch.user.userModel import userORM
 
 
 @autoRoute()

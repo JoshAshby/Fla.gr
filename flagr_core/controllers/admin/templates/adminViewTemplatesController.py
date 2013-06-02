@@ -16,8 +16,8 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.templates.adminViewTemplatesTmpl import adminViewTemplatesTmpl
 
-import models.template.templateModel as tm
-import models.setting.settingModel as sm
+import models.couch.template.templateModel as tm
+import models.redis.setting.settingModel as sm
 import json
 
 

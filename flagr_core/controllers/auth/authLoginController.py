@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.auth.authLoginTmpl import authLoginTmpl
 
-import models.user.userModel as um
+import models.couch.user.userModel as um
 import utils.sessionExceptions as use
 
 

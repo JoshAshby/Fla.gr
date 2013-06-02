@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagDelTmpl import flagDelTmpl
 
-import models.flag.flagModel as fm
+import models.couch.flag.flagModel as fm
 
 import utils.search.searchUtils as su
 

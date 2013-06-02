@@ -15,7 +15,7 @@ joshuaashby@joshashby.com
 """
 from seshat.baseObject import baseHTTPObject
 
-import models.bucket.bucketModel as bm
+import models.redis.bucket.bucketModel as bm
 
 class baseHTMLObject(baseHTTPObject):
     def finishInit(self):

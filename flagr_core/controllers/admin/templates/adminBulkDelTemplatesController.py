@@ -14,7 +14,7 @@ joshuaashby@joshashby.com
 from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
-import models.template.templateModel as tm
+import models.couch.template.templateModel as tm
 
 import json
 

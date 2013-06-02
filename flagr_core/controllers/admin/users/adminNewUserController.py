@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.users.adminNewUserTmpl import adminNewUserTmpl
 
-from models.user.userModel import userORM
+from models.couch.user.userModel import userORM
 
 
 @autoRoute()
