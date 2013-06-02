@@ -13,8 +13,8 @@ from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, Li
 from datetime import datetime
 
 import config.dbBase as db
-from models.baseModel import baseCouchModel
-import models.user.userModel as um
+from models.couch.baseCouchModel import baseCouchModel
+import models.couch.user.userModel as um
 import utils.markdownUtils as mdu
 
 

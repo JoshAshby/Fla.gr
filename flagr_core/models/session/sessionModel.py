@@ -13,7 +13,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import models.user.userModel as userModel
+import models.couch.user.userModel as userModel
 import config.config as c
 import config.dbBase as db
 import utils.alerts as ua

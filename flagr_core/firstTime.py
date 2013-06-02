@@ -18,8 +18,8 @@ import string
 import random
 
 import config.dbBase as db
-import models.user.userModel as um
-import models.setting.settingModel as sm
+import models.couch.user.userModel as um
+import models.redis.setting.settingModel as sm
 
 
 if os.path.exists(c.baseFolder+'/siteConfig.json'):

@@ -19,7 +19,7 @@ from whoosh.qparser import MultifieldParser
 import logging
 logger = logging.getLogger(c.logName+".searchUtils.flagSearch")
 
-import models.flag.flagModel as fm
+import models.couch.flag.flagModel as fm
 
 flagSearchIndex = "/.flagSearchIndex"
 

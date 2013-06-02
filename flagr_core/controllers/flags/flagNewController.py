@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagNewTmpl import flagNewTmpl
 
-import models.flag.flagModel as fm
+import models.couch.flag.flagModel as fm
 import json
 import utils.markdownUtils as mdu
 

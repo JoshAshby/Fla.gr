@@ -26,7 +26,7 @@ from whoosh.fields import *
 
 import os
 
-import models.flag.flagModel as fm
+import models.couch.flag.flagModel as fm
 
 import config.config as c
 

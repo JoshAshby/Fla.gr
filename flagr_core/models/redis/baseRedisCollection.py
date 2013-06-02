@@ -9,7 +9,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import models.baseModel as bum
+import models.redis.baseRedisModel as bum
 import config.dbBase as db
 
 

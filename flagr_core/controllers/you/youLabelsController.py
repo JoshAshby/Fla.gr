@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youLabelsTmpl import youLabelsTmpl
 
-import models.flag.flagModel as fm
+import models.couch.flag.flagModel as fm
 import utils.labelUtils as lu
 
 

@@ -13,7 +13,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import models.basic.sessionModel as sm
+import models.session.sessionModel as sm
 import traceback
 
 class baseHTTPObject(object):

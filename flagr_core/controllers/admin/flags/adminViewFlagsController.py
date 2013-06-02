@@ -16,8 +16,8 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminViewFlagsTmpl import adminViewFlagsTmpl
 
-from models.user.userModel import userORM
-import models.flag.flagModel as fm
+from models.couch.user.userModel import userORM
+import models.couch.flag.flagModel as fm
 
 
 @autoRoute()

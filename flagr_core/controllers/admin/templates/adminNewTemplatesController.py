@@ -16,8 +16,8 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.templates.adminNewTemplatesTmpl import adminNewTemplatesTmpl
 
-import models.template.templateModel as tm
-import models.setting.settingModel as sm
+import models.couch.template.templateModel as tm
+import models.redis.setting.settingModel as sm
 
 
 @autoRoute()

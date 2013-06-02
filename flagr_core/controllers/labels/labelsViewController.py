@@ -17,7 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.labels.labelsViewTmpl import labelsViewTmpl
 from views.partials.flags.flagsListTmpl import flagsListTmpl
 
-import models.flag.flagModel as fm
+import models.couch.flag.flagModel as fm
 import re
 
 import utils.pagination as p

@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.user.userProfileTmpl import userProfileTmpl
 
-import models.user.userModel as um
+import models.couch.user.userModel as um
 
 
 @autoRoute()

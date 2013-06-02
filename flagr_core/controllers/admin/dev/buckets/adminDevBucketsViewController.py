@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.dev.adminDevViewBucketsTmpl import adminDevViewBucketsTmpl
 
-import models.bucket.bucketModel as bm
+import models.redis.bucket.bucketModel as bm
 import json
 
 

@@ -14,7 +14,7 @@ joshuaashby@joshashby.com
 from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
-import models.request.requestModel as rm
+import models.couch.request.requestModel as rm
 
 import json
 

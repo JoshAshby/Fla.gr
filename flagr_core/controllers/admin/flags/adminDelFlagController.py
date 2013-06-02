@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.admin.flags.adminDelFlagTmpl import adminDelFlagTmpl
 
-from models.flag.flagModel import flagORM
+from models.couch.flag.flagModel import flagORM
 
 
 @autoRoute()

@@ -15,10 +15,10 @@ joshuaashby@joshashby.com
 from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
-import models.request.requestModel as rm
+import models.couch.request.requestModel as rm
+import models.redis.setting.settingModel as sm
 import utils.email.emailUtils as eu
 import json
-import models.setting.settingModel as sm
 
 
 @autoRoute()

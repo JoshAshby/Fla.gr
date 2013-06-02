@@ -15,8 +15,8 @@ from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.requests.requestsRegisterTmpl import requestsRegisterTmpl
-import models.user.userModel as um
-import models.request.requestModel as rm
+import models.couch.user.userModel as um
+import models.couch.request.requestModel as rm
 import utils.signerUtils as su
 
 

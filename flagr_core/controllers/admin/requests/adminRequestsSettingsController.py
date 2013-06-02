@@ -14,7 +14,7 @@ joshuaashby@joshashby.com
 from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
-import models.setting.settingModel as sm
+import models.redis.setting.settingModel as sm
 
 
 @autoRoute()

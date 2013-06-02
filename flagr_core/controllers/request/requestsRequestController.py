@@ -16,8 +16,8 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.requests.requestsRequestTmpl import requestsRequestTmpl
 
-import models.request.requestModel as rm
-import models.user.userModel as um
+import models.couch.request.requestModel as rm
+import models.couch.user.userModel as um
 
 
 @autoRoute()

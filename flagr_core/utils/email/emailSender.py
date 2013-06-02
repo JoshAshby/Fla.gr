@@ -18,7 +18,7 @@ from email.mime.multipart import MIMEMultipart
 import pystache
 
 import utils.markdownUtils as mdu
-import models.template.templateModel as tm
+import models.couch.template.templateModel as tm
 import config.config as c
 
 from gevent import monkey; monkey.patch_all()
@@ -35,7 +35,7 @@ import json
 import logging
 logger = logging.getLogger(c.logName+"email.sender")
 
-import models.setting.settingModel as sm
+import models.redis.setting.settingModel as sm
 
 
 class emailer(object):

@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagEditTmpl import flagEditTmpl
 
-import models.flag.flagModel as fm
+import models.couch.flag.flagModel as fm
 import utils.markdownUtils as mdu
 
 from datetime import datetime

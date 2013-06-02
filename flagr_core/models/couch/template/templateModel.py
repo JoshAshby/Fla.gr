@@ -12,7 +12,7 @@ joshuaashby@joshashby.com
 from couchdb.mapping import Document, TextField, DateTimeField
 from datetime import datetime
 
-from models.baseModel import baseCouchModel
+from models.couch.baseCouchModel import baseCouchModel
 import utils.markdownUtils as mdu
 
 

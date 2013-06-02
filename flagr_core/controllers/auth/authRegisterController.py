@@ -15,7 +15,7 @@ from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.auth.authRegisterTmpl import authRegisterTmpl
-import models.user.userModel as um
+import models.couch.user.userModel as um
 
 
 @autoRoute()
