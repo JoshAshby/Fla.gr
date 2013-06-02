@@ -126,15 +126,12 @@ class redisKeysBase(object):
         return str(self._data)
 
     def __getitem__(self, item):
-        print "get", item
         return self._data[item]
 
     def __setitem__(self, item, value):
         if type(value) == list:
-            print "set list", item, value
             self._data[item] = redisList(self.key+item, value)
         else:
-            print "set", item, value
             self._data[item] = value
             self.redis.set(self.key+item, value)
 
@@ -220,7 +217,6 @@ class redisList(object):
         self.redis = redis
         self.key = key
         self.extend(start)
-        print self._list
 
 
     def __repr__(self):
