@@ -16,41 +16,22 @@ joshuaashby@joshashby.com
 import models.user.userModel as userModel
 import config.dbBase as db
 import utils.dbUtils as dbu
+import models.collections.baseCollection as bc
 
 
-def adminBucketDict():
-    """
-    Attempts to make a single dict which holds the description and
-    value for each bucket as the value, and the id of the bucket as the key.
-    eg:
-        {"id0": {"value": True, "description":"description goes here", "name": "enable id0"}}
-
-    :return: A dict of ids and another dict. Each value is a smaller dict of the key value,
-        name and description
-    """
-    returnBuckets = dict()
-
-    buckets = [ key.strip(":value") for key in db.redisBucketServer.keys("bucket:*:value") ]
-
-    for bucket in buckets:
-        returnBuckets[bucket.strip("bucket").strip(":")] = {"value": dbu.toBoolean(db.redisBucketServer.get(bucket+":value")),
-                "name": db.redisBucketServer.get(bucket+":name"),
-                "description": db.redisBucketServer.get(bucket+":description")}
-        #Finally attach a list of userORM objects for the users who have access to this bucket
-        if db.redisBucketServer.exists("%s:users"%bucket):
-            users = db.redisBucketServer.smembers("%s:users")
+class bucketPail(bc.baseRedisCollection):
+    def preInitAppend(self, drip):
+        if "users" in drip:
             userList = []
-            for user in users:
+            for user in drip.users:
                 userList.append(userModel.getByID(user))
-            returnBuckets[bucket.strip("bucket").strip(":")]["users"] = userList
+            drip._userObjects = userList
+        return drip
 
-    return returnBuckets
-
-
-
-def adminBucketToggle(bucketID):
-    current = dbu.toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
-    return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
+    @staticmethod
+    def toggle(bucketID):
+        current = dbu.toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
+        return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
 
 
 class cfgBuckets(object):

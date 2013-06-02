@@ -17,33 +17,33 @@
     <tbody>
     #for $bucket in $buckets
         <tr>
-            <td width=35%><a href="#buckets/$bucket">$bucket</a><br>
-            <a href="#buckets/$bucket">$buckets[$bucket]["name"]</a></td>
-            <td>$buckets[$bucket]["description"][:100]...</td>
+            <td width=35%><a href="#buckets/$bucket.id">$bucket.id</a><br>
+            <a href="#buckets/$bucket.id">$bucket["name"]</a></td>
+            <td>$bucket["description"][:100]...</td>
             <td class="changeBtns" width=15%>
-                #if $buckets[$bucket]["value"]
-                    <a class="btn btn-success pull-right" id="${bucket}ModalButton" href="#${bucket}Modal" role="button" data-toggle="modal"><i class="icon-bolt"></i> Enabled</a>
+                #if $bucket["value"]
+                    <a class="btn btn-success pull-right" id="${bucket.id}ModalButton" href="#${bucket.id}Modal" role="button" data-toggle="modal"><i class="icon-bolt"></i> Enabled</a>
                 #else
-                    <a class="btn btn-inverse pull-right" id="${bucket}ModalButton" href="#${bucket}Modal" role="button" data-toggle="modal"><i class="icon-off"></i> Disabled</a>
+                    <a class="btn btn-inverse pull-right" id="${bucket.id}ModalButton" href="#${bucket.id}Modal" role="button" data-toggle="modal"><i class="icon-off"></i> Disabled</a>
                 #end if
             </td>
         </tr>
-        <div id="${bucket}Modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="${bucket}Label" aria-hidden="true">
+        <div id="${bucket.id}Modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="${bucket.id}Label" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
-                <h3 id="${bucket}Label">Change `$bucket` Status?</h3>
+                <h3 id="${bucket.id}Label">Change `$bucket.id` Status?</h3>
             </div>
             <div class="modal-body">
                 <p>Here you can choose to either close this window, or activate or deactivate the selected bucket.</p>
-                <p>$buckets[$bucket]["description"]</p>
+                <p>$bucket["description"]</p>
             </div>
             <div class="modal-footer">
                 <div class="btn-group">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    #if not $buckets[$bucket]["value"]
-                        <button data-bucket="$bucket" class="btn btn-inverse modal-options-btn"><i class="icon-off"></i> Disabled</button>
+                    #if not $bucket["value"]
+                        <button data-bucket="$bucket.id" class="btn btn-inverse modal-options-btn"><i class="icon-off"></i> Disabled</button>
                     #else
-                        <button data-bucket="$bucket" class="btn btn-success modal-options-btn"><i class="icon-bolt"></i> Enabled</button>
+                        <button data-bucket="$bucket.id" class="btn btn-success modal-options-btn"><i class="icon-bolt"></i> Enabled</button>
                     #end if
                 </div>
             </div>

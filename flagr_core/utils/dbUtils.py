@@ -11,7 +11,9 @@ joshuaashby@joshashby.com
 """
 
 def toBoolean(str):
-    if str[0] == 'T':
+    if str == 'True':
         return True
-    else:
+    elif str == 'False':
         return False
+    else:
+        raise Exception("Not a boolean")
