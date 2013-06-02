@@ -227,6 +227,7 @@ class redisList(object):
         self.key = key
         if self.key and not start:
             self._list = self.redis.lrange(key, 0, -1)
+            self.listToInt()
         else:
             self.extend(start)
 
@@ -238,6 +239,13 @@ class redisList(object):
 
     def sync(self):
         self._list = self.redis.lrange(self.key, 0, -1)
+
+    def listToInt(self):
+        for elem in range(len(self._list)):
+            try:
+                self._list[elem] = int(self._list[elem])
+            except:
+                pass
 
     def append(self, other):
         self._list.append(other)
@@ -281,7 +289,8 @@ class redisList(object):
         self.redis.lset(self.key, index, value)
 
     def __iter__(self):
-        return self._list
+        for item in self._list:
+            yield item
 
     def __contains__(self, item):
         if item in self._list:
