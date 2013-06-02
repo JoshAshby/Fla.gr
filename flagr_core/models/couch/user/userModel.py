@@ -26,7 +26,7 @@ import utils.markdownUtils as mdu
 from models.modelExceptions.userModelExceptions import \
        multipleUsersError, passwordError, userError
 
-from models.baseModel import baseCouchModel
+from models.couch.baseCouchModel import baseCouchModel
 
 
 class userORM(Document, baseCouchModel):
