@@ -167,11 +167,12 @@ class redisObject(object):
 
     Emulates a python object and stores it in Redis real time.
     """
-    protectedItems = ["_keys", "key", "redis"]
+    protectedItems = ["_keys", "key", "redis", "id"]
     def __init__(self, key, redis=db.redisBucketServer, **kwargs):
         self._keys = redisKeysBase(key)
         self.redis = redis
         self.key = key
+        self.id = self.key.split("bucket:")[1]
         if not kwargs:
             bits = self.redis.keys("%s:*"%(key))
             for bit in bits:

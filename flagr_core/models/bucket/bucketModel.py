@@ -14,28 +14,33 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import models.user.userModel as userModel
+import models.baseModel as bum
 import config.dbBase as db
 import utils.dbUtils as dbu
 
 
-class redisBucketContainer(object):
+class bucketPail(object):
     def __init__(self):
         self._buckets = []
         buckets = [ key.split(":value")[0] for key in db.redisBucketServer.keys("bucket:*:value") ]
 
         for bucket in buckets:
-            redisBucket = db.redisObject(bucket)
-            userList = []
-            for user in redisBucket.users:
-                userList.append(userModel.getByID(user))
-            redisBucket._userObjects = userList
+            redisBucket = bum.redisObject(bucket)
+            if "users" in redisBucket:
+                userList = []
+                for user in redisBucket.users:
+                    userList.append(userModel.getByID(user))
+                redisBucket._userObjects = userList
             self._buckets.append(redisBucket)
 
-
     @staticmethod
-    def bucketToggle(bucketID):
+    def toggle(bucketID):
         current = dbu.toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
         return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
+
+    def __iter__(self):
+        for bucket in self._buckets:
+            yield bucket
 
 
 class cfgBuckets(object):
