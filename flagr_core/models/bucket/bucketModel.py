@@ -18,44 +18,24 @@ import config.dbBase as db
 import utils.dbUtils as dbu
 
 
-def adminBucketDict():
-    """
-    Attempts to make a single dict which holds the description and
-    value for each bucket as the value, and the id of the bucket as the key.
-    eg:
-        {"id0": {"value": True, "description":"description goes here", "name": "enable id0"}}
+class redisBucketContainer(object):
+    def __init__(self):
+        self._buckets = []
+        self._usersLists = {}
+        buckets = [ key.split(":value")[0] for key in db.redisBucketServer.keys("bucket:*:value") ]
 
-    :return: A dict of ids and another dict. Each value is a smaller dict of the key value,
-        name and description
-    """
-    returnBuckets = dict()
+        for bucket in buckets:
+            redisBucket = db.redisObject(bucket)
+            bucketID = bucket.strip("bucket:")[1]
+            self._buckets.append(redisBucket)
+            self._userLists[bucketID] = []
+            for user in redisBucket.users:
+                self._userLists[bucketID].append(userModel.getByID(user))
 
-    buckets = [ key.strip(":value") for key in db.redisBucketServer.keys("bucket:*:value") ]
-
-    for bucket in buckets:
-        returnBuckets[bucket.strip("bucket").strip(":")] = {"value": dbu.toBoolean(db.redisBucketServer.get(bucket+":value")),
-                "name": db.redisBucketServer.get(bucket+":name"),
-                "description": db.redisBucketServer.get(bucket+":description")}
-        #Finally attach a list of userORM objects for the users who have access to this bucket
-        for additional in ["users", "requires", "disables"]:
-            if db.redisBucketServer.exists("%s:%s"%(bucket, additional)):
-                if db.reditBucketServer.type("%s:%s"(bucket, additional)) == "set":
-                    bits = db.redisBucketServer.smembers("%s:%s"(bucket, additional))
-                    bitList = []
-                    for bit in bits:
-                        if additional == "users":
-                            bitList.append(userModel.getByID(bit))
-                        else:
-                            bitList.append(bit)
-                    returnBuckets[bucket.strip("bucket").strip(":")][additional] = bitList
-
-    return returnBuckets
-
-
-
-def adminBucketToggle(bucketID):
-    current = dbu.toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
-    return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
+    @staticmethod
+    def bucketToggle(bucketID):
+        current = dbu.toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
+        return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
 
 
 class cfgBuckets(object):

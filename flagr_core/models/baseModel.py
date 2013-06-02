@@ -110,6 +110,10 @@ class baseCouchModel(object):
 
 
 class redisKeysBase(object):
+    """
+    Acts as the backing cantainer for redisObject which will update the
+    redis keys as the containers values and keys change.
+    """
     def __init__(self, key, redis=db.redisBucketServer):
         self._data = dict()
         self.redis = redis
