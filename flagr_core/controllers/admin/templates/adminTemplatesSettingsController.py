@@ -14,7 +14,7 @@ joshuaashby@joshashby.com
 from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
-import models.couch.setting.settingModel as sm
+import models.redis.setting.settingModel as sm
 import json
 
 

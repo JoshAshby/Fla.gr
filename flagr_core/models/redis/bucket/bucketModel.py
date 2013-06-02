@@ -16,7 +16,7 @@ joshuaashby@joshashby.com
 import models.couch.user.userModel as userModel
 import config.dbBase as db
 import utils.dbUtils as dbu
-import models.redis.baseRedisCollection.baseRedisCollection as bc
+import models.redis.baseRedisCollection as bc
 
 
 class bucketPail(bc.baseRedisCollection):
