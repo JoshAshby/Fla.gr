@@ -118,7 +118,15 @@ class redisKeysBase(object):
     def getField(self, key):
         objectType = self.redis.type(self.key+key)
         if objectType == "string":
-            self._data[key] = self.redis.get(self.key+key)
+            # If it's a string then we have to check if it
+            # is a boolean or a regular string since
+            # Redis doesn't have a concept of boolean it seems
+            objectData = self.redis.get(self.key+key)
+            try:
+                objectData = dbu.toBoolean(objectData)
+            except:
+                pass
+            self._data[key] = objectData
         if objectType == "list":
             self._data[key] = redisList(self.key+key)
 
@@ -149,7 +157,8 @@ class redisObject(object):
     """
     I said I never would, but this is another attempt at making
     an ORM for redis...
-    It's probably not going to work, but heres hoping.
+
+    Emulates a python object and stores it in Redis real time.
     """
     protectedItems = ["_keys", "key", "redis"]
     def __init__(self, key, redis=db.redisBucketServer, **kwargs):
@@ -216,14 +225,19 @@ class redisList(object):
         self._list = []
         self.redis = redis
         self.key = key
-        self.extend(start)
-
+        if self.key and not start:
+            self._list = self.redis.lrange(key, 0, -1)
+        else:
+            self.extend(start)
 
     def __repr__(self):
         return repr(self._list)
 
     def __str__(self):
         return str(self._list)
+
+    def sync(self):
+        self._list = self.redis.lrange(self.key, 0, -1)
 
     def append(self, other):
         self._list.append(other)
@@ -265,9 +279,6 @@ class redisList(object):
     def __setitem__(self, index, value):
         self._list[index] = value
         self.redis.lset(self.key, index, value)
-
-    def __delitem__(self, index):
-        return self.remove(index)
 
     def __iter__(self):
         return self._list
