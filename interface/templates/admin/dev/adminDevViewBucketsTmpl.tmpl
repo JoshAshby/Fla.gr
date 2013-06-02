@@ -22,9 +22,9 @@
             <td>$bucket["description"][:100]...</td>
             <td class="changeBtns" width=15%>
                 #if $bucket["value"]
-                    <a class="btn btn-success pull-right" id="${bucket.id}ModalButton" href="#${bucket}Modal" role="button" data-toggle="modal"><i class="icon-bolt"></i> Enabled</a>
+                    <a class="btn btn-success pull-right" id="${bucket.id}ModalButton" href="#${bucket.id}Modal" role="button" data-toggle="modal"><i class="icon-bolt"></i> Enabled</a>
                 #else
-                    <a class="btn btn-inverse pull-right" id="${bucket.id}ModalButton" href="#${bucket}Modal" role="button" data-toggle="modal"><i class="icon-off"></i> Disabled</a>
+                    <a class="btn btn-inverse pull-right" id="${bucket.id}ModalButton" href="#${bucket.id}Modal" role="button" data-toggle="modal"><i class="icon-off"></i> Disabled</a>
                 #end if
             </td>
         </tr>
