@@ -21,16 +21,16 @@ import utils.dbUtils as dbu
 class redisBucketContainer(object):
     def __init__(self):
         self._buckets = []
-        self._usersLists = {}
         buckets = [ key.split(":value")[0] for key in db.redisBucketServer.keys("bucket:*:value") ]
 
         for bucket in buckets:
             redisBucket = db.redisObject(bucket)
-            bucketID = bucket.strip("bucket:")[1]
-            self._buckets.append(redisBucket)
-            self._userLists[bucketID] = []
+            userList = []
             for user in redisBucket.users:
-                self._userLists[bucketID].append(userModel.getByID(user))
+                userList.append(userModel.getByID(user))
+            redisBucket._userObjects = userList
+            self._buckets.append(redisBucket)
+
 
     @staticmethod
     def bucketToggle(bucketID):

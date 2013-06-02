@@ -113,6 +113,9 @@ class redisKeysBase(object):
     """
     Acts as the backing cantainer for redisObject which will update the
     redis keys as the containers values and keys change.
+
+    This could probably be tied into redisObject but then the code would
+    get a little messy, I think so I'm keeping this seperate. 
     """
     def __init__(self, key, redis=db.redisBucketServer):
         self._data = dict()
@@ -176,14 +179,16 @@ class redisObject(object):
                 self._keys.getField(objectPart)
 
     def _get(self, item):
-        if item not in object.__getattribute__(self, "protectedItems"):
+        if item not in object.__getattribute__(self, "protectedItems") \
+                and item[0] != "_":
             keys = object.__getattribute__(self, "_keys")
             if item in keys:
                 return keys[item]
         return object.__getattribute__(self, item)
 
     def _set(self, item, value):
-        if item not in object.__getattribute__(self, "protectedItems"):
+        if item not in object.__getattribute__(self, "protectedItems") \
+                and item[0] != "_":
             keys = object.__getattribute__(self, "_keys")
             if not hasattr(value, '__call__'):
                 keys[item] = value
