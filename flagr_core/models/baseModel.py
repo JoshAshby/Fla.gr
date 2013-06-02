@@ -115,29 +115,35 @@ class redisKeysBase(object):
         self.redis = redis
         self.key = key+":"
 
+    def getField(self, key):
+        objectType = self.redis.type(self.key+key)
+        if objectType == "string":
+            self._data[key] = self.redis.get(self.key+key)
+        if objectType == "list":
+            self._data[key] = redisList(self.key+key)
+
     def __repr__(self):
-        data = object.__getattribute__(self, "_data")
-        return str(data)
+        return str(self._data)
 
     def __getitem__(self, item):
-        print item
-        data = object.__getattribute__(self, "_data")
-        return data[item]
+        print "get", item
+        return self._data[item]
 
     def __setitem__(self, item, value):
-        print item, value
-        data = object.__getattribute__(self, "_data")
-        data[item] = value
-        self.redis.set(self.key+item, value)
+        if type(value) == list:
+            print "set list", item, value
+            self._data[item] = redisList(self.key+item, value)
+        else:
+            print "set", item, value
+            self._data[item] = value
+            self.redis.set(self.key+item, value)
 
     def __delitem__(self, item):
-        data = object.__getattribute__(self, "_data")
-        del(data[item])
+        del(self._data[item])
         self.redis.delete(self.key+item)
 
     def __contains__(self, item):
-        data = object.__getattribute__(self, "_data")
-        if item in data:
+        if item in self._data:
             return True
         return False
 
@@ -157,17 +163,7 @@ class redisObject(object):
             bits = self.redis.keys("%s:*"%(key))
             for bit in bits:
                 objectPart = bit.split("%s:"%(key))[1]
-                objectType = self.redis.type(bit)
-
-                if objectType == "string":
-                    objectValue = self.redis.get(bit)
-                    try:
-                        objectValue = dbu.toBoolean(objectValue)
-                    except:
-                        pass
-                    self._keys[objectPart] = objectValue
-                elif objectType == "list":
-                    self._keys[objectPart] = redisList(bit)
+                self._keys.getField(objectPart)
 
     def _get(self, item):
         if item not in object.__getattribute__(self, "protectedItems"):
@@ -216,11 +212,16 @@ class redisList(object):
     """
     Attempts to emulate a python list, while storing the list
     in redis.
+
+    Missing the sort and reverse functions currently
     """
     def __init__(self, key, start=[], redis=db.redisBucketServer):
+        self._list = []
         self.redis = redis
         self.key = key
-        self._list = start or self.redis.lrange(self.key, 0, -1)
+        self.extend(start)
+        print self._list
+
 
     def __repr__(self):
         return repr(self._list)
@@ -258,12 +259,6 @@ class redisList(object):
 
     def count(self):
         return self._list.count()
-
-    #def sort(self):
-        #return self._list.sort()
-
-    #def reverse(self):
-        #return self._list.reverse()
 
     def __len__(self):
         return len(self._list)
