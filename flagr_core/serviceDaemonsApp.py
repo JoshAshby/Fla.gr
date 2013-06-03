@@ -59,13 +59,13 @@ def setupLog(daemon):
 class searchIndex(Daemon):
     def run(self):
         logger = setupLog("search")
-        import utils.search.searchIndexer as siu
+        __import__("utils.search.searchIndexer", siu, locals())
         siu.start()
 
 class emailSender(Daemon):
     def run(self):
         logger = setupLog("email")
-        import utils.email.emailSender as ems
+        __import__("utils.email.emailSender", ems, locals())
         ems.start()
 
 
@@ -82,52 +82,36 @@ if __name__ == "__main__":
                 siu.buildIndexes()
                 sys.exit(0)
 
-            if not noDaemon:
+        if not noDaemon:
+            if 'search' == sys.argv[1]:
                 daemon = searchIndex(c.general.dirs["pidDir"]+c.general.logName+'SearchDaemon.pid', stderr=c.general.files["stderr"])
+            elif 'email' == sys.argv[1]:
+                daemon = emailSender(c.general.dirs["pidDir"]+c.general.logName+'emailDaemon.pid', stderr=c.general.files["stderr"])
 
-                if 'start' in sys.argv:
-                    daemon.start()
+            if 'start' in sys.argv:
+                daemon.start()
 
-                elif 'stop' in sys.argv:
-                    daemon.stop()
+            elif 'stop' in sys.argv:
+                daemon.stop()
 
-                elif 'restart' in sys.argv:
-                    daemon.restart()
-
-                else:
-                    print "Unknown command"
-                    sys.exit(2)
-                sys.exit(0)
+            elif 'restart' in sys.argv:
+                daemon.restart()
 
             else:
+                print "Unknown command"
+                sys.exit(2)
+            sys.exit(0)
+
+        else:
+            if 'search' == sys.argv[1]:
                 logger = setupLog("search")
                 import utils.search.searchIndexer as siu
                 siu.start()
-                sys.exit(0)
-
-        if 'email' == sys.argv[1]:
-            if not noDaemon:
-                daemon = emailSender(c.general.dirs["pidDir"]+c.general.logName+'emailDaemon.pid', stderr=c.general.files["stderr"])
-
-                if 'start' in sys.argv:
-                    daemon.start()
-
-                elif 'stop' in sys.argv:
-                    daemon.stop()
-
-                elif 'restart' in sys.argv:
-                    daemon.restart()
-
-                else:
-                    print "Unknown command"
-                    sys.exit(2)
-                sys.exit(0)
-
-            else:
+            elif 'email' == sys.argv[1]:
                 logger = setupLog("email")
                 import utils.email.emailSender as ems
                 ems.start()
-                sys.exit(0)
+            sys.exit(0)
 
     else:
         print "usage: %s start|stop|restart|noDaemon" % sys.argv[0]
