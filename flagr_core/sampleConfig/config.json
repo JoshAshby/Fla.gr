@@ -1,0 +1,36 @@
+{
+    "appName": "fla.gr",
+    "logName": "flagr",
+
+    "email": {
+        "sendEmail": false,
+        "logEmail": true,
+        "notLocalhost": true,
+        "host": "smtp.example.com",
+        "port": 587,
+        "loginEmail": "example@example.com",
+        "loginPassword": "12345"
+    },
+    "requests": {
+        "secret": "generateRandom"
+    },
+    "dirs": {
+        "logDir": "%s/logs/",
+        "pidDir": "%s/pid/"
+    },
+    "files": {
+        "stdout": "%s/logs/out",
+        "stderr": "%s/logs/error"
+    },
+
+    "fcgiBase": "",
+    "serverAddress": "127.0.0.1",
+    "serverPort": 8000,
+
+    "debug": true,
+    "dummySession": false,
+
+    "baseURL": "http://localhost",
+
+    "securityLevels": ["normal", "admin"]
+}

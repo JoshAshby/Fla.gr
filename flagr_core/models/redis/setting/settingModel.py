@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config.dbBase as db
+import config.config as c
 
 
 def setSetting(featureName, settingName, value):
@@ -21,34 +21,34 @@ def setSetting(featureName, settingName, value):
 
     :param bucketName: The bucket name to update the settings for
     :param settingName: The name of the settings, if this key exists then a type check will happen against `value`
-    :param value: The value of the setting, should match type of setting if settingName exists in the db already
+    :param value: The value of the setting, should match type of setting if settingName exists in the c.database already
     """
     settingKey = "setting:%s:%s"%(featureName, settingName)
-    if db.redisBucketServer.exists(settingKey):
-        settingType = db.redisBucketServer.type(settingKey)
+    if c.database.redisBucketServer.exists(settingKey):
+        settingType = c.database.redisBucketServer.type(settingKey)
 
         if type(value) == set:
             if settingType and settingType == "set":
-                currentMembers = db.redisBucketServer.smembers(settingKey)
+                currentMembers = c.database.redisBucketServer.smembers(settingKey)
                 for member in currentMembers.difference(value):
-                    db.redisBucketServer.srem(settingKey, member)
+                    c.database.redisBucketServer.srem(settingKey, member)
                     currentMembers.remove(member)
                 for member in value.difference(currentMembers):
-                    db.redisBucketServer.sadd(settingKey, member)
+                    c.database.redisBucketServer.sadd(settingKey, member)
             elif not settingType:
                 for member in value:
-                    db.redisBucketServer.sadd(settingKey, member)
+                    c.database.redisBucketServer.sadd(settingKey, member)
             else:
                 raise Exception("Value and key are of different types: %s %s"%(type(value), settingType))
         else:
-            db.redisBucketServer.set(settingKey, value)
+            c.database.redisBucketServer.set(settingKey, value)
 
     else:
         if type(value) == set:
             for item in value:
-                db.redisBucketServer.sadd(settingKey, item)
+                c.database.redisBucketServer.sadd(settingKey, item)
         else:
-            db.redisBucketServer.set(settingKey, value)
+            c.database.redisBucketServer.set(settingKey, value)
 
 
 def getSetting(featureName, settingName):
@@ -56,13 +56,13 @@ def getSetting(featureName, settingName):
 
     """
     settingKey = "setting:%s:%s"%(featureName, settingName)
-    if db.redisBucketServer.exists(settingKey):
-        keyType = db.redisBucketServer.type(settingKey)
+    if c.database.redisBucketServer.exists(settingKey):
+        keyType = c.database.redisBucketServer.type(settingKey)
 
         if keyType == "string":
-            return db.redisBucketServer.get(settingKey)
+            return c.database.redisBucketServer.get(settingKey)
         elif keyType == "set":
-            return db.redisBucketServer.smembers(settingKey)
+            return c.database.redisBucketServer.smembers(settingKey)
     else:
         raise Exception("Setting doesn't exist!")
 

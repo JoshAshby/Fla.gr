@@ -1,13 +1,4 @@
-*!!!WARNING!!!!*
-====================
-  
-This is a fairly complete rewrite of fla.gr  
-As a result, most things are either broken, non functional, or otherwise a
-mess.  
-I'm currently working on trying to get it ready for a preliminary release  
-  
 ## fla.gr - ALL THE BOOKMARKS
-  
   
 A bit of introduction:
 ---------------------
@@ -29,10 +20,9 @@ HTML as separate systems.
   
 What you need:
 ---------------
-Well, currently nothing, because I'm rewriting this and it doesn't work. At
-all.  
+Well... Everything  
   
-However, you probably will eventually need ZeroMQ, Redis, CouchDB, Python
+However, honestly you probably will eventually need ZeroMQ, Redis, CouchDB, Python
 2.7, node.js, and all the node packages and the python packages. The simplest way
 to get the python and node.js packages and generate the templates is to do:  
   
@@ -41,6 +31,8 @@ to get the python and node.js packages and generate the templates is to do:
   pip install -r requirements.txt  
   make flagr  
   
+After this you'll have to setup your static folder so the content in `interface/resources/` 
+is available at `/static` on your web server.
 It's recommend by Me to run fla.gr in a Python virtualenv just to be safe
 and to make sure everything runs smoothly even if you have a more up to date
 system than I do.  

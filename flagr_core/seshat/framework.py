@@ -21,7 +21,7 @@ import gevent
 from gevent_fastcgi.server import WSGIServer
 
 import logging
-logger = logging.getLogger(c.logName+".seshat")
+logger = logging.getLogger(c.general.logName+".seshat")
 
 from seshat.coreApp import app
 
@@ -32,14 +32,14 @@ def main():
 
         Sets up the server and all that messy stuff
         """
-        if c.port and type(c.port) is str:
-                port = int(c.port)
+        if c.general.serverPort and type(c.general.serverPort) is str:
+                port = int(c.general.serverPort)
         else:
                 port = 8000
-        if not c.address:
+        if not c.general.serverAddress:
                 address = "127.0.0.1"
         else:
-                address = c.address
+                address = c.general.serverAddress
 
         server = WSGIServer((address, port), app)
 

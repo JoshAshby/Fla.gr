@@ -15,7 +15,6 @@ joshuaashby@joshashby.com
 """
 import models.couch.user.userModel as userModel
 import config.config as c
-import config.dbBase as db
 import utils.alerts as ua
 import json
 
@@ -31,8 +30,8 @@ def session(cookieID):
     #if there isn't a config setting for using dummy sessions for everything
     #then we can go ahead and make either a new dummy if anonymous
     #or pull in the userModel if there is a user logged in
-    if not c.dummySession:
-        userID = db.redisSessionServer.hget(cookieID, "userID")
+    if not c.general.dummySession:
+        userID = c.database.redisSessionServer.hget(cookieID, "userID")
         if userID:
             user = userModel.userORM.find(userID)
         else:
@@ -41,7 +40,7 @@ def session(cookieID):
         #We also try to get the alerts however this might not work because
         #there might now be any json to pull in (eg: empty hash value in redis)
         try:
-            user._alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
+            user._alerts = json.loads(c.database.redisSessionServer.hget(cookieID, "alerts"))
         except:
             pass
 
@@ -83,7 +82,7 @@ class dummySession(object):
         self._alerts = []
 
     def store(self, dbDummy):
-        db.redisSessionServer.hset(self.sessionID, "alerts",
+        c.database.redisSessionServer.hset(self.sessionID, "alerts",
                 json.dumps(self._alerts))
 
     def pushAlert(self, *args, **kwargs):
@@ -101,7 +100,7 @@ class dummySession(object):
         self.alerts = self.HTMLAlert(*args, **kwargs);
 
     def saveAlerts(self):
-        db.redisSessionServer.hset(self.sessionID, "alerts",
+        c.database.redisSessionServer.hset(self.sessionID, "alerts",
                 json.dumps(self._alerts))
 
     @property
@@ -143,7 +142,7 @@ class dummySession(object):
         Same as `store` Simply stores the sessions alerts in redis for
         the next page load from the session.
         """
-        db.redisSessionServer.hset(self.sessionID, "alerts",
+        c.database.redisSessionServer.hset(self.sessionID, "alerts",
                 json.dumps(self._alerts))
 
     def logout(self):

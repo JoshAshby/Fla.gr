@@ -31,7 +31,7 @@ import models.couch.flag.flagModel as fm
 import config.config as c
 
 import logging
-logger = logging.getLogger(c.logName+"search.indexer")
+logger = logging.getLogger(c.general.logName+"search.indexer")
 
 
 flagSchema = Schema(title=TEXT,
@@ -44,11 +44,11 @@ flagSchema = Schema(title=TEXT,
 
 flagSearchIndex = "/.flagSearchIndex"
 
-if not os.path.exists(c.baseFolder+flagSearchIndex):
-    os.mkdir(c.baseFolder+flagSearchIndex)
-    logger.debug("Made directory: "+c.baseFolder+flagSearchIndex)
+if not os.path.exists(c.general.baseFolder+flagSearchIndex):
+    os.mkdir(c.general.baseFolder+flagSearchIndex)
+    logger.debug("Made directory: "+c.general.baseFolder+flagSearchIndex)
 
-storage = FileStorage(c.baseFolder+flagSearchIndex)
+storage = FileStorage(c.general.baseFolder+flagSearchIndex)
 
 
 def buildIndexes():
@@ -79,7 +79,7 @@ def updateFlags():
     logger.debug("Rebuilding index of flags...")
     ix = storage.open_index()
 
-    flags = list(fm.flagORM.view(db.couchServer, 'typeViews/flag'))
+    flags = list(fm.flagORM.view(c.database.couchServer, 'typeViews/flag'))
     flags = fm.formatFlags(flags, True)
 
     currentFlags = set()

@@ -12,12 +12,11 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config.config as c
-import config.zmqBase as zmqc
 
 import json
 
 import logging
-logger = logging.getLogger(c.logName+".emailUtils")
+logger = logging.getLogger(c.general.logName+".emailUtils")
 
 
 def sendMessage(tmplID, tmplData, whoTo, subject):
@@ -38,6 +37,6 @@ def sendMessage(tmplID, tmplData, whoTo, subject):
     msg = "sendEmail:" + json.dumps(dictToSend)
 
     logger.debug("Sending signal: %s" % msg)
-    zmqc.zmqSock.send(msg)
+    c.zeromq.socket.send(msg)
     logger.debug("Signal sent")
 

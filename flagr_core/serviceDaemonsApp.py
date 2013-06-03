@@ -27,21 +27,21 @@ def setupLog(daemon):
     """
     import logging
     level = logging.WARNING
-    if c.debug:
+    if c.general.debug:
         level = logging.DEBUG
 
     formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
     %(message)s""")
 
-    logger = logging.getLogger(c.logName+daemon)
+    logger = logging.getLogger(c.general.logName+daemon)
     logger.setLevel(level)
 
-    fh = logging.FileHandler(c.logFolder+c.logName+daemon+".log")
+    fh = logging.FileHandler(c.general.dirs["logDir"]+c.general.logName+daemon+".log")
     fh.setLevel(level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    if c.debug and "noDaemon" in sys.argv:
+    if c.general.debug and "noDaemon" in sys.argv:
         """
         Make sure we're not in daemon mode if we're logging to console too
         """
@@ -83,7 +83,7 @@ if __name__ == "__main__":
                 sys.exit(0)
 
             if not noDaemon:
-                daemon = searchIndex(c.pidFolder+c.logName+'SearchDaemon.pid', stderr=c.stderr)
+                daemon = searchIndex(c.general.dirs["pidDir"]+c.general.logName+'SearchDaemon.pid', stderr=c.general.files["stderr"])
 
                 if 'start' in sys.argv:
                     daemon.start()
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
         if 'email' == sys.argv[1]:
             if not noDaemon:
-                daemon = emailSender(c.pidFolder+c.logName+'emailDaemon.pid', stderr=c.stderr)
+                daemon = emailSender(c.general.dirs["pidDir"]+c.general.logName+'emailDaemon.pid', stderr=c.general.files["stderr"])
 
                 if 'start' in sys.argv:
                     daemon.start()

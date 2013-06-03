@@ -12,7 +12,7 @@ joshuaashby@joshashby.com
 from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, ListField
 from datetime import datetime
 
-import config.dbBase as db
+import config.config as c
 from models.couch.baseCouchModel import baseCouchModel
 import models.couch.user.userModel as um
 import utils.markdownUtils as mdu
@@ -27,7 +27,7 @@ def listFlagsByUserID(userID):
         `userORM` object for the flags author
         `None` if no flags are found
     """
-    foundFlags = flagORM.view(db.couchServer, 'typeViews/flag')
+    foundFlags = flagORM.view(c.database.couchServer, 'typeViews/flag')
     if not foundFlags:
         return None
     flags = []

@@ -25,21 +25,21 @@ def setupLog():
     """
     import logging
     level = logging.WARNING
-    if c.debug:
+    if c.general.debug:
             level = logging.DEBUG
 
     formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
     %(message)s""")
 
-    logger = logging.getLogger(c.logName)
+    logger = logging.getLogger(c.general.logName)
     logger.setLevel(level)
 
-    fh = logging.FileHandler(c.logFolder+c.logName+".log")
+    fh = logging.FileHandler(c.general.dirs["logDir"]+c.general.logName+".log")
     fh.setLevel(level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    if c.debug and "noDaemon" in sys.argv:
+    if c.general.debug and "noDaemon" in sys.argv:
         """
         Make sure we're not in daemon mode if we're logging to console too
         """
@@ -64,16 +64,14 @@ class app(Daemon):
         if self.down:
             logger.warn("Entered Maintenance mode. All URLS routed to maintenanceController!")
             __import__("controllers.maintenanceController", globals(), locals())
-            #import controllers.maintenanceController
         else:
             __import__("controllers.controllerMap", globals(), locals())
-            #import controllers.controllerMap
 
         fw.serveForever()
 
 
 if __name__ == "__main__":
-    daemon = app(c.pidFolder+c.logName+'.pid', stderr=c.stderr)
+    daemon = app(c.general.dirs["pidDir"]+c.general.logName+'.pid', stderr=c.general.files["stderr"])
     daemon.down = False
     if len(sys.argv) >= 2:
         if 'noDaemon' in sys.argv:
@@ -81,10 +79,8 @@ if __name__ == "__main__":
             import seshat.framework as fw
             if 'maintenance' in sys.argv:
                 __import__("controllers.maintenanceController", globals(), locals())
-                #import controllers.maintenanceController
             else:
                 __import__("controllers.controllerMap", globals(), locals())
-                #import controllers.controllerMap
             fw.serveForever()
 
         elif 'start' in sys.argv:

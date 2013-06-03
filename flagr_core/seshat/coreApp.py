@@ -19,7 +19,7 @@ import gevent
 from gevent import queue
 
 import logging
-logger = logging.getLogger(c.logName+".seshat.coreApp")
+logger = logging.getLogger(c.general.logName+".seshat.coreApp")
 
 import string
 import random
@@ -66,7 +66,7 @@ def app(env, start_response):
 
         for url in c.urls:
             try:
-                matched = url.regex.match(env["REQUEST_URI"][len(c.fcgiBase):].split("?")[0])
+                matched = url.regex.match(env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0])
             except:
                 matched = url.regex.match(env["PATH_INFO"])
             if matched:
@@ -97,13 +97,13 @@ def app(env, start_response):
                                         members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
 
                 newHTTPObject = url.pageObject(env, members, sessionID)
-                if c.debug:
+                if c.general.debug:
                         logURL(env, url)
                 break
 
         if not newHTTPObject:
             newHTTPObject = errorController.error404(env, members, sessionID)
-            if c.debug: log404(env)
+            if c.general.debug: log404(env)
 
 
         if env["REQUEST_METHOD"] == "GET":
@@ -130,7 +130,7 @@ def app(env, start_response):
         #Hack to see if this works...
         if status == "404 NOT FOUND":
             newHTTPObject = errorController.error404(env, members, sessionID)
-            if c.debug: log404(env)
+            if c.general.debug: log404(env)
 
             if env["REQUEST_METHOD"] == "GET":
                     newHTTPObject.session.history = env["REQUEST_URI"] if env.has_key("REQUEST_URL") else env["PATH_INFO"]

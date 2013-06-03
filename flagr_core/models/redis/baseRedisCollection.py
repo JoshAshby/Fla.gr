@@ -10,7 +10,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import models.redis.baseRedisModel as bum
-import config.dbBase as db
+import config.config as c
 
 
 class baseRedisCollection(object):
@@ -22,7 +22,7 @@ class baseRedisCollection(object):
 
     For an example see `bucketsPail` in `models.bucket.bucketModel`
     """
-    def __init__(self, pattern, redis=db.redisBucketServer):
+    def __init__(self, pattern, redis=c.database.redisBucketServer):
         """
         Assumes the Redis objects are stored in a pattern of `what:id:parts``
         Where `what` is like a class, where all keys in `what` are of the same

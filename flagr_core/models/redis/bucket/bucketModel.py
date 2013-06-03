@@ -14,7 +14,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import models.couch.user.userModel as userModel
-import config.dbBase as db
+import config.config as c
 import utils.dbUtils as dbu
 import models.redis.baseRedisCollection as bc
 
@@ -30,13 +30,13 @@ class bucketPail(bc.baseRedisCollection):
 
     @staticmethod
     def toggle(bucketID):
-        current = dbu.toBoolean(db.redisBucketServer.get("bucket:%s:value"%bucketID))
-        return db.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
+        current = dbu.toBoolean(c.database.redisBucketServer.get("bucket:%s:value"%bucketID))
+        return c.database.redisBucketServer.set("bucket:%s:value"%bucketID, not current)
 
 
 class cfgBuckets(object):
     def __init__(self):
-        keys = { key.split(":")[1]:dbu.toBoolean(db.redisBucketServer.get(key)) for key in db.redisBucketServer.keys("bucket:*:value") }
+        keys = { key.split(":")[1]:dbu.toBoolean(c.database.redisBucketServer.get(key)) for key in c.database.redisBucketServer.keys("bucket:*:value") }
         for key in keys:
             setattr(self, key, keys[key])
 

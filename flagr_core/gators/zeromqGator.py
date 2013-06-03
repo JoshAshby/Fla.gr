@@ -15,4 +15,13 @@ from gevent_zeromq import zmq
 
 context = zmq.Context()
 zmqSock = context.socket(zmq.PUB)
-zmqSock.bind("tcp://127.0.0.1:5000")
+
+from gators.baseGator import baseGator
+
+
+class config(baseGator):
+    baseFile = 'zeromq.json'
+    _temp = {}
+    def postInit(self):
+        self._temp["sock"] = zmqSock.bind(self._data["URL"]+":"+str(self._data["port"]))
+        self._data = self._temp
