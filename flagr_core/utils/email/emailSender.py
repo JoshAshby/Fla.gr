@@ -33,7 +33,7 @@ zmqSock.setsockopt(zmq.SUBSCRIBE, "sendEmail")
 import json
 
 import logging
-logger = logging.getLogger(c.logName+"email.sender")
+logger = logging.getLogger(c.general.logName+"email.sender")
 
 import models.redis.setting.settingModel as sm
 

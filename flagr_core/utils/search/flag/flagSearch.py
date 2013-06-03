@@ -17,13 +17,13 @@ from whoosh.filedb.filestore import FileStorage
 from whoosh.qparser import MultifieldParser
 
 import logging
-logger = logging.getLogger(c.logName+".searchUtils.flagSearch")
+logger = logging.getLogger(c.general.logName+".searchUtils.flagSearch")
 
 import models.couch.flag.flagModel as fm
 
 flagSearchIndex = "/.flagSearchIndex"
 
-storage = FileStorage(c.baseFolder+flagSearchIndex)
+storage = FileStorage(c.general.baseFolder+flagSearchIndex)
 
 
 def flagSearch(queryString):

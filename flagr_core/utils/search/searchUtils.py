@@ -12,12 +12,11 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import config.config as c
-import config.zmqBase as zmqc
 
 import gevent
 
 import logging
-logger = logging.getLogger(c.logName+".searchUtils")
+logger = logging.getLogger(c.general.logName+".searchUtils")
 
 
 def _update(message):
@@ -28,7 +27,7 @@ def _update(message):
     :return: None
     """
     logger.debug("Sending signal: %s" % message)
-    zmqc.zmqSock.send(message)
+    c.zeromq.socket.send(message)
     logger.debug("Signal sent")
 
 

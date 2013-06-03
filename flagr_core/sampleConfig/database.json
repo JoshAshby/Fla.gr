@@ -1,0 +1,15 @@
+{
+    "redisDB": {
+        "storeSeparate": true,
+        "databases": {
+            "session": 3,
+            "bucket": 4
+        },
+        "URL": "localhost"
+    },
+    "couchDB": {
+        "URL": "http://localhost",
+        "port": 5984,
+        "name": "flagr"
+    }
+}

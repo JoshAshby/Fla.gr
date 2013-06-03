@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config.dbBase as db
+import config.config as c
 import utils.dbUtils as dbu
 
 
@@ -23,7 +23,7 @@ class redisKeysBase(object):
     This could probably be tied into redisObject but then the code would
     get a little messy, I think so I'm keeping this separate. 
     """
-    def __init__(self, key, redis=db.redisBucketServer):
+    def __init__(self, key, redis=c.database.redisBucketServer):
         self._data = dict()
         self.redis = redis
         self.key = key+":"
@@ -74,7 +74,7 @@ class redisObject(object):
     Emulates a python object and stores it in Redis real time.
     """
     protectedItems = ["_keys", "key", "redis", "id"]
-    def __init__(self, key, redis=db.redisBucketServer, **kwargs):
+    def __init__(self, key, redis=c.database.redisBucketServer, **kwargs):
         self._keys = redisKeysBase(key)
         self.redis = redis
         self.key = key
@@ -137,7 +137,7 @@ class redisList(object):
 
     Missing the sort and reverse functions currently
     """
-    def __init__(self, key, start=[], redis=db.redisBucketServer):
+    def __init__(self, key, start=[], redis=c.database.redisBucketServer):
         self._list = []
         self.redis = redis
         self.key = key

@@ -11,12 +11,12 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import config.dbBase as db
+import config.config as c
 
 
 class baseCouchModel(object):
     """
-    Extension of the couchdb-python Document class to provide a
+    Extension of the couchc.database-python Document class to provide a
     bit more of an object interface with the documents, since some
     things such as saving and deleteing the documents doesn't feel
     very object based to me.
@@ -34,13 +34,13 @@ class baseCouchModel(object):
         """
         Simply a shortcut for saving the document to couch
         """
-        self.store(db.couchServer)
+        self.store(c.database.couchServer)
 
     def delete(self):
         """
         Deletes the current instance
         """
-        db.couchServer.delete(self)
+        c.database.couchServer.delete(self)
 
     @classmethod
     def getByID(cls, ID):
@@ -51,12 +51,12 @@ class baseCouchModel(object):
         :param ID: The document id of the document you want to retrieve
         :return: An instance of `cls` which has the matching document id
         """
-        return cls.load(db.couchServer, ID)
+        return cls.load(c.database.couchServer, ID)
 
     @classmethod
     def findWithView(cls, view, value):
         """
-        Searches couchdb for documents that have the requested username
+        Searches couchc.database for documents that have the requested username
 
         :param value: The value to search for in the ORM
         :return: Either a `cls` instance or a list of `cls` instances
@@ -78,7 +78,7 @@ class baseCouchModel(object):
     @classmethod
     def find(cls, value):
         """
-        Searches couchdb for documents that have the requested username
+        Searches couchc.database for documents that have the requested username
 
         :param value: The value to search for in the ORM
         :return: Either a `cls` instance or a list of `cls` instances
@@ -93,14 +93,14 @@ class baseCouchModel(object):
         Returns either all of the documents under view, or all of the documents
         which match the key
         :param view: The name of the view to use, currently this is the name of the
-            couchdb view, however it can be extended into other areas later on if I
+            couchc.database view, however it can be extended into other areas later on if I
             ever change the underlying database.
         :param key: Optional view key to use
         :return: A list of ORM instances which fall within the given `view`
         """
         if key:
-            return list(cls.view(db.couchServer, view, key=key))
-        return list(cls.view(db.couchServer, view))
+            return list(cls.view(c.database.couchServer, view, key=key))
+        return list(cls.view(c.database.couchServer, view))
 
     @classmethod
     def all(cls):

@@ -2,7 +2,7 @@
 """
 fla.gr user model
 
-Given a userID or a username or a email, return the users couchdb ORM
+Given a userID or a username or a email, return the users couchc.database ORM
 
 http://xkcd.com/353/
 
@@ -18,7 +18,7 @@ import bcrypt
 import json
 from datetime import datetime
 
-import config.dbBase as db
+import config.config as c
 import utils.alerts as ua
 import utils.sessionExceptions as use
 import utils.markdownUtils as mdu
@@ -31,7 +31,7 @@ from models.couch.baseCouchModel import baseCouchModel
 
 class userORM(Document, baseCouchModel):
     """
-    Base ORM for users in fla.gr, this one currently uses couchdb to store
+    Base ORM for users in fla.gr, this one currently uses couchc.database to store
     the data.
     TODO: Flesh this doc out a lot more
     """
@@ -79,7 +79,7 @@ class userORM(Document, baseCouchModel):
         :param password: plain text password to hash
         """
         self.password = bcrypt.hashpw(password, bcrypt.gensalt())
-        self.store(db.couchServer)
+        self.store(c.database.couchServer)
 
     @classmethod
     def login(cls, user, password, cookieID):
@@ -98,12 +98,12 @@ class userORM(Document, baseCouchModel):
             if not foundUser.disable:
                 if foundUser.password == bcrypt.hashpw(password,
                         foundUser.password):
-                    db.redisSessionServer.hset(cookieID, "userID",
+                    c.database.redisSessionServer.hset(cookieID, "userID",
                             foundUser.id)
-                    user = cls.load(db.couchServer, foundUser.id)
+                    user = cls.load(c.database.couchServer, foundUser.id)
                     user.sessionID = cookieID
                     user.loggedIn = True
-                    user._alerts = json.loads(db.redisSessionServer.hget(cookieID,
+                    user._alerts = json.loads(c.database.redisSessionServer.hget(cookieID,
                             "alerts"))
                     user.save()
                     return user
@@ -126,10 +126,10 @@ class userORM(Document, baseCouchModel):
 
         :param cookieID: The sessions cookie ID for the person to login
         """
-        db.redisSessionServer.hset(cookieID, "userID", self.id)
+        c.database.redisSessionServer.hset(cookieID, "userID", self.id)
         self.sessionID = cookieID
         self.loggedIn = True
-        self._alerts = json.loads(db.redisSessionServer.hget(cookieID, "alerts"))
+        self._alerts = json.loads(c.database.redisSessionServer.hget(cookieID, "alerts"))
         self.save()
 
     def logout(self):
@@ -138,8 +138,8 @@ class userORM(Document, baseCouchModel):
         session and their `userORM`
         """
         self.loggedIn = False
-        self.store(db.couchServer)
-        db.redisSessionServer.hdel(self.sessionID, "userID")
+        self.store(c.database.couchServer)
+        c.database.redisSessionServer.hdel(self.sessionID, "userID")
         return True
 
     def pushAlert(self, *args, **kwargs):
@@ -160,7 +160,7 @@ class userORM(Document, baseCouchModel):
         """
         Saves the current users alerts and places them into redis
         """
-        db.redisSessionServer.hset(self.sessionID, "alerts",
+        c.database.redisSessionServer.hset(self.sessionID, "alerts",
                 json.dumps(self._alerts))
         return True
 
@@ -223,6 +223,6 @@ class userORM(Document, baseCouchModel):
         Override of the baseCouchModel method: save
         Saves the user object, along with saving the alerts to redis
         """
-        self.store(db.couchServer)
-        db.redisSessionServer.hset(self.sessionID, "alerts",
+        self.store(c.database.couchServer)
+        c.database.redisSessionServer.hset(self.sessionID, "alerts",
                 json.dumps(self._alerts))

@@ -17,7 +17,7 @@ import config.config as c
 
 import baseURL as bu
 import logging
-logger = logging.getLogger(c.logName+".seshat.route")
+logger = logging.getLogger(c.general.logName+".seshat.route")
 
 
 def route(routeURL, urls=c.urls):
@@ -25,7 +25,7 @@ def route(routeURL, urls=c.urls):
                 urlObject = bu.url(routeURL, HTTPObject)
                 urls.append(urlObject)
                 HTTPObject.__url__ = urlObject.url
-                if c.debug: logger.debug("""Made route table entry for:
+                if c.general.debug: logger.debug("""Made route table entry for:
         Object: %(objectName)s
         Pattern %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
                 return HTTPObject
@@ -38,7 +38,7 @@ def autoRoute(urls=c.urls):
 
         urls.append(urlObject)
         HTTPObject.__url__ = urlObject.url
-        if c.debug: logger.debug("""Auto generated route table entry for:
+        if c.general.debug: logger.debug("""Auto generated route table entry for:
         Object: %(objectName)s
         Pattern %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
         return HTTPObject
