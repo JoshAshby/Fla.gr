@@ -28,6 +28,9 @@ class baseRedisCollection(object):
         Where `what` is like a class, where all keys in `what` are of the same
         object type in the system.
 
+        It also assumes that this collection is stored in a redis list under
+        the `what` name, so for buckets, the list key would be `bucket`
+
         :param pattern: The pattern which to find all the keys in this collection
             For example, `bucket:*:value` is a general pattern to find all the ids
             in the category of `bucket`
@@ -37,11 +40,20 @@ class baseRedisCollection(object):
         self._collection = []
         self.redis = redis
         self.pattern = pattern
-        key = pattern.split(":")[0] + ":"
-        pail = list(set([ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ]))
+        key = pattern.split(":")[0]
+        pail = bum.redisList(key)
+        if not pail:
+            self.pail = bum.redisList(key)
+            key += ":"
+            pail = list(set([ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ]))
 
         for drop in pail:
-            drip = bum.redisObject(drop)
+            if type(pail) == bum.redisList:
+                drip = bum.redisObject(drop)
+            else:
+                drip = bum.redisObject(drop)
+                self.pail.append(drop)
+
             drip = self.preInitAppend(drip)
             self._collection.append(drip)
             self.postInitAppend()
@@ -87,6 +99,26 @@ class baseRedisCollection(object):
         if not desc:
             self._collection.reverse()
         return self._collection
+
+    def addObject(self, key):
+        self.pail.append("%s:%s"%(self.patter.split(":")[0], key))
+        pass
+
+    def delObject(self, key):
+        self.pail.remove("%s:%s"%(self.pattern.split(":")[0], key))
+        pass
+
+    def update(self, key):
+        key = self.pattern.split(":")[0] + ":"
+        pail = [ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ]
+        setPail = set(pail)
+
+        setSelfPail = set(self.pail)
+
+        difference = setSelfPail.difference(setPail)
+
+        for drop in difference:
+            self.pail.append(drop)
 
     def __iter__(self):
         """
