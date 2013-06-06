@@ -9,7 +9,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import models.redis.baseRedisModel as bum
+import models.redis.baseRedisModel as brm
 import config.config as c
 
 
@@ -41,17 +41,17 @@ class baseRedisCollection(object):
         self.redis = redis
         self.pattern = pattern
         key = pattern.split(":")[0]
-        pail = bum.redisList(key)
+        pail = brm.redisList(key)
         if not pail:
-            self.pail = bum.redisList(key)
+            self.pail = brm.redisList(key)
             key += ":"
             pail = list(set([ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ]))
 
         for drop in pail:
-            if type(pail) == bum.redisList:
-                drip = bum.redisObject(drop)
+            if type(pail) == brm.redisList:
+                drip = brm.redisObject(drop)
             else:
-                drip = bum.redisObject(drop)
+                drip = brm.redisObject(drop)
                 self.pail.append(drop)
 
             drip = self.preInitAppend(drip)
@@ -101,15 +101,31 @@ class baseRedisCollection(object):
         return self._collection
 
     def addObject(self, key):
-        self.pail.append("%s:%s"%(self.patter.split(":")[0], key))
-        pass
+        """
+        Adds an object to the internal list object, stored in a Redis list
+
+        :param key: The key of the object, in the form of `id` as `what:` is
+            supplied by the collection
+        :type key: Str
+        """
+        self.pail.append("%s:%s"%(self.pattern.split(":")[0], key))
 
     def delObject(self, key):
-        self.pail.remove("%s:%s"%(self.pattern.split(":")[0], key))
-        pass
+        """
+        Removes an object to the internal list of objects, stored in a Redis list
 
-    def update(self, key):
-        key = self.pattern.split(":")[0] + ":"
+        :param key: The key of the object, in the form of `id` as `what:` is
+            supplied by the collection
+        :type key: Str
+        """
+        self.pail.remove("%s:%s"%(self.pattern.split(":")[0], key))
+
+    def update(self):
+        """
+        Updates the internal list of objects, stored in a Redis list, deleting
+        keys that no longer exist, and adding new keys that are not currently
+        part of the collection.
+        """
         pail = [ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ]
         setPail = set(pail)
 
@@ -119,6 +135,11 @@ class baseRedisCollection(object):
 
         for drop in difference:
             self.pail.append(drop)
+
+        deleteDifference = setPail.difference(setSelfPail)
+
+        for drop in deleteDifference:
+            self.pail.remove(drop)
 
     def __iter__(self):
         """
