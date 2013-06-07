@@ -41,18 +41,16 @@ class baseRedisCollection(object):
         self.redis = redis
         self.pattern = pattern
         key = pattern.split(":")[0]
-        pail = brm.redisList(key)
-        if not pail:
-            self.pail = brm.redisList(key)
-            key += ":"
-            pail = list(set([ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ]))
+        self.pail = brm.redisList(key)
+        if not self.pail:
+            self.update()
 
-        for drop in pail:
-            if type(pail) == brm.redisList:
-                drip = brm.redisObject(drop)
-            else:
-                drip = brm.redisObject(drop)
-                self.pail.append(drop)
+    def fetch(self):
+        """
+        Fetches all the redisObjects
+        """
+        for drop in self.pail:
+            drip = brm.redisObject(drop)
 
             drip = self.preInitAppend(drip)
             self._collection.append(drip)
@@ -126,20 +124,21 @@ class baseRedisCollection(object):
         keys that no longer exist, and adding new keys that are not currently
         part of the collection.
         """
-        pail = [ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ]
-        setPail = set(pail)
+        key = self.pattern.split(":")[0]+":"
+        setPail = set([ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ])
 
-        setSelfPail = set(self.pail)
+        delete = (self.pail == [])
 
-        difference = setSelfPail.difference(setPail)
+        for drop in setPail:
+            try:
+                self.pail.index(drop)
+            except ValueError:
+                self.pail.append(drop)
 
-        for drop in difference:
-            self.pail.append(drop)
-
-        deleteDifference = setPail.difference(setSelfPail)
-
-        for drop in deleteDifference:
-            self.pail.remove(drop)
+        if delete:
+            for drop in self.pail:
+                if drop not in setPail:
+                    self.pail.remove(drop)
 
     def __iter__(self):
         """
