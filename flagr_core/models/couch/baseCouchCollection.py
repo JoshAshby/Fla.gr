@@ -9,7 +9,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import models.couch.baseRedisModel as brm
+import models.redis.baseRedisModel as brm
 import config.config as c
 
 
