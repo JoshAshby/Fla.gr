@@ -45,11 +45,52 @@ class baseRedisCollection(object):
         if not self.pail:
             self.update()
 
+    def paginate(self, pageNumber, perPage):
+        """
+        Paginates self.pail
+        """
+        pailVolume = len(self.pail)-1
+        startingPlace = pageNumber * perPage
+        if startingPlace > pailVolume:
+            raise Exception("Starting place outside of collections length.")
+        endingPlace = (pageNumber+1)*perPage
+        if endingPlace > pailVolume:
+            endingPlace = pailValume
+        self.paginate = self.pail[startingPlace:endingPlace]
+
+    def hasNextPage(self):
+        """
+        Returns true if there are more results past the current paginated results.
+
+        :return: Boolean if there is a next page or not.
+        :rtype: Boolean
+        """
+        pailVolume = len(self.pail)-1
+        perPage = self.paginateSettings["perPage"]
+        pageNumber = self.paginateSettings["pageNumber"]
+        endingPlace = (pageNumber+1)*perPage
+        if endingPlace > len(self.pail)-1:
+            return False
+        return True
+
+    def pages(self):
+        """
+        Returns the number of pages of which the results span
+
+        :return: Integer of how many pages are contained within the
+            paginated collection
+        :rtype: Int
+        """
+        pailVolume = float(len(self.pail)-1)
+        perPage = float(self.paginateSettings["perPage"])
+        return int(round(pailVolume/perPage))
+
     def fetch(self):
         """
         Fetches all the redisObjects
         """
-        for drop in self.pail:
+        pail = self.pagination if hasattr(self, "pagination") else self.pail
+        for drop in pail:
             drip = brm.redisObject(drop)
 
             drip = self.preInitAppend(drip)
@@ -79,7 +120,7 @@ class baseRedisCollection(object):
         """
         pass
 
-    def sortBy(self, by, desc=False):
+    def sortBy(self, by, desc=True):
         """
         Sorts the collection by the field specified in `by`
 

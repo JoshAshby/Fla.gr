@@ -32,8 +32,7 @@ class adminDevBucketsIndex(baseHTMLObject):
 
         view.scripts = ["jquery.json-2.4.min",
                 "devBucketsButtons.flagr"]
-        pail = bm.bucketPail("bucket:*:value")
-        pail.fetch()
+        pail = bm.bucketPail("bucket:*:value").fetch()
         pail.sortBy("name")
         view.buckets = pail
 
