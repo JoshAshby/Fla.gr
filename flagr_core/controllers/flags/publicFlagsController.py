@@ -18,6 +18,7 @@ from views.public.publicFlagsTmpl import publicFlagsTmpl
 from views.partials.flags.flagsListTmpl import flagsListTmpl
 
 import models.couch.flag.flagModel as fm
+import models.couch.baseCouchCollection as bcc
 
 import utils.pagination as p
 
@@ -33,8 +34,10 @@ class flagsIndex(baseHTMLObject):
 
         view = publicFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.flagORM.all()
-        flags = fm.formatFlags(flags, False)
+        flags = bcc.baseCouchCollection(fm.flagORM)
+        flags.paginate(1, 25)
+        flags.fetch()
+        flags.format()
 
         if self.env["cfg"].enableModalFlagDeletes:
             view.scripts = ["handlebars_1.0.min",
@@ -42,8 +45,6 @@ class flagsIndex(baseHTMLObject):
                     "adminModal.flagr",
                     "editForm.flagr",
                     "deleteFlagModal.flagr"]
-
-        flags = p.pagination(flags, 10, int(page))
 
         flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
         flagsTmpl.flags = flags

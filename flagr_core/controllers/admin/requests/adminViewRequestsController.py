@@ -19,6 +19,7 @@ from views.admin.requests.adminViewRequestsTmpl import adminViewRequestsTmpl
 import models.couch.request.requestModel as rm
 import models.couch.template.templateModel as tm
 import models.redis.setting.settingModel as sm
+import models.couch.baseCouchCollection as bcc
 
 
 @autoRoute()
@@ -32,8 +33,6 @@ class adminRequestsIndex(baseHTMLObject):
         if self.env["cfg"].enableRequests:
             view = adminViewRequestsTmpl(searchList=[self.tmplSearchList])
 
-            requests = rm.formatRequests(rm.requestORM.all())
-
             view.scripts = ["handlebars_1.0.min",
                     "jquery.json-2.4.min",
                     "sidebarTabs.flagr",
@@ -42,6 +41,11 @@ class adminRequestsIndex(baseHTMLObject):
                     "editForm.flagr",
                     "adminViewRequests.flagr"]
 
+            requests = bcc.baseCouchCollection(rm.requestORM)
+            requests.paginate(1, 25)
+            requests.fetch()
+            requests.format()
+
             view.requests = requests
 
             try:
@@ -49,16 +53,14 @@ class adminRequestsIndex(baseHTMLObject):
             except:
                 currentTmpl = ""
 
-            tmpls = tm.templateORM.all()
-            for tmpl in tmpls:
-                if tmpl.type != "email":
-                    tmpls.pop(tmpls.index(tmpl))
-                else:
-                    tmpl.current = False
-                    if tmpl.id == currentTmpl:
-                        tmpl.current = True
+            tmpl = bcc.baseCouchCollection(tm.templateORM)
+            tmpl.fetch()
+            tmpl.filterBy("type", "email")
+            for tmp in tmpl:
+                if tmp.id == currentTmpl:
+                    tmp.current = True
 
-            view.tmpls = tmpls
+            view.tmpls = tmpl
 
             return view
         else:

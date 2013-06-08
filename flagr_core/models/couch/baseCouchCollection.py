@@ -56,6 +56,7 @@ class baseCouchCollection(bc.baseCollection):
 
     def join(self, model, key):
         """
+        joins another model, using the data in `key`
 
         """
         for drop in self._collection:
@@ -77,7 +78,8 @@ class baseCouchCollection(bc.baseCollection):
 
         """
         for drop in self._collection:
-            drop.format()
+            if hasattr(drop, "format"):
+                drop.format()
 
     def addObject(self, key):
         """

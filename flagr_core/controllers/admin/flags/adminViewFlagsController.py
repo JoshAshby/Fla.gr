@@ -33,8 +33,8 @@ class adminFlagsIndex(baseHTMLObject):
 
         flags = bcc.baseCouchCollection(fm.flagORM)
         flags.paginate(1, 25)
-        flags.format()
         flags.fetch()
+        flags.format()
         flags.join(userORM, "userID")
 
         view.flags = flags

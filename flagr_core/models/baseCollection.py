@@ -39,7 +39,6 @@ class baseCollection(object):
         """
         self.pagination = []
 
-
     @property
     def hasNextPage(self):
         """

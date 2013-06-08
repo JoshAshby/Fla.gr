@@ -1,4 +1,4 @@
-#for $flag in $flags.items
+#for $flag in $flags
     <!-- Start of flag overview template -->
     <article class="flag">
         <div class="row">
@@ -35,10 +35,10 @@
         </div>
         <div class="row">
             <div class="span6">
-            #if len($flags.items) == 1
+            #if len($flags.tub) == 1
                 $flag.formatedDescription
             #else
-                $flag.formatedDescription[:160]
+                $flag.formatedDescription[:160]...
             #end if
             </div>
         </div>
@@ -64,20 +64,22 @@
     <!-- End of flag overview template -->
 #end for
 
-#if $flags.hasNext
+#if $flags.pages > 1
     <!-- Begin pagination -->
     <div class="pagination pagination-centered">
         <ul>
-            #if $flags.hasPrev
-                <li><a href="?p=${flags.currentPage-1}">&laquo;</a></li>
-            #else
-                <li class="disabled"><span>&laquo;</span></li>
-            #end if
-            #for $item in $flags.listPages()
-                <li #if $item == $flags.currentPage#class="active"#end if#><a href="?p=$item">$item</a></li>
+            ###if $flags.hasPrev
+                ##<li><a href="?p=${flags.currentPage-1}">&laquo;</a></li>
+            ###else
+                ##<li class="disabled"><span>&laquo;</span></li>
+            ###end if
+            #for $item in range($flags.pages)
+                <li><a href="?p=$item">$item</a></li>
+                ##<li #if $item == $flags.currentPage#class="active"#end if#><a href="?p=$item">$item</a></li>
             #end for
             #if $flags.hasNext
-                <li><a href="?p=${flags.currentPage+1}">&raquo;</a></li>
+                <li><a href="?p=">&raquo;</a></li>
+                ##<li><a href="?p=${flags.currentPage+1}">&raquo;</a></li>
             #else
                 <li class="disabled"><span>&raquo;</span></li>
             #end if

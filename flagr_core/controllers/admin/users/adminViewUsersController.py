@@ -17,6 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.admin.users.adminViewUsersTmpl import adminViewUsersTmpl
 
 from models.couch.user.userModel import userORM
+import models.couch.baseCouchCollection as bcc
 
 
 @autoRoute()
@@ -29,12 +30,11 @@ class adminUsersIndex(baseHTMLObject):
         """
         view = adminViewUsersTmpl(searchList=[self.tmplSearchList])
 
-        users = userORM.all()
-        #Don't let you see people higher than you,
-        #just out of safety for them...
-        for user in users:
-            if user.level > self.session.level:
-                users.rows.pop(users.rows.index(user))
+        users = bcc.baseCouchCollection(userORM)
+        users.paginate(1, 25)
+        users.fetch()
+        users.format()
+
         view.users = users
 
         return view
