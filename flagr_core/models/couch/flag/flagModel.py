@@ -72,6 +72,7 @@ def formatFlag(flag):
 
 class flagORM(Document, baseCouchModel):
     _view = "typeViews/flag"
+    _name = "flags"
     userID = TextField()
     title = TextField()
     description = TextField()

@@ -35,6 +35,7 @@ class userORM(Document, baseCouchModel):
     the data.
     TODO: Flesh this doc out a lot more
     """
+    _name = "users"
     username = TextField()
     email = TextField()
     about = TextField(default="")

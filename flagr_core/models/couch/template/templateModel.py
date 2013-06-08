@@ -45,6 +45,7 @@ def formatTmpl(tmpl):
 
 
 class templateORM(Document, baseCouchModel):
+    _name = "templates"
     name = TextField()
     description = TextField()
     template = TextField()

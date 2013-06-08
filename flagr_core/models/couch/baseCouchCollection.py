@@ -10,10 +10,11 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import models.redis.baseRedisModel as brm
+import models.baseCollection as bc
 import config.config as c
 
 
-class baseCouchCollection(object):
+class baseCouchCollection(bc.baseCollection):
     """
     Attempts to provide a collection for `Documents` providing
     a way to customize the creation of each object, and a way to sort
@@ -32,51 +33,10 @@ class baseCouchCollection(object):
         self._collection = []
         self.couch = couch
         self.model = model
-        self.pattern = "couch:" + self.model.name
-        self.pail = brm.couchList(self.pattern)
+        self.pattern = "couch:" + self.model._name
+        self.pail = brm.redisList(self.pattern)
         if not self.pail:
             self.update()
-
-    def paginate(self, pageNumber, perPage):
-        """
-        Paginates self.pail, returning a a `dict` containing the number of
-        """
-        pailVolume = len(self.pail)-1
-        startingPlace = pageNumber * perPage
-        if startingPlace > pailVolume:
-            raise Exception("Starting place outside of collections length.")
-        endingPlace = (pageNumber+1)*perPage
-        if endingPlace > pailVolume:
-            endingPlace = pailValume
-        self.paginate = self.pail[startingPlace:endingPlace]
-        self.paginateSettings = {"pageNumber": pageNumber, "perPage": perPage}
-
-    def hasNextPage(self):
-        """
-        Returns true if there are more results past the current paginated results.
-
-        :return: Boolean if there is a next page or not.
-        :rtype: Boolean
-        """
-        pailVolume = len(self.pail)-1
-        perPage = self.paginateSettings["perPage"]
-        pageNumber = self.paginateSettings["pageNumber"]
-        endingPlace = (pageNumber+1)*perPage
-        if endingPlace > len(self.pail)-1:
-            return False
-        return True
-
-    def pages(self):
-        """
-        Returns the number of pages of which the results span
-
-        :return: Integer of how many pages are contained within the
-            paginated collection
-        :rtype: Int
-        """
-        pailVolume = float(len(self.pail)-1)
-        perPage = float(self.paginateSettings["perPage"])
-        return int(round(pailVolume/perPage))
 
     def fetch(self):
         """
@@ -89,48 +49,6 @@ class baseCouchCollection(object):
             drip = self.preInitAppend(drip)
             self._collection.append(drip)
             self.postInitAppend()
-
-    def preInitAppend(self, drip):
-        """
-        Pre append hook for adding a Document to the internal
-        _collection list. Inheriting classes should override this if
-        any modification needs to be made on `drip`
-
-        :param drip: a `Document` instance
-        :type drip: Document
-
-        :return: `drip` instance modified or unmodified
-        :rtype: Document
-        """
-        return drip
-
-    def postInitAppend(self):
-        """
-        Post append hook that runs after each `Document` is inserted into
-        self._collection
-
-        Note: Accepts nothing and returns nothing.
-        """
-        pass
-
-    def sortBy(self, by, desc=True):
-        """
-        Sorts the collection by the field specified in `by`
-
-        :param by: The name of the field by which the collection should be
-            sorted by
-        :type by: Str
-
-        :param desc: If false then the collection is sorted then revered.
-        :type desc: Boolean
-
-        :return: The collection after sorting
-        :rtype: List
-        """
-        self._collection.sort(key=lambda x: x[by])
-        if not desc:
-            self._collection.reverse()
-        return self._collection
 
     def addObject(self, key):
         """
@@ -158,14 +76,15 @@ class baseCouchCollection(object):
         keys that no longer exist, and adding new keys that are not currently
         part of the collection.
         """
-        pail = [ item.id for item in self.model.getAll() ]
-        print pail
-        pass
+        pail = [ item.id for item in self.model.all() ]
 
-    def __iter__(self):
-        """
-        Emulates an iterator for use in `for` loops and such
-        """
-        for drip in self._collection:
-            yield drip
+        delete = (self.pail == [])
 
+        for drop in pail:
+            if drop not in self.pail:
+                self.pail.append(drop)
+
+        if delete:
+            for drop in self.pail:
+                if drop not in pail:
+                    self.pail.remove(drop)

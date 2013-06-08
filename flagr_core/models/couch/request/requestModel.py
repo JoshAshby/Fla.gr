@@ -45,6 +45,7 @@ def formatRequest(request):
 
 
 class requestORM(Document, baseCouchModel):
+    _name = "requests"
     email = TextField()
     created = DateTimeField(datetime.now())
     granted = DateTimeField()
