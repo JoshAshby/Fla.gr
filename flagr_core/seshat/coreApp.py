@@ -119,6 +119,7 @@ def app(env, start_response):
             dataThread.get()
         except:
             members["error"] = data.get() + traceback.format_exc()
+            logger.error(members["error"])
             data = queue.Queue()
             newHTTPObject = errorController.error500(env, members, sessionID)
             dataThread = gevent.spawn(newHTTPObject.build, data, reply)

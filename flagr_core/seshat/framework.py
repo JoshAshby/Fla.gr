@@ -15,17 +15,18 @@ joshuaashby@joshashby.com
 """
 from gevent import monkey; monkey.patch_all()
 
-import config.config as c
-
 import gevent
 from gevent_fastcgi.server import WSGIServer
 
 import logging
-logger = logging.getLogger(c.general.logName+".seshat")
 
 from seshat.coreApp import app
 
 import traceback
+
+
+import config.config as c
+logger = logging.getLogger(c.general.logName+".seshat")
 
 
 def main():
