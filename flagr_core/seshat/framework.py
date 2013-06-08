@@ -25,6 +25,8 @@ logger = logging.getLogger(c.general.logName+".seshat")
 
 from seshat.coreApp import app
 
+import traceback
+
 
 def main():
         """
@@ -66,6 +68,8 @@ def serveForever():
         except KeyboardInterrupt:
                 logger.critical("""Shutdown py operations for a KeyboardInterrupt. Bye!""")
                 gevent.shutdown
+        except:
+                logger.critical(traceback.format_exc())
         else:
                 logger.critical("""Shutdown py operations for unknown reason, possibly a KeyboardInterrupt...""")
                 gevent.shutdown

@@ -34,76 +34,76 @@ cookie = Cookie.SimpleCookie()
 
 
 def app(env, start_response):
-        """
-        WSGI app and controller
+    """
+    WSGI app and controller
 
-        Start off by looking through the dict of url's for a matched
-        regex. If one is found, then build a dict of members, which
-        includes matched groups in the regex, and query strings.
+    Start off by looking through the dict of url's for a matched
+    regex. If one is found, then build a dict of members, which
+    includes matched groups in the regex, and query strings.
 
-        After the dict of members is built, pass it along with the
-        env to the class which is paired with the matched regex url.
+    After the dict of members is built, pass it along with the
+    env to the class which is paired with the matched regex url.
 
-        Finally, call the proper method in the class, send the headers
-        and start streaming data as it's available.
+    Finally, call the proper method in the class, send the headers
+    and start streaming data as it's available.
 
-        If the class provides a cookie/session data, then because of the way
-        this all works, at the moment data can not be streammed. As a result
-        it's all added together, then returned rather than sent out in chunks.
+    If the class provides a cookie/session data, then because of the way
+    this all works, at the moment data can not be streammed. As a result
+    it's all added together, then returned rather than sent out in chunks.
 
-        TODO: Re document this better, and break into smaller chucks.
-        """
+    TODO: Re document this better, and break into smaller chucks.
+    """
+    try:
+        cookie.load(env["HTTP_COOKIE"])
+        sessionCookie = { value.key: value.value for key, value in cookie.iteritems() }
+        sessionID = sessionCookie["flagr_sid"]
+    except:
+        sessionID = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
+        sessionCookie = {"flagr_sid": sessionID}
+
+
+    members = {}
+
+    newHTTPObject = None
+
+    for item in env['QUERY_STRING'].split("&"):
+        if item:
+            parts = item.split("&")
+            for part in parts:
+                query = part.split("=")
+                members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+
+    for item in env['wsgi.input']:
+        if item:
+            parts = item.split("&")
+            for part in parts:
+                query = part.split("=")
+                members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+
+    for url in c.urls:
         try:
-            cookie.load(env["HTTP_COOKIE"])
-            sessionCookie = { value.key: value.value for key, value in cookie.iteritems() }
-            sessionID = sessionCookie["flagr_sid"]
+            matched = url.regex.match(env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0])
         except:
-            sessionID = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
-            sessionCookie = {"flagr_sid": sessionID}
+            matched = url.regex.match(env["PATH_INFO"])
 
+        if matched:
+            matchedItems = matched.groups()
+            for item in range(len(matchedItems)):
+                try:
+                    bits = matchedItems[item].strip("/")
+                    if len(bits.split("/")) > 1:
+                        members.update({item: bits.split("/")})
+                    else:
+                        members.update({item: bits})
+                except:
+                    members.update({item: matchedItems[item]})
 
-        members = {}
+            newHTTPObject = url.pageObject(env, members, sessionID)
+            if c.general.debug:
+                    logURL(env, url)
 
-        newHTTPObject = None
-
-        for item in env['QUERY_STRING'].split("&"):
-            if item:
-                parts = item.split("&")
-                for part in parts:
-                    query = part.split("=")
-                    members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
-
-        for item in env['wsgi.input']:
-            if item:
-                parts = item.split("&")
-                for part in parts:
-                    query = part.split("=")
-                    members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
-
-        for url in c.urls:
-            try:
-                matched = url.regex.match(env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0])
-            except:
-                matched = url.regex.match(env["PATH_INFO"])
-
-            if matched:
-                matchedItems = matched.groups()
-                for item in range(len(matchedItems)):
-                    try:
-                        bits = matchedItems[item].strip("/")
-                        if len(bits.split("/")) > 1:
-                            members.update({item: bits.split("/")})
-                        else:
-                            members.update({item: bits})
-                    except:
-                        members.update({item: matchedItems[item]})
-
-                newHTTPObject = url.pageObject(env, members, sessionID)
-                if c.general.debug:
-                        logURL(env, url)
-
-                break
-
+            break
+    try:
         if not newHTTPObject:
             newHTTPObject = errorController.error404(env, members, sessionID)
             if c.general.debug: log404(env)
@@ -162,6 +162,30 @@ def app(env, start_response):
             return [str(content)]
         else:
             return []
+    except:
+        members["error"] = "Fatal error" + traceback.format_exc()
+        newHTTPObject = errorController.error500(env, members, sessionID)
+
+        data, reply = queue.Queue(), queue.Queue()
+        dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+        dataThread.join()
+
+        content = data.get()
+
+        replyData = reply.get()
+        header = replyData[1]
+        status = replyData[0]
+
+        for morsal in sessionCookie:
+            cookieHeader = ("Set-Cookie", ("%s=%s")%(morsal, sessionCookie[morsal]))
+            header.append(cookieHeader)
+        header.append(("Content-Length", str(len(content))))
+
+        start_response(status, header)
+
+        del(newHTTPObject)
+
+        return [str(content)]
 
 
 def logURL(env, url):
