@@ -20,8 +20,6 @@ from views.partials.flags.flagsListTmpl import flagsListTmpl
 import models.couch.flag.flagModel as fm
 import models.couch.baseCouchCollection as bcc
 
-import utils.pagination as p
-
 
 @autoRoute()
 class flagsIndex(baseHTMLObject):

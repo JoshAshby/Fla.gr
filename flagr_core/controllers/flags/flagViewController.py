@@ -18,7 +18,6 @@ from views.flags.flagViewTmpl import flagViewTmpl
 from views.partials.flags.flagViewTmpl import flagViewTmpl as flagViewTmplPartial
 
 import models.couch.flag.flagModel as fm
-import utils.pagination as p
 
 
 @autoRoute()

@@ -19,8 +19,6 @@ import utils.search.flag.flagSearch as fs
 from views.searchTmpl import searchTmpl
 from views.partials.flags.flagsListTmpl import flagsListTmpl
 
-import utils.pagination as p
-
 
 @autoRoute()
 class search(baseHTMLObject):
@@ -40,8 +38,6 @@ class search(baseHTMLObject):
                         "adminModal.flagr",
                         "editForm.flagr",
                         "deleteFlagModal.flagr"]
-
-            flags = p.pagination(flags, 10, int(page))
 
             flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
             flagsTmpl.flags = flags

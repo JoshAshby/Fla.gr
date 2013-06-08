@@ -21,8 +21,6 @@ import models.couch.flag.flagModel as fm
 import models.couch.user.userModel as um
 import models.couch.flag.collections.userPublicFlagsCollection as pubfc
 
-import utils.pagination as p
-
 
 @autoRoute()
 class userFlags(baseHTMLObject):
