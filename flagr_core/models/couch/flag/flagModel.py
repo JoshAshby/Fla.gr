@@ -40,4 +40,3 @@ class flagORM(Document, baseCouchModel):
         """
         self.formatedDescription = mdu.markClean(self.description)
         self.formatedDate = datetime.strftime(self.created, "%a %b %d, %Y @ %H:%I%p")
-        self.author = um.userORM.getByID(self.userID)

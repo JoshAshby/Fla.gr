@@ -106,7 +106,6 @@ class baseCollection(object):
             self._collection.reverse()
         return self._collection
 
-
     @property
     def tub(self):
         return self._collection

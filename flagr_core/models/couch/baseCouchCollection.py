@@ -59,7 +59,10 @@ class baseCouchCollection(bc.baseCollection):
 
         """
         for drop in self._collection:
-            drop["formated"+key.capitalize()] = model.getByID(drop[key])
+            try:
+                drop["formated"+key] = model.getByID(drop[key])
+            except:
+                drop["formated"+key] = None
 
     def filterBy(self, key, value, function=None):
         """
@@ -68,6 +71,13 @@ class baseCouchCollection(bc.baseCollection):
         if not function:
             function = lambda drop: drop[key] == value
         filter(lambda x: function(x), self._collection)
+
+    def format(self):
+        """
+
+        """
+        for drop in self._collection:
+            drop.format()
 
     def addObject(self, key):
         """

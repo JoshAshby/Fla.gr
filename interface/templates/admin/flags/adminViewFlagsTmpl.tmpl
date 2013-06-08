@@ -20,7 +20,7 @@
     #for $flag in $flags
         <tr>
             <td><a href="/admin/flags/edit/$flag.id">$flag.title</a></td>
-            <td><a href="/admin/users/edit/$flag.userID">$flag.author.username</a></td>
+            <td><a href="/admin/users/edit/$flag.userID">$flag.formateduserID.username</a></td>
             <td>$flag.formatedDate</td>
             <td>
                 #if $flag.visibility
