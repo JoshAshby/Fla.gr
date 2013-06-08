@@ -17,7 +17,9 @@ import os
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
-import config.config as c
+import gators.configGator as cg
+
+general = cg.config()
 
 def setupLog():
     """
@@ -25,21 +27,21 @@ def setupLog():
     """
     import logging
     level = logging.WARNING
-    if c.general.debug:
+    if general.debug:
             level = logging.DEBUG
 
     formatter = logging.Formatter("""%(asctime)s - %(name)s - %(levelname)s
     %(message)s""")
 
-    logger = logging.getLogger(c.general.logName)
+    logger = logging.getLogger(general.logName)
     logger.setLevel(level)
 
-    fh = logging.FileHandler(c.general.dirs["logDir"]+c.general.logName+".log")
+    fh = logging.FileHandler(general.dirs["logDir"]+general.logName+".log")
     fh.setLevel(level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    if c.general.debug and "noDaemon" in sys.argv:
+    if general.debug and "noDaemon" in sys.argv:
         """
         Make sure we're not in daemon mode if we're logging to console too
         """
@@ -71,7 +73,7 @@ class app(Daemon):
 
 
 if __name__ == "__main__":
-    daemon = app(c.general.dirs["pidDir"]+c.general.logName+'.pid', stderr=c.general.files["stderr"])
+    daemon = app(general.dirs["pidDir"]+general.logName+'.pid', stderr=general.files["stderr"])
     daemon.down = False
     if len(sys.argv) >= 2:
         if 'noDaemon' in sys.argv:
