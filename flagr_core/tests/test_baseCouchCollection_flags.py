@@ -43,14 +43,7 @@ class test_baseCouchCollection_flags(object):
 
     @classmethod
     def teardown_class(cls):
-        collection = bcc.baseCouchCollection(fm.flagORM)
-        collection.fetch()
-        for i in collection:
-            try:
-                if int(i.userID) == 0 or int(i.userID) in range(0,100):
-                    i.delete()
-            except:
-                pass
+        pass
 
     def test_collection(self):
         """
@@ -71,3 +64,15 @@ class test_baseCouchCollection_flags(object):
 
         collection.fetch()
         assert len(collection.tub) == 10
+
+        collection.resetPagination()
+
+        collection.fetch()
+        for i in collection:
+            try:
+                if int(i.userID) == 0 or int(i.userID) in range(0,100):
+                    i.delete()
+            except:
+                pass
+
+        collection.update()

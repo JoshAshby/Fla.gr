@@ -43,7 +43,7 @@ class baseCouchCollection(bc.baseCollection):
         """
         Fetches the documents
         """
-        pail = self.pagination if hasattr(self, "pagination") else self.pail
+        pail = self.pagination if hasattr(self, "pagination") and self.pagination else self.pail
         for drop in pail:
             if self.key:
                 drip = self.model.find(key)

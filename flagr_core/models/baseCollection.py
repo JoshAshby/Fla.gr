@@ -33,6 +33,13 @@ class baseCollection(object):
         self.pagination = self.pail[startingPlace:endingPlace]
         self.paginateSettings = {"pageNumber": pageNumber, "perPage": perPage}
 
+    def resetPagination(self):
+        """
+
+        """
+        self.pagination = []
+
+
     @property
     def hasNextPage(self):
         """
