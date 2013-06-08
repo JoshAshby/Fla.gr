@@ -21,7 +21,7 @@ class baseCouchCollection(bc.baseCollection):
     the objects by various fields. Inheriting classes should only need
     to override `preInitAppend` and `postInitAppend` currently.
     """
-    def __init__(self, model, couch=c.database.couchServer):
+    def __init__(self, model, key=None, couch=c.database.couchServer):
         """
         Initializes the object, getting the list of ID's which will result in
         the collection being built when `fetch()` is called.
@@ -33,6 +33,7 @@ class baseCouchCollection(bc.baseCollection):
         self._collection = []
         self.couch = couch
         self.model = model
+        self.key = key
         self.pattern = "couch:" + self.model._name
         self.pail = brm.redisList(self.pattern)
         if not self.pail:
@@ -44,11 +45,29 @@ class baseCouchCollection(bc.baseCollection):
         """
         pail = self.pagination if hasattr(self, "pagination") else self.pail
         for drop in pail:
-            drip = self.model.getByID(drop)
+            if self.key:
+                drip = self.model.find(key)
+            else:
+                drip = self.model.getByID(drop)
 
             drip = self.preInitAppend(drip)
             self._collection.append(drip)
             self.postInitAppend()
+
+    def join(self, model, key):
+        """
+
+        """
+        for drop in self._collection:
+            drop["formated"+key.capitalize()] = model.getByID(drop[key])
+
+    def filterBy(self, key, value, function=None):
+        """
+        function = lambda drop: drop[key] == value
+        """
+        if not function:
+            function = lambda drop: drop[key] == value
+        filter(lambda x: function(x), self._collection)
 
     def addObject(self, key):
         """
