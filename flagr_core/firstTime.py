@@ -13,6 +13,8 @@ joshuaashby@joshashby.com
 """
 import models.couch.user.userModel as um
 import gators.firstTimeGator.config as config
+import models.redis.baseRedisModel as brm
+import models.redis.bucket.bucketModel as bm
 
 def setup():
     print "Setting up fla.gr from config/initial.json..."
@@ -43,6 +45,22 @@ def initialSetup():
 
 def bucketSetup():
     print "Now setting up buckets..."
+    buckets = config.buckets
+    for bucket in buckets:
+        print "Adding Bucket:"
+        print "    "  + bucket
+        print "    " + str(buckets[bucket])
+        newBucket = brm.redisObject("bucket:" + bucket)
+
+        newBucket["name"] = buckets[bucket]["name"]
+        newBucket["value"] = buckets[bucket]["value"]
+        newBucket["description"] = buckets[bucket]["description"]
+
+        if buckets[bucket].has_key("users"):
+            newBucket["users"] = buckets[bucket]["users"]
+
+    pail = bm.bucketPail("bucket:*:value")
+    pail.update()
 
 
 if __name__ == "__main__":
