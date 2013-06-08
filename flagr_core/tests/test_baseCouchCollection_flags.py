@@ -44,7 +44,6 @@ class test_baseCouchCollection_flags(object):
     @classmethod
     def teardown_class(cls):
         collection = bcc.baseCouchCollection(fm.flagORM)
-        collection.update()
         collection.fetch()
         for i in collection:
             try:
@@ -70,3 +69,5 @@ class test_baseCouchCollection_flags(object):
         collection.paginate(1, 10)
         assert len(collection.pagination) == 10
 
+        collection.fetch()
+        assert len(collection.tub) == 10

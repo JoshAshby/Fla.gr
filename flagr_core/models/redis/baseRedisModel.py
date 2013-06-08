@@ -137,12 +137,15 @@ class redisList(object):
 
     Missing the sort and reverse functions currently
     """
-    def __init__(self, key, start=[], redis=c.database.redisBucketServer):
+    def __init__(self, key, start=[], redis=c.database.redisBucketServer, reset=False):
         self._list = []
         self.redis = redis
         self.key = key
         self.sync()
-        if start:
+        if start and not reset:
+            self.extend(start)
+        if start and reset:
+            self.reset()
             self.extend(start)
 
     def __repr__(self):
@@ -192,6 +195,10 @@ class redisList(object):
 
     def count(self):
         return self._list.count()
+
+    def reset(self):
+        self._list = []
+        self.redis.delete(self.key)
 
     def __len__(self):
         return len(self._list)

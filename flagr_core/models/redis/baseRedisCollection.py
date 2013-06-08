@@ -84,18 +84,6 @@ class baseRedisCollection(bc.baseCollection):
         keys that no longer exist, and adding new keys that are not currently
         part of the collection.
         """
-        key = self.pattern.split(":")[0]+":"
-        setPail = set([ key+item.split(":")[1] for item in self.redis.keys(self.pattern) ])
-
-        delete = (self.pail == [])
-
-        for drop in setPail:
-            try:
-                self.pail.index(drop)
-            except ValueError:
-                self.pail.append(drop)
-
-        if delete:
-            for drop in self.pail:
-                if drop not in setPail:
-                    self.pail.remove(drop)
+        key = self.pattern.split(":")[0]
+        setPail = list(set([ key+":"+item.split(":")[1] for item in self.redis.keys(self.pattern) ]))
+        self.pail = brm.redisList(key, setPail, reset=True)

@@ -106,6 +106,11 @@ class baseCollection(object):
             self._collection.reverse()
         return self._collection
 
+
+    @property
+    def tub(self):
+        return self._collection
+
     def __iter__(self):
         """
         Emulates an iterator for use in `for` loops and such
