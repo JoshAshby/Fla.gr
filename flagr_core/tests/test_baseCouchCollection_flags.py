@@ -39,18 +39,34 @@ class test_baseCouchCollection_flags(object):
             userid = 0
             newModel = fm.flagORM(title=title, description=description, userID=userid)
             newModel.save()
+        cls.flags = fm.flagORM.all()
 
     @classmethod
     def teardown_class(cls):
-        flags = fm.flagORM.all()
-        for flag in flags:
-            if flag["userID"] == 0:
-                flag.delete()
+        collection = bcc.baseCouchCollection(fm.flagORM)
+        collection.update()
+        collection.fetch()
+        for i in collection:
+            try:
+                if int(i.userID) == 0 or int(i.userID) in range(0,100):
+                    i.delete()
+            except:
+                pass
 
     def test_collection(self):
-        flags = fm.flagORM.all()
+        """
+        Build the collection, then update it's index of ID's
+        """
         collection = bcc.baseCouchCollection(fm.flagORM)
         collection.update()
 
-        assert len(flags) == len(collection.pail)
+        """
+        The collection at the point only contains a list of
+        ID's but thats enough to check the length to make sure
+        everything is in there.
+        """
+        assert len(self.flags) == len(collection.pail)
+
+        collection.paginate(1, 10)
+        assert len(collection.pagination) == 10
 
