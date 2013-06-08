@@ -40,7 +40,7 @@ class flagsView(baseHTMLObject):
 
         view = flagViewTmpl(searchList=[self.tmplSearchList])
 
-        flag = fm.formatFlag(flag)
+        flag = fm.format()
 
         view.flag = flag
 
