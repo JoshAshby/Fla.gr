@@ -50,6 +50,8 @@ def app(env, start_response):
         If the class provides a cookie/session data, then because of the way
         this all works, at the moment data can not be streammed. As a result
         it's all added together, then returned rather than sent out in chunks.
+
+        TODO: Re document this better, and break into smaller chucks.
         """
         try:
             cookie.load(env["HTTP_COOKIE"])
@@ -64,11 +66,26 @@ def app(env, start_response):
 
         newHTTPObject = None
 
+        for item in env['QUERY_STRING'].split("&"):
+            if item:
+                parts = item.split("&")
+                for part in parts:
+                    query = part.split("=")
+                    members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+
+        for item in env['wsgi.input']:
+            if item:
+                parts = item.split("&")
+                for part in parts:
+                    query = part.split("=")
+                    members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+
         for url in c.urls:
             try:
                 matched = url.regex.match(env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0])
             except:
                 matched = url.regex.match(env["PATH_INFO"])
+
             if matched:
                 matchedItems = matched.groups()
                 for item in range(len(matchedItems)):
@@ -81,24 +98,10 @@ def app(env, start_response):
                     except:
                         members.update({item: matchedItems[item]})
 
-
-                for item in env['QUERY_STRING'].split("&"):
-                        if item:
-                                parts = item.split("&")
-                                for part in parts:
-                                        query = part.split("=")
-                                        members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
-
-                for item in env['wsgi.input']:
-                        if item:
-                                parts = item.split("&")
-                                for part in parts:
-                                        query = part.split("=")
-                                        members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
-
                 newHTTPObject = url.pageObject(env, members, sessionID)
                 if c.general.debug:
                         logURL(env, url)
+
                 break
 
         if not newHTTPObject:
@@ -110,9 +113,9 @@ def app(env, start_response):
                 newHTTPObject.session.history = env["REQUEST_URI"] if env.has_key("REQUEST_URL") else env["PATH_INFO"]
 
         data, reply = queue.Queue(), queue.Queue()
-        dataThread = gevent.spawn(newHTTPObject.build, data, reply)
-        dataThread.join()
         try:
+            dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+            dataThread.join()
             dataThread.get()
         except:
             members["error"] = data.get() + traceback.format_exc()
