@@ -31,6 +31,8 @@ class adminRequestsIndex(baseHTMLObject):
         """
         """
         if self.env["cfg"].enableRequests:
+            page = self.env["members"]["p"] \
+                    if self.env["members"].has_key("p") else 1
             view = adminViewRequestsTmpl(searchList=[self.tmplSearchList])
 
             view.scripts = ["handlebars_1.0.min",
@@ -42,7 +44,7 @@ class adminRequestsIndex(baseHTMLObject):
                     "adminViewRequests.flagr"]
 
             requests = bcc.baseCouchCollection(rm.requestORM)
-            requests.paginate(1, 25)
+            requests.paginate(page, 25)
             requests.fetch()
             requests.format()
 

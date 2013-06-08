@@ -1,3 +1,5 @@
+#from views.partials.pagination.paginationTmpl import paginationTmpl as pagination
+
 #for $flag in $flags
     <!-- Start of flag overview template -->
     <article class="flag">
@@ -63,27 +65,4 @@
     </article>
     <!-- End of flag overview template -->
 #end for
-
-#if $flags.pages > 1
-    <!-- Begin pagination -->
-    <div class="pagination pagination-centered">
-        <ul>
-            ###if $flags.hasPrev
-                ##<li><a href="?p=${flags.currentPage-1}">&laquo;</a></li>
-            ###else
-                ##<li class="disabled"><span>&laquo;</span></li>
-            ###end if
-            #for $item in range($flags.pages)
-                <li><a href="?p=$item">$item</a></li>
-                ##<li #if $item == $flags.currentPage#class="active"#end if#><a href="?p=$item">$item</a></li>
-            #end for
-            #if $flags.hasNext
-                <li><a href="?p=">&raquo;</a></li>
-                ##<li><a href="?p=${flags.currentPage+1}">&raquo;</a></li>
-            #else
-                <li class="disabled"><span>&raquo;</span></li>
-            #end if
-        </ul>
-    </div>
-    <!-- End Pagination -->
-#end if
+$pagination.pagination($flags)

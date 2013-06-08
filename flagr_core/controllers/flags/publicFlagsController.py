@@ -29,26 +29,29 @@ class flagsIndex(baseHTMLObject):
     def GET(self):
         """
         """
-        page = self.env["members"]["p"] \
-                if self.env["members"].has_key("p") else 1
+        if self.env["cfg"].enablePublicPages:
+            page = self.env["members"]["p"] \
+                    if self.env["members"].has_key("p") else 1
 
-        view = publicFlagsTmpl(searchList=[self.tmplSearchList])
+            view = publicFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = bcc.baseCouchCollection(fm.flagORM)
-        flags.paginate(1, 25)
-        flags.fetch()
-        flags.format()
+            flags = bcc.baseCouchCollection(fm.flagORM)
+            flags.paginate(page, 25)
+            flags.fetch()
+            flags.format()
 
-        if self.env["cfg"].enableModalFlagDeletes:
-            view.scripts = ["handlebars_1.0.min",
-                    "jquery.json-2.4.min",
-                    "adminModal.flagr",
-                    "editForm.flagr",
-                    "deleteFlagModal.flagr"]
+            if self.env["cfg"].enableModalFlagDeletes:
+                view.scripts = ["handlebars_1.0.min",
+                        "jquery.json-2.4.min",
+                        "adminModal.flagr",
+                        "editForm.flagr",
+                        "deleteFlagModal.flagr"]
 
-        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
-        flagsTmpl.flags = flags
+            flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
+            flagsTmpl.flags = flags
 
-        view.flags = str(flagsTmpl)
+            view.flags = str(flagsTmpl)
 
-        return view
+            return view
+        else:
+            self._404()

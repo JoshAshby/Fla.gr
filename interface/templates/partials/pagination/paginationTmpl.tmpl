@@ -1,0 +1,25 @@
+#@staticmethod
+#def pagination($tub)
+    #if $tub.pages > 2
+        <!-- Begin pagination -->
+        <div class="pagination pagination-centered">
+            <ul>
+                #if $tub.currentPage > 1
+                    <li><a href="?p=1">&laquo;</a></li>
+                #else
+                    <li class="disabled"><span>&laquo;</span></li>
+                #end if
+                #for $item in range(1, $tub.pages+1)
+                    <li #if $item == $tub.currentPage#class="active"#end if#><a href="?p=$item">$item</a></li>
+                #end for
+                #if $tub.hasNextPage
+                    <li><a href="?p=$tub.pages">&raquo;</a></li>
+                #else
+                    <li class="disabled"><span>&raquo;</span></li>
+                #end if
+            </ul>
+        </div>
+        <!-- End Pagination -->
+    #end if
+#end def
+

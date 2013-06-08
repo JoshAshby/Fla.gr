@@ -21,8 +21,8 @@ from views.searchTmpl import searchTmpl
 import utils.pagination as p
 
 
-@route("/your/search")
-@autoRoute()
+#@route("/your/search")
+#@autoRoute()
 class youSearch(baseHTMLObject):
     _title = "your search"
     def GET(self):

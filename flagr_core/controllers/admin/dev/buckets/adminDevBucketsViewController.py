@@ -28,14 +28,16 @@ class adminDevBucketsIndex(baseHTMLObject):
     def GET(self):
         """
         """
+        page = int(self.env["members"]["p"]) \
+                if self.env["members"].has_key("p") else 1
         view = adminDevViewBucketsTmpl(searchList=[self.tmplSearchList])
 
         view.scripts = ["jquery.json-2.4.min",
                 "devBucketsButtons.flagr"]
         pail = bm.bucketPail("bucket:*:value")
-        pail.paginate(1, 25)
+        pail.paginate(page, 25)
         pail.fetch()
-        pail.sortBy("name")
+        pail.sortBy("id")
         view.buckets = pail
 
         return view

@@ -21,6 +21,8 @@ class baseCollection(object):
         """
         Paginates self.pail, returning a a `dict` containing the number of
         """
+        pageNumber = int(pageNumber)
+        perPage = int(perPage)
         pailVolume = len(self.pail)
         startingPlace = 0
         if pageNumber != 1:
@@ -38,6 +40,13 @@ class baseCollection(object):
 
         """
         self.pagination = []
+
+    @property
+    def currentPage(self):
+        """
+
+        """
+        return self.paginateSettings["pageNumber"]
 
     @property
     def hasNextPage(self):

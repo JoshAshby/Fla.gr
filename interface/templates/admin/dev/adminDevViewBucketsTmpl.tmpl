@@ -1,4 +1,5 @@
 #extends views.admin.adminSkeleton
+#from views.partials.pagination.paginationTmpl import paginationTmpl as pagination
 
 #def body
 <ul class="breadcrumb">
@@ -9,7 +10,7 @@
 <table class="table table-striped table-condensed">
     <thead>
         <tr>
-            <th>Bucket id and name</th>
+            <th>Bucket name and ID</th>
             <th>Bucket description</th>
             <th>Bucket status</th>
         </tr>
@@ -17,8 +18,10 @@
     <tbody>
     #for $bucket in $buckets
         <tr>
-            <td width=35%><a href="#buckets/$bucket.id">$bucket.id</a><br>
-            <a href="#buckets/$bucket.id">$bucket["name"]</a></td>
+            <td width=35%>
+                <a href="#buckets/$bucket.id">$bucket["name"]</a>
+                <small><a href="#buckets/$bucket.id">$bucket.id</a></small>
+            </td>
             <td>$bucket["description"][:100]...</td>
             <td class="changeBtns" width=15%>
                 #if $bucket["value"]
@@ -51,4 +54,5 @@
     #end for
     </tbody>
 </table>
+$pagination.pagination($buckets)
 #end def

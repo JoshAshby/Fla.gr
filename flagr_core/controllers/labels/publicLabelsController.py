@@ -26,12 +26,15 @@ class labelsIndex(baseHTMLObject):
     def GET(self):
         """
         """
-        view = publicLabelsTmpl(searchList=[self.tmplSearchList])
+        if self.env["cfg"].enablePublicPages:
+            view = publicLabelsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.flagORM.all()
+            flags = fm.flagORM.all()
 
-        labels = lu.listLabels(flags, False)
+            labels = lu.listLabels(flags, False)
 
-        view.labels = labels
+            view.labels = labels
 
-        return view
+            return view
+        else:
+            self._404()

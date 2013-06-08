@@ -17,6 +17,8 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.flags.flagNewTmpl import flagNewTmpl
 
 import models.couch.flag.flagModel as fm
+import models.couch.flag.collections.userPublicFlagsCollection as pubfc
+import models.couch.flag.collections.userPrivateFlagsCollection as privfc
 import json
 import utils.markdownUtils as mdu
 
@@ -67,6 +69,13 @@ class flagsNew(baseHTMLObject):
             labels[label] = mdu.cleanInput(labels[label])
 
         newFlag = fm.flagORM(title=mdu.cleanInput(title), description=description, labels=labels, url=url, userID=self.session.id, visibility=visibility)
+
+        pubFlags = pubfc.userPublicFlagsCollection(self.session.id)
+        privFlags = privfc.userPrivateFlagsCollection(self.session.id)
+        if visibility:
+            pubFlags.addObject(newFlag.id)
+        else:
+            privFlags.addObject(newFlag.id)
 
         newFlag.save()
 

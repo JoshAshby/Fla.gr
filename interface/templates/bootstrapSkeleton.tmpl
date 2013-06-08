@@ -55,8 +55,9 @@
                                 #if not $user.loggedIn
                                     <li #if $page=='home'#class="active"#end if#><a href="/"><i class="icon-home"></i></a></li>
                                 #end if
-                                <li #if $page=="public flags"#class="active"#end if#><a href="/flags"><i class="icon-flag"></i></a></li>
-                                <li #if $page=="public labels"#class="active"#end if#><a href="/labels"><i class="icon-tags"></i></a></li>
+                                #if $cfg.enablePublicPages
+                                    <li #if $page=="public flags"#class="active"#end if#><a href="/flags"><i class="icon-flag"></i></a></li>
+                                    <li #if $page=="public labels"#class="active"#end if#><a href="/labels"><i class="icon-tags"></i></a></li>
                                 <li class="dropdown #if $page=='search'#active#end if#">
                                     <a href="#" id="dropdownSearchToggle" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i></a>
                                     <ul class="dropdown-menu">
@@ -70,6 +71,7 @@
                                         </form>
                                     </ul>
                                 </li>
+                                #end if
                             </ul>
                             <!-- Right hand drop down -->
                             <ul class="nav pull-right">

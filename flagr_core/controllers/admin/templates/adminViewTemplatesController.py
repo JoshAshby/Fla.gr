@@ -30,6 +30,8 @@ class adminTemplatesIndex(baseHTMLObject):
     def GET(self):
         """
         """
+        page = self.env["members"]["p"] \
+                if self.env["members"].has_key("p") else 1
         view = adminViewTemplatesTmpl(searchList=[self.tmplSearchList])
 
         view.scripts = ["handlebars_1.0.min",
@@ -42,7 +44,7 @@ class adminTemplatesIndex(baseHTMLObject):
                 "dynamicInput.flagr"]
 
         templates = bcc.baseCouchCollection(tm.templateORM)
-        templates.paginate(1, 25)
+        templates.paginate(page, 25)
         templates.fetch()
         templates.format()
 

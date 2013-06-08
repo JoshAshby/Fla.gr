@@ -21,7 +21,7 @@ class baseCouchCollection(bc.baseCollection):
     the objects by various fields. Inheriting classes should only need
     to override `preInitAppend` and `postInitAppend` currently.
     """
-    def __init__(self, model, key=None, couch=c.database.couchServer):
+    def __init__(self, model, couch=c.database.couchServer):
         """
         Initializes the object, getting the list of ID's which will result in
         the collection being built when `fetch()` is called.
@@ -33,7 +33,6 @@ class baseCouchCollection(bc.baseCollection):
         self._collection = []
         self.couch = couch
         self.model = model
-        self.key = key
         self.pattern = "couch:" + self.model._name
         self.pail = brm.redisList(self.pattern)
         if not self.pail:
@@ -45,10 +44,7 @@ class baseCouchCollection(bc.baseCollection):
         """
         pail = self.pagination if hasattr(self, "pagination") and self.pagination else self.pail
         for drop in pail:
-            if self.key:
-                drip = self.model.find(key)
-            else:
-                drip = self.model.getByID(drop)
+            drip = self.model.getByID(drop)
 
             drip = self.preInitAppend(drip)
             self._collection.append(drip)
@@ -107,4 +103,4 @@ class baseCouchCollection(bc.baseCollection):
         keys that no longer exist, and adding new keys that are not currently
         part of the collection.
         """
-        self.pail = brm.redisList(self.pattern, [ item.id for item in self.model.all() ], reset=True)
+        self.pail = [ item.id for item in self.model.all() ]

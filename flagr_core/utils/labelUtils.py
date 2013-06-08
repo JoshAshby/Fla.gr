@@ -11,12 +11,8 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-def listLabels(flags, showAll):
+def listLabels(flags):
     labels = []
     for flag in flags:
-        if showAll:
-            labels.extend(flag.labels)
-        else:
-            if flag.visibility:
-                labels.extend(flag.labels)
+        labels.extend(flag.labels)
     return labels

@@ -29,10 +29,12 @@ class adminFlagsIndex(baseHTMLObject):
     def GET(self):
         """
         """
+        page = self.env["members"]["p"] \
+                if self.env["members"].has_key("p") else 1
         view = adminViewFlagsTmpl(searchList=[self.tmplSearchList])
 
         flags = bcc.baseCouchCollection(fm.flagORM)
-        flags.paginate(1, 25)
+        flags.paginate(page, 25)
         flags.fetch()
         flags.format()
         flags.join(userORM, "userID")

@@ -15,7 +15,7 @@ from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
 from views.flags.flagViewTmpl import flagViewTmpl
-from views.partials.flags.flagsListTmpl import flagsListTmpl
+from views.partials.flags.flagViewTmpl import flagViewTmpl as flagViewTmplPartial
 
 import models.couch.flag.flagModel as fm
 import utils.pagination as p
@@ -28,8 +28,6 @@ class flagsView(baseHTMLObject):
         """
         """
         flagid = self.env["members"][0]
-        page = self.env["members"]["p"] \
-                if self.env["members"].has_key("p") else 1
 
         flag = fm.flagORM.getByID(flagid)
         if not flag.visibility and flag.userID != self.session.id:
@@ -38,11 +36,9 @@ class flagsView(baseHTMLObject):
             self.head = ("303 SEE OTHER", [("location", "/flags")])
             return
 
+        flag.format()
+
         view = flagViewTmpl(searchList=[self.tmplSearchList])
-
-        flag = fm.format()
-
-        view.flag = flag
 
         if self.env["cfg"].enableModalFlagDeletes:
             view.scripts = ["handlebars_1.0.min",
@@ -51,13 +47,11 @@ class flagsView(baseHTMLObject):
                     "editForm.flagr",
                     "deleteFlagModal.flagr"]
 
-        flag = fm.formatFlag(flag)
-        flag = p.pagination([flag], 10, int(page))
 
-        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
-        flagsTmpl.flags = flag
+        flagsTmpl = flagViewTmplPartial(searchList=[self.tmplSearchList])
+        flagsTmpl.flag = flag
 
-        view.flags = str(flagsTmpl)
+        view.flag = str(flagsTmpl)
 
         return view
 

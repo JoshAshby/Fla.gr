@@ -28,10 +28,12 @@ class adminUsersIndex(baseHTMLObject):
     def GET(self):
         """
         """
+        page = self.env["members"]["p"] \
+                if self.env["members"].has_key("p") else 1
         view = adminViewUsersTmpl(searchList=[self.tmplSearchList])
 
         users = bcc.baseCouchCollection(userORM)
-        users.paginate(1, 25)
+        users.paginate(page, 25)
         users.fetch()
         users.format()
 

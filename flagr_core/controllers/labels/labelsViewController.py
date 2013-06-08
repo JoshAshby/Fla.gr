@@ -23,7 +23,7 @@ import re
 import utils.pagination as p
 
 
-@autoRoute()
+#@autoRoute()
 class labelsView(baseHTMLObject):
     _title = "labels"
     __login__ = True

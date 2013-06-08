@@ -17,6 +17,8 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.admin.flags.adminDelFlagTmpl import adminDelFlagTmpl
 
 from models.couch.flag.flagModel import flagORM
+import models.couch.flag.collections.userPublicFlagsCollection as pubfc
+import models.couch.flag.collections.userPrivateFlagsCollection as privfc
 
 
 @autoRoute()
@@ -40,6 +42,13 @@ class adminFlagsDelete(baseHTMLObject):
         flagid = self.env["members"][0]
 
         flag = flagORM.getByID(flagid)
+        pubFlags = pubfc.userPublicFlagsCollection(flag.userID)
+        privFlags = privfc.userPrivateFlagsCollection(flag.userID)
+        if flag.visibility:
+            pubFlags.delObject(flag.id)
+        else:
+            privFlags.delObject(flag.id)
+
         flag.delete()
 
         self.session.pushAlert("Flag `%s` deleted" % flag.title, "Bye!", "warning")

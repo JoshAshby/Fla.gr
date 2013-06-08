@@ -16,7 +16,8 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.you.youLabelsTmpl import youLabelsTmpl
 
-import models.couch.flag.flagModel as fm
+import models.couch.flag.collections.userPublicFlagsCollection as pubfc
+import models.couch.flag.collections.userPrivateFlagsCollection as privfc
 import utils.labelUtils as lu
 
 
@@ -30,9 +31,15 @@ class youLabels(baseHTMLObject):
         """
         view = youLabelsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.listFlagsByUserID(self.session.id)
-        if flags:
-            labels = lu.listLabels(flags, True)
+        privateFlags = privfc.userPrivateFlagsCollection(self.session.id)
+        privateFlags.fetch()
+        publicFlags = pubfc.userPublicFlagsCollection(self.session.id)
+        publicFlags.fetch()
+
+        privateFlags.tub.extend(publicFlags.tub)
+        flags = privateFlags.tub
+
+        labels = lu.listLabels(flags)
 
         view.labels = labels
 
