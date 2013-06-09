@@ -27,12 +27,7 @@ class config(baseGator):
             else:
                 self._temp["redis"] = redis.StrictRedis(data[item]["URL"], db=data[item]["db"])
         if item == "couchDB":
-            serv = None
-            try:
-                serv = Server(data[item]["URL"]+":"+str(data[item]["port"]))[data[item]["name"]]
-            except Exception as exc:
-                print exc
-            self._temp["couchServer"] = serv
+            self._temp["couchServer"] = Server(data[item]["URL"]+":"+str(data[item]["port"]))[data[item]["name"]]
         return data[item]
 
     def postInit(self):
