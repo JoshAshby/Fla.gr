@@ -19,18 +19,16 @@ import config.config as c
 
 class publicFlagsCollection(bcc.baseCouchCollection):
     """
-    Attempts to provide a collection for `Documents` providing
-    a way to customize the creation of each object, and a way to sort
-    the objects by various fields. Inheriting classes should only need
-    to override `preInitAppend` and `postInitAppend` currently.
+    Attempts togather all the userId's in the system, then use that
+    to build a giant list of all the flag ID's in the system that
+    are public, providing a collection interface for all public
+    flags
     """
     def __init__(self, couch=c.database.couchServer):
         """
         Initializes the object, getting the list of ID's which will result in
         the collection being built when `fetch()` is called.
 
-        :param model: A model which inherits from both `couchdb.Document`
-            and `baseCouchModel`
         :param couch: The couchdb instance which this collection should use
         """
         self._collection = []
@@ -46,8 +44,6 @@ class publicFlagsCollection(bcc.baseCouchCollection):
         part of the collection.
         """
         userIDs = bcc.baseCouchCollection(um.userORM)
-        for user in userIDs:
+        for user in userIDs.pail:
             userPail = pubfc.userPublicFlagsCollection(user)
             self.pail.extend(userPail.pail)
-
-        print self.pail
