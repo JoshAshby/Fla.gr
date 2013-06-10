@@ -18,7 +18,6 @@ from views.admin.flags.adminEditFlagTmpl import adminEditFlagTmpl
 
 from models.couch.flag.flagModel import flagORM
 import models.couch.flag.collections.userPublicFlagsCollection as pubfc
-import models.couch.flag.collections.userPrivateFlagsCollection as privfc
 
 import json
 
@@ -87,12 +86,9 @@ class adminFlagsEdit(baseHTMLObject):
 
         if flag.visibility != visibility:
             pubFlags = pubfc.userPublicFlagsCollection(flag.userID)
-            privFlags = privfc.userPrivateFlagsCollection(flag.userID)
             if visibility:
                 pubFlags.addObject(flag.id)
-                privFlags.delObject(flag.id)
             else:
-                privFlags.addObject(flag.id)
                 pubFlags.delObject(flag.id)
 
             flag.visibility = visibility

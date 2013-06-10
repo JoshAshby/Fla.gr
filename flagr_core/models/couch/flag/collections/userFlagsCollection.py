@@ -15,7 +15,7 @@ import models.couch.flag.flagModel as fm
 import config.config as c
 
 
-class userPrivateFlagsCollection(bcc.baseCouchCollection):
+class userFlagsCollection(bcc.baseCouchCollection):
     """
     Attempts to provide a collection for `Documents` providing
     a way to customize the creation of each object, and a way to sort
@@ -36,7 +36,7 @@ class userPrivateFlagsCollection(bcc.baseCouchCollection):
         self.couch = couch
         self.model = fm.flagORM
         self.userID = userID
-        self.pattern = "couch:" + self.model._name + ":user:" + self.userID + ":private"
+        self.pattern = "couch:" + self.model._name + ":user:" + self.userID
         self.pail = brm.redisList(self.pattern)
         if not self.pail:
             self.update()
@@ -47,8 +47,5 @@ class userPrivateFlagsCollection(bcc.baseCouchCollection):
         keys that no longer exist, and adding new keys that are not currently
         part of the collection.
         """
-        keys = []
-        for item in self.model.getAll(self._view, self.userID):
-            if not item.visibility:
-                keys.append(item.id)
+        keys = [ item.id for item in self.model.getAll(self._view, self.userID) ]
         self.pail = brm.redisList(self.pattern, keys, reset=True)

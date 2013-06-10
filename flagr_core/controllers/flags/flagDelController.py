@@ -18,7 +18,7 @@ from views.flags.flagDelTmpl import flagDelTmpl
 
 import models.couch.flag.flagModel as fm
 import models.couch.flag.collections.userPublicFlagsCollection as pubfc
-import models.couch.flag.collections.userPrivateFlagsCollection as privfc
+import models.couch.flag.collections.userFlagsCollection as fc
 
 import utils.search.searchUtils as su
 
@@ -62,11 +62,10 @@ class flagsDelete(baseHTMLObject):
             return
 
         pubFlags = pubfc.userPublicFlagsCollection(self.session.id)
-        privFlags = privfc.userPrivateFlagsCollection(self.session.id)
+        privFlags = fc.userFlagsCollection(self.session.id)
         if flag.visibility:
             pubFlags.delObject(flag.id)
-        else:
-            privFlags.delObject(flag.id)
+        privFlags.delObject(flag.id)
 
         flag.delete()
 

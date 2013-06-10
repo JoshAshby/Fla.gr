@@ -19,7 +19,7 @@ from views.partials.flags.flagsListTmpl import flagsListTmpl
 
 import models.couch.flag.flagModel as fm
 import models.couch.flag.collections.userPublicFlagsCollection as pubfc
-import models.couch.flag.collections.userPrivateFlagsCollection as privfc
+import models.couch.flag.collections.userFlagsCollection as fc
 
 
 @route("/your/flags")
@@ -45,7 +45,8 @@ class youFlags(baseHTMLObject):
             flags.format()
 
         elif viewType == "private":
-            flags = privfc.userPrivateFlagsCollection(self.session.id)
+            flags = fc.userFlagsCollection(self.session.id)
+            flags.withoutCollection(pubfc.userPublicFlagsCollection(self.session.id))
             flags.paginate(page, 25)
             flags.fetch()
             flags.format()

@@ -95,7 +95,7 @@ class baseCouchCollection(bc.baseCollection):
             supplied by the collection
         :type key: Str
         """
-        self.pail.remove()
+        self.pail.remove(key)
 
     def update(self):
         """

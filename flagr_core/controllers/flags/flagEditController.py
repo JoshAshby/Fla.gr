@@ -18,7 +18,6 @@ from views.flags.flagEditTmpl import flagEditTmpl
 
 import models.couch.flag.flagModel as fm
 import models.couch.flag.collections.userPublicFlagsCollection as pubfc
-import models.couch.flag.collections.userPrivateFlagsCollection as privfc
 import utils.markdownUtils as mdu
 
 from datetime import datetime
@@ -107,12 +106,9 @@ class flagsEdit(baseHTMLObject):
 
         if flag.visibility != visibility:
             pubFlags = pubfc.userPublicFlagsCollection(self.session.id)
-            privFlags = privfc.userPrivateFlagsCollection(self.session.id)
             if visibility:
                 pubFlags.addObject(flag.id)
-                privFlags.delObject(flag.id)
             else:
-                privFlags.addObject(flag.id)
                 pubFlags.delObject(flag.id)
 
             flag.visibility = visibility

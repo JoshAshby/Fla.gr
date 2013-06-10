@@ -19,7 +19,7 @@ class baseCollection(object):
     """
     def paginate(self, pageNumber, perPage):
         """
-        Paginates self.pail, returning a a `dict` containing the number of
+        Paginates self.pail
         """
         pageNumber = int(pageNumber)
         perPage = int(perPage)
@@ -37,14 +37,16 @@ class baseCollection(object):
 
     def resetPagination(self):
         """
-
+        Resets the pagination, for whatever reason this may be needed,
+        It should work just fine.
         """
         self.pagination = []
 
     @property
     def currentPage(self):
         """
-
+        Simple helper property to return the current page number that the collection
+        is paginated on.
         """
         return self.paginateSettings["pageNumber"]
 
@@ -120,6 +122,16 @@ class baseCollection(object):
         if not desc:
             self._collection.reverse()
         return self._collection
+
+    def withoutCollection(self, subCol):
+        """
+        Removes all the elements in subCol from self.pail, resulting in
+        in self.pail becoming a list, rather than a RedisList, meaning
+        any addObject or delObject made to the collection won't be stored.
+        """
+        subPail = subCol.pail
+
+        self.pail = list(set(self.pail) - set(subPail))
 
     @property
     def tub(self):

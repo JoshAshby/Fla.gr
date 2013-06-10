@@ -18,7 +18,7 @@ from views.flags.flagNewTmpl import flagNewTmpl
 
 import models.couch.flag.flagModel as fm
 import models.couch.flag.collections.userPublicFlagsCollection as pubfc
-import models.couch.flag.collections.userPrivateFlagsCollection as privfc
+import models.couch.flag.collections.userFlagsCollection as fc
 import json
 import utils.markdownUtils as mdu
 
@@ -71,11 +71,10 @@ class flagsNew(baseHTMLObject):
         newFlag = fm.flagORM(title=mdu.cleanInput(title), description=description, labels=labels, url=url, userID=self.session.id, visibility=visibility)
 
         pubFlags = pubfc.userPublicFlagsCollection(self.session.id)
-        privFlags = privfc.userPrivateFlagsCollection(self.session.id)
+        privFlags = fc.userFlagsCollection(self.session.id)
         if visibility:
             pubFlags.addObject(newFlag.id)
-        else:
-            privFlags.addObject(newFlag.id)
+        privFlags.addObject(newFlag.id)
 
         newFlag.save()
 

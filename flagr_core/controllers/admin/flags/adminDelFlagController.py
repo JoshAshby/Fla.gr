@@ -18,7 +18,7 @@ from views.admin.flags.adminDelFlagTmpl import adminDelFlagTmpl
 
 from models.couch.flag.flagModel import flagORM
 import models.couch.flag.collections.userPublicFlagsCollection as pubfc
-import models.couch.flag.collections.userPrivateFlagsCollection as privfc
+import models.couch.flag.collections.userFlagsCollection as fc
 
 
 @autoRoute()
@@ -43,11 +43,10 @@ class adminFlagsDelete(baseHTMLObject):
 
         flag = flagORM.getByID(flagid)
         pubFlags = pubfc.userPublicFlagsCollection(flag.userID)
-        privFlags = privfc.userPrivateFlagsCollection(flag.userID)
+        privFlags = fc.userFlagsCollection(flag.userID)
         if flag.visibility:
             pubFlags.delObject(flag.id)
-        else:
-            privFlags.delObject(flag.id)
+        privFlags.delObject(flag.id)
 
         flag.delete()
 
