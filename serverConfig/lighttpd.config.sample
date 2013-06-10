@@ -1,0 +1,13 @@
+url.rewrite-once = (
+    "^/static/(.*)$" => "/static/$1",
+    "^/favicon.ico" => "/statis/favicon.ico",
+    "^/(.*)$" => "/web/$1",
+)
+
+fastcgi.server  = (
+    "/web/" => ((
+        "host" => "127.0.0.1",
+        "port" => 8000,
+        "check-local" => "disable",
+    )),
+)
