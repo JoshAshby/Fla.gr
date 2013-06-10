@@ -1,0 +1,19 @@
+server {
+    listen       80;
+    server_name  localhost;
+
+    # For doing fla.gr with regular gevent.pywsgi    
+    #location / {
+         #proxy_pass http://127.0.0.1:8000;
+    #}
+
+    # And this for doing gevent_fastcgi.server
+    #location / {
+        #fastcgi_pass   127.0.0.1:8000;
+        #include        fastcgi_params;
+    #}
+
+    location  /static/ {
+        root /srv/http; 
+    }
+}

@@ -16,7 +16,11 @@ joshuaashby@joshashby.com
 from gevent import monkey; monkey.patch_all()
 
 import gevent
+#To use fastCGI
 from gevent_fastcgi.server import WSGIServer
+
+#To use plain WSGI
+#from gevent.pywsgi import WSGIServer
 
 import logging
 

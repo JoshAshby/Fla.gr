@@ -33,7 +33,10 @@ and node.js packages and generate the templates is to do:
 After this you'll have to setup your static folder so the content in `interface/resources/` 
 is available at `/static` on your web server, along with fastCGI setup to send
 all results to the server, except for `/static` to `localhost:8080` or whatever port
-you specify in `config.json` and finally:
+you specify in `config.json`. For an example of how I do this with my personal
+dev server see the files included in `serverConfig` and take a look at `seshat/framework.py`
+To make sure your fla.gr server and your webserver are going to play nice with
+each other. Finally:
   
   cd flagr_core
   ./firstTime.py
