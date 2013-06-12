@@ -17,8 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.public.publicFlagsTmpl import publicFlagsTmpl
 from views.partials.flags.flagsListTmpl import flagsListTmpl
 
-import models.couch.flag.flagModel as fm
-import models.couch.baseCouchCollection as bcc
+import models.couch.flag.collections.publicFlagsCollection as pubfc
 
 
 @autoRoute()
@@ -33,7 +32,7 @@ class flagsIndex(baseHTMLObject):
 
             view = publicFlagsTmpl(searchList=[self.tmplSearchList])
 
-            flags = bcc.baseCouchCollection(fm.flagORM)
+            flags = pubfc.publicFlagsCollection()
             flags.paginate(page, 25)
             flags.fetch()
             flags.format()

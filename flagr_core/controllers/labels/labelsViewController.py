@@ -28,7 +28,7 @@ class labelsView(baseHTMLObject):
     def GET(self):
         """
         """
-        if self.env["cfg"].enablePublicPages:
+        if self.env["cfg"].enablePublicPages and self.env["cfg"].enablePublicLabels:
             page = self.env["members"]["p"] \
                     if self.env["members"].has_key("p") else 1
             baseLabel = self.env["members"][0]

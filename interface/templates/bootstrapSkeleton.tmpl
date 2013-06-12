@@ -57,20 +57,24 @@
                                 #end if
                                 #if $cfg.enablePublicPages
                                     <li #if $page=="public flags"#class="active"#end if#><a href="/flags"><i class="icon-flag"></i></a></li>
+                                #if $cfg.enablePublicLabels
                                     <li #if $page=="public labels"#class="active"#end if#><a href="/labels"><i class="icon-tags"></i></a></li>
-                                <li class="dropdown #if $page=='search'#active#end if#">
-                                    <a href="#" id="dropdownSearchToggle" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i></a>
-                                    <ul class="dropdown-menu">
-                                        <form style="padding-left: 20px; padding-right: 20px; padding-top:20px" action="/search">
-                                            <fieldset>
-                                                <div class="input-append">
-                                                    <input class="span3" id="dropdownSearchInput" type="text" placeholder="Search..." name="s" value="$getVar('s', '')">
-                                                    <button type="submit" class="btn btn-primary"><i class="icon-search"></i></button>
-                                                </div>
-                                            </fieldset>
-                                        </form>
-                                    </ul>
-                                </li>
+                                #end if
+                                #if $cfg.enablePublicSearch
+                                    <li class="dropdown #if $page=='search'#active#end if#">
+                                        <a href="#" id="dropdownSearchToggle" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search"></i></a>
+                                        <ul class="dropdown-menu">
+                                            <form style="padding-left: 20px; padding-right: 20px; padding-top:20px" action="/search">
+                                                <fieldset>
+                                                    <div class="input-append">
+                                                        <input class="span3" id="dropdownSearchInput" type="text" placeholder="Search..." name="s" value="$getVar('s', '')">
+                                                        <button type="submit" class="btn btn-primary"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </fieldset>
+                                            </form>
+                                        </ul>
+                                    </li>
+                                #end if
                                 #end if
                             </ul>
                             <!-- Right hand drop down -->

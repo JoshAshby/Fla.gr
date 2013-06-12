@@ -24,7 +24,7 @@ from views.partials.flags.flagsListTmpl import flagsListTmpl
 class search(baseHTMLObject):
     _title = "search"
     def GET(self):
-        if self.env["cfg"].enablePublicPages:
+        if self.env["cfg"].enablePublicPages and self.env["cfg"].enablePublicSearch:
             page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
             value = self.env["members"]["s"] if self.env["members"].has_key("s") else ""
 
