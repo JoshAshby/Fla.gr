@@ -14,7 +14,7 @@ joshuaashby@joshashby.com
 from seshat.route import autoRoute
 from utils.baseHTMLObject import baseHTMLObject
 
-from views.indexTmpl import indexTmpl
+from views.public.index import index
 
 
 @autoRoute()
@@ -28,5 +28,5 @@ class index(baseHTMLObject):
         Nothing much, just get the cheetah template for index and return it
         so Seshat can get cheetah to render it and then return it to the browser
         """
-        view = indexTmpl(searchList=[self.tmplSearchList])
+        view = index(searchList=[self.tmplSearchList])
         return view
