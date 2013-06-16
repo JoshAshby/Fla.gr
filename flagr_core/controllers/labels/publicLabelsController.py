@@ -35,6 +35,7 @@ class labelsIndex(baseHTMLObject):
             flags.paginate(page, 25)
             flags.fetch()
             flags.format()
+            flags.join(um.userORM, "userID")
 
             labels = lu.listLabels(flags, False)
 

@@ -18,7 +18,7 @@ from views.public.publicFlagsTmpl import publicFlagsTmpl
 from views.partials.flags.flagsListTmpl import flagsListTmpl
 
 import models.couch.flag.collections.publicFlagsCollection as pubfc
-
+import models.couch.user.userModel as um
 
 @autoRoute()
 class flagsIndex(baseHTMLObject):
@@ -36,6 +36,7 @@ class flagsIndex(baseHTMLObject):
             flags.paginate(page, 25)
             flags.fetch()
             flags.format()
+            flags.join(um.userORM, "userID")
 
             if self.env["cfg"].enableModalFlagDeletes:
                 view.scripts = ["handlebars_1.0.min",

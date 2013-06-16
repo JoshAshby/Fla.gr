@@ -57,9 +57,9 @@ class baseCouchCollection(bc.baseCollection):
         """
         for drop in self._collection:
             try:
-                drop["formated"+key] = model.getByID(drop[key])
+                drop["joined"+key] = model.getByID(drop[key])
             except:
-                drop["formated"+key] = None
+                drop["joined"+key] = None
 
     def filterBy(self, key, value, function=None):
         """

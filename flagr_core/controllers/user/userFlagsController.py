@@ -39,6 +39,7 @@ class userFlags(baseHTMLObject):
         flags.paginate(page, 25)
         flags.fetch()
         flags.format()
+        flags.join(um.userORM, "userID")
 
         if self.env["cfg"].enableModalFlagDeletes:
             view.scripts = ["handlebars_1.0.min",

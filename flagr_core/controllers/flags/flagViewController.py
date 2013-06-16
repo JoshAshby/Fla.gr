@@ -18,7 +18,7 @@ from views.flags.flagViewTmpl import flagViewTmpl
 from views.partials.flags.flagViewTmpl import flagViewTmpl as flagViewTmplPartial
 
 import models.couch.flag.flagModel as fm
-
+import models.couch.user.userModel as um
 
 @autoRoute()
 class flagsView(baseHTMLObject):
@@ -36,6 +36,7 @@ class flagsView(baseHTMLObject):
             return
 
         flag.format()
+        flag["joineduserID"] = um.userORM.getByID(flag.userID)
 
         view = flagViewTmpl(searchList=[self.tmplSearchList])
 
