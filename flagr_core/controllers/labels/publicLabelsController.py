@@ -16,7 +16,7 @@ from utils.baseHTMLObject import baseHTMLObject
 
 from views.public.publicLabelsTmpl import publicLabelsTmpl
 
-import models.couch.flag.flagModel as fm
+import models.couch.flag.collections.publicFlagsCollection as pubfc
 import utils.labelUtils as lu
 
 
@@ -26,12 +26,21 @@ class labelsIndex(baseHTMLObject):
     def GET(self):
         """
         """
-        view = publicLabelsTmpl(searchList=[self.tmplSearchList])
+        if self.env["cfg"].enablePublicPages:
+            page = self.env["members"]["p"] \
+                    if self.env["members"].has_key("p") else 1
+            view = publicLabelsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.flagORM.all()
+            flags = pubfc.publicFlagsCollection()
+            flags.paginate(page, 25)
+            flags.fetch()
+            flags.format()
+            flags.join(um.userORM, "userID")
 
-        labels = lu.listLabels(flags, False)
+            labels = lu.listLabels(flags, False)
 
-        view.labels = labels
+            view.labels = labels
 
-        return view
+            return view
+        else:
+            self._404()

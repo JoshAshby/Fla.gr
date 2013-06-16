@@ -18,60 +18,9 @@ import models.couch.user.userModel as um
 import utils.markdownUtils as mdu
 
 
-def listFlagsByUserID(userID):
-    """
-    Searches couchdb for flags by the requested userID
-
-    :param userID: The userID to search for
-    :return: A list of `flagORM` instances at least one flag is found, and the
-        `userORM` object for the flags author
-        `None` if no flags are found
-    """
-    foundFlags = flagORM.view(c.database.couchServer, 'typeViews/flag')
-    if not foundFlags:
-        return None
-    flags = []
-    for flag in foundFlags:
-        if flag.userID == userID:
-            flags.append(flag)
-    return flags
-
-def formatFlags(flagsList, showAll):
-    """
-    Takes a list of `flagORM`s and formates the datetime and markdown
-    for templates. Also can remove non public flags, if `showAll` is `False`
-
-    :params flagsList: A list object of `flagORMs` to format
-    :params showAll: If `False` Then private flags will be removed from the list
-    :return: A list of formated `flagORM` objects
-    """
-    flags = []
-    for flag in flagsList:
-        if showAll:
-            flags.append(formatFlag(flag))
-        else:
-            if flag.visibility:
-                flags.append(formatFlag(flag))
-
-    return flags
-
-
-def formatFlag(flag):
-    """
-    Same as above, however takes a single `flagORM` and formates the datetime
-    markdown.
-
-    :param flag: The `flagORM` object of the flag to format
-    :return:
-    """
-    flag.formatedDescription = mdu.markClean(flag.description)
-    flag.formatedDate = datetime.strftime(flag.created, "%a %b %d, %Y @ %H:%I%p")
-    flag.author = um.userORM.find(flag.userID)
-    return flag
-
-
 class flagORM(Document, baseCouchModel):
     _view = "typeViews/flag"
+    _name = "flags"
     userID = TextField()
     title = TextField()
     description = TextField()
@@ -83,3 +32,11 @@ class flagORM(Document, baseCouchModel):
     formatedDescription = ""
     formatedDate = ""
     author = ""
+
+    def format(self):
+        """
+        Same as above, however takes a single `flagORM` and formates the datetime
+        markdown.
+        """
+        self.formatedDescription = mdu.markClean(self.description)
+        self.formatedDate = datetime.strftime(self.created, "%a %b %d, %Y @ %H:%I%p")

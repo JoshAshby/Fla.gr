@@ -18,11 +18,9 @@ import utils.search.flag.flagSearch as fs
 
 from views.searchTmpl import searchTmpl
 
-import utils.pagination as p
 
-
-@route("/your/search")
-@autoRoute()
+#@route("/your/search")
+#@autoRoute()
 class youSearch(baseHTMLObject):
     _title = "your search"
     def GET(self):
@@ -32,12 +30,6 @@ class youSearch(baseHTMLObject):
         flagResults = fs.flagSearch(value)
 
         view = searchTmpl(searchList=[self.tmplSearchList])
-
-        for flag in flagResults:
-            if flag.userID != self.session.id:
-                flagResults.pop(flagResults.index(flag))
-
-        flagResults = p.pagination(flagResults, 10, int(page))
 
         view.flagResults = flagResults
         view.query = value

@@ -17,6 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.user.userLabelTmpl import userLabelTmpl
 
 import models.couch.flag.flagModel as fm
+import models.couch.flag.collections.userPublicFlagsCollection as pubfc
 import models.couch.user.userModel as um
 import utils.labelUtils as lu
 
@@ -31,13 +32,11 @@ class userLabels(baseHTMLObject):
         view = userLabelTmpl(searchList=[self.tmplSearchList])
         user = um.userORM.find(user)
 
-        flags = fm.listFlagsByUserID(user.id)
-        if flags:
-            for flag in flags:
-                if not flag.visibility:
-                    flags.pop(flags.index(flag))
+        flags = pubfc.userPublicFlagsCollection(user.id)
+        flags.paginate(page, 25)
+        flags.fetch()
 
-        labels = lu.listLabels(flags, False)
+        labels = lu.listLabels(flags)
 
         view.labels = labels
         view.flagAuthor = user

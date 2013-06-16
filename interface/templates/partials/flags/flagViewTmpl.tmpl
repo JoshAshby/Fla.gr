@@ -1,0 +1,59 @@
+<!-- Start of flag overview template -->
+<article class="flag">
+    <div class="row">
+        <div class="span6">
+            <h2>
+                <a href="/flags/view/$flag.id" class="flagLink"><i class="icon-flag"></i> $flag.title</a>
+                <small>
+                    <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/user/profile/$flag.joineduserID.username">$flag.joineduserID.username</a>#end if#</b>
+                </small>
+            </h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            <div class="well">
+            <span class="muted"><i class="icon-calendar"></i> $flag.formatedDate</span>
+            #if not $flag.visibility
+                <span class="label"><i class="icon-lock"></i> Private</span>
+           #else
+                <span class="label"><i class="icon-unlock"></i> Public</span>
+            #end if
+            #if  $flag.userID == $user.id
+                 <div class="btn-group pull-right">
+                    <a href="/flags/edit/$flag.id" class="btn btn-info"><i class="icon-edit"></i></a>
+                    #if $cfg.enableModalFlagDeletes
+                        <a href="#" class="btn btn-danger deleteButton" data-title="$flag.title" data-id="$flag.id"><i class="icon-trash"></i></a>
+                    #else
+                        <a href="/flags/delete/$flag.id" class="btn btn-danger"><i class="icon-trash"></i></a>
+                    #end if
+                </div>
+            #end if
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            $flag.formatedDescription
+        </div>
+    </div>
+    #if $flag.labels and $flag.labels != [""] and $cfg.enablePublicLabels
+        <div class="row">
+            <div class="span6">
+                <b class="muted"><i class="icon-tags"></i> Labels: </b>
+                #for $label in $flag.labels
+                    <a href="/labels/view/$label"><span class="label label-info">$label</span></a>
+                #end for
+            </div>
+        </div>
+    #end if
+    #if $flag.url
+    <div class="row">
+        <div class="span6">
+            <b class="muted"><i class="icon-external-link"></i> Link: </b> <a href="$flag.url">$flag.url</a><br>
+        </div>
+    </div>
+    #end if
+    <hr>
+</article>
+<!-- End of flag overview template -->

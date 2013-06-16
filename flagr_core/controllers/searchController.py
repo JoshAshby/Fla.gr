@@ -19,33 +19,32 @@ import utils.search.flag.flagSearch as fs
 from views.searchTmpl import searchTmpl
 from views.partials.flags.flagsListTmpl import flagsListTmpl
 
-import utils.pagination as p
-
 
 @autoRoute()
 class search(baseHTMLObject):
     _title = "search"
     def GET(self):
-        page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
-        value = self.env["members"]["s"] if self.env["members"].has_key("s") else ""
+        if self.env["cfg"].enablePublicPages and self.env["cfg"].enablePublicSearch:
+            page = self.env["members"]["p"] if self.env["members"].has_key("p") else 1
+            value = self.env["members"]["s"] if self.env["members"].has_key("s") else ""
 
-        flags = fs.flagSearch(value)
+            flags = fs.flagSearch(value)
 
-        view = searchTmpl(searchList=[self.tmplSearchList])
+            view = searchTmpl(searchList=[self.tmplSearchList])
 
-        if self.env["cfg"].enableModalFlagDeletes:
-            view.scripts = ["handlebars_1.0.min",
-                    "jquery.json-2.4.min",
-                    "adminModal.flagr",
-                    "editForm.flagr",
-                    "deleteFlagModal.flagr"]
+            if self.env["cfg"].enableModalFlagDeletes:
+                view.scripts = ["handlebars_1.0.min",
+                        "jquery.json-2.4.min",
+                        "adminModal.flagr",
+                        "editForm.flagr",
+                        "deleteFlagModal.flagr"]
 
-        flags = p.pagination(flags, 10, int(page))
+            flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
+            flagsTmpl.flags = flags
 
-        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
-        flagsTmpl.flags = flags
+            view.flagResults = str(flagsTmpl)
+            view.query = value
 
-        view.flagResults = str(flagsTmpl)
-        view.query = value
-
-        return view
+            return view
+        else:
+            self._404()

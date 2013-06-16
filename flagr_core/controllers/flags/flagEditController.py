@@ -17,6 +17,7 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.flags.flagEditTmpl import flagEditTmpl
 
 import models.couch.flag.flagModel as fm
+import models.couch.flag.collections.userPublicFlagsCollection as pubfc
 import utils.markdownUtils as mdu
 
 from datetime import datetime
@@ -102,7 +103,16 @@ class flagsEdit(baseHTMLObject):
         flag.description = description
         flag.labels = labels
         flag.url = url
-        flag.visibility = visibility
+
+        if flag.visibility != visibility:
+            pubFlags = pubfc.userPublicFlagsCollection(self.session.id)
+            if visibility:
+                pubFlags.addObject(flag.id)
+            else:
+                pubFlags.delObject(flag.id)
+
+            flag.visibility = visibility
+
         flag.created = datetime.now()
 
         flag.save()

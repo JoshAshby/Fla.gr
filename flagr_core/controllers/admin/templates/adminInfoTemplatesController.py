@@ -31,7 +31,8 @@ class adminTemplatesView(baseHTMLObject):
         tmplid = self.env["members"][0]
         view = adminInfoTemplatesTmpl(searchList=[self.tmplSearchList])
 
-        template = tm.formatTmpl(tm.templateORM.getByID(tmplid))
+        template = tm.templateORM.getByID(tmplid)
+        template.format()
         view.scripts = ["handlebars_1.0.min",
                 "adminModal.flagr",
                 "sidebarTabs.flagr",

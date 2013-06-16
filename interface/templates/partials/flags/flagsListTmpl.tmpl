@@ -1,4 +1,6 @@
-#for $flag in $flags.items
+#from views.partials.pagination.paginationTmpl import paginationTmpl as pagination
+
+#for $flag in $flags
     <!-- Start of flag overview template -->
     <article class="flag">
         <div class="row">
@@ -6,7 +8,7 @@
                 <h2>
                     <a href="/flags/view/$flag.id" class="flagLink"><i class="icon-flag"></i> $flag.title</a>
                     <small>
-                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/user/profile/$flag.author.username">$flag.author.username</a>#end if#</b>
+                        <b class="muted"> By #if $flag.userID == $user.id#you!#else#<a class="muted" href="/user/profile/$flag.joineduserID.username">$flag.joineduserID.username</a>#end if#</b>
                     </small>
                 </h2>
             </div>
@@ -35,16 +37,16 @@
         </div>
         <div class="row">
             <div class="span6">
-            #if len($flags.items) == 1
+            #if len($flags.tub) == 1
                 $flag.formatedDescription
             #else
-                $flag.formatedDescription[:160]
+                $flag.formatedDescription[:160]...
             #end if
             </div>
         </div>
         <div class="row">
             <div class="span6">
-                #if $flag.labels and $flag.labels != [""]
+                #if $flag.labels and $flag.labels != [""] and $cfg.enablePublicLabels
                     <b class="muted"><i class="icon-tags"></i> Labels: </b>
                     #for $label in $flag.labels
                         <a href="/labels/view/$label"><span class="label label-info">$label</span></a>
@@ -63,25 +65,4 @@
     </article>
     <!-- End of flag overview template -->
 #end for
-
-#if $flags.hasNext
-    <!-- Begin pagination -->
-    <div class="pagination pagination-centered">
-        <ul>
-            #if $flags.hasPrev
-                <li><a href="?p=${flags.currentPage-1}">&laquo;</a></li>
-            #else
-                <li class="disabled"><span>&laquo;</span></li>
-            #end if
-            #for $item in $flags.listPages()
-                <li #if $item == $flags.currentPage#class="active"#end if#><a href="?p=$item">$item</a></li>
-            #end for
-            #if $flags.hasNext
-                <li><a href="?p=${flags.currentPage+1}">&raquo;</a></li>
-            #else
-                <li class="disabled"><span>&raquo;</span></li>
-            #end if
-        </ul>
-    </div>
-    <!-- End Pagination -->
-#end if
+$pagination.pagination($flags)

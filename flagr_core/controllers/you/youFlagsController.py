@@ -18,8 +18,8 @@ from views.you.youFlagsTmpl import youFlagsTmpl
 from views.partials.flags.flagsListTmpl import flagsListTmpl
 
 import models.couch.flag.flagModel as fm
-
-import utils.pagination as p
+import models.couch.flag.collections.userPublicFlagsCollection as pubfc
+import models.couch.flag.collections.userFlagsCollection as fc
 
 
 @route("/your/flags")
@@ -34,26 +34,24 @@ class youFlags(baseHTMLObject):
                 if self.env["members"].has_key("p") else 1
 
         viewType = self.env["members"]["v"] \
-                if self.env["members"].has_key("v") else ""
+                if self.env["members"].has_key("v") else "public"
 
         view = youFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.listFlagsByUserID(self.session.id)
-        if flags:
-            if viewType == "public":
-                flags = fm.formatFlags(flags, False)
-                view.section = "public"
-            elif viewType == "private":
-                flags = fm.formatFlags(flags, True)
-                tmpFlags = []
-                for flag in flags:
-                    if not flag.visibility:
-                        tmpFlags.append(flag)
-                flags = tmpFlags
-                view.section = "private"
-            else:
-                flags = fm.formatFlags(flags, True)
-                view.section = "all"
+        if viewType == "public":
+            flags = pubfc.userPublicFlagsCollection(self.session.id)
+            flags.paginate(page, 25)
+            flags.fetch()
+            flags.format()
+
+        elif viewType == "private":
+            flags = fc.userFlagsCollection(self.session.id)
+            flags.withoutCollection(pubfc.userPublicFlagsCollection(self.session.id))
+            flags.paginate(page, 25)
+            flags.fetch()
+            flags.format()
+
+        view.section = viewType
 
         if self.env["cfg"].enableModalFlagDeletes:
             view.scripts = ["handlebars_1.0.min",
@@ -61,8 +59,6 @@ class youFlags(baseHTMLObject):
                     "adminModal.flagr",
                     "editForm.flagr",
                     "deleteFlagModal.flagr"]
-
-        flags = p.pagination(flags, 10, int(page))
 
         flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
         flagsTmpl.flags = flags

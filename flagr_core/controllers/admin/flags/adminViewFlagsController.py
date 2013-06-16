@@ -18,6 +18,7 @@ from views.admin.flags.adminViewFlagsTmpl import adminViewFlagsTmpl
 
 from models.couch.user.userModel import userORM
 import models.couch.flag.flagModel as fm
+import models.couch.baseCouchCollection as bcc
 
 
 @autoRoute()
@@ -28,13 +29,15 @@ class adminFlagsIndex(baseHTMLObject):
     def GET(self):
         """
         """
+        page = self.env["members"]["p"] \
+                if self.env["members"].has_key("p") else 1
         view = adminViewFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.flagORM.all()
-        flags = fm.formatFlags(flags, True)
-
-        for flag in flags:
-            flag.author = userORM.getByID(flag.userID)
+        flags = bcc.baseCouchCollection(fm.flagORM)
+        flags.paginate(page, 25)
+        flags.fetch()
+        flags.format()
+        flags.join(userORM, "userID")
 
         view.flags = flags
 

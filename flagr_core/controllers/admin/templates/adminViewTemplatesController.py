@@ -18,6 +18,7 @@ from views.admin.templates.adminViewTemplatesTmpl import adminViewTemplatesTmpl
 
 import models.couch.template.templateModel as tm
 import models.redis.setting.settingModel as sm
+import models.couch.baseCouchCollection as bcc
 import json
 
 
@@ -29,9 +30,10 @@ class adminTemplatesIndex(baseHTMLObject):
     def GET(self):
         """
         """
+        page = self.env["members"]["p"] \
+                if self.env["members"].has_key("p") else 1
         view = adminViewTemplatesTmpl(searchList=[self.tmplSearchList])
 
-        templates = tm.formatTmpls(tm.templateORM.all())
         view.scripts = ["handlebars_1.0.min",
                 "jquery.json-2.4.min",
                 "sidebarTabs.flagr",
@@ -40,6 +42,11 @@ class adminTemplatesIndex(baseHTMLObject):
                 "editForm.flagr",
                 "adminViewTemplates.flagr",
                 "dynamicInput.flagr"]
+
+        templates = bcc.baseCouchCollection(tm.templateORM)
+        templates.paginate(page, 25)
+        templates.fetch()
+        templates.format()
 
         view.templates = templates
 

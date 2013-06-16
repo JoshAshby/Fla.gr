@@ -20,55 +20,55 @@ from views.partials.flags.flagsListTmpl import flagsListTmpl
 import models.couch.flag.flagModel as fm
 import re
 
-import utils.pagination as p
 
-
-@autoRoute()
+#@autoRoute()
 class labelsView(baseHTMLObject):
     _title = "labels"
     __login__ = True
     def GET(self):
         """
         """
-        page = self.env["members"]["p"] \
-                if self.env["members"].has_key("p") else 1
-        baseLabel = self.env["members"][0]
+        if self.env["cfg"].enablePublicPages and self.env["cfg"].enablePublicLabels:
+            page = self.env["members"]["p"] \
+                    if self.env["members"].has_key("p") else 1
+            baseLabel = self.env["members"][0]
 
-        if type(baseLabel) == list:
-            baseLabel = "/".join(baseLabel)
+            if type(baseLabel) == list:
+                baseLabel = "/".join(baseLabel)
 
-        view = labelsViewTmpl(searchList=[self.tmplSearchList])
+            view = labelsViewTmpl(searchList=[self.tmplSearchList])
 
-        labelRe = re.compile(baseLabel+'(.*)')
+            labelRe = re.compile(baseLabel+'(.*)')
 
-        matchedFlags = []
-        labels = []
-        flags = fm.listFlagsByUserID(self.session.id)
-        for flag in flags:
-            for label in flag.labels:
-                if labelRe.match(label):
-                    labels.append(label)
-                    matchedFlags.append(flag)
+            matchedFlags = []
+            labels = []
+            flags = fm.listFlagsByUserID(self.session.id)
+            for flag in flags:
+                for label in flag.labels:
+                    if labelRe.match(label):
+                        labels.append(label)
+                        matchedFlags.append(flag)
 
-        if baseLabel in labels:
-            labels.pop(labels.index(baseLabel))
+            if baseLabel in labels:
+                labels.pop(labels.index(baseLabel))
 
-        if self.env["cfg"].enableModalFlagDeletes:
-            view.scripts = ["handlebars_1.0.min",
-                    "jquery.json-2.4.min",
-                    "adminModal.flagr",
-                    "editForm.flagr",
-                    "deleteFlagModal.flagr"]
+            if self.env["cfg"].enableModalFlagDeletes:
+                view.scripts = ["handlebars_1.0.min",
+                        "jquery.json-2.4.min",
+                        "adminModal.flagr",
+                        "editForm.flagr",
+                        "deleteFlagModal.flagr"]
 
-        flags = fm.formatFlags(matchedFlags, False)
-        flags = p.pagination(flags, 10, int(page))
+            flags = fm.formatFlags(matchedFlags, False)
 
-        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
-        flagsTmpl.flags = flags
+            flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
+            flagsTmpl.flags = flags
 
-        view.flags = str(flagsTmpl)
+            view.flags = str(flagsTmpl)
 
-        view.labels = labels
-        view.baseLabel = baseLabel
+            view.labels = labels
+            view.baseLabel = baseLabel
 
-        return view
+            return view
+        else:
+            self._404()

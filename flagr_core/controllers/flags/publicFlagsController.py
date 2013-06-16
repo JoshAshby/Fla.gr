@@ -17,10 +17,8 @@ from utils.baseHTMLObject import baseHTMLObject
 from views.public.publicFlagsTmpl import publicFlagsTmpl
 from views.partials.flags.flagsListTmpl import flagsListTmpl
 
-import models.couch.flag.flagModel as fm
-
-import utils.pagination as p
-
+import models.couch.flag.collections.publicFlagsCollection as pubfc
+import models.couch.user.userModel as um
 
 @autoRoute()
 class flagsIndex(baseHTMLObject):
@@ -28,26 +26,30 @@ class flagsIndex(baseHTMLObject):
     def GET(self):
         """
         """
-        page = self.env["members"]["p"] \
-                if self.env["members"].has_key("p") else 1
+        if self.env["cfg"].enablePublicPages:
+            page = self.env["members"]["p"] \
+                    if self.env["members"].has_key("p") else 1
 
-        view = publicFlagsTmpl(searchList=[self.tmplSearchList])
+            view = publicFlagsTmpl(searchList=[self.tmplSearchList])
 
-        flags = fm.flagORM.all()
-        flags = fm.formatFlags(flags, False)
+            flags = pubfc.publicFlagsCollection()
+            flags.paginate(page, 25)
+            flags.fetch()
+            flags.format()
+            flags.join(um.userORM, "userID")
 
-        if self.env["cfg"].enableModalFlagDeletes:
-            view.scripts = ["handlebars_1.0.min",
-                    "jquery.json-2.4.min",
-                    "adminModal.flagr",
-                    "editForm.flagr",
-                    "deleteFlagModal.flagr"]
+            if self.env["cfg"].enableModalFlagDeletes:
+                view.scripts = ["handlebars_1.0.min",
+                        "jquery.json-2.4.min",
+                        "adminModal.flagr",
+                        "editForm.flagr",
+                        "deleteFlagModal.flagr"]
 
-        flags = p.pagination(flags, 10, int(page))
+            flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
+            flagsTmpl.flags = flags
 
-        flagsTmpl = flagsListTmpl(searchList=[self.tmplSearchList])
-        flagsTmpl.flags = flags
+            view.flags = str(flagsTmpl)
 
-        view.flags = str(flagsTmpl)
-
-        return view
+            return view
+        else:
+            self._404()
