@@ -191,7 +191,7 @@ def app(env, start_response):
 
 def logURL(env, url):
     uri = env["REQUEST_URI"] if env.has_key("REQUEST_URI") else env["PATH_INFO"]
-    remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "locahost")
+    remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "localhost")
     logger.debug("""\n\r----------------------------
     Method: %s
     URL: %s
