@@ -12,19 +12,19 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
+from seshat.baseHTMLObject import baseHTMLObject
 
 
 @autoRoute()
-class authLogout(baseHTMLObject):
+class logout(baseHTMLObject):
     def GET(self):
         """
         Simply log the user out. Nothing much to do here.
 
         redirect to login page after we're done.
         """
-        if self.session.logout():
-            self.session.pushAlert("Come back soon!", "B'ahBye...", "info")
+        if self.request.session.logout():
+            self.request.session.pushAlert("Come back soon!", "B'ahBye...", "info")
 
         self.head = ("303 SEE OTHER", [("location", ("/auth/login"))])
 

@@ -30,14 +30,14 @@ import models.redis.bucket.bucketModel as bm
 class requestItem(object):
   def __init__(self, env):
     self._env = env
-    self.getMembers()
+    self.getParams()
     self.getCookie()
     self.getSession()
     self.getCfg()
 
     self.method = env["REQUEST_METHOD"]
 
-  def getMembers(self):
+  def getParams(self):
     members = {}
     for item in self._env['QUERY_STRING'].split("&"):
         if item:
@@ -52,6 +52,8 @@ class requestItem(object):
             for part in parts:
                 query = part.split("=")
                 members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+
+    self.params = members
 
   def getCookie(self):
     cookie = Cookie.SimpleCookie()
@@ -76,5 +78,8 @@ class requestItem(object):
       header.append(("Content-Length", str(length)))
       return header
 
-
-
+  def getParam(self, param, default=""):
+      try:
+          return self.params[param]
+      except:
+          return default

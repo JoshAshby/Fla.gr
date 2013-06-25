@@ -12,56 +12,49 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.auth.authLoginTmpl import authLoginTmpl
-
-import models.couch.user.userModel as um
-import utils.sessionExceptions as use
-
+from seshat.baseHTMLObject import baseHTMLObject
+import models.modelExceptions.sessionExceptions as se
 
 @autoRoute()
-class authLogin(baseHTMLObject):
+class login(baseHTMLObject):
     """
 
     """
     _title = "login"
+    _defaultTmpl = "auth/login"
     def GET(self):
         """
         Display the login page or redirect to their dashboard if they are already logged in
         """
-        if self.session.loggedIn:
+        if self.request.session.userID:
             self.head = ("303 SEE OTHER",
                 [("location", "/you")])
-            self.session.pushAlert("It looks like you're already signed in!", "Hey there!", "info")
+            self.request.session.pushAlert("It looks like you're already signed in!", "Hey there!", "info")
 
         else:
-            loginForm = authLoginTmpl(searchList=[self.tmplSearchList])
-            return loginForm
+            return self.view
 
     def POST(self):
         """
         Use form data to check login, and the redirect if successful
         if not successful then redirect to the login page again.
         """
-        passwd = self.env["members"]["password"]
-        name = self.env["members"]["username"]
+        passwd = self.request.getParam("password")
+        name = self.request.getParam("username")
 
+        exc = ""
         try:
-            um.userORM.login(name, passwd, self.env["cookie"])
+            self.request.session.login(name, passwd)
             self.head = ("303 SEE OTHER", [("location", "/you")])
-            self.session.pushAlert("Welcome back, %s!" % name, "Ohia!", "success")
+            self.request.session.pushAlert("Welcome back, %s!" % name, "Ohia!", "success")
 
-        except Exception as exc:
-            self.session.pushAlert("%s <br/>Please try again." % exc, "Uh oh...", "error")
-            loginForm = authLoginTmpl(searchList=[self.tmplSearchList])
+        except se.usernameError as e:
+            exc = e
+        except se.passwordError as e:
+            exc = e
+            self.view.username = {"username": name}
+        except se.baseError as e:
+            exc = e
 
-            if type(exc) == use.usernameError:
-                loginForm.usernameError = True
-            elif type(exc) == use.passwordError:
-                loginForm.passwordError = True
-                loginForm.username = name
-            elif type(exc) == use.banError:
-                loginForm.banError = True
-
-            return loginForm
+        self.request.session.pushAlert("%s <br/>Please try again." % exc, "Uh oh...", "error")
+        return self.view

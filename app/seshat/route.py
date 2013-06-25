@@ -27,7 +27,7 @@ def route(routeURL, urls=c.urls):
                 HTTPObject.__url__ = urlObject.url
                 if c.general.debug: logger.debug("""Made route table entry for:
         Object: %(objectName)s
-        Pattern %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
+        Pattern: %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
                 return HTTPObject
         return wrapper
 
@@ -40,6 +40,6 @@ def autoRoute(urls=c.urls):
         HTTPObject.__url__ = urlObject.url
         if c.general.debug: logger.debug("""Auto generated route table entry for:
         Object: %(objectName)s
-        Pattern %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
+        Pattern: %(regex)s""" % {"regex": urlObject.url, "objectName": HTTPObject.__module__ + "/" + HTTPObject.__name__})
         return HTTPObject
     return wrapper

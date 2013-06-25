@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
+from seshat.baseHTMLObject import baseHTMLObject
 
 
 @autoRoute()

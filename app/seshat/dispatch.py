@@ -16,15 +16,12 @@ joshuaashby@joshashby.com
 import config.config as c
 
 import gevent
-from gevent import queue
 
 import logging
 logger = logging.getLogger(c.general.logName+".seshat.dispatch")
 
-import traceback
-
-from seshat.requestItem import requestItem 
-import controllers.errorController as errorController
+from seshat.requestItem import requestItem
+import controllers.error as error
 
 
 def dispatch(env, start_response):
@@ -73,16 +70,13 @@ def dispatch(env, start_response):
         if not newHTTPObject:
             return error404(request, start_response)
 
+        dataThread = gevent.spawn(newHTTPObject.build)
+        dataThread.join()
         try:
-            data, reply = queue.Queue(), queue.Queue()
-            dataThread = gevent.spawn(newHTTPObject.build, data, reply)
-            dataThread.join()
-            dataThread.get()
-        except:
+            content, replyData = dataThread.get()
+        except Exception as e:
+            request.error = e.message
             return error500(request, start_response)
-
-        content = data.get()
-        replyData = reply.get()
 
         header = replyData[1]
         status = replyData[0]
@@ -103,24 +97,23 @@ def dispatch(env, start_response):
         else:
             return []
 
-    except:
-      return error500(request, start_response)
+    except Exception as e:
+        request.error = e
+        return error500(request, start_response)
 
 
 def error404(request, start_response):
     """
     Returns a base 404 not found error page
     """
-    newHTTPObject = errorController.error404(request)
+    newHTTPObject = error.error404(request)
     if c.general.debug: log404(request)
 
-    data, reply = queue.Queue(), queue.Queue()
-    dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+    dataThread = gevent.spawn(newHTTPObject.build)
     dataThread.join()
 
-    content = data.get()
+    content, replyData = dataThread.get()
 
-    replyData = reply.get()
     header = replyData[1]
     status = replyData[0]
 
@@ -139,17 +132,14 @@ def error500(request, start_response):
     These errors are logged in a special error log and there is also a general
     error logged to the default logger.
     """
-    request.error = "Fatal error" + traceback.format_exc()
-    newHTTPObject = errorController.error500(request)
+    newHTTPObject = error.error500(request)
     if c.general.debug: log500(request)
 
-    data, reply = queue.Queue(), queue.Queue()
-    dataThread = gevent.spawn(newHTTPObject.build, data, reply)
+    dataThread = gevent.spawn(newHTTPObject.build)
     dataThread.join()
 
-    content = data.get()
+    content, replyData = dataThread.get()
 
-    replyData = reply.get()
     header = replyData[1]
     status = replyData[0]
 
@@ -181,7 +171,8 @@ def log500(request):
     Method: %s
     URL: %s
     IP: %s
-    """ % (env["REQUEST_METHOD"], uri, remote))
+    ERROR: %s
+    """ % (env["REQUEST_METHOD"], uri, remote, request.error))
 
 
 def log404(request):

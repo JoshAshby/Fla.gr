@@ -34,3 +34,9 @@ class baseHTMLObject(baseHTTPObject):
         self.request.title = title
 
         self.view = template(tmpl, self.request)
+
+    def postMethod(self, content):
+        if type(content) == template:
+            return content.render()
+        else:
+            return content

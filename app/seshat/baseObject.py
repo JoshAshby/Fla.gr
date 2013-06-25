@@ -13,7 +13,6 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import traceback
 
 
 class baseHTTPObject(object):
@@ -32,7 +31,8 @@ class baseHTTPObject(object):
         def finishInit(self):
             pass
 
-        def build(self, data, reply):
+        #def build(self, data, reply):
+        def build(self):
             error = False
             content = ""
 
@@ -58,24 +58,23 @@ class baseHTTPObject(object):
                     error = True
 
             if not error:
-                try:
-                    content = getattr(self, self.request.method)() or ""
-                    content = unicode(content)
-                except:
-                    content = traceback.format_exc()
-                    error = True
+                content = getattr(self, self.request.method)() or ""
+                content = self.postMethod(content)
+                content = unicode(content)
 
             if self.head[0] != "303 SEE OTHER":
                 del self.request.session.alerts
 
-            data.put(content)
-            data.put(StopIteration)
 
-            reply.put(self.head)
-            reply.put(StopIteration)
+            return content, self.head
+            #data.put(content)
+            #data.put(StopIteration)
 
-            if error:
-                raise Exception("Controller failed to finish...")
+            #reply.put(self.head)
+            #reply.put(StopIteration)
+
+        def postMethod(self, content):
+            return content
 
         def _404(self):
             self.head = ("404 NOT FOUND", [])

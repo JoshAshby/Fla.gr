@@ -23,7 +23,9 @@ import pystache
 
 class session(brm.redisObject):
     def _finishInit(self):
-        if not hasattr(self, "_alerts"): self._alerts = ""
+        if not hasattr(self, "_alerts"): self._alerts = "[]"
+        if not hasattr(self, "username"): self.username = None
+        if not hasattr(self, "userID"): self.userID = None
 
     def login(self, user, password):
         """
@@ -61,8 +63,8 @@ class session(brm.redisObject):
         Sets the users loggedIn to False then removes the link between their
         session and their `userORM`
         """
-        del self.username
-        del self.userID
+        self.username = None
+        self.userID = None
         return True
 
     def pushAlert(self, message, quip="", level="success"):
@@ -75,7 +77,9 @@ class session(brm.redisObject):
         :param quip: Similar to a title, however just a quick attention getter
         :param level: Can be any of `success` `error` `info` `warning`
         """
-        self._alerts.append(json.dumps({"msg": message, "level": level, "expire": "next", "quip": quip}))
+        alerts = json.loads(self._alerts)
+        alerts.append(json.dumps({"msg": message, "level": level, "expire": "next", "quip": quip}))
+        self._alerts = json.dumps(alerts)
 
     @property
     def alerts(self):
@@ -84,20 +88,19 @@ class session(brm.redisObject):
 
         :return: List of Dicts
         """
-        alerts = []
-        for alert in self._alerts:
-            alerts.update(json.loads(alert))
-
-        return alerts
+        return json.loads(self._alerts)
 
     @alerts.deleter
     def alerts(self):
         """
         Clears the current users expired alerts.
         """
-        for alert in self._alerts:
+        alerts = json.loads(self._alerts)
+        for alert in alerts:
             if alert["expire"] == "next":
-                self._alerts.pop(self.alerts.index(alert))
+                alerts.pop(self.alerts.index(alert))
+
+        self._alerts = json.dumps(alerts)
 
     @staticmethod
     def HTMLAlert(alert):

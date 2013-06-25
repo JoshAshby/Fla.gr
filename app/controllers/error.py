@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from utils.baseHTMLObject import baseHTMLObject
+from seshat.baseHTMLObject import baseHTMLObject
 
 
 class error404(baseHTMLObject):

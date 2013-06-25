@@ -40,11 +40,8 @@ class autoURL(object):
         fullModule = pageObject.__module__
         bits = fullModule.split(".")
         bases = []
-        for bit in bits[1:]:
-            if len(bit.split("Controller")) > 1:
-                break;
-            else:
-                bases.append(bit.lower())
+        for bit in bits[1:len(bits)-1]:
+            bases.append(bit.lower())
 
         self.url = "/"
         for base in bases:
