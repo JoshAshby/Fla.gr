@@ -6,7 +6,7 @@ CUSTOM_LESS = ./interface/static/less/custom_styles.less
 COFFEE_DIR = ./interface/static/cs/
 CHECK=✔
 
-flagr: bootstrap less coffee templates
+flagr: bootstrap less coffee
 	@echo "You should link interface/static to your servers /static/"
 	@echo "In other words, interface/static should be accessible from localhost/static"
 
@@ -37,10 +37,10 @@ coffee:
 	./node_modules/.bin/coffee --compile --output interface/static/js/ ${COFFEE_DIR}
 	@echo "Done ${CHECK}"
 
-templates:
-	@echo "Compiling Cheetah templates..."
-	cheetah compile -R --idir interface/templates/ --odir flagr_core/views/
-	@echo "Done ${CHECK}"
+#templates:
+	#@echo "Compiling Cheetah templates..."
+	#cheetah compile -R --idir interface/templates/ --odir app/views/
+	#@echo "Done ${CHECK}"
 
 clean:
 	@echo "Cleaning up a few directories I made..."
