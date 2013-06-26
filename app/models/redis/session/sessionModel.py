@@ -29,6 +29,29 @@ class session(brm.redisObject):
 
         self.protectedItems.append("HTMLAlerts")
 
+    def loginWithoutCheck(self, user):
+        """
+        Tries to find the user in the database, if the user is successfully
+        logged in then the sessions username and user ID is set to that users
+
+        :param user: Str of the username or ID to try and login
+        :type user: Str
+
+        :returns: True if the user was successfully logged in
+        """
+        foundUser = userModel.userORM.find(user)
+        if foundUser:
+            if not foundUser.disable:
+                self.username = foundUser.username
+                self.userID = foundUser.id
+                self.hasAdmin = foundUser.hasAdmin
+                return True
+            else:
+                raise use.banError("Your user is currently disabled. \
+                        Please contact an admin for additional information.")
+        raise use.usernameError("We can't find your user, are you \
+                sure you have the correct information?")
+
     def login(self, user, password):
         """
         Tries to find the user in the database,then tries to use the plain text

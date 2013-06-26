@@ -14,6 +14,10 @@
                 <b class="muted">Or...</b>
                 <a href="/request">Request an invite</a>
             {{/req.cfg.enableRequests}}
+            {{#req.cfg.enableRegistration}}
+                <b class="muted">Or...</b>
+                <a href="/auth/register">Register an account</a>
+            {{/req.cfg.enableRegistration}}
         </div>
     </form>
   </div>

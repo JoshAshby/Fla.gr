@@ -42,6 +42,9 @@ class login(baseHTMLObject):
         passwd = self.request.getParam("password")
         name = self.request.getParam("username")
 
+        if not passwd and not name:
+          return self.view
+
         exc = ""
         try:
             self.request.session.login(name, passwd)

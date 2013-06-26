@@ -53,45 +53,49 @@ class register(baseHTMLObject):
                 lets log them in also.
                 """
                 newUser = um.userORM(username, passwordOnce)
-                newUser.loginThis(self.env["cookie"])
                 newUser.save()
-                self.session.pushAlert("You can now log in with the \
-                        information you gave us!", "Congrats!", "success")
+                self.request.session.loginWithoutCheck(username)
+                self.request.session.pushAlert("You're account has been made and we've logged you in!",
+                    "Congrats!", "success")
                 self.head = ("303 SEE OTHER", [("location", "/your/flags")])
+                return
 
-            #else:
-                #"""
-                #If none, or one of those isn't true then we have a problem...
-                #"""
-                #view.email = givenEmail
-                #view.username = username
-                #if foundName:
-                    #"""
-                    #Someone with the same username, thats not allowed...
-                    #"""
-                    #self.session.pushAlert("There is already a person in our \
-                            #system with that username, please choose another",
-                            #"Oh no!", "error")
+            else:
+                """
+                If none, or one of those isn't true then we have a problem...
+                """
+                if foundName:
+                    """
+                    Someone with the same username, thats not allowed...
+                    """
+                    self.request.session.pushAlert("There is already a person in our \
+                            system with that username, please choose another",
+                            "Oh no!", "error")
 
-                    #view.usernameError = True
+                    self.view.data = {"usernameError": True}
 
-                #elif foundEmail:
-                    #"""
-                    #Already someone with that email in the system...
-                    #"""
-                    #self.session.pushAlert("There is already someone with that \
-                            #email in our system, are you sure you don't already\
-                            #have an account, or have already requested an invite?",
-                            #"Oh no!", "error")
-                    #view.emailError = True
+                elif foundEmail:
+                    """
+                    Already someone with that email in the system...
+                    """
+                    self.request.session.pushAlert("There is already someone with that \
+                            email in our system, are you sure you don't already\
+                            have an account, or have already requested an invite?",
+                            "Oh no!", "error")
 
-                #elif passwordOnce != "" and passwordOnce != passwordTwice:
-                    #"""
-                    #Password isn't null but doesn't match
-                    #"""
-                    #view.passwordMatchError = True
+                    self.view.data = {"emailError": True,
+                        "username": username}
 
-            #return self.view
+                elif passwordOnce != "" and passwordOnce != passwordTwice:
+                    """
+                    Password isn't null but doesn't match
+                    """
+                    self.request.session.pushAlert("Your passwords don't match!", "Oh no!", "error")
+                    self.view.data = {"passwordError": True,
+                        "username": username,
+                        "email": givenEmail}
+
+                return self.view
 
         else:
             self._404()
