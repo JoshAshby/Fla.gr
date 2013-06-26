@@ -25,6 +25,7 @@ class session(brm.redisObject):
         if not hasattr(self, "_alerts"): self._alerts = "[]"
         if not hasattr(self, "username"): self.username = None
         if not hasattr(self, "userID"): self.userID = None
+        if not hasattr(self, "hasAdmin"): self.hasAdmin = None
 
         self.protectedItems.append("HTMLAlerts")
 
@@ -49,6 +50,7 @@ class session(brm.redisObject):
                         foundUser.password):
                     self.username = foundUser.username
                     self.userID = foundUser.id
+                    self.hasAdmin = foundUser.hasAdmin
                     return True
                 else:
                     raise use.passwordError("Your password appears to \
