@@ -20,6 +20,7 @@ import models.couch.user.userModel as um
 @autoRoute()
 class register(baseHTMLObject):
     _title = "register"
+    _defaultTmpl = "public/auth/register"
     def GET(self):
         """
         """
