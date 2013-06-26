@@ -91,9 +91,11 @@ class template(object):
             "body"  : body,
         })
 
+        self._data["req"].session.renderAlerts()
+
         self._render = pystache.render(tmpls["base"], self._data)
 
-        return self._render
+        return unicode(self._render)
 
     def __str__(self):
-        return self._render
+        return unicode(self._render)

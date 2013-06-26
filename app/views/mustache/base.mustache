@@ -131,6 +131,12 @@
 
     <!-- Begin main body container -->
     <div class="container">
+        <div class="row">
+            <div class="span10 offset1">
+                {{{req.session.HTMLAlerts}}}
+            </div>
+        </div>
+
         {{{body}}}
 
         <hr>
@@ -142,6 +148,7 @@
                 &copy 2013 <a href="http://github.com/transientBug"><i class="icon-github"></i></a>
                 <a href="http://twitter.com/transientBug"><i class="icon-twitter"></i></a>
               </small>
+              <input type="hidden" id="userID" value="{{req.session.userID}}">
             </footer>
           </div>
         </div>

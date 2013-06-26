@@ -53,6 +53,8 @@ class redisKeysBase(object):
         if type(value) == list:
             self._data[item] = redisList(self.key+item, value)
         else:
+            if value == None:
+              value = ""
             self._data[item] = value
             self.redis.set(self.key+item, value)
 

@@ -21,7 +21,7 @@ class login(baseHTMLObject):
 
     """
     _title = "login"
-    _defaultTmpl = "auth/login"
+    _defaultTmpl = "public/auth/login"
     def GET(self):
         """
         Display the login page or redirect to their dashboard if they are already logged in
@@ -50,10 +50,12 @@ class login(baseHTMLObject):
 
         except se.usernameError as e:
             exc = e
+            self.view.data = {"usernameError": True}
         except se.passwordError as e:
             exc = e
-            self.view.username = {"username": name}
-        except se.baseError as e:
+            self.view.data = {"username": name}
+            self.view.data = {"passwordError": True}
+        except se.banError as e:
             exc = e
 
         self.request.session.pushAlert("%s <br/>Please try again." % exc, "Uh oh...", "error")

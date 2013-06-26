@@ -18,7 +18,6 @@ import bcrypt
 import models.redis.baseRedisModel as brm
 import models.modelExceptions.sessionExceptions as use
 import json
-import pystache
 
 
 class session(brm.redisObject):
@@ -26,6 +25,8 @@ class session(brm.redisObject):
         if not hasattr(self, "_alerts"): self._alerts = "[]"
         if not hasattr(self, "username"): self.username = None
         if not hasattr(self, "userID"): self.userID = None
+
+        self.protectedItems.append("HTMLAlerts")
 
     def login(self, user, password):
         """
@@ -41,13 +42,13 @@ class session(brm.redisObject):
 
         :returns: True if the user was successfully logged in
         """
-        foundUser = userModel.find(user)
+        foundUser = userModel.userORM.find(user)
         if foundUser:
             if not foundUser.disable:
                 if foundUser.password == bcrypt.hashpw(password,
                         foundUser.password):
                     self.username = foundUser.username
-                    self.userID = foundUser.userID
+                    self.userID = foundUser.id
                     return True
                 else:
                     raise use.passwordError("Your password appears to \
@@ -78,7 +79,7 @@ class session(brm.redisObject):
         :param level: Can be any of `success` `error` `info` `warning`
         """
         alerts = json.loads(self._alerts)
-        alerts.append(json.dumps({"msg": message, "level": level, "expire": "next", "quip": quip}))
+        alerts.append({"msg": message, "level": level, "expire": "next", "quip": quip})
         self._alerts = json.dumps(alerts)
 
     @property
@@ -98,26 +99,24 @@ class session(brm.redisObject):
         alerts = json.loads(self._alerts)
         for alert in alerts:
             if alert["expire"] == "next":
-                alerts.pop(self.alerts.index(alert))
+                alerts.pop(alerts.index(alert))
 
         self._alerts = json.dumps(alerts)
 
-    @staticmethod
-    def HTMLAlert(alert):
-        if not alert.icon:
-            if alert.level == "info":
-                alert.icon = "info-sign"
-            elif alert.level == "success":
-                alert.icon = "thumbs-up"
-            elif alert.level == "warning":
-                alert.icon = "excalmation-mark"
-            elif alert.level == "error":
-                alert.icon = "warning-sign"
+    def renderAlerts(self):
+        alerts = json.loads(self._alerts)
 
-        tmpl = """
-    <div class="alert alert-{{level}}"><i class="icon-{{icon}}"></i><strong>{{quip}}</strong> {{message}}</div>
-        """
+        alertStr = ""
+        for alert in alerts:
+            if alert["level"] == "info":
+                alert["icon"] = "info-sign"
+            elif alert["level"] == "success":
+                alert["icon"] = "thumbs-up"
+            elif alert["level"] == "warning":
+                alert["icon"] = "excalmation-mark"
+            elif alert["level"] == "error":
+                alert["icon"] = "warning-sign"
 
-        renderedAlert = pystache.render(tmpl, alert)
+            alertStr += ("""<div class="alert alert-{level}"><i class="icon-{icon}"></i><strong>{quip}</strong> {msg}</div>""").format(**alert)
 
-        return renderedAlert
+        self.HTMLAlerts = unicode(alertStr)
