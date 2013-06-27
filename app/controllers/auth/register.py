@@ -15,6 +15,7 @@ from seshat.route import autoRoute
 from seshat.baseHTMLObject import baseHTMLObject
 
 import models.couch.user.userModel as um
+import models.couch.request.requestModel as rm
 
 
 @autoRoute()
@@ -24,8 +25,18 @@ class register(baseHTMLObject):
     def GET(self):
         """
         """
-        if self.request.cfg.enableRegistration:
+        token = self.request.getParam("token")
+        if self.request.cfg.enableRegistration or token:
+            if token:
+                request = rm.find(token)
+                try:
+                    request.checkToken()
+                    self.view.data = {"requestEmail": request.email}
+                except Exception:
+                    self.request.session.pushAlert("There was an error with finding your request. We've logged this and will try to get back to you as soon as possible.")
+
             return self.view
+
         else:
             self.head = ("303 SEE OTHER", [("Location", "/request")])
             self.request.session.pushAlert("We currently have registration closed \
@@ -35,8 +46,18 @@ class register(baseHTMLObject):
     def POST(self):
         """
         """
-        if self.request.cfg.enableRegistration:
-            givenEmail = self.request.getParam("email")
+        token = self.request.getParam("token")
+        if self.request.cfg.enableRegistration or token:
+            if token:
+                request = um.find(token)
+                try:
+                    request.checkToken()
+                    self.view.data = {"requestEmail": request.email}
+                except Exception:
+                    self.request.session.pushAlert("There was an error with finding your request. We've logged this and will try to get back to you as soon as possible.")
+            else:
+                givenEmail = self.request.getParam("email")
+
             username = self.request.getParam("username")
             passwordOnce = self.request.getParam("passwordOnce")
             passwordTwice = self.request.getParam("passwordTwice")

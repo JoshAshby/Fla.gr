@@ -14,7 +14,14 @@ from datetime import datetime
 
 from models.couch.baseCouchModel import baseCouchModel
 
-import utils.signerUtils as su
+from itsdangerous import URLSafeTimedSerializer, BadSignature
+import config.config as c
+
+secret = c.general.requests["secret"]
+requestSigner = URLSafeTimedSerializer(
+        secret,
+        salt="requestAnInvite")
+
 
 
 class requestORM(Document, baseCouchModel):
@@ -32,11 +39,20 @@ class requestORM(Document, baseCouchModel):
 
         :return: The invite token which is a URL save, serialized version of
             their email signed with a secret and a salt.
+
+        TODO: Unfuck this and make it work again and better
         """
-        token = su.requestToken(self.email)
+        token = requestSigner.dumps(self.email)
+        self.token = token
         self.granted = datetime.now()
         self.save()
         return token
+
+    def checkToken(self):
+        try:
+            return requestSigner.loads(self.email)
+        except BadSignature:
+            raise Exception("Could not verify the token, please make sure it is correct.")
 
     def format(self):
         """

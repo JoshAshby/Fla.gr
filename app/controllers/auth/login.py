@@ -50,6 +50,7 @@ class login(baseHTMLObject):
             self.request.session.login(name, passwd)
             self.head = ("303 SEE OTHER", [("location", "/you")])
             self.request.session.pushAlert("Welcome back, %s!" % name, "Ohia!", "success")
+            return
 
         except se.usernameError as e:
             exc = e
@@ -60,6 +61,8 @@ class login(baseHTMLObject):
             self.view.data = {"passwordError": True}
         except se.banError as e:
             exc = e
+
+        exc = exc.strip("'")
 
         self.request.session.pushAlert("%s <br/>Please try again." % exc, "Uh oh...", "error")
         return self.view

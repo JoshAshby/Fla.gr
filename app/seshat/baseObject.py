@@ -60,18 +60,13 @@ class baseHTTPObject(object):
             if not error:
                 content = getattr(self, self.request.method)() or ""
                 content = self.postMethod(content)
-                content = unicode(content)
+                if content:
+                    content = unicode(content)
 
             if self.head[0] != "303 SEE OTHER":
                 del self.request.session.alerts
 
-
             return content, self.head
-            #data.put(content)
-            #data.put(StopIteration)
-
-            #reply.put(self.head)
-            #reply.put(StopIteration)
 
         def postMethod(self, content):
             return content

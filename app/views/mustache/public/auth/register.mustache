@@ -1,11 +1,16 @@
 <div class="row">
-  <div class="span10 offset1">
+  <div class="span6 offset3">
     <h2>Register for an account</h2>
     <form class="form form-horizontal" method="POST" action="/auth/register">
-      <div class="control-group {{#emailError}}error{{/emailError}}">
-        <input type="email" placeholder="email..." name="email" class="span6" value="{{email}}" required>
-        <span class="help-block">We need to verify your email with the one you gave us in the request. Please use the same email here as you did to request an invite.</span>
-      </div>
+      {{^requestEmail}}
+        <div class="control-group {{#emailError}}error{{/emailError}}">
+          <input type="email" placeholder="email..." name="email" class="span6" value="{{email}}" required>
+          <span class="help-block">We need to verify your email with the one you gave us in the request. Please use the same email here as you did to request an invite.</span>
+        </div>
+      {{/requestEmail}}
+      {{#requestEmail}}
+        <p>Welcome {{requestEmail}}, this form will take you through the process of finishing registering for an account.</p>
+      {{/requestEmail}}
       <div class="control-group {{#usernameError}}error{{/usernameError}}">
         <input type="text" placeholder="username..." name="username" class="span6" value="{{username}}">
       </div>
