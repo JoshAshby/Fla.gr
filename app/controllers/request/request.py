@@ -12,16 +12,14 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.requests.requestsRequestTmpl import requestsRequestTmpl
+from seshat.baseHTMLObject import baseHTMLObject
 
 import models.couch.request.requestModel as rm
 import models.couch.user.userModel as um
 
 
 @autoRoute()
-class requestIndex(baseHTMLObject):
+class index(baseHTMLObject):
     _title = "request an invite"
     _defaultTmpl = "public/request/request"
     def GET(self):
@@ -35,9 +33,8 @@ class requestIndex(baseHTMLObject):
     def POST(self):
         """
         """
-        if self.env["cfg"].enableRequests:
-            email = self.env["members"]["email"] \
-                    if self.env["members"].has_key("email") else ""
+        if self.request.cfg.enableRequests:
+            email = self.request.getParam("email")
 
             found = um.userORM.find(email) or rm.requestORM.find(email)
 
@@ -46,19 +43,16 @@ class requestIndex(baseHTMLObject):
                 newRequest.save()
                 self.head = ("303 SEE OTHER",
                     [("location", "/request/thanks")])
-                self.session.pushAlert("Thanks, %s for registering. \
-                        We hope to get you an invite soon!"%email,
+                self.request.session.pushAlert("Thanks, %s for requesting an invite. \
+                        We hope to get you a spot soon!"%email,
                         "", "success")
             else:
                 if found:
-                    self.session.pushAlert("There is already someone in our \
+                    self.request.session.pushAlert("There is already someone in our \
                             system with that email! If this is a mistake and \
                             you have not requested an invite or registered \
-                            before, please send us an email \
-                            at: flagr@joshashby.com", "Wha'oh", "error")
+                            before, please send us an email.", "Wha'oh", "error")
 
-                view = requestsRequestTmpl(searchList=[self.tmplSearchList])
-                view.emailError = True
-                return view
+                return self.view
         else:
             self._404()

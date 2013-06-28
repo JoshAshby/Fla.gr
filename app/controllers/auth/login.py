@@ -15,6 +15,7 @@ from seshat.route import autoRoute
 from seshat.baseHTMLObject import baseHTMLObject
 import models.modelExceptions.sessionExceptions as se
 
+
 @autoRoute()
 class login(baseHTMLObject):
     """
@@ -43,7 +44,7 @@ class login(baseHTMLObject):
         name = self.request.getParam("username")
 
         if not passwd and not name:
-          return self.view
+            return self.view
 
         exc = ""
         try:

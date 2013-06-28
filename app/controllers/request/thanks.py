@@ -12,19 +12,17 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.requests.requestsThanksTmpl import requestsThanksTmpl
+from seshat.baseHTMLObject import baseHTMLObject
 
 
 @autoRoute()
-class requestThanks(baseHTMLObject):
+class thanks(baseHTMLObject):
     _title = "thanks!"
+    _defaultTmpl = "public/request/thanks"
     def GET(self):
         """
         """
-        if self.env["cfg"].enableRequests:
-            view = requestsThanksTmpl(searchList=[self.tmplSearchList])
-            return view
+        if self.request.cfg.enableRequests:
+            return self.view
         else:
             self._404()
