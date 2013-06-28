@@ -30,7 +30,7 @@ class register(baseHTMLObject):
             if token:
                 request = rm.find(token)
                 try:
-                    request.checkToken()
+                    request.checkToken(token)
                     self.view.data = {"requestEmail": request.email}
                 except Exception:
                     self.request.session.pushAlert("There was an error with finding your request. We've logged this and will try to get back to you as soon as possible.")
@@ -51,8 +51,9 @@ class register(baseHTMLObject):
             if token:
                 request = um.find(token)
                 try:
-                    request.checkToken()
+                    request.checkToken(token)
                     self.view.data = {"requestEmail": request.email}
+                    givenEmail = request.email
                 except Exception:
                     self.request.session.pushAlert("There was an error with finding your request. We've logged this and will try to get back to you as soon as possible.")
             else:

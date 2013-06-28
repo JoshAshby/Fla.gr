@@ -39,7 +39,7 @@ class index(baseHTMLObject):
             found = um.userORM.find(email) or rm.requestORM.find(email)
 
             if email and not found:
-                newRequest = rm.requestORM(email)
+                newRequest = rm.requestORM(email=email)
                 newRequest.save()
                 self.head = ("303 SEE OTHER",
                     [("location", "/request/thanks")])

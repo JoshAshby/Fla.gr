@@ -18,6 +18,7 @@ joshuaashby@joshashby.com
 class baseHTTPObject(object):
         __level__ = 0
         __login__ = False
+        __admin__ = False
 
         """
         Base HTTP page response object
@@ -36,18 +37,16 @@ class baseHTTPObject(object):
             error = False
             content = ""
 
-            if not error and self.__level__:
-                if self.session.level == 100:
+            if not error and (self.__level__ or self.__admin__):
+                if self.request.session.hasAdmin:
                     """
                     Duh, This user is obviously omnicious and has access to every
                     area in the site.
                     """
                     pass
 
-                elif self.__level__ > self.request.session.level:
+                else:
                     loc = "/"
-                    if self.request.session.loggedIn:
-                        loc = "/your/flags"
                     self.request.session.pushAlert("You don't have the rights to access this.")
                     self.head = ("303 SEE OTHER", [("location", loc)])
                     error = True

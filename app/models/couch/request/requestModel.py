@@ -27,6 +27,7 @@ requestSigner = URLSafeTimedSerializer(
 class requestORM(Document, baseCouchModel):
     _name = "requests"
     email = TextField()
+    token = TextField()
     created = DateTimeField(datetime.now())
     granted = DateTimeField()
     docType = TextField(default="request")
@@ -48,9 +49,9 @@ class requestORM(Document, baseCouchModel):
         self.save()
         return token
 
-    def checkToken(self):
+    def checkToken(self, token):
         try:
-            return requestSigner.loads(self.email)
+            return requestSigner.loads(self.email, token)
         except BadSignature:
             raise Exception("Could not verify the token, please make sure it is correct.")
 

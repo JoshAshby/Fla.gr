@@ -80,6 +80,13 @@ class template(object):
         self._data[placeholder] = pystache.render(template, data)
 
     def render(self):
+        if "flagpole" in self._template.split("/"):
+            self._baseData.update({
+              "classes": {
+                "navbar": "navbar-inverse"
+              },
+              "bootstrapCSS": "adminBootstrap.css"
+            })
         body = self.raw
         if not self.raw:
             body = tmpls[self._template]

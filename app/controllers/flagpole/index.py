@@ -11,24 +11,22 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
+import seshat.objectMods as mods
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.admin.adminIndexTmpl import adminIndexTmpl
+from seshat.baseHTMLObject import baseHTMLObject
 
 
 @autoRoute()
-class adminIndex(baseHTMLObject):
+@mods.admin()
+class index(baseHTMLObject):
     """
     Returns base index page.
     """
     _title = "admin panel"
-    __level__ = 50
-    __login__ = True
+    _defaultTmpl = "flagpole/index/index"
     def GET(self):
         """
         Nothing much, just get the cheetah template for index and return it
         so Seshat can get cheetah to render it and then return it to the browser
         """
-        view = adminIndexTmpl(searchList=[self.tmplSearchList])
-        return view
+        return self.view

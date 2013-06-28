@@ -11,36 +11,35 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
+import seshat.objectMods as mods
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.admin.dev.adminDevViewBucketsTmpl import adminDevViewBucketsTmpl
+from seshat.baseHTMLObject import baseHTMLObject
 
 import models.redis.bucket.bucketModel as bm
 import json
 
 
 @autoRoute()
-class adminDevBucketsIndex(baseHTMLObject):
+@mods.admin(100)
+class index(baseHTMLObject):
     _title = "dev buckets"
-    __level__ = 100
-    __login__ = True
+    _defaultTmpl = "flagpole/dev/buckets/buckets"
     def GET(self):
         """
         """
-        page = int(self.env["members"]["p"]) \
-                if self.env["members"].has_key("p") else 1
-        view = adminDevViewBucketsTmpl(searchList=[self.tmplSearchList])
+        page = self.request.getParam("p")
 
-        view.scripts = ["jquery.json-2.4.min",
+        self.view.scripts = ["jquery.json-2.4.min",
                 "devBucketsButtons.flagr"]
+
         pail = bm.bucketPail("bucket:*:value")
         pail.paginate(page, 25)
         pail.fetch()
         pail.sortBy("id")
-        view.buckets = pail
 
-        return view
+        self.view.data = {"buckets": pail}
+
+        return self.view
 
     def POST(self):
         self.head = ("200 OK", [("Content-Type", "application/json")])
