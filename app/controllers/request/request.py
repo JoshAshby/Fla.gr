@@ -23,12 +23,12 @@ import models.couch.user.userModel as um
 @autoRoute()
 class requestIndex(baseHTMLObject):
     _title = "request an invite"
+    _defaultTmpl = "public/request/request"
     def GET(self):
         """
         """
-        if self.env["cfg"].enableRequests:
-            view = requestsRequestTmpl(searchList=[self.tmplSearchList])
-            return view
+        if self.request.cfg.enableRequests:
+            return self.view
         else:
             self._404()
 
