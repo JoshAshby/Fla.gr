@@ -59,7 +59,8 @@ class template(object):
             "stylesheets": [],
             "scripts": [],
             "static": "/static",
-            "bootstrapCSS": "bootstrap.css"
+            "bootstrapCSS": "bootstrap.css",
+            "breadcrumbs": ""
         }
 
         self._render = u""
@@ -147,3 +148,35 @@ class template(object):
 
     def __str__(self):
         return unicode(self._render)
+
+
+def listView(template, collection):
+    rendered = ""
+    for item in collection:
+      rendered += pystache.render(tmpls[template], {"row": item})
+
+    return rendered
+
+def paginateView(collection, template="partials/paginate"):
+    if collection.pages > 2:
+        previous = (collection.currentPage > 2)
+
+        pages = []
+        for page in range(1, (collection.pages+1)):
+            pageDict = {"number": page}
+            if page == collection.currentPage:
+                pageDict.update({"class": "active"})
+            pages.append(pageDict)
+
+        last = False
+        if collection.hasNextPage:
+            last = collection.currentPage+1
+
+        data = {"previous": previous,
+            "pages": pages,
+            "next": last}
+
+        return pystache.render(template, data)
+
+    else:
+        return ""

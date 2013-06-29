@@ -18,6 +18,7 @@ from seshat.baseHTMLObject import baseHTMLObject
 import models.redis.bucket.bucketModel as bm
 import json
 
+from views.template import listView, paginateView
 
 @autoRoute()
 @admin(100)
@@ -27,17 +28,23 @@ class index(baseHTMLObject):
     def GET(self):
         """
         """
-        page = self.request.getParam("p")
+        page = self.request.getParam("page", 1)
+        perpage = self.request.getParam("perpage", 25)
+        sort = self.request.getParam("sort", "id")
 
         self.view.scripts = ["jquery.json-2.4.min",
                 "devBucketsButtons.flagr"]
 
         pail = bm.bucketPail("bucket:*:value")
-        pail.paginate(page, 25)
+        pail.paginate(page, perpage)
         pail.fetch()
-        pail.sortBy("id")
+        pail.sortBy(sort)
 
-        self.view.data = {"buckets": pail}
+        buckets = listView("flagpole/partials/rows/bucket", pail)
+        pagination = paginateView(pail)
+
+        self.view.data = {"buckets": buckets,
+            "pagination": pagination}
 
         return self.view
 

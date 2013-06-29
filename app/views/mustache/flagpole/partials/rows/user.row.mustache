@@ -1,0 +1,22 @@
+<tr>
+  <td>
+    <input type="checkbox" class="userCheckbox" />
+  </td>
+
+  <td>
+    <a href="/flagpole/users/view/{{id}}">{{username}}</a>
+  </td>
+
+  <td>
+    <a href="/flagpole/users/view/{{id}}">{{email}}</a>
+  </td>
+
+  <td>
+    {{^status}}
+      <span class="label label-sucess">Active</span>
+    {{/status}}
+    {{#status}}
+      <span class="label label-error">Banned</span>
+    {{/status}}
+  </td>
+</tr>
