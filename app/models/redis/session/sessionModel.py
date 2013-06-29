@@ -22,12 +22,10 @@ import json
 
 class session(brm.redisObject):
     def _finishInit(self):
-        if not hasattr(self, "_alerts"): self._alerts = "[]"
+        if not hasattr(self, "rawAlerts"): self.rawAlerts = "[]"
         if not hasattr(self, "username"): self.username = None
         if not hasattr(self, "userID"): self.userID = None
         if not hasattr(self, "hasAdmin"): self.hasAdmin = None
-
-        self.protectedItems.append("HTMLAlerts")
 
     def loginWithoutCheck(self, user):
         """
@@ -91,6 +89,7 @@ class session(brm.redisObject):
         """
         self.username = None
         self.userID = None
+        self.hasAdmin = None
         return True
 
     def pushAlert(self, message, quip="", level="success"):
@@ -103,9 +102,9 @@ class session(brm.redisObject):
         :param quip: Similar to a title, however just a quick attention getter
         :param level: Can be any of `success` `error` `info` `warning`
         """
-        alerts = json.loads(self._alerts)
+        alerts = json.loads(self.rawAlerts)
         alerts.append({"msg": message, "level": level, "expire": "next", "quip": quip})
-        self._alerts = json.dumps(alerts)
+        self.rawAlerts = json.dumps(alerts)
 
     @property
     def alerts(self):
@@ -114,22 +113,22 @@ class session(brm.redisObject):
 
         :return: List of Dicts
         """
-        return json.loads(self._alerts)
+        return json.loads(self.rawAlerts)
 
     @alerts.deleter
     def alerts(self):
         """
         Clears the current users expired alerts.
         """
-        alerts = json.loads(self._alerts)
+        alerts = json.loads(self.rawAlerts)
         for alert in alerts:
             if alert["expire"] == "next":
                 alerts.pop(alerts.index(alert))
 
-        self._alerts = json.dumps(alerts)
+        self.rawAlerts = json.dumps(alerts)
 
     def renderAlerts(self):
-        alerts = json.loads(self._alerts)
+        alerts = json.loads(self.rawAlerts)
 
         alertStr = ""
         for alert in alerts:
@@ -144,4 +143,4 @@ class session(brm.redisObject):
 
             alertStr += ("""<div class="alert alert-{level}"><i class="icon-{icon}"></i><strong>{quip}</strong> {msg}</div>""").format(**alert)
 
-        self.HTMLAlerts = unicode(alertStr)
+        self._HTMLAlerts = unicode(alertStr)

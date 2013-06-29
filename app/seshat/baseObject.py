@@ -32,12 +32,11 @@ class baseHTTPObject(object):
         def finishInit(self):
             pass
 
-        #def build(self, data, reply):
         def build(self):
             error = False
             content = ""
 
-            if not error and (self.__level__ or self.__admin__):
+            if self.__admin__:
                 if self.request.session.hasAdmin:
                     """
                     Duh, This user is obviously omnicious and has access to every
@@ -45,27 +44,40 @@ class baseHTTPObject(object):
                     """
                     pass
 
+                elif self.request.session.userID:
+                    loc = "/you"
+                    self.request.session.pushAlert("You don't have the rights to access this.", level="error")
+                    self.head = ("303 SEE OTHER", [("location", loc)])
+                    error = True
                 else:
                     loc = "/"
-                    self.request.session.pushAlert("You don't have the rights to access this.")
+                    self.request.session.pushAlert("You need to be logged in as an Admin", level="error")
                     self.head = ("303 SEE OTHER", [("location", loc)])
                     error = True
 
-            elif self.__login__ and not self.request.session.loggedIn:
-                    self.request.session.pushAlert("You need to be logged in to view this page.")
-                    self.head = ("303 SEE OTHER", [("location", "/auth/login")])
-                    error = True
+            elif self.__login__ and not self.request.session.userID:
+                self.request.session.pushAlert("You need to be logged in to view this page.", level="error")
+                self.head = ("303 SEE OTHER", [("location", "/auth/login")])
+                error = True
 
             if not error:
+                self.noErrorHook()
                 content = getattr(self, self.request.method)() or ""
                 content = self.postMethod(content)
-                if content:
-                    content = unicode(content)
+                if content: content = unicode(content)
+            else:
+                self.errorHook()
 
             if self.head[0] != "303 SEE OTHER":
                 del self.request.session.alerts
 
             return content, self.head
+
+        def noErrorHook(self):
+            pass
+
+        def errorHook(self):
+            pass
 
         def postMethod(self, content):
             return content

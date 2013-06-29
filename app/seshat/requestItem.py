@@ -28,58 +28,56 @@ import models.redis.session.sessionModel as sm
 import models.redis.bucket.bucketModel as bm
 
 class requestItem(object):
-  def __init__(self, env):
-    self._env = env
-    self.getParams()
-    self.getCookie()
-    self.getSession()
-    self.getCfg()
+    def __init__(self, env):
+        self._env = env
+        self.buildParams()
+        self.buildCookie()
+        self.buildSession()
+        self.buildCfg()
 
-    self.method = env["REQUEST_METHOD"]
+        self.method = self._env["REQUEST_METHOD"]
+        self.url = env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0] or env["PATH_INFO"]
+        self.remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "localhost")
 
-  def getParams(self):
-    members = {}
-    for item in self._env['QUERY_STRING'].split("&"):
-        if item:
-            parts = item.split("&")
-            for part in parts:
-                query = part.split("=")
-                members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+    def buildParams(self):
+        self.rawParams = ""
+        members = {}
 
-    for item in self._env['wsgi.input']:
-        if item:
-            parts = item.split("&")
-            for part in parts:
-                query = part.split("=")
-                members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+        for item in self._env['wsgi.input']:
+            if item:
+                self.rawParams += item
+                parts = item.split("&")
+                for part in parts:
+                    query = part.split("=")
+                    members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
 
-    self.params = members
+        self.params = members
 
-  def getCookie(self):
-    cookie = Cookie.SimpleCookie()
-    try:
-        cookie.load(self._env["HTTP_COOKIE"])
-        self.sessionCookie = { value.key: value.value for key, value in cookie.iteritems() }
-        self.sessionID = self.sessionCookie["flagr_sid"]
-    except:
-        self.sessionID = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
-        self.sessionCookie = {"flagr_sid": self.sessionID}
+    def buildCookie(self):
+        cookie = Cookie.SimpleCookie()
+        try:
+            cookie.load(self._env["HTTP_COOKIE"])
+            self.sessionCookie = { value.key: value.value for key, value in cookie.iteritems() }
+            self.sessionID = self.sessionCookie["flagr_sid"]
+        except:
+            self.sessionID = "".join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
+            self.sessionCookie = {"flagr_sid": self.sessionID}
 
-  def getSession(self):
-    self.session = sm.session("session:"+self.sessionID)
+    def buildSession(self):
+        self.session = sm.session("session:"+self.sessionID)
 
-  def getCfg(self):
-    self.cfg = bm.cfgBuckets()
+    def buildCfg(self):
+        self.cfg = bm.cfgBuckets()
 
-  def buildHeader(self, header, length):
-      for morsal in self.sessionCookie:
-          cookieHeader = ("Set-Cookie", ("%s=%s")%(morsal, self.sessionCookie[morsal]))
-          header.append(cookieHeader)
-      header.append(("Content-Length", str(length)))
-      return header
+    def generateHeader(self, header, length):
+        for morsal in self.sessionCookie:
+            cookieHeader = ("Set-Cookie", ("%s=%s")%(morsal, self.sessionCookie[morsal]))
+            header.append(cookieHeader)
+        header.append(("Content-Length", str(length)))
+        return header
 
-  def getParam(self, param, default=""):
-      try:
-          return self.params[param]
-      except:
-          return default
+    def getParam(self, param, default=""):
+        try:
+            return self.params[param]
+        except:
+            return default

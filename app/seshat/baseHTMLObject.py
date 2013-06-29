@@ -22,18 +22,18 @@ class baseHTMLObject(baseHTTPObject):
         self.head = ("200 OK", [("Content-Type", "text/html")])
 
         try:
-          tmpl = self._defaultTmpl
-        except:
-          tmpl = ""
-
-        try:
             title = self._title
         except:
             title = "untitledFlagrPage"
 
         self.request.title = title
 
-        self.view = template(tmpl, self.request)
+    def noErrorHook(self):
+        try:
+          tmpl = self._defaultTmpl
+          self.view = template(tmpl, self.request)
+        except:
+          self.view = ""
 
     def postMethod(self, content):
         if type(content) == template:

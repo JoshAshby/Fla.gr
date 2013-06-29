@@ -45,24 +45,20 @@ def dispatch(env, start_response):
     request = requestItem(env)
     newHTTPObject = None
 
-
     """
     This needs to be rewritten to automatically pull out the URL since the URL scheme
     is settled upon with /blah/blah/id the use of regex and matching a regex is
     old slower and partially redudant with the autorouter
     """
     for url in c.urls:
-        try:
-            matched = url.regex.match(env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0])
-        except:
-            matched = url.regex.match(env["PATH_INFO"])
+        matched = url.regex.match(request.url)
 
         if matched:
             matchedItems = matched.groups()
             request.id = matchedItems
 
             newHTTPObject = url.pageObject(request)
-            if c.general.debug: logURL(env, url)
+            if c.general.debug: logURL(request, url)
 
             break
 
@@ -81,16 +77,15 @@ def dispatch(env, start_response):
         header = replyData[1]
         status = replyData[0]
 
-        #Hack to see if this works...
         if status == "404 NOT FOUND":
             return error404(request, start_response)
 
         if content:
-            header = request.buildHeader(header, len(content))
+            header = request.generateHeader(header, len(content))
+
+        if c.general.debug: logResponse(request, status)
 
         start_response(status, header)
-
-        del(newHTTPObject)
 
         if content:
             return [str(content)]
@@ -100,6 +95,10 @@ def dispatch(env, start_response):
     except Exception as e:
         request.error = e
         return error500(request, start_response)
+
+    finally:
+        del newHTTPObject
+        del request
 
 
 def error404(request, start_response):
@@ -117,11 +116,11 @@ def error404(request, start_response):
     header = replyData[1]
     status = replyData[0]
 
-    header = request.buildHeader(header, len(content))
+    header = request.generateHeader(header, len(content))
 
     start_response(status, header)
 
-    del(newHTTPObject)
+    del newHTTPObject
 
     return [str(content)]
 
@@ -143,44 +142,43 @@ def error500(request, start_response):
     header = replyData[1]
     status = replyData[0]
 
-    header = request.buildHeader(header, len(content))
+    header = request.generateHeader(header, len(content))
 
     start_response(status, header)
 
-    del(newHTTPObject)
+    del newHTTPObject
 
     return [str(content)]
 
 
-def logURL(env, url):
-    uri = env["REQUEST_URI"] if env.has_key("REQUEST_URI") else env["PATH_INFO"]
-    remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "localhost")
-    logger.debug("""\n\r----------------------------
+def logURL(request, url):
+    logger.debug("""\n\r------- Request ---------------------
     Method: %s
     URL: %s
+    PARAMS: %s
     Object: %s
     IP: %s
-""" % (env["REQUEST_METHOD"], uri, url.pageObject.__module__+"."+url.pageObject.__name__, remote))
+""" % (request.method, request.url, request.rawParams, url.pageObject.__module__+"/"+url.pageObject.__name__, request.remote))
+
+def logResponse(request, status):
+  logger.debug("""\n\r--------- Response ---------------------
+    URL: %s
+    Status: %s
+""" % (request.url, status))
 
 
 def log500(request):
-    env = request._env
-    uri = env["REQUEST_URI"] if env.has_key("REQUEST_URI") else env["PATH_INFO"]
-    remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "localhost")
     logger.error("""\n\r-------500 INTERNAL SERVER ERROR --------
     Method: %s
     URL: %s
     IP: %s
     ERROR: %s
-    """ % (env["REQUEST_METHOD"], uri, remote, request.error))
+    """ % (request.method, request.url, request.remote, request.error))
 
 
 def log404(request):
-    env = request._env
-    uri = env["REQUEST_URI"] if env.has_key("REQUEST_URI") else env["PATH_INFO"]
-    remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "localhost")
     logger.warn("""\n\r-------404 NOT FOUND--------
     Method: %s
     URL: %s
     IP: %s
-    """ % (env["REQUEST_METHOD"], uri, remote))
+    """ % (request.method, request.url, request.remote))
