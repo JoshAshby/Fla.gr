@@ -30,6 +30,7 @@ class index(baseHTMLObject):
         """
         page = self.request.getParam("page", 1)
         perpage = self.request.getParam("perpage", 25)
+        print perpage
         sort = self.request.getParam("sort", "id")
 
         self.view.scripts = ["jquery.json-2.4.min",

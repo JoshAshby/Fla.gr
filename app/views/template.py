@@ -27,7 +27,7 @@ baseFile.close()
 tmpls["base"] = base
 
 
-for directory in ["flagpole", "public", "error"]:
+for directory in ["flagpole", "public", "error", "partials"]:
     tempTmpls = {}
     for folder in os.walk(tmplPath + directory + "/"):
         allTmpls = folder[2] # files in current directory
@@ -151,7 +151,7 @@ class template(object):
 
 
 def listView(template, collection):
-    rendered = ""
+    rendered = u""
     for item in collection:
       rendered += pystache.render(tmpls[template], {"row": item})
 
@@ -159,7 +159,7 @@ def listView(template, collection):
 
 def paginateView(collection, template="partials/paginate"):
     if collection.pages > 2:
-        previous = (collection.currentPage > 2)
+        previous = (collection.currentPage-1) if (collection.currentPage > 1) else False
 
         pages = []
         for page in range(1, (collection.pages+1)):
@@ -168,15 +168,15 @@ def paginateView(collection, template="partials/paginate"):
                 pageDict.update({"class": "active"})
             pages.append(pageDict)
 
-        last = False
-        if collection.hasNextPage:
-            last = collection.currentPage+1
+        last = (collection.currentPage+1) if collection.hasNextPage else False
 
         data = {"previous": previous,
             "pages": pages,
-            "next": last}
+            "perpage": collection.perPage,
+            "next": last,
+            "last": collection.pages}
 
-        return pystache.render(template, data)
+        return unicode(pystache.render(tmpls[template], data))
 
     else:
         return ""

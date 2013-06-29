@@ -2,17 +2,17 @@
 <div class="pagination pagination-centered">
   <ul>
     {{#previous}}
-        <li><a href="?page=1">&laquo;</a></li>
+        <li><a href="?page=1&perpage={{perpage}}">&laquo;</a></li>
     {{/previous}}
     {{^previous}}
         <li class="disabled"><span>&laquo;</span></li>
     {{/previous}}
 
-    {{pages}}
-      <li class="{{class}}"><a href="?page={{number}}">{{number}}</a></li>
+    {{#pages}}
+      <li class="{{class}}"><a href="?page={{number}}&perpage={{perpage}}">{{number}}</a></li>
     {{/pages}}
     {{#next}}
-      <li><a href="?page={{next}}">&raquo;</a></li>
+      <li><a href="?page={{last}}&perpage={{perpage}}">&raquo;</a></li>
     {{/next}}
     {{^next}}
       <li class="disabled"><span>&raquo;</span></li>

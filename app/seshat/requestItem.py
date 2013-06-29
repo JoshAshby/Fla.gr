@@ -44,7 +44,17 @@ class requestItem(object):
         self.rawParams = ""
         members = {}
 
-        for item in self._env['wsgi.input']:
+        # GET Params
+        for item in self._env["QUERY_STRING"].split("&"):
+            if item:
+                self.rawParams += item
+                parts = item.split("&")
+                for part in parts:
+                    query = part.split("=")
+                    members.update({re.sub("\+", " ", query[0]): urllib.unquote(re.sub("\+", " ", query[1]))})
+
+        # POST Params
+        for item in self._env["wsgi.input"]:
             if item:
                 self.rawParams += item
                 parts = item.split("&")

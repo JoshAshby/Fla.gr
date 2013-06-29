@@ -51,6 +51,13 @@ class baseCollection(object):
         return self.paginateSettings["pageNumber"]
 
     @property
+    def perPage(self):
+        """
+        Simple helper to return the perpage which the pagination was called with
+        """
+        return self.paginateSettings["perPage"]
+
+    @property
     def hasNextPage(self):
         """
         Returns true if there are more results past the current paginated results.
