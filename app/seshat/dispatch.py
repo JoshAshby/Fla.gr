@@ -55,7 +55,8 @@ def dispatch(env, start_response):
 
         if matched:
             matchedItems = matched.groups()
-            request.id = matchedItems
+            if len(matchedItems) > 0:
+                request.id = matchedItems[0]
 
             newHTTPObject = url.pageObject(request)
             if c.general.debug: logURL(request, url)

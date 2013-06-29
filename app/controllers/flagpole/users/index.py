@@ -12,31 +12,37 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.admin.users.adminViewUsersTmpl import adminViewUsersTmpl
+from seshat.baseHTMLObject import baseHTMLObject
+from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
 import models.couch.baseCouchCollection as bcc
 
+from views.template import listView, paginateView
+
 
 @autoRoute()
-class adminUsersIndex(baseHTMLObject):
-    _title = "admin users"
-    __level__ = 50
-    __login__ = True
+@admin()
+class index(baseHTMLObject):
+    _title = "flagpole users"
+    _defaultTmpl = "flagpole/users/users"
     def GET(self):
         """
         """
-        page = self.env["members"]["p"] \
-                if self.env["members"].has_key("p") else 1
-        view = adminViewUsersTmpl(searchList=[self.tmplSearchList])
+        page = self.request.getParam("page", 1)
+        perpage = self.request.getParam("perpage", 25)
+        sort = self.request.getParam("sort", "username")
 
         users = bcc.baseCouchCollection(userORM)
-        users.paginate(page, 25)
+        users.paginate(page, perpage)
         users.fetch()
         users.format()
+        users.sortBy(sort)
 
-        view.users = users
+        usersList = listView("flagpole/partials/rows/user", users)
+        pagination = paginateView(users)
 
-        return view
+        self.view.data = {"users": usersList,
+            "pagination": pagination}
+
+        return self.view

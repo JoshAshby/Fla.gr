@@ -1,22 +1,33 @@
-<tr>
+<tr id="{{row.id}}">
   <td>
-    <input type="checkbox" class="userCheckbox" />
+    <input type="checkbox" class="userBox" style="padding-left: 5px; margin-top: -2px;" />
   </td>
 
   <td>
-    <a href="/flagpole/users/view/{{id}}">{{username}}</a>
+    <a href="/flagpole/users/view/{{row.id}}">{{row.username}}</a>
   </td>
 
   <td>
-    <a href="/flagpole/users/view/{{id}}">{{email}}</a>
+    <a href="/flagpole/users/view/{{row.id}}">{{row.email}}</a>
   </td>
 
   <td>
-    {{^status}}
+    <span class="label {{#row.hasAdmin}}label-important{{/row.hasAdmin}}">
+      {{#row.hasAdmin}}
+        Admin
+      {{/row.hasAdmin}}
+      {{^row.hasAdmin}}
+        User
+      {{/row.hasAdmin}}
+    </span>
+  </td>
+
+  <td>
+    {{^row.disable}}
       <span class="label label-sucess">Active</span>
-    {{/status}}
-    {{#status}}
-      <span class="label label-error">Banned</span>
-    {{/status}}
+    {{/row.disable}}
+    {{#row.disable}}
+      <span class="label label-error">Disabled</span>
+    {{/row.disable}}
   </td>
 </tr>

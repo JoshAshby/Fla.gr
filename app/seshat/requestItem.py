@@ -40,6 +40,8 @@ class requestItem(object):
         self.url = env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0] or env["PATH_INFO"]
         self.remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "localhost")
 
+        self.id = None
+
     def buildParams(self):
         self.rawParams = ""
         members = {}

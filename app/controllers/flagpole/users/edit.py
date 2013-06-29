@@ -12,45 +12,30 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.admin.users.adminEditUserTmpl import adminEditUserTmpl
+from seshat.baseHTMLObject import baseHTMLObject
+from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
 
 
 @autoRoute()
-class adminUsersEdit(baseHTMLObject):
+@admin()
+class edit(baseHTMLObject):
     _title = "admin users"
-    __level__ = 50
-    __login__ = True
-    def GET(self):
-        """
-        """
-        userid = self.env["members"][0]
-
-        user = userORM.getByID(userid)
-        view = adminEditUserTmpl(searchList=[self.tmplSearchList])
-
-        view.editUser = user
-
-        return view
-
     def POST(self):
-        userid = self.env["members"][0]
-        password = self.env["members"]["password"] if self.env["members"].has_key("password") else None
-        passwordTwice = self.env["members"]["passwordTwice"] if self.env["members"].has_key("passwordTwice") else None
-        about = self.env["members"]["about"] or ""
-        level = self.env["members"]["level"] if self.env["members"].has_key("level") else 1
-        email = self.env["members"]["email"] or ""
-        emailVis = True if self.env["members"].has_key("emailVis") else False
-        disable = True if self.env["members"].has_key("disable") else False
+        userid = self.request.id
+        password = self.request.getParam("password")
+        passwordTwice = self.request.getParam("passwordTwice")
+        about = self.request.getParam("about")
+        level = self.request.getParam("level", 1)
+        email = self.request.getParam("emailVis", False)
+        disable = self.request.getParam("disable", False)
 
         user = userORM.getByID(userid)
         user.about = about
         #Not allowed to edit your own level,
         #or disable to avoid down leveling or locking out on accident
-        if self.session.id != userid:
+        if self.request.session.userID != userid:
             user.level = level
             user.disable = disable
         user.email = email
@@ -62,14 +47,11 @@ class adminUsersEdit(baseHTMLObject):
                 user.setPassword(password)
 
             else:
-                view = adminEditUserTmpl(searchList=[self.tmplSearchList])
-                view.passwordMatchError = True
+                pass
 
-                self.session.pushAlert("Those passwords don't match, please try again.", "", "error")
+        self.request.session.pushAlert("User %s was update!" % user.username, "Yay!", "success")
 
-                return view
+        self.head = ("200 OK",
+            [("location", "/flagpole/users/view/%s" % userid)])
 
-        self.session.pushAlert("User `%s` updated" % user.username, "Yay", "success")
 
-        self.head = ("303 SEE OTHER",
-            [("location", "/admin/users")])

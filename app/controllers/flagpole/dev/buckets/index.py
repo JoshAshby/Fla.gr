@@ -30,11 +30,10 @@ class index(baseHTMLObject):
         """
         page = self.request.getParam("page", 1)
         perpage = self.request.getParam("perpage", 25)
-        print perpage
         sort = self.request.getParam("sort", "id")
 
-        self.view.scripts = ["jquery.json-2.4.min",
-                "devBucketsButtons.flagr"]
+        #self.view.scripts = ["jquery.json-2.4.min",
+                #"devBucketsButtons.flagr"]
 
         pail = bm.bucketPail("bucket:*:value")
         pail.paginate(page, perpage)
@@ -51,8 +50,8 @@ class index(baseHTMLObject):
 
     def POST(self):
         self.head = ("200 OK", [("Content-Type", "application/json")])
-        bucket = json.loads(self.env["members"]["json"])
+        bucket = self.request.getParam("bucket")
 
-        reply = bm.bucketPail.toggle(bucket["bucket"])
+        reply = bm.bucketPail.toggle(bucket)
 
-        return json.dumps({"status": reply, "bucket": bucket["bucket"]})
+        return json.dumps({"status": reply, "bucket": bucket["bucket"], "success": True})

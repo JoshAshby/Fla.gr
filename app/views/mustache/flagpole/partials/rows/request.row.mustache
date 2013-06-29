@@ -1,0 +1,21 @@
+<tr id="{{row.id}}">
+  <td>
+    <input type="checkbox" class="grantBox" style="padding-left: 5px; margin-top: -2px;" />
+  </td>
+  <td>
+    <p>{{row.email}}</p>
+    <small class="muted">{{row.id}}</small>
+  </td>
+  <td>{{row.created}}...</td>
+  <td class="changeBtns" width=15%>
+    {{#row.granted}}
+      <div class="btn-group">
+        <a class="btn btn-success pull-right disabled" class="grantButton"><i class="icon-thumbs-up"></i> Granted</a>
+        <a class="btn btn-primary">Re Grant</a>
+      </div>
+    {{/row.granted}}
+    {{^row.granted}}
+      <a class="btn btn-primary pull-right" class="grantButton">Grant</a>
+    {{/row.granted}}
+  </td>
+</tr>

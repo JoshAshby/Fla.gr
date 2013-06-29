@@ -39,7 +39,6 @@ class userORM(Document, baseCouchModel):
     disable = BooleanField(default=False)
     emailVisibility = BooleanField(default=False)
     level = IntegerField(default=1)
-    redirect = BooleanField(default=False)
     password = TextField()
     joined = DateTimeField(default=datetime.now)
     docType = TextField(default="user")

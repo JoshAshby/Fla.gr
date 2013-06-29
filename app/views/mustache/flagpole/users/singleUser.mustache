@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="span2">
+    <div class="tabbable tabs-left">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#view" data-toggle="tab">View</a></li>
+        <li><a href="#edit" data-toggle="tab">Edit</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="span8">
+    <div class="tab-content">
+      <div class="tab-pane active" id="view">
+        <h1>{{user.username}} <small>{{user.email}}</small></h1>
+      </div>
+      <div class="tab-pane" id="edit">
+        <form class="form" method="POST" method="/flagpole/users/edit/{{user.id}}">
+          <fieldset>
+            <input type="email" name="email" value="{{user.email}}" placeholder="email..." />
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

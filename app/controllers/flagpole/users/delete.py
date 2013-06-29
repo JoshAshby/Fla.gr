@@ -12,56 +12,33 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.admin.users.adminDelUserTmpl import adminDelUserTmpl
+from seshat.baseHTMLObject import baseHTMLObject
+from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
 
 
 @autoRoute()
-class adminUsersDelete(baseHTMLObject):
+@admin()
+class delete(baseHTMLObject):
     _title = "admin users"
-    __level__ = 50
-    __login__ = True
-    def GET(self):
-        """
-        """
-        userid = self.env["members"][0]
-
-        if userid == self.session.id:
-            self.session.pushAlert("You can't delete yourself!",
-                    "Can't do that!", "error")
-
-            self.head = ("303 SEE OTHER",
-                [("location", "/admin/users")])
-
-            return
-
-        user = userORM.getByID(userid)
-        view = adminDelUserTmpl(searchList=[self.tmplSearchList])
-
-        view.editUser = user
-
-        return view
-
     def POST(self):
-        userid = self.env["members"][0]
+        userid = self.request.id
 
-        if userid == self.session.id:
-            self.session.pushAlert("You can't delete yourself!",
+        if userid == self.request.session.userID:
+            self.request.session.pushAlert("You can't delete yourself!",
                     "Can't do that!", "error")
 
             self.head = ("303 SEE OTHER",
-                [("location", "/admin/users")])
+                [("location", "/flagpole/users")])
 
             return
 
         user = userORM.getByID(userid)
         user.delete()
 
-        self.session.pushAlert("User `%s` deleted" % user.username,
+        self.request.session.pushAlert("User `%s` deleted" % user.username,
                 "Bye!", "success")
 
-        self.head = ("303 SEE OTHER",
-            [("location", "/admin/users")])
+        self.head = ("200 OK",
+            [("location", "/flagpole/users")])
