@@ -22,7 +22,6 @@ def admin(level=50):
             return HTTPObject
         return wrapper
 
-
 def login(allowBan=False):
     def wrapper(HTTPObject):
         HTTPObject.__login__ = True

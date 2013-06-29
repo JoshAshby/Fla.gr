@@ -37,7 +37,9 @@ for directory in ["flagpole", "public", "error"]:
         # if any are mustache template files, and if they are then read them into
         # memory and add them to the watcher
         for tmpl in allTmpls:
-            name, extension = tmpl.split(".")
+            parts = tmpl.split(".")
+            name = parts[0]
+            extension = parts[len(parts)-1]
             if extension != "mustache":
                 continue
 
@@ -64,6 +66,20 @@ class template(object):
         self.raw = u""
 
         self._template = template
+        self._base = "base"
+
+    @property
+    def skeleton(self):
+        return self._base
+
+    @skeleton.setter
+    def skeleton(self, value):
+        assert type(value) == str
+        self._base = value
+
+    @skeleton.deleter
+    def skeleton(self):
+        self._base = "base"
 
     @property
     def data(self):
@@ -71,9 +87,34 @@ class template(object):
 
     @data.setter
     def data(self, value):
-        if type(value) != dict:
-            raise Exception("Data must be of type dict")
+        assert type(value) == dict
         self._baseData.update(value)
+
+    @property
+    def scripts(self):
+        return self._baseData["scripts"]
+
+    @scripts.setter
+    def scripts(self, value):
+        assert type(value) == list
+        self._baseData["scripts"].extend(value)
+
+    @scripts.deleter
+    def scripts(self):
+        self._baseData["scripts"] = []
+
+    @property
+    def stylesheets(self):
+        return self._baseData["stylesheets"]
+
+    @stylesheets.setter
+    def stylesheets(self, value):
+        assert type(value) == list
+        self._baseData["stylesheets"].extend(value)
+
+    @stylesheets.deleter
+    def stylesheets(self):
+        self._baseData["stylesheets"] = []
 
     def partial(self, placeholder, template, data):
         data.update(self._baseData)
@@ -93,14 +134,14 @@ class template(object):
 
         body = pystache.render(body, self._baseData)
 
-        self._data = self._baseData
-        self._data.update({
+        _data = self._baseData
+        _data.update({
             "body"  : body,
         })
 
-        self._data["req"].session.renderAlerts()
+        _data["req"].session.renderAlerts()
 
-        self._render = pystache.render(tmpls["base"], self._data)
+        self._render = pystache.render(tmpls[self._base], _data)
 
         return unicode(self._render)
 

@@ -11,7 +11,7 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import seshat.objectMods as mods
+from seshat.objectMods import *
 from seshat.route import autoRoute
 from seshat.baseHTMLObject import baseHTMLObject
 
@@ -20,7 +20,7 @@ import json
 
 
 @autoRoute()
-@mods.admin(100)
+@admin(100)
 class index(baseHTMLObject):
     _title = "dev buckets"
     _defaultTmpl = "flagpole/dev/buckets/buckets"

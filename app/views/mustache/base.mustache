@@ -38,7 +38,7 @@
       <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Begin nav bar template -->
+    <!-- Begin nav bar (messy) -->
     <div class="navbar {{classes.navbar}} navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -88,7 +88,7 @@
                       <li><a href="/flags/new"><i class="icon-flag"></i> Create a flag</a></li>
                       {{#req.session.hasAdmin}}
                         <li class="nav-header">Toys...</li>
-                        <li><a href="/admin"><i class="icon-wrench"></i> Admin Panel</a></li>
+                        <li><a href="/flagpole"><i class="icon-wrench"></i> Admin Panel</a></li>
                       {{/req.session.hasAdmin}}
                       <li class="nav-header">Or...</li>
                       <li><a href="/you/settings"><i class="icon-cogs"></i> Account Settings</a></li>
@@ -126,46 +126,47 @@
         </div>
       </div>
     </div>
-    <!-- End nav bar template -->
+    <!-- End nav bar -->
 
 
     <!-- Begin main body container -->
     <div class="container">
-        <div class="row">
-            <div class="span10 offset1">
-                {{{req.session.HTMLAlerts}}}
-            </div>
+      <!-- Begin alerts section -->
+      <div class="row">
+        <div class="span10 offset1">
+          {{{req.session.HTMLAlerts}}}
         </div>
+      </div>
+      <!-- End alerts section -->
 
-        {{{body}}}
+      <!-- Begin Main Body -->
+      {{{body}}}
+      <!-- End Main Body -->
 
-        <hr>
-        <div class="row">
-          <div class="span10 offset1">
-            <footer>
-              <small>
-                A project by <a href="http://transientBug.com"><i class="icon-beaker"></i> transientBug</a>
-                &copy 2013 <a href="http://github.com/transientBug"><i class="icon-github"></i></a>
-                <a href="http://twitter.com/transientBug"><i class="icon-twitter"></i></a>
-              </small>
-              <input type="hidden" id="userID" value="{{req.session.userID}}">
-            </footer>
-          </div>
+      <!-- Begin Footer -->
+      <hr>
+      <div class="row">
+        <div class="span10 offset1">
+          <footer>
+            <small>
+              A project by <a href="http://transientBug.com"><i class="icon-beaker"></i> transientBug</a>
+              &copy 2013 <a href="http://github.com/transientBug"><i class="icon-github"></i></a>
+              <a href="http://twitter.com/transientBug"><i class="icon-twitter"></i></a>
+            </small>
+            <input type="hidden" id="userID" value="{{req.session.userID}}">
+          </footer>
         </div>
+      </div>
+      <!-- End Footer -->
     </div>
     <!-- End main body container -->
 
-    <!-- Begin edit form -->
-    <form method="POST" id="editForm">
-      <input type="hidden" name="array" id="editFormInput">
-    </form>
-    <div id="modal"></div>
-    <!-- End edit form -->
-
+    <!-- jQuery and bootstrap JS stuff -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{static}}/js/jquery-1.9.1.min.js"><\/script>')</script>
 
     <script src="{{static}}/js/bootstrap.min.js"></script>
+    <!-- End -->
 
     <!-- Begin global fla.gr scripts -->
     {{#scripts}}
@@ -173,7 +174,7 @@
     {{/scripts}}
     <!-- End global fla.gr scripts -->
 
-    <!-- <script>
+    <!-- GA stuffz <script>
       var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
       g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';

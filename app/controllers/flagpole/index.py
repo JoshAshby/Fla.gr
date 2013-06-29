@@ -11,13 +11,13 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-import seshat.objectMods as mods
+from seshat.objectMods import *
 from seshat.route import autoRoute
 from seshat.baseHTMLObject import baseHTMLObject
 
 
 @autoRoute()
-@mods.admin()
+@admin()
 class index(baseHTMLObject):
     """
     Returns base index page.

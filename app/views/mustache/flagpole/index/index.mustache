@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="span10 offset1">
+    <!-- TODO: Breadcrumbs -->
+    <ul class="breadcrumb">
+      You are here:<span class="divider"></span>
+      <li class="active"><a href="/flagpole">Flagpole</a>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span10 offset1">
+    <ul class="thumbnails">
+      <li class="span3">
+        <div class="thumbnail">
+          <div class="caption">
+            <h3><i class="icon-flag"></i> Flags</h3>
+            <p>View flags, who they belong to and edit them if need be.<br>
+            <br>
+            <a href="/flagpole/flags" class="btn btn-primary"><i class="icon-flag"></i> Flags</a>
+            </p>
+          </div>
+        </div>
+      </li>
+      <li class="span4">
+        <div class="thumbnail">
+          <div class="caption">
+            <h3><i class="icon-group"></i> Users</h3>
+            <p>Make life or death decisions on fla.gr, managing users or making a new one. Here you can edit a users whole account, and enable it or disable it, along with deleting it if need be. You can also make new users with the push of a button and some keystrokes.<br><br>
+            <a href="/flagpole/users" class="btn btn-primary"><i class="icon-group"></i> Users</a>
+            </p>
+          </div>
+        </div>
+      </li>
+      <li class="span3">
+        <div class="thumbnail">
+          <div class="caption">
+            <h3><i class="icon-lemon"></i> Buckets</h3>
+            <p>This link will give you lemons. No, really, it will. Enable and disable experimental features across the whole site, and manage who those features are available to. But be careful, a fire extinguisher is recommended.<br><br>
+            <a href="/flagpole/dev/buckets" class="btn btn-primary"><i class="icon-lemon"></i> Give me Lemons!</a>
+            </p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span10 offset1">
+    {{#req.cfg.enableRequests}}
+      <h3><a href="/flagpole/requests">Requests</a></h3>
+      <p class="offset1">Manage the invite requests for the site</p>
+    {{/req.cfg.enableRequests}}
+  </div>
+</div>
