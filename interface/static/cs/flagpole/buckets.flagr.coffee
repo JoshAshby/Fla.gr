@@ -1,11 +1,26 @@
+class @toggleModal extends @modalBase
+    make: ->
+        modalData =
+            "btnText": "Toggle"
+            "btnColor": "info"
+            "textColor": "info"
+            "icon": "bolt"
+            "btnLoadingText": "Making Lemons..."
+        super modalData
+
+
 $ ->
     $(".bucketToggleButton").click ->
+        console.log this
         elem = $(this)
-        bucket = elem.parent("tr").attr "id"
+        bucket = elem.parents("tr").attr "id"
+        console.log bucket
 
+        title = "Toggle this bucket?"
+        text = "You are about to toggle the status of bucket <code>#{ bucket }</code>. Are you sure you want to do this?"
 
         callback = () ->
-            $.post "/admin/dev/buckets/"+bucket, (data) ->
+            $.post "/flagpole/dev/buckets/toggle/"+bucket, (data) ->
                 if data["status"] and data["success"]
                     if elem.hasClass "btn-inverse"
                         elem.removeClass "btn-inverse"
@@ -24,3 +39,6 @@ $ ->
                         elem.addClass "btn-inverse"
                         elem.removeClass "btn-success"
                         elem.html "<i class=\"icon-off\"></i> Disabled"
+
+        mod = new toggleModal title, text, callback
+        mod.make()

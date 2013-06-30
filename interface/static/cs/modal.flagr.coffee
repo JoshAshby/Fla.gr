@@ -1,5 +1,5 @@
 modalTmplPre = """
-    <div id="flagrModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labeledby="flagrModal" aria-hidden="true">
+    <div id="modal" class="modal hide fade" role="dialog" aria-labeledby="modal" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
             <h3 class="text-{{textColor}}"><i class="icon-{{icon}}"></i> {{modalTitle}}</h3>
@@ -19,7 +19,7 @@ modalTmplPre = """
 modalTmpl = Handlebars.compile modalTmplPre
 
 
-class modalBase
+class @modalBase
     ###
     Base modal object class
 
@@ -41,22 +41,33 @@ class modalBase
     make: (data) ->
         data["text"] = @text
         data["modalTitle"] = @title
-        $("#modal").html modalTmpl data
-        $("#requestModal").modal()
-        $("#requestModal").modal 'show'
+        callback = @callback
 
-        $("#requestModal").on 'shown', ->
+        there = $(document).find("#modal").length
+        if not there
+            $("body").append """<div id="modalContainer"></div>"""
+
+        tmpl = modalTmpl data
+
+        $("#modalContainer").html tmpl
+        $("#modal").modal()
+        $("#modal").modal 'show'
+
+        $("#modal").on 'shown', ->
             $("#modalButton").button()
 
             $("#modalButton").on 'click', ->
                 $(this).button 'loading'
-                @callback()
+                success = callback()
+                success.success ->
+                    $("#modal").modal 'hide'
 
         ###
         Clear the HTML we threw into the page after the modal is gone,
         not sure if this is needed since the page probably will redirect
+        Also clean up the click handler
         ###
-        $('#requestModal').on 'hidden', ->
+        $('#modal').on 'hidden', ->
             $("modal").html ''
             $("#modalButton").off 'click'
 

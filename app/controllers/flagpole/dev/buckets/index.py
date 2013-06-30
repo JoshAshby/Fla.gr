@@ -32,7 +32,9 @@ class index(baseHTMLObject):
         perpage = self.request.getParam("perpage", 25)
         sort = self.request.getParam("sort", "id")
 
-        self.view.scripts = ["flagpole/buckets.flagr"]
+        self.view.scripts = ["handlebars_1.0.min",
+            "modal.flagr",
+            "flagpole/buckets.flagr"]
 
         pail = bm.bucketPail("bucket:*:value")
         pail.paginate(page, perpage)
@@ -46,11 +48,3 @@ class index(baseHTMLObject):
             "pagination": pagination}
 
         return self.view
-
-    def POST(self):
-        self.head = ("200 OK", [("Content-Type", "application/json")])
-        bucket = self.request.getParam("bucket")
-
-        reply = bm.bucketPail.toggle(bucket)
-
-        return json.dumps({"status": reply, "bucket": bucket["bucket"], "success": True})
