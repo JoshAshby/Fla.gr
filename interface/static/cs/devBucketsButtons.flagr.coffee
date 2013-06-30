@@ -3,7 +3,7 @@ $ ->
         elem = $(this)
         bucket = elem.data "bucket"
         $.post "/admin/dev/buckets", json: "{\"bucket\": \"" + bucket+"\"}", (data) ->
-            if data["status"]
+            if data["status"] and data["success"]
                 if elem.hasClass "btn-inverse"
                     elem.removeClass "btn-inverse"
                     elem.addClass "btn-success"

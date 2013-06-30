@@ -1,3 +1,24 @@
 <tr id="{{row.id}}">
+  <td>
+    <input type="checkbox" class="flagBox" />
+  </td>
 
+  <td>
+    {{row.title}}
+  </td>
+
+  <td>
+    {{row.joineduserID.username}}
+  </td>
+
+  <td>
+    <span class="label">
+      {{#row.visibility}}
+        <i class="icon-unlock"></i> Public
+      {{/row.visibility}}
+      {{^row.visibility}}
+        <i class="icon-lock"></i> Private
+      {{/row.visibility}}
+    </span>
+  </td>
 </tr>

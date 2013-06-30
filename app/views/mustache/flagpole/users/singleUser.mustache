@@ -4,6 +4,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#view" data-toggle="tab"><i class="icon-user"></i> View</a></li>
         <li><a href="#edit" data-toggle="tab"><i class="icon-pencil"></i> Edit</a></li>
+        <li><a hred="#flags" data-toggle="tab"><i class="icon-flag"></i> Flags</a></li>
       </ul>
     </div>
   </div>
@@ -22,6 +23,11 @@
                   No email listed <i class="icon-frown"></i>
                 {{/user.email}}
             </small></h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="span8">
+            {{user.formatedjoined}}
           </div>
         </div>
         <div class="row">
@@ -71,6 +77,15 @@
           </div>
         </div>
         <!-- End edit tab -->
+      </div>
+      <div class="tab-pane" id="flags">
+        <!-- Start flags tab -->
+        <div class="row">
+          <div class="span8">
+
+          </div>
+        </div>
+        <!-- End flags tab -->
       </div>
     </div>
   </div>
