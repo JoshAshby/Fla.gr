@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseObject import JSONObject
+from seshat.baseObject import HTMLObject
 from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
@@ -20,7 +20,7 @@ from models.couch.user.userModel import userORM
 
 @autoRoute()
 @admin()
-class delete(JSONObject):
+class delete(HTMLObject):
     def POST(self):
         userid = self.request.id
 
@@ -30,10 +30,11 @@ class delete(JSONObject):
 
             self.head = ("303 SEE OTHER",
                 [("location", "/flagpole/users")])
-
             return
 
-        user = userORM.getByID(userid)
+        user = userORM.find(userid)
         user.delete()
 
-        return {"user": user.id, "action": "delete"}
+        self.request.session.pushAlert("User deleted...", level="success")
+        self.head = ("302 FOUND",
+            [("location", "/flagpole/users")])

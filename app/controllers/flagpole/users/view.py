@@ -42,6 +42,9 @@ class view(HTMLObject):
 
         user.format()
 
+        self.view.scripts = ["handlebars_1.0.min",
+            "modal.flagr",
+            "flagpole/user.flagr"]
         self.view.data = {"user": user}
         return self.view
 
@@ -65,12 +68,13 @@ class view(HTMLObject):
               self.view.data = {"passwordError": True}
               return self.view
         else:
-            if about: user.about = about
+            user.about = about
             #Not allowed to edit your own level,
             #or disable to avoid down leveling or locking out on accident
             if self.request.session.userID != userid:
                 if level: user.level = level
-            if email: user.email = email
+
+            user.email = email
             user.emailVisibility = emailVis
             user.disable = disable
             user.save()
@@ -80,5 +84,5 @@ class view(HTMLObject):
         else:
             self.request.session.pushAlert("User disabled :/", "Welp...", "success")
 
-        self.head = ("303 SEE OTHER",
+        self.head = ("302 FOUND",
             [("location", "/flagpole/users/view/"+str(user.id))])

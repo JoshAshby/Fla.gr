@@ -53,7 +53,7 @@
         </div>
         <div class="row">
           <div class="span8">
-            <form class="form" method="POST">
+            <form class="form" method="POST" data-id="{{user.id}}">
               <fieldset>
                 <input type="hidden" name="disable" value="{{user.disable}}">
                 <input type="email" class="span8" name="email" value="{{user.email}}" placeholder="email..." />
@@ -71,7 +71,7 @@
                 <div class="form-actions">
                   <button type="submit" class="btn btn-primary"><i class="icon-save"></i> Update</button>
                   <div class="pull-right">
-                    <button id="userToggleButton"
+                    <a id="userToggleButton"
                       class="btn btn-{{#user.disable}}success{{/user.disable}}{{^user.disable}}inverse{{/user.disable}}">
                       {{^user.disable}}
                         <i class="icon-off"></i> Disable
@@ -79,8 +79,8 @@
                       {{#user.disable}}
                         <i class="icon-bolt"></i> Enable
                       {{/user.disable}}
-                    </button>
-                    <button id="deleteButton" class="btn btn-danger"><i class="icon-trash"></i> Delete</button>
+                    </a>
+                    <a id="userDeleteButton" class="btn btn-danger"><i class="icon-trash"></i> Delete</a>
                   </div>
                 </div>
               </fieldset>
