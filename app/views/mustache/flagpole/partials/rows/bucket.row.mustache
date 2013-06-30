@@ -4,12 +4,12 @@
     <small class="muted">{{row.id}}</small>
   </td>
   <td>{{row.description}}...</td>
-  <td class="changeBtns" width=15%>
+  <td width=15%>
     {{#row.value}}
-      <a class="btn btn-success pull-right" class="toggleBucketButton"><i class="icon-bolt"></i> Enabled</a>
+      <a class="btn btn-success pull-right" class="bucketToggleButton"><i class="icon-bolt"></i> Enabled</a>
     {{/row.value}}
     {{^row.value}}
-      <a class="btn btn-inverse pull-right" class="toggelBucketButton"><i class="icon-off"></i> Disabled</a>
+      <a class="btn btn-inverse pull-right" class="bucketToggleButton"><i class="icon-off"></i> Disabled</a>
     {{/row.value}}
   </td>
 </tr>

@@ -37,11 +37,6 @@ coffee:
 	./node_modules/.bin/coffee --compile --output interface/static/js/ ${COFFEE_DIR}
 	@echo "Done ${CHECK}"
 
-#templates:
-	#@echo "Compiling Cheetah templates..."
-	#cheetah compile -R --idir interface/templates/ --odir app/views/
-	#@echo "Done ${CHECK}"
-
 clean:
 	@echo "Cleaning up a few directories I made..."
 	rm -rf interface/static/css/bootstrap

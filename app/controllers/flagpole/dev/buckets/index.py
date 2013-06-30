@@ -32,8 +32,7 @@ class index(baseHTMLObject):
         perpage = self.request.getParam("perpage", 25)
         sort = self.request.getParam("sort", "id")
 
-        #self.view.scripts = ["jquery.json-2.4.min",
-                #"devBucketsButtons.flagr"]
+        self.view.scripts = ["flagpole/buckets.flagr"]
 
         pail = bm.bucketPail("bucket:*:value")
         pail.paginate(page, perpage)

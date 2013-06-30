@@ -1,5 +1,5 @@
 modalTmplPre = """
-    <div id="requestModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labeledby="requestModal" aria-hidden="true">
+    <div id="flagrModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labeledby="flagrModal" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
             <h3 class="text-{{textColor}}"><i class="icon-{{icon}}"></i> {{modalTitle}}</h3>
@@ -10,7 +10,7 @@ modalTmplPre = """
         <div class="modal-footer">
             <div class="btn-group">
                 <a class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                <button class="btn btn-{{btnColor}}" type="submit" id="modalButton" data-loading-text="{{btnLoadingText}}"><i class="icon-{{icon}}"></i> {{btnText}}</button>
+                <button class="btn btn-{{btnColor}}" id="modalButton" data-loading-text="{{btnLoadingText}}"><i class="icon-{{icon}}"></i> {{btnText}}</button>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@ class modalBase
                 "btnLoadingText": ""
 
     ###
-    constructor: (@title, @text) ->
+    constructor: (@title, @text, @callback) ->
 
     make: (data) ->
         data["text"] = @text
@@ -48,15 +48,17 @@ class modalBase
         $("#requestModal").on 'shown', ->
             $("#modalButton").button()
 
-            $("#modalButton").click ->
+            $("#modalButton").on 'click', ->
                 $(this).button 'loading'
+                @callback()
 
         ###
         Clear the HTML we threw into the page after the modal is gone,
         not sure if this is needed since the page probably will redirect
         ###
         $('#requestModal').on 'hidden', ->
-            $("modal").html ""
+            $("modal").html ''
+            $("#modalButton").off 'click'
 
 
 class @deleteModal extends modalBase

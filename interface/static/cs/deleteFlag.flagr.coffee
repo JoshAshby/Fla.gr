@@ -8,12 +8,13 @@ $ ->
     $(".deleteButton").click ->
         id = $(this).data "id"
         title = $(this).data "title"
+        action = $(this).data "action"
 
+        title = "Delete: #{ title }?"
         text = "You're about to delete your flag `#{ title }`<br> Doing so will delete it forever, are you sure you want to continue?"
 
-        mod = new deleteModal "Delete `#{ title }?`", text
-        mod.make()
-        editForm "/flags/delete/#{ id }", [id]
+        callback = () ->
+            $.post action, ->
 
-        $("#modalButton").click ->
-            $("#editForm").submit()
+        mod = new deleteModal title, text, callback
+        mod.make()

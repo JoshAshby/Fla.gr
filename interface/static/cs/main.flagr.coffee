@@ -18,3 +18,10 @@ $ ->
             setTimeout ->
                 $("#dropdownLoginPassword").focus()
             , 10
+
+
+    $("#checkAllButton").click ->
+        if $(this).hasClass 'active'
+            $(".bulkCheckbox").prop 'checked', false
+        else
+            $(".bulkCheckbox").prop 'checked', true
