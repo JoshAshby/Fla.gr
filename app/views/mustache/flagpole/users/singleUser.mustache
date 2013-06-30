@@ -1,10 +1,10 @@
 <div class="row">
-  <div class="span2">
+  <div class="span2 offset1">
     <div class="tabbable tabs-left">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#view" data-toggle="tab"><i class="icon-user"></i> View</a></li>
         <li><a href="#edit" data-toggle="tab"><i class="icon-pencil"></i> Edit</a></li>
-        <li><a hred="#flags" data-toggle="tab"><i class="icon-flag"></i> Flags</a></li>
+        <li><a href="#flags" data-toggle="tab"><i class="icon-flag"></i> Flags</a></li>
       </ul>
     </div>
   </div>
@@ -27,13 +27,15 @@
         </div>
         <div class="row">
           <div class="span8">
-            {{user.formatedjoined}}
+            <h6>Joined: </h6>
+            {{user.formatedJoined}}
           </div>
         </div>
         <div class="row">
           <div class="span8">
+            <h6>About:</h6>
             {{#user.about}}
-              {{{user.about}}}
+              {{{user.formatedAbout}}}
             {{/user.about}}
             {{^user.about}}
               <p>{{user.username}} has nothing about themselves in their profile...</p>
@@ -51,16 +53,17 @@
         </div>
         <div class="row">
           <div class="span8">
-            <form class="form" method="POST" method="/flagpole/users/edit/{{user.id}}">
+            <form class="form" method="POST">
               <fieldset>
+                <input type="hidden" name="disable" value="{{user.disable}}">
                 <input type="email" class="span8" name="email" value="{{user.email}}" placeholder="email..." />
 
-                <textarea id="about" data-provide="markdown" rows="10" class="span8" placeholder="about...">{{{about}}}</textarea>
+                <textarea id="about" name="about" data-provide="markdown" rows="10" class="span8" placeholder="about...">{{{about}}}</textarea>
 
                 <div class="control-group">
                   <div class="controls">
                     <label class="checkbox" for="emailVis">
-                      <input type="checkbox" name="emailVis" /> Email visible to public?
+                      <input type="checkbox" name="emailVis" value="true" {{#user.emailVisibility}}checked{{/user.emailVisibility}}/> Email visible to public?
                     </label>
                   </div>
                 </div>
@@ -68,7 +71,15 @@
                 <div class="form-actions">
                   <button type="submit" class="btn btn-primary"><i class="icon-save"></i> Update</button>
                   <div class="pull-right">
-                    <button id="disableButton" class="btn btn-inverse"><i class="icon-off"></i> Disable</button>
+                    <button id="userToggleButton"
+                      class="btn btn-{{#user.disable}}success{{/user.disable}}{{^user.disable}}inverse{{/user.disable}}">
+                      {{^user.disable}}
+                        <i class="icon-off"></i> Disable
+                      {{/user.disable}}
+                      {{#user.disable}}
+                        <i class="icon-bolt"></i> Enable
+                      {{/user.disable}}
+                    </button>
                     <button id="deleteButton" class="btn btn-danger"><i class="icon-trash"></i> Delete</button>
                   </div>
                 </div>
@@ -82,7 +93,14 @@
         <!-- Start flags tab -->
         <div class="row">
           <div class="span8">
-
+            <table class="table">
+              <thead>
+                <th></th>
+              </thead>
+              <tbody>
+                {{{flags}}}
+              </tbody>
+            </table>
           </div>
         </div>
         <!-- End flags tab -->

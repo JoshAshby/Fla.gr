@@ -30,6 +30,7 @@ class view(HTMLObject):
         if not userid:
             self.head = ("303 SEE OTHER",
                 [("location", "/flagpole/users")])
+            return
 
         user = userORM.find(userid)
         if not user:
@@ -37,6 +38,47 @@ class view(HTMLObject):
                 [("location", "/flagpole/users")])
             self.request.session.pushAlert("That user couldn't be found!",
                 "Oh no!", "error")
+            return
+
+        user.format()
 
         self.view.data = {"user": user}
         return self.view
+
+    def POST(self):
+        userid = self.request.id
+        password = self.request.getParam("password")
+        passwordTwice = self.request.getParam("passwordTwice")
+        email = self.request.getParam("email")
+        about = self.request.getParam("about")
+        level = self.request.getParam("level", 1)
+        emailVis = self.request.getParam("emailVis", False)
+        disable = self.request.getParam("disable", False)
+
+        user = userORM.find(userid)
+
+        if password and passwordTwice:
+            if password == passwordTwice:
+                user.setPassword(password)
+
+            else:
+              self.view.data = {"passwordError": True}
+              return self.view
+        else:
+            if about: user.about = about
+            #Not allowed to edit your own level,
+            #or disable to avoid down leveling or locking out on accident
+            if self.request.session.userID != userid:
+                if level: user.level = level
+            if email: user.email = email
+            user.emailVisibility = emailVis
+            user.disable = disable
+            user.save()
+
+        if not disable:
+            self.request.session.pushAlert("User updated!", "Yay!", "success")
+        else:
+            self.request.session.pushAlert("User disabled :/", "Welp...", "success")
+
+        self.head = ("303 SEE OTHER",
+            [("location", "/flagpole/users/view/"+str(user.id))])

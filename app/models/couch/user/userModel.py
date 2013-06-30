@@ -101,3 +101,10 @@ class userORM(Document, baseCouchModel):
     @property
     def hasAdmin(self):
         return self.level > 50
+
+    def format(self):
+        """
+        Formats markdown and dates into the right stuff
+        """
+        self.formatedAbout = mdu.markClean(self.about)
+        self.formatedJoined = datetime.strftime(self.joined, "%a %b %d, %Y @ %H:%I%p")

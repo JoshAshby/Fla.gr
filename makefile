@@ -1,8 +1,9 @@
 BOOTSTRAP_LESS = ./interface/static/less/bootstrap/bootstrap.less
-BOOTSTRAP_ADMIN_LESS = ./interface/static/less/bootstrap/adminBootstrap.less
+BOOTSTRAP_ADMIN_LESS = ./interface/static/less/bootstrap/AnotherAdminBootstrap.less
 BOOTSTRAP_RESPONSIVE_LESS = ./interface/static/less/bootstrap/responsive.less
 FONTAWESOME_LESS = ./interface/static/less/fontawesome/font-awesome.less
 CUSTOM_LESS = ./interface/static/less/custom_styles.less
+BOOTSTRAP_MARKDOWN = ./interface/static/less/bootstrap-markdown.less
 COFFEE_DIR = ./interface/static/cs/
 CHECK=✔
 
@@ -30,6 +31,8 @@ less:
 	@echo "Compiling custom LESS..."
 	./node_modules/.bin/recess --compile ${CUSTOM_LESS} > interface/static/css/custom_styles.css
 	./node_modules/.bin/recess --compress ${CUSTOM_LESS} > interface/static/css/custom_styles.css
+	./node_modules/.bin/recess --compile ${BOOTSTRAP_MARKDOWN} > interface/static/css/bootstrap-markdown.css
+	./node_modules/.bin/recess --compress ${BOOTSTRAP_MARKDOWN} > interface/static/css/bootstrap-markdown.css
 	@echo "Done ${CHECK}"
 
 coffee:

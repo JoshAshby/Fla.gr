@@ -21,9 +21,6 @@ from models.couch.user.userModel import userORM
 @autoRoute()
 @admin()
 class delete(JSONObject):
-    def GET(self):
-        raise Exception("test")
-
     def POST(self):
         userid = self.request.id
 
@@ -36,13 +33,7 @@ class delete(JSONObject):
 
             return
 
-        error = ""
-        status = False
-        try:
-            user = userORM.getByID(userid)
-            user.delete()
-            status = True
-        except Exception as e:
-            error = str(e)
+        user = userORM.getByID(userid)
+        user.delete()
 
-        return {"user": user.id, "action": "delete", "success": status}
+        return {"user": user.id, "action": "delete"}

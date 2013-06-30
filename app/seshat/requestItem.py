@@ -91,6 +91,11 @@ class requestItem(object):
 
     def getParam(self, param, default=""):
         try:
-            return self.params[param]
+            p = self.params[param]
+            if p == "True" or p == "true":
+                p = True
+            elif p == "False" or p == "false":
+                p = False
+            return p
         except:
             return default
