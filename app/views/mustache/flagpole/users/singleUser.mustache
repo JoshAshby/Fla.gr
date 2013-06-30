@@ -2,8 +2,8 @@
   <div class="span2">
     <div class="tabbable tabs-left">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#view" data-toggle="tab">View</a></li>
-        <li><a href="#edit" data-toggle="tab">Edit</a></li>
+        <li class="active"><a href="#view" data-toggle="tab"><i class="icon-user"></i> View</a></li>
+        <li><a href="#edit" data-toggle="tab"><i class="icon-pencil"></i> Edit</a></li>
       </ul>
     </div>
   </div>
@@ -11,18 +11,66 @@
   <div class="span8">
     <div class="tab-content">
       <div class="tab-pane active" id="view">
-        <h1>{{user.username}} <small>{{user.email}}</small></h1>
+        <!-- Start view tab -->
+        <div class="row">
+          <div class="span8">
+            <h2>{{user.username}} <small>
+                {{#user.email}}
+                  {{user.email}}
+                {{/user.email}}
+                {{^user.email}}
+                  No email listed <i class="icon-frown"></i>
+                {{/user.email}}
+            </small></h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="span8">
+            {{#user.about}}
+              {{{user.about}}}
+            {{/user.about}}
+            {{^user.about}}
+              <p>{{user.username}} has nothing about him in they're profile...</p>
+            {{/user.about}}
+          </div>
+        </div>
+        <!-- End view tab -->
       </div>
       <div class="tab-pane" id="edit">
-        <form class="form" method="POST" method="/flagpole/users/edit/{{user.id}}">
-          <fieldset>
-            <input type="email" name="email" value="{{user.email}}" placeholder="email..." />
+        <!-- Start edit tab -->
+        <div class="row">
+          <div class="span8">
+            <h2>Editing - {{user.username}}</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="span8">
+            <form class="form" method="POST" method="/flagpole/users/edit/{{user.id}}">
+              <fieldset>
+                <input type="email" class="span8" name="email" value="{{user.email}}" placeholder="email..." />
 
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">Update</button>
-            </div>
-          </fieldset>
-        </form>
+                <textarea id="about" data-provide="markdown" rows="10" class="span8" placeholder="about...">{{{about}}}</textarea>
+
+                <div class="control-group">
+                  <div class="controls">
+                    <label class="checkbox" for="emailVis">
+                      <input type="checkbox" name="emailVis" /> Email visible to public?
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary"><i class="icon-save"></i> Update</button>
+                  <div class="pull-right">
+                    <button id="disableButton" class="btn btn-inverse"><i class="icon-off"></i> Disable</button>
+                    <button id="deleteButton" class="btn btn-danger"><i class="icon-trash"></i> Delete</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+        <!-- End edit tab -->
       </div>
     </div>
   </div>
