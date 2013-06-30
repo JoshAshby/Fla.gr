@@ -17,11 +17,12 @@ from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
 
+from models.modelExceptions.userModelExceptions import userError
 
 @autoRoute()
 @admin()
 class new(HTMLObject):
-    _title = "admin users"
+    _title = "new user"
     _defaultTmpl = "flagpole/users/new"
     def GET(self):
         """
@@ -33,14 +34,11 @@ class new(HTMLObject):
         password = self.request.getParam("password")
         passwordTwice = self.request.getParam("passwordTwice")
 
-        level = self.request.getParam("level")
+        about = self.request.getParam("about")
+        level = self.request.getParam("level", 1)
         email = self.request.getParam("email")
         emailVis = self.request.getParam("emailVis", False)
         disable = self.request.getParam("disable", False)
-
-        level = self.env["members"]["level"] or ""
-        email = self.env["members"]["email"] or ""
-
 
         if password and password == passwordTwice:
             try:
@@ -50,6 +48,7 @@ class new(HTMLObject):
                 newUser.email = email
                 newUser.emailVisibility = emailVis
                 newUser.disable = disable
+                newUser.about = about
                 newUser.save()
 
                 self.request.session.pushAlert("New user with username `%s` \
@@ -63,12 +62,24 @@ class new(HTMLObject):
                 self.request.session.pushAlert("You're going to have to pick a new \
                         username, `%s` is taken." % name, "", "error")
 
-                self.view.data = {"usernameError": True}
+                self.view.data = {"usernameError": True,
+                    "about": about,
+                    "level": level,
+                    "disable": disable,
+                    "emailVis": emailVis,
+                    "email": email,
+                    "username": name}
                 return self.view
 
         else:
             self.request.session.pushAlert("Those passwords don't match, please \
                     try again.", "", "error")
 
-            self.view.data = {"passwordError": True}
+            self.view.data = {"passwordError": True,
+                "about": about,
+                "level": level,
+                "disable": disable,
+                "emailVis": emailVis,
+                "email": email,
+                "username": name}
             return self.view

@@ -1,0 +1,43 @@
+{{{breadcrumbs}}}
+<div class="row">
+  <div class="span10 offset1">
+  
+  </div>
+</div>
+<div class="row">
+  <div class="span6 offset3">
+    <form method="POST">
+      <fieldset>
+        <h2>Basic stuff... <small>Required</small></h2>
+        <input class="span6" type="text" placeholder="username..." name="username" value="{{username}}" />
+        <input type="password" placeholder="password..." name="password" class="span6" />
+        <input type="password" placeholder="one more time..." name="passwordTwice" class="span6" />
+
+        <h2>Profile... <small>Optional</small></h2>
+        <textarea name="about" data-provide="markdown" rows="10" class="span6" placeholder="about...">{{about}}</textarea>
+
+        <input type="email" class="span6" placeholder="email..." name="email" value="{{email}}" />
+
+        <div class="control-group">
+          <div class="controls">
+            <label class="checkbox" for="emailVis">
+              <input type="checkbox" name="emailVis" value="true" {{#user.emailVis}}checked{{/user.emailVis}}/> Email visible to public?
+            </label>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <label class="checkbox" for="disable">
+              <input type="checkbox" name="disable" value="true" {{#user.disable}}checked{{/user.disable}}/> Disable this users account?
+            </label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class=" btn btn-primary"><i class="icon-save"></i> Create</button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>

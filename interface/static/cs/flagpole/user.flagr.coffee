@@ -3,7 +3,7 @@ $ ->
         form = $(this).parents "form"
         input = form.find 'input[name="disable"]'
 
-        if input.val is "False"
+        if input.val() is "False"
             action = "disable"
             val = "true"
         else

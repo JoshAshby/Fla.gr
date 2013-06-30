@@ -10,7 +10,7 @@ $ ->
 
         callback = () ->
             $.post "/flagpole/dev/buckets/toggle/"+bucket, (data) ->
-                if data["status"] and data["success"]
+                if data["status"] is "200 OK"
                     if elem.hasClass "btn-inverse"
                         elem.removeClass "btn-inverse"
                         elem.addClass "btn-success"
