@@ -12,11 +12,11 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 
 
 @autoRoute()
-class logout(baseHTMLObject):
+class logout(HTMLObject):
     def GET(self):
         """
         Simply log the user out. Nothing much to do here.

@@ -11,10 +11,10 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 
 
-class error404(baseHTMLObject):
+class error404(HTMLObject):
     """
     Returns base 404 error page.
     """
@@ -27,7 +27,7 @@ class error404(baseHTMLObject):
         return self.view.render()
 
 
-class error500(baseHTMLObject):
+class error500(HTMLObject):
     """
     Returns base 500 error page.
     """
@@ -37,5 +37,5 @@ class error500(baseHTMLObject):
         """
         """
         self.head = ("500 INTERNAL SERVER ERROR", [("Content-Type", "text/html")])
-        self.view.data = {"error": self.request.error}
+        self.view.data = {"error": self.request.error[0], "tb": self.request.error[1]}
         return self.view.render()

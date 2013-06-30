@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
@@ -23,7 +23,7 @@ from views.template import listView, paginateView
 
 @autoRoute()
 @admin()
-class index(baseHTMLObject):
+class index(HTMLObject):
     _title = "flagpole users"
     _defaultTmpl = "flagpole/users/users"
     def GET(self):

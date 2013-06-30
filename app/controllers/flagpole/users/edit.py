@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
@@ -20,7 +20,7 @@ from models.couch.user.userModel import userORM
 
 @autoRoute()
 @admin()
-class edit(baseHTMLObject):
+class edit(HTMLObject):
     _title = "admin users"
     def POST(self):
         userid = self.request.id
@@ -53,5 +53,3 @@ class edit(baseHTMLObject):
 
         self.head = ("200 OK",
             [("location", "/flagpole/users/view/%s" % userid)])
-
-

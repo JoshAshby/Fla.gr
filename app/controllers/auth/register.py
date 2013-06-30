@@ -12,14 +12,14 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 
 import models.couch.user.userModel as um
 import models.couch.request.requestModel as rm
 
 
 @autoRoute()
-class register(baseHTMLObject):
+class register(HTMLObject):
     _title = "register"
     _defaultTmpl = "public/auth/register"
     def GET(self):

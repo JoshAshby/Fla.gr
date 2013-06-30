@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
@@ -20,16 +20,23 @@ from models.couch.user.userModel import userORM
 
 @autoRoute()
 @admin()
-class view(baseHTMLObject):
+class view(HTMLObject):
     _title = "flagpole user"
     _defaultTmpl = "flagpole/users/singleUser"
     def GET(self):
         """
         """
         userid = self.request.id
-        user = userORM.find(userid)
+        if not userid:
+            self.head = ("303 SEE OTHER",
+                [("location", "/flagpole/users")])
 
-        print userid
+        user = userORM.find(userid)
+        if not user:
+            self.head = ("303 SEE OTHER", 
+                [("location", "/flagpole/users")])
+            self.request.session.pushAlert("That user couldn't be found!",
+                "Oh no!", "error")
 
         self.view.data = {"user": user}
         return self.view

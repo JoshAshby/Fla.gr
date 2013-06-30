@@ -12,12 +12,12 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 import models.modelExceptions.sessionExceptions as se
 
 
 @autoRoute()
-class login(baseHTMLObject):
+class login(HTMLObject):
     """
 
     """

@@ -12,7 +12,7 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
@@ -20,7 +20,7 @@ from models.couch.user.userModel import userORM
 
 @autoRoute()
 @admin()
-class new(baseHTMLObject):
+class new(HTMLObject):
     _title = "admin users"
     _defaultTmpl = "flagpole/users/new"
     def GET(self):

@@ -12,14 +12,14 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 
 import models.couch.request.requestModel as rm
 import models.couch.user.userModel as um
 
 
 @autoRoute()
-class index(baseHTMLObject):
+class index(HTMLObject):
     _title = "request an invite"
     _defaultTmpl = "public/request/request"
     def GET(self):

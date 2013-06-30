@@ -12,11 +12,11 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 
 
 @autoRoute()
-class thanks(baseHTMLObject):
+class thanks(HTMLObject):
     _title = "thanks!"
     _defaultTmpl = "public/request/thanks"
     def GET(self):

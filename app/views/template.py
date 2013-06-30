@@ -179,4 +179,4 @@ def paginateView(collection, template="partials/paginate"):
         return unicode(pystache.render(tmpls[template], data))
 
     else:
-        return ""
+        return u""

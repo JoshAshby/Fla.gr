@@ -22,6 +22,7 @@ logger = logging.getLogger(c.general.logName+".seshat.dispatch")
 
 from seshat.requestItem import requestItem
 import controllers.error as error
+import traceback
 
 
 def dispatch(env, start_response):
@@ -69,10 +70,9 @@ def dispatch(env, start_response):
 
         dataThread = gevent.spawn(newHTTPObject.build)
         dataThread.join()
-        try:
-            content, replyData = dataThread.get()
-        except Exception as e:
-            request.error = e.message
+        content, replyData = dataThread.get()
+        if type(content) == tuple:
+            request.error = content
             return error500(request, start_response)
 
         header = replyData[1]
@@ -94,7 +94,7 @@ def dispatch(env, start_response):
             return []
 
     except Exception as e:
-        request.error = e
+        request.error = (e, traceback.format_exc())
         return error500(request, start_response)
 
     finally:

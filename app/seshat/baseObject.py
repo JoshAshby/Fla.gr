@@ -13,6 +13,9 @@ Josh Ashby
 http://joshashby.com
 joshuaashby@joshashby.com
 """
+from views.template import template
+import json
+import traceback
 
 
 class baseHTTPObject(object):
@@ -62,9 +65,12 @@ class baseHTTPObject(object):
 
             if not error:
                 self.noErrorHook()
-                content = getattr(self, self.request.method)() or ""
-                content = self.postMethod(content)
-                if content: content = unicode(content)
+                try:
+                    content = getattr(self, self.request.method)() or ""
+                    content = self.postMethod(content)
+                    if content: content = unicode(content)
+                except Exception as e:
+                    content = (e, traceback.format_exc())
             else:
                 self.errorHook()
 
@@ -102,3 +108,38 @@ class baseHTTPObject(object):
 
         def DELETE(self):
             pass
+
+
+class HTMLObject(baseHTTPObject):
+    def finishInit(self):
+        self.head = ("200 OK", [("Content-Type", "text/html")])
+
+        try:
+            title = self._title
+        except:
+            title = "untitledFlagrPage"
+
+        self.request.title = title
+
+    def noErrorHook(self):
+        try:
+          tmpl = self._defaultTmpl
+          self.view = template(tmpl, self.request)
+        except:
+          self.view = ""
+
+    def postMethod(self, content):
+        if type(content) == template:
+            return content.render()
+        else:
+            return content
+
+
+class JSONObject(baseHTTPObject):
+    def finishInit(self):
+        self.head = ("200 OK", [("Content-Type", "application/json")])
+
+    def postMethod(self, content):
+        response = [{"status": self.head[0], "data": content, "error": self.request.error}]
+
+        return json.dumps(response)

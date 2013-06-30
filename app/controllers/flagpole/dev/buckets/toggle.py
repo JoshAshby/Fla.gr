@@ -13,20 +13,17 @@ joshuaashby@joshashby.com
 """
 from seshat.objectMods import *
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import JSONObject
 
 import models.redis.bucket.bucketModel as bm
-import json
 
 
 @autoRoute()
 @admin(100)
-class toggle(baseHTMLObject):
-    _title = "dev buckets"
+class toggle(JSONObject):
     def POST(self):
-        self.head = ("200 OK", [("Content-Type", "application/json")])
         bucket = self.request.id
 
         reply = bm.bucketPail.toggle(bucket)
 
-        return json.dumps({"status": reply, "bucket": bucket, "success": True})
+        return {"status": reply, "bucket": bucket, "success": True}

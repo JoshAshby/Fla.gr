@@ -13,16 +13,15 @@ joshuaashby@joshashby.com
 """
 from seshat.objectMods import *
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 
 import models.redis.bucket.bucketModel as bm
-import json
 
 from views.template import listView, paginateView
 
 @autoRoute()
 @admin(100)
-class index(baseHTMLObject):
+class index(HTMLObject):
     _title = "dev buckets"
     _defaultTmpl = "flagpole/dev/buckets/buckets"
     def GET(self):

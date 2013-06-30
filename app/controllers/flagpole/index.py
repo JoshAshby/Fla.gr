@@ -13,12 +13,12 @@ joshuaashby@joshashby.com
 """
 from seshat.objectMods import *
 from seshat.route import autoRoute
-from seshat.baseHTMLObject import baseHTMLObject
+from seshat.baseObject import HTMLObject
 
 
 @autoRoute()
 @admin()
-class index(baseHTMLObject):
+class index(HTMLObject):
     """
     Returns base index page.
     """
