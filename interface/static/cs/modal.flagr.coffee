@@ -114,3 +114,14 @@ class @createModal extends modalBase
             "icon": "ok"
             "btnLoadingText": "Creating..."
         super modalData
+
+
+class @toggleModal extends modalBase
+    make: ->
+        modalData =
+            "btnText": "Toggle"
+            "btnColor": "primary"
+            "textColor": ""
+            "icon": "bolt"
+            "btnLoadingText": "Making Lemons..."
+        super modalData

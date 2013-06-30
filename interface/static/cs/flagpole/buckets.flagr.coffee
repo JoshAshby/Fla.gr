@@ -1,14 +1,3 @@
-class @toggleModal extends @modalBase
-    make: ->
-        modalData =
-            "btnText": "Toggle"
-            "btnColor": "info"
-            "textColor": "info"
-            "icon": "bolt"
-            "btnLoadingText": "Making Lemons..."
-        super modalData
-
-
 $ ->
     $(".bucketToggleButton").click ->
         console.log this
