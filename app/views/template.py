@@ -16,40 +16,105 @@ joshuaashby@joshashby.com
 """
 import pystache
 import os
-
-tmplPath = os.path.dirname(__file__)+"/mustache/"
-
-
-tmpls = {}
-with open(tmplPath+"base.mustache", "r") as baseFile:
-    base = unicode(baseFile.read())
-baseFile.close()
-tmpls["base"] = base
+import time
+import config.config as c
+import logging
+logger = logging.getLogger(c.general.logName+".views")
 
 
-for directory in ["flagpole", "public", "error", "partials"]:
-    tempTmpls = {}
-    for folder in os.walk(tmplPath + directory + "/"):
-        allTmpls = folder[2] # files in current directory
-        where = folder[0].split(tmplPath)[1].rstrip("/") # relative folder path
+class templateWalker(object):
+    """
+    Base walker which goes through the given template path and initializes a
+    bucnh of templateFile objects for each mustache template it finds. When a
+    template is requested from it later on, such as in the case in the template
+    object below, then it returns the template from the templateFile object.
+    This is mostly a helper to allow for live file re reading in templateFiles
+    """
+    def __init__(self, path):
+        """
+        Walks through `path` looking for mustache templates and adding any that
+        it finds into it's `_tmpls` dict in the form of templateFile objects
+        """
+        self._tmpls = {}
+        self._path = path
 
-        # Everytime we have files in the current directory, go through and see
-        # if any are mustache template files, and if they are then read them into
-        # memory and add them to the watcher
-        for tmpl in allTmpls:
-            parts = tmpl.split(".")
-            name = parts[0]
-            extension = parts[len(parts)-1]
-            if extension != "mustache":
-                continue
+        base = templateFile(self._path+"base.mustache")
+        self._tmpls["base"] = base
 
-            fileBit = folder[0]+"/"+tmpl
-            with open(fileBit, "r") as openTmpl:
-                template = unicode(openTmpl.read())
+        for directory in ["flagpole", "public", "error", "partials"]:
+            tempTmpls = {}
+            for folder in os.walk(self._path + directory + "/"):
+                allTmpls = folder[2] # files in current directory
+                where = folder[0].split(self._path)[1].rstrip("/") # relative folder path
+
+                # Everytime we have files in the current directory, go through and see
+                # if any are mustache template files, and if they are then read them into
+                # memory and add them to the watcher
+                for tmpl in allTmpls:
+                    parts = tmpl.split(".")
+                    extension = parts[len(parts)-1]
+                    if extension != "mustache":
+                        continue
+
+                    fileBit = folder[0]+"/"+tmpl
+                    templateThing = templateFile(fileBit)
+
+                    name = parts[0]
+                    tempTmpls[where+"/"+name] = templateThing
+
+            self._tmpls.update(tempTmpls)
+
+    def __getitem__(self, item):
+        """
+        Mostly a helper to allow for easy access to either a memory stored
+        template, or reading in the template freshly each time.
+        """
+        return self._tmpls[item].template
+
+
+class templateFile(object):
+    def __init__(self, fileBit):
+        """
+        Reads in fileBit into memory, and sets the modified time for the
+        object to that of the file at the current moment.
+        """
+        self._file = fileBit
+        self._mtime = 0
+
+        self.readTemplate()
+
+    @property
+    def template(self):
+        """
+        Returns the template, while reading it in if the file has been
+        modified since we first read it in, and only if we are in debug
+        mode. Otherwise this will just return the template stored in memory
+        from first read/startup.
+        """
+        if c.general.debug:
+            self.readTemplate()
+
+        return self._template
+
+    def readTemplate(self):
+        """
+        Read in the template only if it has been modified since we first
+        read it into our `_template`
+        """
+        mtime = time.ctime(os.path.getmtime(self._file))
+
+        if self._mtime < mtime:
+            with open(self._file, "r") as openTmpl:
+                self._template = unicode(openTmpl.read())
             openTmpl.close()
-            tempTmpls[where+"/"+name] = template
-
-    tmpls.update(tempTmpls)
+            self._mtime = mtime
+            if c.general.debug:
+                logger.debug("""\n\r============== Template =================
+    Rereading template into memory...
+    TEMPLATE: %s
+    OLD MTIME: %s
+    NEW MTIME %s
+""" % (self._file, self._mtime, mtime))
 
 
 class template(object):
@@ -157,6 +222,7 @@ def listView(template, collection):
 
     return rendered
 
+
 def paginateView(collection, template="partials/paginate"):
     if collection.pages > 2:
         previous = (collection.currentPage-1) if (collection.currentPage > 1) else False
@@ -180,3 +246,7 @@ def paginateView(collection, template="partials/paginate"):
 
     else:
         return u""
+
+
+tmplPath = os.path.dirname(__file__)+"/mustache/"
+tmpls = templateWalker(tmplPath)
