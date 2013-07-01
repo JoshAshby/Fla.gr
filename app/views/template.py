@@ -104,17 +104,17 @@ class templateFile(object):
         mtime = time.ctime(os.path.getmtime(self._file))
 
         if self._mtime < mtime:
+            if c.general.debug:
+                logger.debug("""\n\r============== Template =================
+    Rereading template into memory...
+    TEMPLATE:  %s
+    OLD MTIME: %s
+    NEW MTIME: %s
+""" % (self._file, self._mtime, mtime))
             with open(self._file, "r") as openTmpl:
                 self._template = unicode(openTmpl.read())
             openTmpl.close()
             self._mtime = mtime
-            if c.general.debug:
-                logger.debug("""\n\r============== Template =================
-    Rereading template into memory...
-    TEMPLATE: %s
-    OLD MTIME: %s
-    NEW MTIME %s
-""" % (self._file, self._mtime, mtime))
 
 
 class template(object):
@@ -216,6 +216,10 @@ class template(object):
 
 
 def listView(template, collection):
+    """
+    Takes a collection and renders a list view, of one template per item in
+    the collection.
+    """
     rendered = u""
     for item in collection:
       rendered += pystache.render(tmpls[template], {"row": item})
@@ -224,6 +228,10 @@ def listView(template, collection):
 
 
 def paginateView(collection, template="partials/paginate"):
+    """
+    Returns a pagination rendered template based off the settings from the
+    given collection
+    """
     if collection.pages > 2:
         previous = (collection.currentPage-1) if (collection.currentPage > 1) else False
 

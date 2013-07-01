@@ -161,6 +161,7 @@ def logURL(request, url):
     IP: %s
 """ % (request.method, request.url, request.rawParams, url.pageObject.__module__+"/"+url.pageObject.__name__, request.remote))
 
+
 def logResponse(request, status):
   logger.debug("""\n\r--------- Response ---------------------
     URL: %s
