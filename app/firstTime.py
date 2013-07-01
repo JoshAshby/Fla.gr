@@ -12,20 +12,25 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 import models.couch.user.userModel as um
-import gators.firstTimeGator.config as config
+import gators.firstTimeGator as gator
+
 import models.redis.baseRedisModel as brm
 import models.redis.bucket.bucketModel as bm
 
+config = gator.config()
+
 def setup():
     print "Setting up fla.gr from config/initial.json..."
-    initialSetup()
+    #initialSetup()
     bucketSetup()
     print "Done"
 
 def initialSetup():
-    print "Setting up inital users, flags and templates..."
-    if config.initial.has_key("users"):
-        for user in config.initial["users"]:
+    print "Setting up inital users"
+    for user in config.initial.users:
+        if um.userORM.find(user["username"]):
+            print "\tSkipping user %s" % user["username"]
+        else:
             newUser = um.userORM(user["username"], user["password"])
             print "\tAdding new user `%s`"%user["username"]
             print "\t\tpassword `%s`"%user["password"]
@@ -37,19 +42,14 @@ def initialSetup():
                 newUser.level = 100
             newUser.save()
 
-    if config.initial.has_key("flags"):
-        pass
-
-    if config.initial.has_ley("templates"):
-        pass
 
 def bucketSetup():
     print "Now setting up buckets..."
     buckets = config.buckets
     for bucket in buckets:
         print "Adding Bucket:"
-        print "    "  + bucket
-        print "    " + str(buckets[bucket])
+        print "\t"  + bucket
+        print "\t" + str(buckets[bucket])
         newBucket = brm.redisObject("bucket:" + bucket)
 
         newBucket["name"] = buckets[bucket]["name"]

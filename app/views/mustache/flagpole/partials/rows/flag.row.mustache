@@ -1,10 +1,15 @@
 <tr id="{{row.id}}">
   <td>
-    {{row.title}}
+    <a href="/flagpole/flags/view/{{row.id}}">
+      {{row.title}}
+    </a>
   </td>
 
   <td>
-    {{row.joineduserID.username}}
+    <a href="/flagpole/users/view/{{row.userID}}">
+      {{row.joineduserID.username}}{{row.joineduserID}}
+      {{row.joineduserID.id}}
+    </a>
   </td>
 
   <td>
@@ -23,12 +28,12 @@
   </td>
 
   <td>
-    <span class="label {{#row.reported}}label-error{{/row.reported}}">
+    <span class="label label-{{#row.reported}}important{{/row.reported}}{{^row.reported}}success{{/row.reported}}">
       {{#row.reported}}
-        <i class="icon-smile"></i> Okay!
+        <i class="icon-ban-circle"></i> Reported!
       {{/row.reported}}
       {{^row.reported}}
-        <i class="icon-ban-circle"></i> Reported!
+        <i class="icon-smile"></i> Okay!
       {{/row.reported}}
     </span>
   </td>

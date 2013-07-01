@@ -16,7 +16,7 @@ from seshat.baseObject import HTMLObject
 from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
-import models.couch.flag.flagModel as fm
+from models.couch.flag.flagModel import flagORM
 import models.couch.baseCouchCollection as bcc
 
 from views.template import listView, paginateView
@@ -34,7 +34,7 @@ class index(HTMLObject):
         perpage = self.request.getParam("perpage", 25)
         sort = self.request.getParam("sort", "title")
 
-        flags = bcc.baseCouchCollection(fm.flagORM)
+        flags = bcc.baseCouchCollection(flagORM)
         flags.paginate(page, perpage)
         flags.fetch()
         flags.format()

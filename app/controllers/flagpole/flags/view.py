@@ -26,7 +26,7 @@ import json
 @admin()
 class view(HTMLObject):
     _title = "flagpole flag"
-    _defaultTmpl = "flapole/flags/singleFlag"
+    _defaultTmpl = "flagpole/flags/singleFlag"
     def GET(self):
         """
         """

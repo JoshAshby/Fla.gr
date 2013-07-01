@@ -12,9 +12,7 @@ joshuaashby@joshashby.com
 from couchdb.mapping import Document, TextField, DateTimeField, BooleanField, ListField
 from datetime import datetime
 
-import config.config as c
 from models.couch.baseCouchModel import baseCouchModel
-import models.couch.user.userModel as um
 import utils.markdownUtils as mdu
 
 
@@ -29,9 +27,7 @@ class flagORM(Document, baseCouchModel):
     visibility = BooleanField(default=False)
     created = DateTimeField(default=datetime.now)
     docType=TextField(default="flag")
-    formatedDescription = ""
-    formatedDate = ""
-    author = ""
+    reported = BooleanField(default=False)
 
     def format(self):
         """

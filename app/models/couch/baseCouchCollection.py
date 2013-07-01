@@ -103,4 +103,5 @@ class baseCouchCollection(bc.baseCollection):
         keys that no longer exist, and adding new keys that are not currently
         part of the collection.
         """
-        self.pail = [ item.id for item in self.model.all() ]
+        keys = [ item.id for item in self.model.all() ]
+        self.pail = brm.redisList(self.pattern, keys, reset=True)

@@ -65,7 +65,6 @@ class baseCollection(object):
         :return: Boolean if there is a next page or not.
         :rtype: Boolean
         """
-        pailVolume = len(self.pail)
         perPage = self.paginateSettings["perPage"]
         pageNumber = self.paginateSettings["pageNumber"]
         endingPlace = (pageNumber+1)*perPage

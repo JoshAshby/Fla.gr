@@ -222,7 +222,7 @@ def listView(template, collection):
     """
     rendered = u""
     for item in collection:
-      rendered += pystache.render(tmpls[template], {"row": item})
+        rendered += pystache.render(tmpls[template], {"row": item})
 
     return rendered
 
