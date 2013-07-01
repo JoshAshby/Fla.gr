@@ -12,33 +12,39 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.admin.flags.adminViewFlagsTmpl import adminViewFlagsTmpl
+from seshat.baseObject import HTMLObject
+from seshat.objectMods import *
 
 from models.couch.user.userModel import userORM
 import models.couch.flag.flagModel as fm
 import models.couch.baseCouchCollection as bcc
 
+from views.template import listView, paginateView
+
 
 @autoRoute()
-class adminFlagsIndex(baseHTMLObject):
-    _title = "admin flags"
-    __level__ = 50
-    __login__ = True
+@admin()
+class index(HTMLObject):
+    _title = "flagpole flags"
+    _defaultTmpl = "flagpole/flags/flags"
     def GET(self):
         """
         """
-        page = self.env["members"]["p"] \
-                if self.env["members"].has_key("p") else 1
-        view = adminViewFlagsTmpl(searchList=[self.tmplSearchList])
+        page = self.request.getParam("page", 1)
+        perpage = self.request.getParam("perpage", 25)
+        sort = self.request.getParam("sort", "title")
 
         flags = bcc.baseCouchCollection(fm.flagORM)
-        flags.paginate(page, 25)
+        flags.paginate(page, perpage)
         flags.fetch()
         flags.format()
         flags.join(userORM, "userID")
+        flags.sortBy(sort)
 
-        view.flags = flags
+        flagsList = listView("flagpole/partials/rows/flag", flags)
+        pagination = paginateView(flags)
 
-        return view
+        self.view.data = {"flags" : flagsList,
+            "pagination": pagination}
+
+        return self.view

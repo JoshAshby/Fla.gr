@@ -1,0 +1,85 @@
+{{{breadcrumbs}}}
+<div class="row">
+  <div class="span2 offset1">
+    <div class="tabbable tabs-left">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#view" data-toggle="tab"><i class="icon-flag"></i> View</a></li>
+        <li><a href="#edit" data-toggle="tab"><i class="icon-pencil"></i> Edit</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="span8">
+    <div class="tab-content">
+      <div class="tab-pane active" id="view">
+        <!-- Start view tab -->
+        <div class="row">
+          <div class="span8">
+            <h2>{{flag.title}} <small>By {{user.username}}</small></h2>
+          </div>
+        </div>
+        <!-- End view tab -->
+      </div>
+      <div class="tab-pane" id="edit">
+        <!-- Start edit tab -->
+        <div class="row">
+          <div class="span8">
+            <h2>Editing - {{flag.title[:100]}}...</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="span8">
+            <form class="form" method="POST" data-id="{{flag.id}}">
+              <fieldset>
+                <input type="text" class="span8" name="title" value="{{flag.title}}" placeholder="title..." required/>
+
+                <div class="control-group">
+                  <input type="text" class="span8" name="url" value="{{flag.url}}" placeholder="link..." />
+                  <span class="help-block"><small>An optional link can be attached to this flag, which can then be used as a bookmark, or to add context to the flag.</small></span>
+                </div>
+
+                <div class="control-group">
+                  <textarea name="description" data-provide="markdown" rows="10" class="span8" placeholder="description...">{{{flag.description}}}</textarea>
+                  <span class="help-block"><small>Text can be formated with <a href="http://daringfireball.net/projects/markdown/syntax">Daring Fireball's Markdown</a>. Most HTML is escaped.</small></span>
+                </div>
+
+                <div class="control-group">
+                  {{#req.cfg.enableDynamicLabels}}
+                    <div class="well">
+                        <b class="muted">Labels: </b> <span id="dynamicList"></span>
+                    </div>
+                    <input type="text" id="addInputField" class="span5" placeholder="labels...">
+                    <a id="addButton" class="btn btn-info"><i class="icon-plus"></i></a>
+                    <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be stripped.</span>
+                    <input type="hidden" name="labels" id="addInputHidden" value='{{labels}}'>
+                  {{/req.cfg.enableDynamicLabels}}
+                  {{^req.cfg.enableDynamicLabels}}
+                    <input type="text" name="labels" class="span6" placeholder="labels..." value='{{labels}}'>
+                    <span class="help-block">Labels can be stacked with /'s or you can enter multiple labels at once by comma seperating them. Spaces will be striped. (Hint, tags will be removed if you click on them.)</span>
+                  {{/req.cfg.enableDynamicLabels}}
+                </div>
+
+                <div class="control-group">
+                  <div class="controls">
+                    <label class="checkbox" for="vis">
+                      <input type="checkbox" name="vis" value="true"
+                      {{#flag.visibility}}checked{{/flag.visibility}}/> Is this flag visible to public?
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary"><i class="icon-save"></i> Update</button>
+                  <div class="pull-right">
+                    <a id="deleteButton" class="btn btn-danger"><i class="icon-trash"></i> Delete</a>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+        <!-- End edit tab -->
+      </div>
+    </div>
+  </div>
+</div>

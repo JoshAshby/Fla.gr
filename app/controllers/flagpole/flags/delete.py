@@ -12,9 +12,8 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.admin.flags.adminDelFlagTmpl import adminDelFlagTmpl
+from seshat.baseObject import HTMLObject
+from seshat.objectMods import *
 
 from models.couch.flag.flagModel import flagORM
 import models.couch.flag.collections.userPublicFlagsCollection as pubfc
@@ -22,24 +21,11 @@ import models.couch.flag.collections.userFlagsCollection as fc
 
 
 @autoRoute()
-class adminFlagsDelete(baseHTMLObject):
+@admin()
+class delete(HTMLObject):
     _title = "admin flags"
-    __level__ = 50
-    __login__ = True
-    def GET(self):
-        """
-        """
-        flagid = self.env["members"][0]
-
-        flag = flagORM.getByID(flagid)
-        view = adminDelFlagTmpl(searchList=[self.tmplSearchList])
-
-        view.flag = flag
-
-        return view
-
     def POST(self):
-        flagid = self.env["members"][0]
+        flagid = self.request.id
 
         flag = flagORM.getByID(flagid)
         pubFlags = pubfc.userPublicFlagsCollection(flag.userID)
@@ -50,7 +36,7 @@ class adminFlagsDelete(baseHTMLObject):
 
         flag.delete()
 
-        self.session.pushAlert("Flag `%s` deleted" % flag.title, "Bye!", "warning")
+        self.request.session.pushAlert("Flag `%s` deleted" % flag.title, "Bye!", "success")
 
         self.head = ("303 SEE OTHER",
-            [("location", "/admin/flags")])
+            [("location", "/flagpole/flags")])

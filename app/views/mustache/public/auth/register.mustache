@@ -12,12 +12,12 @@
         <p>Welcome {{requestEmail}}, this form will take you through the process of finishing registering for an account.</p>
       {{/requestEmail}}
       <div class="control-group {{#usernameError}}error{{/usernameError}}">
-        <input type="text" placeholder="username..." name="username" class="span6" value="{{username}}">
+        <input type="text" placeholder="username..." name="username" class="span6" value="{{username}}" required>
       </div>
       <div class="control-group {{#passwordError}}error{{/passwordError}}">
-        <input type="password" placeholder="password..." name="passwordOnce" class="span6">
+        <input type="password" placeholder="password..." name="passwordOnce" class="span6" required>
         <br><br>
-        <input type="password" placeholder="renter password..." name="passwordTwice" class="span6">
+        <input type="password" placeholder="renter password..." name="passwordTwice" class="span6" required>
       </div>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> Register and login!</button>

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """
 TEMPLATE ALL THE THINGS WITH HANDLEBARS!!!!
-Uses Pybars which is a python implimentation of handlebars which is an extension
-of the mustache templating language to make a base template object by which is
-easy to work with in the controllers.
+Uses the mustache templating language to make a base template object by which is
+easy to work with in the controllers, and a walker and templateFile objects
+which provide automatic reading and rereading in debug mode of template files.
 
 For more information, see: https://github.com/JoshAshby/
 

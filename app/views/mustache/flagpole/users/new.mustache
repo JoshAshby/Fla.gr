@@ -9,9 +9,9 @@
     <form method="POST">
       <fieldset>
         <h2>Basic stuff... <small>Required</small></h2>
-        <input class="span6" type="text" placeholder="username..." name="username" value="{{username}}" />
-        <input type="password" placeholder="password..." name="password" class="span6" />
-        <input type="password" placeholder="one more time..." name="passwordTwice" class="span6" />
+        <input class="span6" type="text" placeholder="username..." name="username" value="{{username}}" required />
+        <input type="password" placeholder="password..." name="password" class="span6" required/>
+        <input type="password" placeholder="one more time..." name="passwordTwice" class="span6" required/>
 
         <h2>Profile... <small>Optional</small></h2>
         <textarea name="about" data-provide="markdown" rows="10" class="span6" placeholder="about...">{{about}}</textarea>

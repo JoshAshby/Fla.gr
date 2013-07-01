@@ -1,14 +1,14 @@
 <tr id="{{row.id}}">
   <td>
-    <input type="checkbox" class="flagBox" />
-  </td>
-
-  <td>
     {{row.title}}
   </td>
 
   <td>
     {{row.joineduserID.username}}
+  </td>
+
+  <td>
+    {{row.formatedDate}}
   </td>
 
   <td>
@@ -19,6 +19,17 @@
       {{^row.visibility}}
         <i class="icon-lock"></i> Private
       {{/row.visibility}}
+    </span>
+  </td>
+
+  <td>
+    <span class="label {{#row.reported}}label-error{{/row.reported}}">
+      {{#row.reported}}
+        <i class="icon-smile"></i> Okay!
+      {{/row.reported}}
+      {{^row.reported}}
+        <i class="icon-ban-circle"></i> Reported!
+      {{/row.reported}}
     </span>
   </td>
 </tr>
