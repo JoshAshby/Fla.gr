@@ -61,6 +61,8 @@ class baseCouchCollection(bc.baseCollection):
             except:
                 drop["joined"+key] = None
 
+            object.__setattr__(drop, "joined"+key, drop["joined"+key])
+
     def filterBy(self, key, value, function=None):
         """
         function = lambda drop: drop[key] == value
