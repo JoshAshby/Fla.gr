@@ -12,58 +12,45 @@ http://joshashby.com
 joshuaashby@joshashby.com
 """
 from seshat.route import autoRoute
-from utils.baseHTMLObject import baseHTMLObject
-
-from views.admin.requests.adminViewRequestsTmpl import adminViewRequestsTmpl
+from seshat.baseHTMLObject import HTMLObject
+from seshat.objectMods import *
 
 import models.couch.request.requestModel as rm
-import models.couch.template.templateModel as tm
-import models.redis.setting.settingModel as sm
 import models.couch.baseCouchCollection as bcc
+
+from views.template import listView, paginateView
 
 
 @autoRoute()
-class adminRequestsIndex(baseHTMLObject):
+@admin()
+class index(HTMLObject):
     _title = "admin requests"
-    __level__ = 50
-    __login__ = True
+    _defaultTmpl = "flagpole/requests/requests"
     def GET(self):
         """
         """
         if self.env["cfg"].enableRequests:
-            page = self.env["members"]["p"] \
-                    if self.env["members"].has_key("p") else 1
-            view = adminViewRequestsTmpl(searchList=[self.tmplSearchList])
+            page = self.request.getParam("page", 1)
+            perpage = self.request.getParam("perpage", 25)
+            sort = self.request.getParam("sort", "title")
 
-            view.scripts = ["handlebars_1.0.min",
+            self.view.scripts = ["handlebars_1.0.min",
                     "jquery.json-2.4.min",
-                    "sidebarTabs.flagr",
-                    "adminModal.flagr",
-                    "bulkCheck.flagr",
-                    "editForm.flagr",
-                    "adminViewRequests.flagr"]
+                    "modal.flagr",
+                    "flagpole/requests.flagr"]
 
             requests = bcc.baseCouchCollection(rm.requestORM)
-            requests.paginate(page, 25)
+            requests.paginate(page, perpage)
             requests.fetch()
             requests.format()
+            requests.sortBy(sort)
 
-            view.requests = requests
+            requestsList = listView("flagpole/partials/rows/flag", requests)
+            pagination = paginateView(requests)
 
-            try:
-                currentTmpl = sm.getSetting("enableRequests", "tmplid")
-            except:
-                currentTmpl = ""
+            self.view.data = {"requests": requestsList,
+                "pagination": pagination}
 
-            tmpl = bcc.baseCouchCollection(tm.templateORM)
-            tmpl.fetch()
-            tmpl.filterBy("type", "email")
-            for tmp in tmpl:
-                if tmp.id == currentTmpl:
-                    tmp.current = True
-
-            view.tmpls = tmpl
-
-            return view
+            return self.view
         else:
             self._404()

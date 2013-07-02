@@ -23,7 +23,6 @@ import models.couch.flag.collections.userFlagsCollection as fc
 @autoRoute()
 @admin()
 class delete(HTMLObject):
-    _title = "admin flags"
     def POST(self):
         flagid = self.request.id
 
