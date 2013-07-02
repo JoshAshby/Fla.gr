@@ -84,5 +84,5 @@ class view(HTMLObject):
         else:
             self.request.session.pushAlert("User disabled :/", "Welp...", "success")
 
-        self.head = ("302 FOUND",
+        self.head = ("303 SEE OTHER",
             [("location", "/flagpole/users/view/"+str(user.id))])

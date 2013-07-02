@@ -36,5 +36,5 @@ class delete(HTMLObject):
         user.delete()
 
         self.request.session.pushAlert("User deleted...", level="success")
-        self.head = ("302 FOUND",
+        self.head = ("303 SEE OTHER",
             [("location", "/flagpole/users")])

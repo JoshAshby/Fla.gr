@@ -54,7 +54,7 @@ class new(HTMLObject):
                 self.request.session.pushAlert("New user with username `%s` \
                         created" % name, "Yay", "success")
 
-                self.head = ("302 FOUND",
+                self.head = ("303 SEE OTHER",
                     [("location", str("/flagpole/users/view/%s"%newUser.id))])
 
             except userError:

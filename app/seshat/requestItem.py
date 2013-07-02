@@ -37,7 +37,10 @@ class requestItem(object):
         self.buildCfg()
 
         self.method = self._env["REQUEST_METHOD"]
-        self.url = env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0] or env["PATH_INFO"]
+        try:
+            self.url = env["REQUEST_URI"][len(c.general.fcgiBase):].split("?")[0] or env["PATH_INFO"]
+        except KeyError:
+            self.url = env["PATH_INFO"]
         self.remote = env["REMOTE_ADDR"] if env.has_key("REMOTE_ADDR") else (env["HTTP_HOST"] if env.has_key("HTTP_HOST") else "localhost")
 
         self.id = None
@@ -86,7 +89,10 @@ class requestItem(object):
         for morsal in self.sessionCookie:
             cookieHeader = ("Set-Cookie", ("%s=%s")%(morsal, self.sessionCookie[morsal]))
             header.append(cookieHeader)
+
         header.append(("Content-Length", str(length)))
+        header.append(("Server", self._env["SERVER_SOFTWARE"]))
+        header.append(("X-Seshat-Says", "Ello!"))
         return header
 
     def getParam(self, param, default=""):
