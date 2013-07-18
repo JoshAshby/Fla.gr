@@ -14,6 +14,8 @@ from datetime import datetime
 
 from models.couch.baseCouchModel import baseCouchModel
 import utils.markdownUtils as mdu
+import models.couch.flag.collections.userFlagCollection as fc
+import models.couch.flag.collections.userPublicFlagCollection as pubfc
 
 
 class flagORM(Document, baseCouchModel):
@@ -36,3 +38,17 @@ class flagORM(Document, baseCouchModel):
         """
         self.formatedDescription = mdu.markClean(self.description)
         self.formatedDate = datetime.strftime(self.created, "%a %b %d, %Y @ %H:%I%p")
+
+    def collectionsUpdate(self):
+        pubFlags = pubfc.userPublicFlagsCollection(self.userID)
+        if self.visibility:
+            pubFlags.addObject(self.id)
+        else:
+            pubFlags.delObject(self.id)
+
+    def collectionsDelete(self):
+        privFlags = fc.userFlagsCollection(self.session.id)
+        pubFlags = pubfc.userPublicFlagsCollection(self.userID)
+
+        privFlags.delObject(self.id)
+        pubFlags.delObject(self.id)

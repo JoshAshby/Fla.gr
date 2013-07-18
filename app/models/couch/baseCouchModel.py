@@ -34,13 +34,27 @@ class baseCouchModel(object):
         """
         Simply a shortcut for saving the document to couch
         """
+        self.collectionsUpdate()
         self.store(c.database.couchServer)
 
     def delete(self):
         """
         Deletes the current instance
         """
+        self.collectionsDelete()
         c.database.couchServer.delete(self)
+
+    def collectionsUpate(self):
+        """
+        Helper function to make working with objects in collections easier
+        """
+        pass
+
+    def collectionsDelete(self):
+        """
+        Helper to aid in working with collections when a model is deleted
+        """
+        pass
 
     @classmethod
     def getByID(cls, ID):
